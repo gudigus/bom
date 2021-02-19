@@ -2,10 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Junghun">
-
-	<select id="searchList" parameterType="Junghun" resultType="Junghun">
-		select bcontent 
-		from board
-		where bcontent like '%'||'재'||'%'
-	</select> 
+	<!-- 글검색 -->
+	<select id="searchfame" parameterType="Junghun"
+		resultType="Junghun">
+		select b.bcontent , b.blikecount , u.uatid , u.unickname , b.btmpsavtime
+		from board b, user_info u
+		where b.busercode = u.ucode
+		and b.bcontent
+		like '%'||'a'||'%'
+		ORDER BY b.blikecount DESC
+	</select>
+	<!-- 회원검색 -->
+	<select id="searchuser" parameterType="Junghun"
+		resultType="Junghun">
+		select uatid , unickname
+		from user_info
+		where ( uatid like
+		'%'||'a'||'%' or unickname like '%'||'a'||'%')
+	</select>
+	<!-- 최신글검색 -->
+	<select id="searchnew" parameterType="Junghun"
+		resultType="Junghun">
+		select b.bcontent , b.btmpsavtime, u.uatid , u.unickname
+		from board b, user_info u
+		where b.busercode = u.ucode
+		and b.bcontent
+		like '%'||'a'||'%'
+		ORDER BY b.BTMPSAVTIME
+	</select>
 </mapper>

@@ -1,4 +1,4 @@
-package com.spring.bom.dao.junghun;
+package com.spring.bom.dao.hoon;
 
 import java.util.List;
 
@@ -15,7 +15,17 @@ public class JunghunDaoImpl implements JunghunDao{
 
 	@Override
 	public List<Junghun> listSearch(Junghun junghun) {
-		return session.selectList("searchList",junghun);
+		return session.selectList("searchfame",junghun);
+	}
+
+	@Override
+	public List<Junghun> listUser(Junghun junghun) {
+		return session.selectList("searchuser",junghun);
+	}
+
+	@Override
+	public List<Junghun> listNew(Junghun junghun) {
+		return session.selectList("searchnew",junghun);
 	}
 
 }

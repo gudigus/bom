@@ -15,10 +15,10 @@
 <title>BOM</title>
 
 <!-- Bootstrap core CSS -->
-<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="css/bootstrap.min.css" rel="stylesheet">
 
 <!-- Custom styles for this template -->
-<link href="/css/simple-sidebar.css" rel="stylesheet">
+<link href="css/simple-sidebar.css" rel="stylesheet">
 
 <!-- Bootstrap core JavaScript -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
@@ -32,9 +32,9 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 	integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 	crossorigin="anonymous"></script>
-<script src="/js/jquery.min.js"></script>
-<script src="/js/bootstrap.bundle.min.js"></script>
-<script src="/js/bootstrap.bundle.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/bootstrap.bundle.js"></script>
 <style>
 .dropdown-toggle.caret-off::after {
 	display: none;
@@ -49,32 +49,32 @@
 		<!-- Sidebar -->
 		<div class="border-right sidebar-fixed-top" id="sidebar-wrapper">
 			<div class="sidebar-heading" align="center">
-				<img src="/img/logo2.jpg" width="150" height="150">
+				<img src="img/logo2.jpg" width="150" height="150">
 			</div>
 			<div class="list-group list-group-flush">
 				<a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/home.svg" width="15" height="15"> 타임라인
-				</a> <a href="explore" class="list-group-item list-group-item-action">
-					<img src="/img/search.svg" width="15" height="15"> 검색하기
+					src="img/home.svg" width="15" height="15"> 타임라인
+				</a> <a href="explore" class="list-group-item list-group-item-action"> <img
+					src="img/search.svg" width="15" height="15"> 검색하기
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/bell.svg" width="15" height="15"> 알림 <span
+					src="img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/send.svg" width="15" height="15"> 쪽지
+					src="img/send.svg" width="15" height="15"> 쪽지
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/bookmark.svg" width="15" height="15"> 북마크
+					src="img/bookmark.svg" width="15" height="15"> 북마크
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/user.svg" width="15" height="15"> 프로필
+					src="img/user.svg" width="15" height="15"> 프로필
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/more.svg" width="15" height="15"> 더보기
+					src="img/more.svg" width="15" height="15"> 더보기
 				</a> <a href="#" class="list-group-item list-group-item-action">
 					<button type="button" class="btn btn-outline-success">
-						<img src="/img/write.svg" width="15" height="15"> 글 쓰기
+						<img src="img/write.svg" width="15" height="15"> 글 쓰기
 					</button>
 				</a>
 				<div class="card">
 					<div class="card-body">
-						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
+						<img src="img/teemo.jpg" class="rounded-circle" width="50"
 							width="50"> <a class="card-title text-dark">닉네임</a> <a
 							class="card-subtitle mb-2 text-muted">@atid</a>
 					</div>
@@ -91,27 +91,71 @@
 				class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
 				<button class="btn btn-success" id="menu-toggle">←</button>
 			</nav>
+			<div class="alert alert-success" role="alert">
+				<a href="#" class="alert-link">좋아요</a>를 누르셨습니다.
+			</div>
 			<div class="container-fluid">
 				<p>
 				<div class="card">
+					<div class="card-header">글쓰기</div>
 					<div class="card-body">
 						<div class="form-group">
-							<form class="well form-search" action="hoon/searchView">
-								<div class="input-group flex-nowrap">
-									<div class="input-group-prepend">
-										<span class="input-group-text" id="addon-wrapping"><img
-											src="/img/search.svg" width="15" height="15"> </span>
-									</div>
-									<input type="text" class="form-control"
-										placeholder="Bom search" aria-label="Username"
-										aria-describedby="addon-wrapping">
-								</div>
-							</form>
+							<textarea class="form-control" id="exampleFormControlTextarea1"
+								rows="3"></textarea>
 						</div>
+						<div class="btn-group" role="group" aria-label="Basic example">
+							<button type="button" class="btn btn-outline-secondary">미디어</button>
+							<button type="button" class="btn btn-outline-secondary">GIF</button>
+							<button type="button" class="btn btn-outline-secondary">투표</button>
+							<button type="button" class="btn btn-outline-secondary">예약하기</button>
+						</div>
+						<button type="submit" class="btn btn-success float-right">등록</button>
 					</div>
 				</div>
 				<!--글 정렬-->
-				블라블라블라
+				<c:forEach begin="1" end="10" step="1">
+					<div class="card">
+						<div class="card-body">
+							<button type="button" class="btn btn-light float-right">⋯</button>
+							<img src="img/teemo.jpg" class="rounded-circle" width="50"
+								width="50"> <a class="card-title text-dark">닉네임</a> <a
+								class="card-subtitle mb-2 text-muted">@atid</a> <a
+								class="card-subtitle mb-2 text-muted">작성시간</a> <a href="#"
+								class="card-text" style="margin-top: 10px;">글내용 블라블라글내용
+								블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라 글내용 블라블라글내용
+								블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라 글내용 블라블라글내용
+								블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라 글내용 블라블라글내용
+								블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라</a>
+							<div align="center">
+								<div class="btn-group col-md-12" role="group"
+									aria-label="Button group with nested dropdown">
+									<button type="button" class="btn btn-secondary mr-3 btn-light"
+										data-toggle="tooltip" data-placement="top" title="답글">
+										<img src="img/speech-bubble.svg" width="20" height="20">
+									</button>
+									<button type="button" class="btn btn-secondary btn-light mr-3"
+										data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
+										<img src="img/bring.svg" width="20" height="20">
+									</button>
+									<button type="button" class="btn btn-secondary btn-light mr-3"
+										data-toggle="tooltip" data-placement="top" title="좋아요">
+										<img src="img/heart.svg" width="20" height="20">
+									</button>
+									<button type="button"
+										class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+										data-toggle="dropdown" aria-haspopup="true"
+										aria-expanded="false">
+										<img src="img/share.svg" width="20" height="20">
+									</button>
+									<div class="dropdown-menu">
+										<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
+											class="dropdown-item" href="#">URL담아가기</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</c:forEach>
 			</div>
 		</div>
 		<!-- /#page-content-wrapper -->
@@ -133,7 +177,7 @@
 						<div class="card-body" style="padding: 5px;">
 							<div class="card">
 								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
+									<img src="img/teemo.jpg" class="rounded-circle" width="20"
 										height="20"> <a class="card-title text-dark">닉네임</a> <a
 										class="card-subtitle mb-2 text-muted">@atid</a>
 									<button type="button"
@@ -143,7 +187,7 @@
 							</div>
 							<div class="card">
 								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
+									<img src="img/teemo.jpg" class="rounded-circle" width="20"
 										height="20"> <a class="card-title text-dark">닉네임</a> <a
 										class="card-subtitle mb-2 text-muted">@atid</a>
 									<button type="button"
@@ -153,7 +197,7 @@
 							</div>
 							<div class="card">
 								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
+									<img src="img/teemo.jpg" class="rounded-circle" width="20"
 										height="20"> <a class="card-title text-dark">닉네임</a> <a
 										class="card-subtitle mb-2 text-muted">@atid</a>
 									<button type="button"
