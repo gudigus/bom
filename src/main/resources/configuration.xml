@@ -1,7 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "HTTP://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
      <typeAliases>
-		<typeAlias alias="Emp"          type="com.oracle.oBootMyBatis03.model.Emp"   />
+		<typeAlias alias="Board"          type="com.spring.bom.model.coffee.Board"   />
+		<typeAlias alias="User_info"          type="com.spring.bom.model.coffee.User_info"   />
 		
      </typeAliases>
 </configuration>
