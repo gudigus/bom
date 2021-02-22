@@ -1,4 +1,4 @@
-package com.spirng.bom;
+package com.spring.bom;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
