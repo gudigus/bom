@@ -1,0 +1,38 @@
+@charset "UTF-8";
+.list-group {
+	width: 50%;
+}
+
+.table {
+	border-spacing: 25px;
+	border-collapse: separate;
+	text-align: center;
+}
+
+.table .table-title {
+	border: 1px solid green;
+	font-weight: bold;
+}
+
+ul li a {
+	color: black;
+}
+
+ul li a:hover {
+	background-color: #E0F8E6;
+	color: blakc;
+	font-weight: bold;
+}
+
+.nav-tabs .nav-link.active {
+	border-color: white;
+	border-bottom-color: green;
+	border-bottom-width: medium;
+	font-weight: bold;
+	color: #495057;
+	background-color: #fff;
+}
+
+page-content-wrapper {
+	width: 800px;
+}

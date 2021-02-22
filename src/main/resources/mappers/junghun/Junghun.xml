@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="Junghun">
+<mapper namespace="com.spring.bom.model.Junghun">
 	<!-- 글검색 -->
-	<select id="searchfame" parameterType="Junghun"
+	<select id="searchfame" parameterType="String"
 		resultType="Junghun">
 		select b.bcontent , b.blikecount , u.uatid , u.unickname , b.btmpsavtime
 		from board b, user_info u
 		where b.busercode = u.ucode
 		and b.bcontent
-		like '%'||'a'||'%'
+		like '%'||#{search}||'%'
 		ORDER BY b.blikecount DESC
 	</select>
 	<!-- 회원검색 -->
-	<select id="searchuser" parameterType="Junghun"
+	<select id="searchuser" parameterType="String"
 		resultType="Junghun">
 		select uatid , unickname
 		from user_info
 		where ( uatid like
-		'%'||'a'||'%' or unickname like '%'||'a'||'%')
+		'%'||#{search}||'%' or unickname like '%'||#{search}||'%')
 	</select>
 	<!-- 최신글검색 -->
-	<select id="searchnew" parameterType="Junghun"
+	<select id="searchnew" parameterType="String"
 		resultType="Junghun">
 		select b.bcontent , b.btmpsavtime, u.uatid , u.unickname
 		from board b, user_info u
 		where b.busercode = u.ucode
 		and b.bcontent
-		like '%'||'a'||'%'
+		like '%'||#{search}||'%'
 		ORDER BY b.BTMPSAVTIME
 	</select>
 </mapper>

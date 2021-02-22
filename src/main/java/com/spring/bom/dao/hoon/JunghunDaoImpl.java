@@ -14,18 +14,19 @@ public class JunghunDaoImpl implements JunghunDao{
 	private SqlSession session;
 
 	@Override
-	public List<Junghun> listSearch(Junghun junghun) {
-		return session.selectList("searchfame",junghun);
+	public List<Junghun> listSearch(String search) {
+		System.out.println("Dao Search :: "+search);
+		return session.selectList("searchfame",search);
 	}
 
 	@Override
-	public List<Junghun> listUser(Junghun junghun) {
-		return session.selectList("searchuser",junghun);
+	public List<Junghun> listUser(String search) {
+		return session.selectList("searchuser",search);
 	}
 
 	@Override
-	public List<Junghun> listNew(Junghun junghun) {
-		return session.selectList("searchnew",junghun);
+	public List<Junghun> listNew(String search) {
+		return session.selectList("searchnew",search);
 	}
 
 }

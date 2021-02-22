@@ -20,6 +20,9 @@
 <!-- Custom styles for this template -->
 <link href="/css/simple-sidebar.css" rel="stylesheet">
 
+<!-- junghun style -->
+<link href="/css/junghun.css" rel="stylesheet">
+
 <!-- Bootstrap core JavaScript -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
 	integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -96,7 +99,7 @@
 				<div class="card">
 					<div class="card-body">
 						<div class="form-group">
-							<form class="well form-search" action="hoon/searchView">
+							<form class="well form-search" action="searchView" method="get">
 								<div class="input-group flex-nowrap">
 									<div class="input-group-prepend">
 										<span class="input-group-text" id="addon-wrapping"><img
@@ -104,14 +107,32 @@
 									</div>
 									<input type="text" class="form-control"
 										placeholder="Bom search" aria-label="Username"
-										aria-describedby="addon-wrapping">
+										aria-describedby="addon-wrapping" name="search">
 								</div>
 							</form>
 						</div>
 					</div>
 				</div>
 				<!--글 정렬-->
-				블라블라블라
+				<div class="panel panel-default">
+					<!-- Table -->
+					<table class="table">
+						<tr>
+							<td class="table-title">2월 첫째주 검색순</td>
+							<td class="table-title">2월 한달 검색순</td>
+						</tr>
+						<%-- <c:forEach var="" items=""> --%>
+							<tr>
+								<td>1. <a href="#">블라블라블라</a></td>
+								<td>1.</td>
+							</tr>
+							<tr>
+								<td>2.</td>
+								<td>2.</td>
+							</tr>
+						<%-- </c:forEach> --%>
+					</table>
+				</div>
 			</div>
 		</div>
 		<!-- /#page-content-wrapper -->

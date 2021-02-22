@@ -2,6 +2,8 @@ package com.spring.bom.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,33 +17,39 @@ public class JunghunController {
 	@Autowired
 	private JunghunService js;
 
-	
-	@RequestMapping(value = "main")
+	@RequestMapping(value = "hoon/main")
 	public String main() {
 		return "hoon/main";
 	}
-	@RequestMapping(value = "explore")
+
+	@RequestMapping(value = "hoon/explore")
 	public String explore() {
 		return "hoon/explore";
 	}
+
 	@RequestMapping(value = "hoon/searchView")
-	public String searchView(Model model , Junghun junghun) {
+	public String searchView(Model model, Junghun junghun, String search) throws Exception {
 		System.out.println("hoon Controller search Start");
-		List<Junghun> listSearch = js.listSearch(junghun);
-		List<Junghun> listUser   = js.listUser(junghun);
-		List<Junghun> listNew    = js.listNew(junghun);
-		System.out.println("content ::"+listSearch.size());
+		System.out.println("Controller ::" + search);
+		List<Junghun> listSearch = js.listSearch(search);
+		List<Junghun> listUser	 = js.listUser(search);
+		List<Junghun> listNew 	 = js.listNew(search);
+		
+		System.out.println("content ::" + listSearch.size());
 		System.out.println("user ::" + listUser.size());
 		System.out.println("new Content ::"+listNew.size());
 		
-		model.addAttribute("listSearch",listSearch);
+		model.addAttribute("search", search);
+		model.addAttribute("listSearch", listSearch);
 		model.addAttribute("listUser",listUser);
 		model.addAttribute("listNew",listNew);
+		
 		return "hoon/searchView";
 	}
+
 	@RequestMapping(value = "like")
 	public String like() {
 		return "hoon/like";
 	}
-	
+
 }

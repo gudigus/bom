@@ -20,6 +20,10 @@
 <!-- Custom styles for this template -->
 <link href="/css/simple-sidebar.css" rel="stylesheet">
 
+<!-- junghun style -->
+<link href="/css/junghun.css" rel="stylesheet">
+
+
 <!-- Bootstrap core JavaScript -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
 	integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -40,10 +44,6 @@
 	display: none;
 }
 
-ul li {
-	margin-left: 120px;
-	margin-right: 80px;
-}
 </style>
 </head>
 
@@ -96,41 +96,51 @@ ul li {
 				class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
 				<button class="btn btn-success" id="menu-toggle">←</button>
 			</nav>
+			<p>
 			<div class="container-fluid">
-				<form class="well form-search" action="hoon/searchView">
-					<div class="input-group flex-nowrap">
-						<div class="input-group-prepend">
-							<span class="input-group-text" id="addon-wrapping"><img
-								src="/img/search.svg" width="15" height="15"> </span>
+				<div class="card">
+					<div class="card-body">
+						<div class="form-group">
+							<form class="well form-search" action="searchView" method="get">
+								<div class="input-group flex-nowrap">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="addon-wrapping"><img
+											src="/img/search.svg" width="15" height="15"> </span>
+									</div>
+									<input type="text" class="form-control"
+										placeholder="Bom search" aria-label="Username"
+										aria-describedby="addon-wrapping" name="search">
+								</div>
+							</form>
 						</div>
-						<input type="text" class="form-control" placeholder="Bom search"
-							aria-label="Username" aria-describedby="addon-wrapping">
 					</div>
-				</form>
+				</div>
 				<p>
 					<!--글 정렬-->
-				<ul class="nav nav-tabs" id="myTab" role="tablist">
-					<li class="nav-item" role="presentation"><a
-						class="nav-link active" id="home-tab" data-toggle="tab"
-						href="#fame" role="tab" aria-controls="fame" aria-selected="true">인기</a>
-					</li>
+						<ul class="nav nav-tabs nav-justified col-md-25" id="myTab" role="tablist">
+							<li class="nav-item mr-5" role="presentation"><a
+								class="nav-link active" id="home-tab" data-toggle="tab"
+								href="#fame" role="tab" aria-controls="fame"
+								aria-selected="true">인기</a></li>
 
-					<li class="nav-item" role="presentation"><a class="nav-link"
-						id="profile-tab" data-toggle="tab" href="#user" role="tab"
-						aria-controls="user" aria-selected="false">사용자</a></li>
+							<li class="nav-item mr-5" role="presentation"><a
+								class="nav-link" id="profile-tab" data-toggle="tab" href="#user"
+								role="tab" aria-controls="user" aria-selected="false">사용자</a></li>
 
-					<li class="nav-item" role="presentation"><a class="nav-link"
-						id="contact-tab" data-toggle="tab" href="#new" role="tab"
-						aria-controls="new" aria-selected="false">최신글</a></li>
+							<li class="nav-item mr-5" role="presentation"><a
+								class="nav-link" id="contact-tab" data-toggle="tab" href="#new"
+								role="tab" aria-controls="new" aria-selected="false">최신글</a></li>
 
-					<li class="nav-item" role="presentation"><a class="nav-link"
-						id="contact-tab" data-toggle="tab" href="#contact" role="tab"
-						aria-controls="photo" aria-selected="false">사진</a></li>
+							<li class="nav-item mr-5" role="presentation"><a
+								class="nav-link" id="contact-tab" data-toggle="tab"
+								href="#contact" role="tab" aria-controls="photo"
+								aria-selected="false">사진</a></li>
 
-					<li class="nav-item" role="presentation"><a class="nav-link"
-						id="contact-tab" data-toggle="tab" href="#contact" role="tab"
-						aria-controls="video" aria-selected="false">동영상</a></li>
-				</ul>
+							<li class="nav-item mr-5" role="presentation"><a
+								class="nav-link" id="contact-tab" data-toggle="tab"
+								href="#contact" role="tab" aria-controls="video"
+								aria-selected="false">동영상</a></li>
+						</ul>
 				<div class="tab-content" id="myTabContent">
 					<!-- 인기  -->
 					<div class="tab-pane fade show active" id="fame" role="tabpanel"
@@ -246,9 +256,7 @@ ul li {
 					</div>
 					<!-- 사진 -->
 					<div class="tab-pane fade" id="photo" role="tabpanel"
-						aria-labelledby="contact-tab">
-						
-					</div>
+						aria-labelledby="contact-tab"></div>
 					<!-- 동영상 -->
 					<div class="tab-pane fade" id="video" role="tabpanel"
 						aria-labelledby="contact-tab">...</div>

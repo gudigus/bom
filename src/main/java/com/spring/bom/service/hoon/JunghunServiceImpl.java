@@ -14,18 +14,19 @@ public class JunghunServiceImpl implements JunghunService {
 	private JunghunDao jd;
 	
 	@Override
-	public List<Junghun> listSearch(Junghun junghun) {
-		return jd.listSearch(junghun);
+	public List<Junghun> listSearch(String search) {
+		System.out.println("Service Search :: "+search);
+		return jd.listSearch(search);
 	}
 
 	@Override
-	public List<Junghun> listUser(Junghun junghun) {
-		return jd.listUser(junghun);
+	public List<Junghun> listUser(String search) {
+		return jd.listUser(search);
 	}
 
 	@Override
-	public List<Junghun> listNew(Junghun junghun) {
-		return jd.listNew(junghun);
+	public List<Junghun> listNew(String search) {
+		return jd.listNew(search);
 	}
 
 }
