@@ -61,7 +61,7 @@ public class CoffeeController {
 	public String censorBomManagerPage(Model model) {
 		System.out.println("CoffeeController censorBomManagerPage start..");
 		List<User_info> list = uis.user_infoSensorList();
-		model.addAttribute("user_infoList", list);
+		model.addAttribute("boardUser_infoList", list);
 		return "coffee/censorBomManagerPage";
 	}
 
@@ -69,14 +69,14 @@ public class CoffeeController {
 	public String restoreBomManagerPage(Model model) {
 		System.out.println("CoffeeController restoreBomManagerPage start..");
 		List<User_info> list = uis.user_infoRestoreList();
-		model.addAttribute("user_infoList", list);
+		model.addAttribute("boardUser_infoList", list);
 		return "coffee/restoreBomManagerPage";
 	}
 	@GetMapping(value = "/coffee/accusationBomManagerPage")
 	public String accusationBomManagerPage(Model model) {
 		System.out.println("CoffeeController accusationBomManagerPage start..");
 		List<User_info> list = uis.user_infoAccusationList();
-		model.addAttribute("user_infoList", list);
+		model.addAttribute("boardUser_infoList", list);
 		return "coffee/accusationBomManagerPage";
 	}
 	

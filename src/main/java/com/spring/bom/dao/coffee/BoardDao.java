@@ -2,8 +2,11 @@ package com.spring.bom.dao.coffee;
 
 import java.util.List;
 
-import com.spring.bom.model.coffee.Board;
+import com.spring.bom.model.coffee.BoardUser_info;
+
 
 public interface BoardDao {
-	List<Board> listSelect();
+	List<BoardUser_info> sensorList();
+	List<BoardUser_info> restoreList();
+	List<BoardUser_info> accusationList();
 }

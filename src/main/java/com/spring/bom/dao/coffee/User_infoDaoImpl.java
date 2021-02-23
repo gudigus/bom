@@ -15,19 +15,19 @@ public class User_infoDaoImpl implements User_infoDao {
 	private  SqlSession  session;
 	@Override
 	public List<User_info> user_infoSensorList() {
-		List<User_info> user_infoList = new ArrayList<User_info>();
+		List<User_info> user_infoList = null;
 		user_infoList = session.selectList("coffeeSensorSelectUser_info");
 		return user_infoList;
 	}
 	@Override
 	public List<User_info> user_infoRestoreList() {
-		List<User_info> user_infoList = new ArrayList<User_info>();
+		List<User_info> user_infoList = null;
 		user_infoList = session.selectList("coffeeRestoreSelectUser_info");
 		return user_infoList;
 	}
 	@Override
 	public List<User_info> user_infoAccusationList() {
-		List<User_info> user_infoList = new ArrayList<User_info>();
+		List<User_info> user_infoList = null;
 		user_infoList = session.selectList("coffeeAccusationSelectUser_info");
 		return user_infoList;
 	}

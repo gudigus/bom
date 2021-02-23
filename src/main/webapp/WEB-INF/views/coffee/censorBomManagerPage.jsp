@@ -116,13 +116,13 @@
 				<div class="input-group col-auto">
 					<ul class="nav nav-tabs">
 					  <li class="nav-item">
-					    <a class="nav-link active" aria-current="page" href="/coffee/censorMemberManagerPage">탈퇴</a>
+					    <a class="nav-link active" aria-current="page" href="/coffee/censorBomManagerPage">차단</a>
 					  </li>
 					  <li class="nav-item">
-					    <a class="nav-link" href="/coffee/restoreMemberManagerPage">복원</a>
+					    <a class="nav-link" href="/coffee/restoreBomManagerPage">복원</a>
 					  </li>
 					  <li class="nav-item">
-					    <a class="nav-link" href="/coffee/accusationMemberManagerPage">피신고자</a>
+					    <a class="nav-link" href="/coffee/accusationBomManagerPage">피신고글</a>
 					  </li>
 					  
 					</ul>
@@ -132,22 +132,22 @@
 					</form>
 				</div>
 				<!--글 정렬-->
-				<c:forEach begin="1" end="10" step="1">
+				<c:forEach var="list" items="${boardUser_infoList }">
 					<div class="card">
 						<div class="card-body">
-							<span><button type="button" class="btn btn-danger float-right">탈퇴</button></span>
+							<span><button type="button" class="btn btn-danger float-right">차단</button></span>
 							<span><button type="button" class="btn btn-primary float-right">복원</button></span>
 							<c:choose>
 								<c:when test="${not empty list.uimage }">
-								<img alt="회원 이미지" src="/img/profiles/${ulist.uimage }" class="rounded-circle" width="50"
+								<img alt="회원 이미지" src="/img/profiles/${list.uimage }" class="rounded-circle" width="50"
 								height="50"></c:when>
 								<c:otherwise>
 								<img src="/img/coffee/user_basic.svg" class="rounded-circle" width="50" height="50">
 								</c:otherwise>
-							</c:choose><span class="card-title text-dark">${ulist.unickname }</span> <a
-								class="card-subtitle mb-2 text-muted">@${ulist.uatid }</a> <a
-								class="card-subtitle mb-2 text-muted">${blist.bregdate }</a> <a href="#"
-								class="card-text" style="margin-top: 10px;">${blist.bcontent }</a>
+							</c:choose><span class="card-title text-dark">${list.unickname }</span> <a
+								class="card-subtitle mb-2 text-muted">@${list.uatid }</a> <a
+								class="card-subtitle mb-2 text-muted">${list.bregdate }</a> <a href="#"
+								class="card-text" style="margin-top: 10px;">$blist.bcontent }</a>
 							
 						</div>
 					</div>

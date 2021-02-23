@@ -2,7 +2,7 @@ package com.spring.bom.model.coffee;
 
 public class Board {
 	private int bcode;
-	private int busercode;
+	private int ucode;
 	private String bcontent;
 	private String bregdate;
 	private String btype;
@@ -16,17 +16,20 @@ public class Board {
 	private int blikecount;
 	private int bexpcount;
 	private int bjoincount;
+	private int bstate;
+	private int breportcount;
+	
 	public int getBcode() {
 		return bcode;
 	}
 	public void setBcode(int bcode) {
 		this.bcode = bcode;
 	}
-	public int getBusercode() {
-		return busercode;
+	public int getUcode() {
+		return ucode;
 	}
-	public void setBusercode(int busercode) {
-		this.busercode = busercode;
+	public void setUcode(int ucode) {
+		this.ucode = ucode;
 	}
 	public String getBcontent() {
 		return bcontent;
@@ -105,5 +108,17 @@ public class Board {
 	}
 	public void setBjoincount(int bjoincount) {
 		this.bjoincount = bjoincount;
+	}
+	public int getBstate() {
+		return bstate;
+	}
+	public void setBstate(int bstate) {
+		this.bstate = bstate;
+	}
+	public int getBreportcount() {
+		return breportcount;
+	}
+	public void setBreportcount(int breportcount) {
+		this.breportcount = breportcount;
 	}
 }

@@ -4,6 +4,7 @@
      <typeAliases>
 		<typeAlias alias="Board"          type="com.spring.bom.model.coffee.Board"   />
 		<typeAlias alias="User_info"          type="com.spring.bom.model.coffee.User_info"   />
+		<typeAlias alias="BoardUser_info"          type="com.spring.bom.model.coffee.BoardUser_info"   />
 		
      </typeAliases>
 </configuration>

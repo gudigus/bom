@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BoardUser_info">
+	<select id="coffeeSensorSelectBoardUser_info" parameterType="BoardUser_info" resultType="BoardUser_info">
+		SELECT  b.bcode, b.ucode, b.bcontent, b.bregdate, b.btype, b.banchor, b.bpermission, b.bbcode, b.battach, b.bvotecode,
+        b.btmpsav, b.btmpsavtime, b.blikecount, b.bexpcount, b.bjoincount, b.bstate, b.breportcount,
+        <!-- u.ucode, --> u.uemail, u.upassword, u.uatid, u.unickname, u.ubirth, u.ugender, u.unation, u.uidentify, u.uchat,
+        u.ualarm, u.uprivate, u.uregdate, u.uintro, u.uloc, u.uimage, u.ubg, u.uprofilelink, u.ustate, u.ureportcount,
+        u.uonline, u.ulogincount
+		FROM    board b, user_info u
+		WHERE   b.ucode = u.ucode and b.bstate = 1
+   	</select>
+   	<select id="coffeeRestoreSelectBoardUser_info" parameterType="BoardUser_info" resultType="BoardUser_info">
+		SELECT  b.bcode, b.ucode, b.bcontent, b.bregdate, b.btype, b.banchor, b.bpermission, b.bbcode, b.battach, b.bvotecode,
+        b.btmpsav, b.btmpsavtime, b.blikecount, b.bexpcount, b.bjoincount, b.bstate, b.breportcount,
+        <!-- u.ucode, --> u.uemail, u.upassword, u.uatid, u.unickname, u.ubirth, u.ugender, u.unation, u.uidentify, u.uchat,
+        u.ualarm, u.uprivate, u.uregdate, u.uintro, u.uloc, u.uimage, u.ubg, u.uprofilelink, u.ustate, u.ureportcount,
+        u.uonline, u.ulogincount
+		FROM    board b, user_info u
+		WHERE   b.ucode = u.ucode and b.bstate = 2
+   	</select>
+   	<select id="coffeeAccusationSelectBoardUser_info" parameterType="BoardUser_info" resultType="BoardUser_info">
+		SELECT  b.bcode, b.ucode, b.bcontent, b.bregdate, b.btype, b.banchor, b.bpermission, b.bbcode, b.battach, b.bvotecode,
+        b.btmpsav, b.btmpsavtime, b.blikecount, b.bexpcount, b.bjoincount, b.bstate, b.breportcount,
+        <!-- u.ucode, --> u.uemail, u.upassword, u.uatid, u.unickname, u.ubirth, u.ugender, u.unation, u.uidentify, u.uchat,
+        u.ualarm, u.uprivate, u.uregdate, u.uintro, u.uloc, u.uimage, u.ubg, u.uprofilelink, u.ustate, u.ureportcount,
+        u.uonline, u.ulogincount
+		FROM    board b, user_info u
+		WHERE   b.ucode = u.ucode and b.breportcount >= 1
+		
+   	</select>
+   
+   
+   
+   
+   <select id="total" resultType="int">
+       select COUNT(*) from user_info
+   </select>
+   <!-- <select id="listAll3"  parameterType="Emp" resultType="Emp">
+		select * from (select rownum rn, a.* 
+		               from (select * from emp order by empno) a
+		               ) 
+		where rn between #{start} and	 #{end}   
+   </select>
+	<select id="listAll" parameterType="Emp" resultType="Emp">
+		<![CDATA[
+		select * from (select rownum rn, a.* 
+		               from (select * from emp order by empno) a
+		               ) 
+		where rn >= #{start} 
+		and	  rn <= #{end}   
+		]]>
+	
+	</select>
+   <select id="tkEmpSelOne" parameterType="int" resultType="Emp" >
+       select * From emp Where empno = #{empno}   
+   </select>  
+
+   <update id="TKempUpdate" parameterType="Emp">
+	 update emp set ename=#{ename}, job=#{job}, mgr=#{mgr}, hiredate=to_date(#{hiredate}, 'yy/mm/dd hh24:mi:ss'),
+	    sal=#{sal}, 
+	    <if test="comm!=null"> 	comm=#{comm},    </if>
+	    deptno=#{deptno} where empno=#{empno}
+   </update>
+
+    <select id="selectManager" resultType="Emp">
+        SELECT   * 
+        FROM    emp 
+        WHERE   empno in (select mgr from emp)
+    </select>
+
+   <insert id="insert" parameterType="Emp">
+ 	 insert into emp values (#{empno},#{ename},#{job},#{mgr},
+	 to_date(#{hiredate}, 'yy/mm/dd hh24:mi:ss'),#{sal},#{comm},#{deptno} ) 
+   </insert>
+
+   <delete id="delete" parameterType="int">
+	    delete from emp where empno=#{empno}
+   </delete>  -->
+
+
+</mapper>
