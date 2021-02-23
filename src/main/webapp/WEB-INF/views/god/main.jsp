@@ -68,6 +68,21 @@ select.custom-select:focus {
 	content: attr(placeholder);
 	display: block; /* For Firefox */
 }
+
+input[type="file"] {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}
+
+label {
+	margin: 0px;
+}
 </style>
 </head>
 
@@ -137,7 +152,64 @@ select.custom-select:focus {
 							style="padding: 0px;" width="50" width="50">
 						<div contentEditable="true" id="writeTextarea"
 							class="col-11 float-left" placeholder="당신의 이야기를 들려주세요."></div>
-
+						<!--투표-->
+						<div class="card" id="vote_form" style="display: none;">
+							<ul class="list-group list-group-flush">
+								<li class="list-group-item">
+									<div class="form-group">
+										<input type="text" class="form-control" placeholder="선택1">
+									</div>
+									<div class="form-group">
+										<input type="text" class="form-control" placeholder="선택2">
+									</div>
+									<div class="form-group" id="pick3" style="display: none;">
+										<input type="text" class="form-control"
+											placeholder="선택3(선택 사항)">
+									</div>
+									<div class="form-group" id="pick4" style="display: none;">
+										<input type="text" class="form-control"
+											placeholder="선택4(선택 사항)">
+									</div>
+									<button type="button" id="plusSelect"
+										class="btn btn-outline-secondary btn-sm">+</button>
+								</li>
+								<li class="list-group-item">
+									<h5 class="card-title">투표 기간</h5>
+									<div class="form-row">
+										<select id="day" class="form-control col-md-3 mr-5 ml-2"
+											required="required">
+											<option selected="selected" disabled="disabled">일</option>
+											<c:forEach var="i" begin="0" end="7" step="1">
+												<option>${i}</option>
+											</c:forEach>
+										</select> <select id="hour" class="form-control col-md-3 mr-5"
+											required="required">
+											<option selected="selected" disabled="disabled">시간</option>
+											<c:forEach var="i" begin="0" end="23" step="1">
+												<option>${i}</option>
+											</c:forEach>
+										</select> <select id="min" class="form-control col-md-3"
+											required="required">
+											<option selected="selected" disabled="disabled">분</option>
+											<c:forEach var="i" begin="0" end="59" step="1">
+												<option>${i}</option>
+											</c:forEach>
+										</select>
+									</div>
+								</li>
+								<li class="list-group-item text-center"><a href="#"
+									id="deleteVote" class="btn btn-outline-danger">투표 삭제</a></li>
+							</ul>
+						</div>
+						<!--파일첨부 -->
+						<div class="select_file">
+							<img src="" class="img-fluid" />
+							<div class="embed-responsive embed-responsive-16by9"
+								style="display: none;">
+								<video id="video">
+								</video>
+							</div>
+						</div>
 						<!-- <textarea class="form-control col-11 float-left"
 							id="writeTextarea" placeholder="당신의 이야기를 들려주세요." rows="3"></textarea> -->
 						<select class="custom-select custom-select-sm">
@@ -149,10 +221,14 @@ select.custom-select:focus {
 					<div class="modal-footer">
 						<fieldset class="w-100">
 							<span class="btn-group" role="group" aria-label="Basic example">
-								<button type="button" class="btn btn-outline-secondary">미디어</button>
+								<label class="btn btn-outline-secondary" for="media_file">미디어</label>
+								<input type="file" class="custom-file-input"
+								accept="video/*, image/*" id="media_file">
 								<button type="button" class="btn btn-outline-secondary">GIF</button>
-								<button type="button" class="btn btn-outline-secondary">투표</button>
-								<button type="button" class="btn btn-outline-secondary">예약하기</button>
+								<button type="button" id="displayVote"
+									class="btn btn-outline-secondary">투표</button>
+								<button type="button" class="btn btn-outline-secondary" id="reserveBtn"
+									data-toggle="modal" data-target="#reserveForm">예약하기</button>
 							</span>
 							<button type="button" class="btn btn-success float-right">봄</button>
 						</fieldset>
@@ -160,37 +236,184 @@ select.custom-select:focus {
 				</div>
 			</div>
 		</div>
-		<!--자동 높이 조절 -->
-		<!-- <script type="text/javascript">
-			$("textarea.form-control").on('keydown keyup', function() {
-				$(this).height(1).height($(this).prop('scrollHeight') + 12);
-			});
-		</script> -->
-		<!--해시태그 처리 -->
+		<!--예약 창-->
+		<div class="modal fade" id="reserveForm" data-backdrop="static"
+			data-keyboard="false" tabindex="-1"
+			aria-labelledby="exampleModalLabel2" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">봄 예약하기</h5>
+						<button type="button" class="btn btn-success btn-sm float-right">예약</button>
+					</div>
+
+					<div class="modal-body col-12">
+						<h5 class="card-title">날짜</h5>
+						<div class="form-row">
+							<select aria-label="년" class="form-control col-md-3 mr-5 ml-2" required="required">
+								<option>${year+1 }년</option>
+								<option selected="selected">${year }년</option>
+								<option>${year-1 }년</option>
+							</select> 
+							<select aria-label="월" class="form-control col-md-3 mr-5" required="required">
+								<option selected="selected">${month }월</option>
+								<c:forEach var="i" begin="1" end="12" step="1">
+									<c:if test="${i } ne ${month }">
+										<option>${i}월</option>
+									</c:if>
+								</c:forEach>
+							</select> 
+							<select class="form-control col-md-3" required="required">
+								<option selected="selected" disabled="disabled">분</option>
+								<c:forEach var="i" begin="0" end="59" step="1">
+									<option>${i}</option>
+								</c:forEach>
+							</select>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 		<script type="text/javascript">
-			$("#writeTextarea")
-					.on(
-							"propertychange change keyup paste input",
-							function(event) {
-								if (event.keyCode == 32 || event.keyCode == 13) {
-									var currentVal = $(this).html();
-									var pattern = /#([\p{L}\p{N}]+)/gu;
-								 	currentVal = currentVal
-											.replace(pattern,'<a href="/?hashtag=$1">#$1</a>&nbsp');
-									$('#writeTextarea').html(currentVal);
-									/* currentVal = $(this).val();
-									var splitedArray = currentVal.split(' ');
-									var linkedContent = "";
-									for ( var word in splitedArray) {
-										word = splitedArray[word];
-										if (word.indexOf('#') == 0)
-											word = '<span class="text-primary">'
-													+ word + '</span>';
-										linkedContent += word + ' ';
-									}
-									document.getElementById('writeTextarea').innerHTML = linkedContent; */
-								}
-							});
+		<!--예약창 시간 가져오기-->
+		jQuery('#reserveBtn').click(function (){
+			let today = new Date(); 
+			let year = today.getFullYear(); // 년도
+			let month = today.getMonth() + 1;  // 월
+			let date = today.getDate();  // 일
+			let hours = today.getHours(); // 시
+			let minutes = today.getMinutes();  // 분
+			
+		});
+		
+		
+		<!-- 투표 삭제 -->
+		jQuery('#deleteVote').click(function () {   
+			$('#vote_form').css("display","none");  
+		});  
+		<!-- 투표 보이기 -->
+		jQuery('#displayVote').click(function () {  
+		    if($("#vote_form").css("display") == "none"){   
+		        $('#vote_form').css("display","");  
+		    } 
+		});  
+		
+		<!--투표 항목 늘리기-->
+		jQuery('#plusSelect').click(function () {  
+		    if($("#pick3").css("display") == "none"){   
+		        $('#pick3').css("display","");  
+		    } 
+		    else {  
+		        $('#pick4').css("display","");
+		        $('#plusSelect').css("display","none");
+		    }  
+		});  
+		<!--파일 처리(이미지 or 동영상 선택)-->
+		$("#media_file").change(function(){
+			if(this.files && this.files[0] && this.files[0].name.match(/\.(jpg|jpeg|png|gif)$/)){
+				$(".embed-responsive video").attr("src","");
+				if(this.files[0].size>10485760) {
+                    alert('File size is larger than 10MB!');
+                }
+				else{
+					$('.img-fluid').css("display","");
+					$('.embed-responsive').css("display","none");
+					var reader=new FileReader;
+					reader.onload=function(data){
+						$(".select_file img").attr("src", data.target.result);
+					}
+					reader.readAsDataURL(this.files[0]);
+				}
+			}
+			else if(this.files && this.files[0] && this.files[0].name.match(/\.(avi|mpg|mpeg|mp4)$/)){
+				$(".img-fluid").attr("src","");
+				if(this.files[0].size>10485760) {
+                    alert('File size is larger than 10MB!');
+                }
+				else{
+					$('.img-fluid').css("display","none");
+					$('.embed-responsive').css("display","");
+					var inputFile = document.getElementById("media_file"); 
+					var video = document.getElementById("video"); 
+					var files = inputFile.files; 
+					var videourl = URL.createObjectURL(inputFile.files[0]); 
+					video.setAttribute("src", videourl); 
+					video.play(); 
+				}
+			}
+		});
+		<!--해시태그 처리 -->
+		$("#writeTextarea").on("propertychange change keyup paste input",
+				function(event) {
+					if (event.keyCode == 32 || event.keyCode == 13) {
+						var currentVal = $(this).html();
+						if(currentVal.includes('#')){
+							var pattern = /#([\p{L}\p{N}]+)/gu;
+							currentVal = currentVal.replace(pattern,
+								'<a href="/?hashtag=$1">#$1</a>&nbsp');
+							$('#writeTextarea').html(currentVal);
+						}
+							/* var div = document.getElementById('#writeTextarea');
+							setTimeout(function() {
+							    div.focus();
+							}, 0); 
+
+							// See it in action here 
+							$(this).focusToEnd("Cursor will be at my tail...");  */
+							/* currentVal = $(this).val();
+							var splitedArray = currentVal.split(' ');
+							var linkedContent = "";
+							for ( var word in splitedArray) {
+								word = splitedArray[word];
+								if (word.indexOf('#') == 0)
+									word = '<span class="text-primary">'
+											+ word + '</span>';
+								linkedContent += word + ' ';
+							}
+							document.getElementById('writeTextarea').innerHTML = linkedContent; */
+						}
+					});
+			/* function pasteHtmlAtCaret(html) {
+				var sel, range;
+				if (window.getSelection) {
+					// IE9 and non-IE
+					sel = window.getSelection();
+					if (sel.getRangeAt && sel.rangeCount) {
+						range = sel.getRangeAt(0);
+						range.deleteContents();
+
+						// Range.createContextualFragment() would be useful here but is
+						// non-standard and not supported in all browsers (IE9, for one)
+						var el = document.createElement("div");
+						el.innerHTML = html;
+						var frag = document.createDocumentFragment(), node, lastNode;
+						while ((node = el.firstChild)) {
+							lastNode = frag.appendChild(node);
+						}
+						range.insertNode(frag);
+
+						// Preserve the selection
+						if (lastNode) {
+							range = range.cloneRange();
+							range.setStartAfter(lastNode);
+							range.collapse(true);
+							sel.removeAllRanges();
+							sel.addRange(range);
+						}
+					}
+				} else if (document.selection
+						&& document.selection.type != "Control") {
+					// IE < 9
+					document.selection.createRange().pasteHTML(html);
+				}
+			}  */
 			/* function hashtag() {
 				var content = document.getElementById('writeTextarea').innerHTML;
 				var splitedArray = content.split(' ');
@@ -264,8 +487,8 @@ select.custom-select:focus {
 					<div class="card">
 						<div class="card-body">
 							<button type="button" class="btn btn-light float-right">⋯</button>
-							<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-								width="50"> <a class="card-title text-dark">닉네임</a> <a
+							<img src="/img/teemo.jpg" class="rounded-circle" width="50">
+							<a class="card-title text-dark">닉네임</a> <a
 								class="card-subtitle mb-2 text-muted">@atid</a> <a
 								class="card-subtitle mb-2 text-muted">작성시간</a> <a href="#"
 								class="card-text" style="margin-top: 10px;">글내용 블라블라글내용
