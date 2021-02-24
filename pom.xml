@@ -55,7 +55,7 @@
 			<version>2.0.1.RELEASE</version>
 		</dependency>
 		
-			<!-- jsp변경 -->
+		<!-- jsp변경 -->
 		<dependency> 
 			<groupId>javax.servlet</groupId> 
 			<artifactId>jstl</artifactId> 

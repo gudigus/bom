@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Bookmark">
+   <select id="ubmBoardListMapper" parameterType="int" resultType="UserBookmarkBoard">
+   
+        SELECT  b.bcontent bcontent, ui.uatid uatid, ui.unickname unickname, ui.uimage uimage
+        FROM    user_info ui, like_bookmark lb, board b
+        WHERE   lb.ucode = #{ucode}
+        AND     lb.bcode = b.bcode
+        AND     b.ucode = ui.ucode
+
+
+   </select>
+
+
+
+
+
+
+
+</mapper>

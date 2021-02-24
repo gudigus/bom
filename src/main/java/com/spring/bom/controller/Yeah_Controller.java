@@ -1,37 +1,52 @@
 package com.spring.bom.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.spring.bom.model.yeah.Board;
+import com.spring.bom.model.yeah.UserBookmarkBoard;
+import com.spring.bom.service.yeah.BookmarkService;
+
+
+
+
 
 @Controller
 public class Yeah_Controller {
-
-	@RequestMapping(value = "/bookmark")
-	public String bookmark() {
-
-		return "yeah/bookmark";
+    
+	@Autowired
+	private BookmarkService bms;
+	
+	
+	
+	@RequestMapping(value = "yeah/main")
+	public String main() {
+		System.out.println("Yeah_Controller main Start...");
+		return "yeah/main";
 	}
 
-	/*
-	 * // 북마크
-	 * 
-	 * @GetMapping(value = "bookmark") public String bookmark(Model model) { 모델
-	 * <-회원코드, 글코드 } return "bookmark"; // 북마크 삭제
-	 * 
-	 * @GetMapping(value="delete") public String delete(글코드, 회원코드) { 모델 <- 회원코드 ,글코드
-	 * } return "delete";
-	 * 
-	 * 북마크 전체 삭제
-	 * 
-	 * 최신 북마크한 순으로 나열-> db
-	 * 
-	 * // 북마크 안에서의 검색
-	 * 
-	 * @GetMapping(value="search") public String search(Model model) 모델 <- 글코드, 회원코드
-	 * or 회원 아이디
-	 * 
-	 * return "search";
-	 */
-	 
+	@RequestMapping(value = "yeah/bookmark")
+	 public String bookmark(String ucode, Model model) {
+		//   1. int_ucode 변수 처리 
+		int int_ucode = Integer.parseInt(ucode);
+		System.out.println("Yeah_Controller bookmark Start...");
+		System.out.println("Yeah_Controller bookmark ucode->"+int_ucode);
+		
+		List<UserBookmarkBoard> ubmBoardList = bms.ubmBoardList(int_ucode);
+		
+		System.out.println("Yeah_Controller ubmBoardList.size()"+ubmBoardList.size());
+		
+		model.addAttribute("ubmBoardList", ubmBoardList);
+		
+		
+		
+		return "yeah/bookmark";
+	}
+	
+	
+	
 }
