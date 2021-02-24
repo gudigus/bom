@@ -1,6 +1,9 @@
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -87,7 +90,6 @@ label {
 </head>
 
 <body>
-
 	<div class="d-flex" id="wrapper">
 
 		<!-- Sidebar -->
@@ -176,21 +178,28 @@ label {
 								<li class="list-group-item">
 									<h5 class="card-title">투표 기간</h5>
 									<div class="form-row">
+										<label for="day" class="col-md-3 mr-5 ml-2">일</label> <label
+											for="hour" class="col-md-3 mr-5">시</label> <label for="min"
+											class="col-md-3">분</label>
+									</div>
+									<div class="form-row">
 										<select id="day" class="form-control col-md-3 mr-5 ml-2"
 											required="required">
-											<option selected="selected" disabled="disabled">일</option>
 											<c:forEach var="i" begin="0" end="7" step="1">
-												<option>${i}</option>
+												<c:if test="${i eq '1'}">
+													<option selected="selected">${i}</option>
+												</c:if>
+												<c:if test="${i ne '1'}">
+													<option>${i}</option>
+												</c:if>
 											</c:forEach>
 										</select> <select id="hour" class="form-control col-md-3 mr-5"
 											required="required">
-											<option selected="selected" disabled="disabled">시간</option>
 											<c:forEach var="i" begin="0" end="23" step="1">
 												<option>${i}</option>
 											</c:forEach>
 										</select> <select id="min" class="form-control col-md-3"
 											required="required">
-											<option selected="selected" disabled="disabled">분</option>
 											<c:forEach var="i" begin="0" end="59" step="1">
 												<option>${i}</option>
 											</c:forEach>
@@ -210,8 +219,6 @@ label {
 								</video>
 							</div>
 						</div>
-						<!-- <textarea class="form-control col-11 float-left"
-							id="writeTextarea" placeholder="당신의 이야기를 들려주세요." rows="3"></textarea> -->
 						<select class="custom-select custom-select-sm">
 							<option value="All" selected>모든 사람이 답글 권한을 가집니다</option>
 							<option value="Follower">내가 팔로우하는 사람들만 답글 권한을 가집니다</option>
@@ -227,8 +234,8 @@ label {
 								<button type="button" class="btn btn-outline-secondary">GIF</button>
 								<button type="button" id="displayVote"
 									class="btn btn-outline-secondary">투표</button>
-								<button type="button" class="btn btn-outline-secondary" id="reserveBtn"
-									data-toggle="modal" data-target="#reserveForm">예약하기</button>
+								<button type="button" class="btn btn-outline-secondary"
+									id="reserveBtn" data-toggle="modal" data-target="#reserveForm">예약하기</button>
 							</span>
 							<button type="button" class="btn btn-success float-right">봄</button>
 						</fieldset>
@@ -236,10 +243,35 @@ label {
 				</div>
 			</div>
 		</div>
-		<!--예약 창-->
-		<div class="modal fade" id="reserveForm" data-backdrop="static"
+		<!--글쓰기 팝업 끝-->
+		<!--예약 창 시작-->
+		<%
+			while(true){ 
+				SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy");
+				SimpleDateFormat sdf2 = new SimpleDateFormat("MM");
+				SimpleDateFormat sdf3 = new SimpleDateFormat("dd");
+				SimpleDateFormat sdf4 = new SimpleDateFormat("HH");
+				SimpleDateFormat sdf5 = new SimpleDateFormat("mm");
+				Date d = new Date();
+				
+				String year = sdf1.format(d); 
+				String month = sdf2.format(d); 
+				String day2 = sdf3.format(d); 
+				String hours = sdf4.format(d); 
+				String minute = sdf5.format(d); 
+				try { 
+					Thread.sleep(1000); 
+				}catch (InterruptedException e) {
+					
+				} 
+			}
+
+		%>
+		<div class="modal" id="reserveForm" data-backdrop="static"
 			data-keyboard="false" tabindex="-1"
-			aria-labelledby="exampleModalLabel2" aria-hidden="true">
+			aria-labelledby="exampleModalLabel2" aria-hidden="true"
+			backdrop="false">
+			<div id="serverTime"></div>
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -250,29 +282,55 @@ label {
 					<div class="modal-body col-12">
 						<h5 class="card-title">날짜</h5>
 						<div class="form-row">
-							<select aria-label="년" class="form-control col-md-3 mr-5 ml-2" required="required">
-								<option>${year+1 }년</option>
-								<option selected="selected">${year }년</option>
-								<option>${year-1 }년</option>
-							</select> 
-							<select aria-label="월" class="form-control col-md-3 mr-5" required="required">
-								<option selected="selected">${month }월</option>
+							<label for="year" class="col-md-3 mr-5 ml-2">년</label> <label
+								for="month" class="col-md-3 mr-5">월</label> <label for="day2"
+								class="col-md-3">일</label>
+						</div>
+						<div class="form-row">
+							<select id="year" class="form-control col-md-3 mr-5 ml-2"
+								required="required">
+								<option>${year-1 }</option>
+								<option selected="selected">${year }</option>
+								<option>${year+1 }</option>
+							</select> <select id="month" class="form-control col-md-3 mr-5"
+								required="required">
 								<c:forEach var="i" begin="1" end="12" step="1">
-									<c:if test="${i } ne ${month }">
-										<option>${i}월</option>
-									</c:if>
+									<c:choose>
+										<c:when test="${i } ne ${month }">
+											<option>${i}</option>
+										</c:when>
+										<c:otherwise>
+											<option selected="selected">${i}</option>
+										</c:otherwise>
+									</c:choose>
 								</c:forEach>
-							</select> 
-							<select class="form-control col-md-3" required="required">
-								<option selected="selected" disabled="disabled">분</option>
+							</select> <select id="day2" class="form-control col-md-3"
+								required="required">
 								<c:forEach var="i" begin="0" end="59" step="1">
 									<option>${i}</option>
 								</c:forEach>
 							</select>
 						</div>
+						<div class="form-row mt-1">
+							<label for="hours" class="col-md-3 mr-5 ml-2">시간</label> <label
+								for="minute" class="col-md-3">분</label>
+						</div>
+						<div class="form-row">
+							<select id="hours" class="form-control col-md-3 mr-5 ml-2"
+								required="required">
+								<option>${year+1 }년</option>
+							</select> <select id="minute" class="form-control col-md-3"
+								required="required">
+								<c:forEach var="i" begin="1" end="12" step="1">
+									<c:if test="${i } ne ${month }">
+										<option>${i}월</option>
+									</c:if>
+								</c:forEach>
+							</select>
+						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="close" data-dismiss="modal"
+						<button type="button" class="close" id="reserveClose" data-dismiss="modal"
 							aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -280,24 +338,79 @@ label {
 				</div>
 			</div>
 		</div>
+		<!--예약 창 끝-->
 		<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 		<script type="text/javascript">
 		<!--예약창 시간 가져오기-->
 		jQuery('#reserveBtn').click(function (){
-			let today = new Date(); 
-			let year = today.getFullYear(); // 년도
-			let month = today.getMonth() + 1;  // 월
-			let date = today.getDate();  // 일
-			let hours = today.getHours(); // 시
-			let minutes = today.getMinutes();  // 분
-			
+			 $.ajax({
+		 		type: 'GET',
+				cache: false,
+			    url: location.href,
+			    complete: function (req, textStatus) {
+			      	var dateString = req.getResponseHeader('Date');
+			      	if (dateString.indexOf('GMT') === -1) {
+			    	  dateString += ' GMT';
+				  	}
+					var date = new Date(dateString);
+				      	$('#serverTime').text(date.toString());
+				    }
+			});
 		});
+
+		<%-- jQuery('#reserveBtn').click(function () {   
+			/* <jsp:useBean id="now" class="java.util.Date"/> */
+			<c:set var="now" value="<%= new java.util.Date() %>" />
+			<c:set var="year">
+				<fmt:formatDate value="${now}" pattern="yyyy" />
+			</c:set>
+			<c:set var="month">
+				<fmt:formatDate value="${now}" pattern="MM" />
+			</c:set> 
+			<c:set var="day2">
+				<fmt:formatDate value="${now}" pattern="dd" />
+			</c:set> 
+			<c:set var="hours">
+				<fmt:formatDate value="${now}" pattern="HH" />
+			</c:set> 
+			<c:set var="minute">
+				<fmt:formatDate value="${now}" pattern="mm" />
+			</c:set> 
+		});  --%>
+		/* jQuery('#reserveBtn').click(function () {   
+			$("#writeForm").modal('hide');
+			var timer1=0;
+			timer1=setInterval(function(){
+				var timer=new Date();
+				var y=timer.getFullYear();
+				var m=timer.getMonth()+1;
+				var d=timer.getDate();
+				var h=timer.getHours();
+				var m2=timer.getMinutes();
+				document.getElementById('times').innerHTML
+				="<c:set var='year' value='"+y+"'/>"
+				+"<c:set var='month' value='"+m+"'/>"
+				+"<c:set var='day2' value='"+d+"'/>"
+				+"<c:set var='hours' value='"+h+"'/>"
+				+"<c:set var='minute' value='"+m2+"'/>";
+			},1000);
+		});   */
 		
+		<!--글쓰기 창 숨기고 보여주고-->
+		/* $(document).ready(function(){
+			$("#reserveBtn").click(function(){
+				$("#writeForm").modal('hide');
+			});
+			$("#reserveClose").click(function(){
+				$("#writeForm").modal('show');
+			});
+		}); */
 		
 		<!-- 투표 삭제 -->
 		jQuery('#deleteVote').click(function () {   
 			$('#vote_form').css("display","none");  
-		});  
+		}); 
+		
 		<!-- 투표 보이기 -->
 		jQuery('#displayVote').click(function () {  
 		    if($("#vote_form").css("display") == "none"){   
@@ -315,6 +428,7 @@ label {
 		        $('#plusSelect').css("display","none");
 		    }  
 		});  
+		
 		<!--파일 처리(이미지 or 동영상 선택)-->
 		$("#media_file").change(function(){
 			if(this.files && this.files[0] && this.files[0].name.match(/\.(jpg|jpeg|png|gif)$/)){
@@ -349,6 +463,7 @@ label {
 				}
 			}
 		});
+		
 		<!--해시태그 처리 -->
 		$("#writeTextarea").on("propertychange change keyup paste input",
 				function(event) {
