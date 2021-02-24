@@ -8,7 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.spring.bom.model.coffee.BoardUser_info;
 import com.spring.bom.model.coffee.User_info;
+import com.spring.bom.service.coffee.BoardService;
 import com.spring.bom.service.coffee.User_infoService;
 
 
@@ -16,7 +18,10 @@ import com.spring.bom.service.coffee.User_infoService;
 @Controller
 public class CoffeeController {
 	@Autowired
-	private User_infoService uis; 
+	private User_infoService uis;
+	
+	@Autowired
+	private BoardService bs;
 	
 	
 	@GetMapping(value = "/coffee/example")
@@ -60,7 +65,7 @@ public class CoffeeController {
 	@GetMapping(value = "/coffee/censorBomManagerPage")
 	public String censorBomManagerPage(Model model) {
 		System.out.println("CoffeeController censorBomManagerPage start..");
-		List<User_info> list = uis.user_infoSensorList();
+		List<BoardUser_info> list = bs.sensorList();
 		model.addAttribute("boardUser_infoList", list);
 		return "coffee/censorBomManagerPage";
 	}
@@ -68,14 +73,14 @@ public class CoffeeController {
 	@GetMapping(value = "/coffee/restoreBomManagerPage")
 	public String restoreBomManagerPage(Model model) {
 		System.out.println("CoffeeController restoreBomManagerPage start..");
-		List<User_info> list = uis.user_infoRestoreList();
+		List<BoardUser_info> list = bs.restoreList();
 		model.addAttribute("boardUser_infoList", list);
 		return "coffee/restoreBomManagerPage";
 	}
 	@GetMapping(value = "/coffee/accusationBomManagerPage")
 	public String accusationBomManagerPage(Model model) {
 		System.out.println("CoffeeController accusationBomManagerPage start..");
-		List<User_info> list = uis.user_infoAccusationList();
+		List<BoardUser_info> list = bs.accusationList();
 		model.addAttribute("boardUser_infoList", list);
 		return "coffee/accusationBomManagerPage";
 	}

@@ -10,6 +10,7 @@
         u.uonline, u.ulogincount
 		FROM    board b, user_info u
 		WHERE   b.ucode = u.ucode and b.bstate = 1
+		ORDER BY b.bregdate DESC
    	</select>
    	<select id="coffeeRestoreSelectBoardUser_info" parameterType="BoardUser_info" resultType="BoardUser_info">
 		SELECT  b.bcode, b.ucode, b.bcontent, b.bregdate, b.btype, b.banchor, b.bpermission, b.bbcode, b.battach, b.bvotecode,

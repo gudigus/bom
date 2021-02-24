@@ -3,10 +3,12 @@ package com.spring.bom.service.coffee;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.spring.bom.dao.coffee.BoardDao;
 import com.spring.bom.model.coffee.BoardUser_info;
 
+@Service
 public class BoardServiceImpl implements BoardService {
 	@Autowired
 	private BoardDao bd;

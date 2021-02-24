@@ -33,7 +33,7 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 	integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 	crossorigin="anonymous"></script>
-<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.js"></script>
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
 <style>
@@ -106,9 +106,9 @@
 				class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
 				<button class="btn btn-success" id="menu-toggle">←</button>
 			</nav>
-			<h2>회원 검열 페이지</h2>
+			<h2>봄 검열 페이지</h2>
 			<div class="alert alert-success" role="alert">
-				회원이 탈퇴처리 되었습니다.
+				봄이 차단처리 되었습니다.
 			</div>
 			
 			<div class="container-fluid">
@@ -126,7 +126,7 @@
 					  </li>
 					  
 					</ul>
-					<form class="form-inline mt-2 mt-md-0">
+					<form class="form-inline mt-2 mt-md-0" action="">
 						<input type="text" class="form-control form-control mr-sm-2 float-right" name="searchMember" id="searchMember">
 						<button type="submit" class="btn btn-success float-right">검 색</button>
 					</form>
@@ -139,15 +139,16 @@
 							<span><button type="button" class="btn btn-primary float-right">복원</button></span>
 							<c:choose>
 								<c:when test="${not empty list.uimage }">
-								<img alt="회원 이미지" src="/img/profiles/${list.uimage }" class="rounded-circle" width="50"
-								height="50"></c:when>
+									<img alt="회원 이미지" src="/img/profiles/${list.uimage }" class="rounded-circle" width="50"
+									height="50"></c:when>
 								<c:otherwise>
-								<img src="/img/coffee/user_basic.svg" class="rounded-circle" width="50" height="50">
+									<img src="/img/coffee/user_basic.svg" class="rounded-circle" width="50" height="50">
 								</c:otherwise>
-							</c:choose><span class="card-title text-dark">${list.unickname }</span> <a
+							</c:choose>
+							<span class="card-title text-dark">${list.unickname }</span> <a
 								class="card-subtitle mb-2 text-muted">@${list.uatid }</a> <a
 								class="card-subtitle mb-2 text-muted">${list.bregdate }</a> <a href="#"
-								class="card-text" style="margin-top: 10px;">$blist.bcontent }</a>
+								class="card-text" style="margin-top: 10px;">${list.bcontent }</a>
 							
 						</div>
 					</div>

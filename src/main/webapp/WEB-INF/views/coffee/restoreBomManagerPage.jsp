@@ -41,6 +41,23 @@
 	display: none;
 }
 </style>
+<script type="text/javascript">
+﻿﻿﻿	$("#btn_ban").click(function(){
+		$(this).hide();
+		$("#btn_restore").show();
+	});
+	﻿﻿﻿﻿﻿
+	$("#btn_restore").click(function(){
+		$(this).hide();
+		$("#btn_ban").show();
+	});
+	
+	
+
+
+
+
+</script>
 </head>
 
 <body>
@@ -98,9 +115,9 @@
 				class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
 				<button class="btn btn-success" id="menu-toggle">←</button>
 			</nav>
-			<h2>회원 검열 페이지</h2>
+			<h2>봄 검열 페이지</h2>
 			<div class="alert alert-success" role="alert">
-				회원이 탈퇴처리 되었습니다.
+				봄이 차단처리 되었습니다.
 			</div>
 			
 			<div class="container-fluid">
@@ -108,51 +125,40 @@
 				<div class="input-group col-auto">
 					<ul class="nav nav-tabs">
 					  <li class="nav-item">
-					    <a class="nav-link" href="/coffee/censorMemberManagerPage">탈퇴</a>
+					    <a class="nav-link" href="/coffee/censorBomManagerPage">차단</a>
 					  </li>
 					  <li class="nav-item">
-					    <a class="nav-link active" aria-current="page" href="/coffee/restoreMemberManagerPage">복원</a>
+					    <a class="nav-link active" aria-current="page" href="/coffee/restoreBomManagerPage">복원</a>
 					  </li>
 					  <li class="nav-item">
-					    <a class="nav-link" href="/coffee/accusationMemberManagerPage">피신고자</a>
+					    <a class="nav-link" href="/coffee/accusationBomManagerPage">피신고글</a>
 					  </li>
 					  
 					</ul>
-					<form class="form-inline mt-2 mt-md-0">
+					<form class="form-inline mt-2 mt-md-0" action="">
 						<input type="text" class="form-control form-control mr-sm-2 float-right" name="searchMember" id="searchMember">
 						<button type="submit" class="btn btn-success float-right">검 색</button>
 					</form>
 				</div>
 				<!--글 정렬-->
-				<c:forEach var="list" items="${user_infoList }">
+				<c:forEach var="list" items="${boardUser_infoList }">
 					<div class="card">
 						<div class="card-body">
-							<div align="center"><img src="/img/coffee/news_img_02_m.jpg" style="width: auto;
-    							height: 200px; object-fit:contain;">
-							</div>
-							<span><button type="button" class="btn btn-danger float-right">탈퇴</button></span>
-							<span><button type="button" class="btn btn-primary float-right">복원</button></span>
+							<span class="btn_ban"><button type="button" id="btn_ban" class="btn btn-danger float-right">차단</button></span>
+							<span class="btn_restore"><button type="button" id="btn_restore" class="btn btn-primary float-right">복원</button></span>
 							<c:choose>
 								<c:when test="${not empty list.uimage }">
-								<img alt="회원 이미지" src="/img/profiles/${list.uimage }" class="rounded-circle" width="100"
-								height="100"></c:when>
+									<img alt="회원 이미지" src="/img/profiles/${list.uimage }" class="rounded-circle" width="50"
+									height="50"></c:when>
 								<c:otherwise>
-								<img src="/img/coffee/user_basic.svg" class="rounded-circle" width="100" height="100">
+									<img src="/img/coffee/user_basic.svg" class="rounded-circle" width="50" height="50">
 								</c:otherwise>
 							</c:choose>
 							<span class="card-title text-dark">${list.unickname }</span> <a
-								class="card-subtitle mb-2 text-muted">@${list.uatid }</a> 
-								<a class="card-text" style="margin-top: 10px;">${list.uintro } 
-								</a>
-							<div><c:if test="${not empty list.unation }"><img alt="국적" src="/img/coffee/flags.svg" width="15" height="15">${list.unation }</c:if> 
-							<c:if test="${not empty list.uloc }"><img alt="위치" src="/img/coffee/placeholder.svg" width="15" height="15">${list.uloc }</c:if>
-							</div>
-							<div> 
-							<c:if test="${not empty list.uprofilelink }"><img src="/img/coffee/link.svg" width="15" height="15"><a href="#">${list.uprofilelink }</a></c:if>
-							<img src="/img/coffee/calendar-interface-symbol-tool.svg" width="15" height="15">${list.uregdate }
-							</div>
-							<div>팔로잉수 Following 팔로워수 Follower</div>
-							<span class="bg-danger p-1 text-light"><img src="/img/coffee/accusation.svg" width="15" height="15">${list.ureportcount }</span>
+								class="card-subtitle mb-2 text-muted">@${list.uatid }</a> <a
+								class="card-subtitle mb-2 text-muted">${list.bregdate }</a> <a href="#"
+								class="card-text" style="margin-top: 10px;">${list.bcontent }</a>
+							
 						</div>
 					</div>
 				</c:forEach>
