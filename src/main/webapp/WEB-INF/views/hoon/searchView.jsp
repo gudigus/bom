@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -43,7 +44,6 @@
 .dropdown-toggle.caret-off::after {
 	display: none;
 }
-
 </style>
 </head>
 
@@ -117,30 +117,30 @@
 				</div>
 				<p>
 					<!--글 정렬-->
-						<ul class="nav nav-tabs nav-justified col-md-25" id="myTab" role="tablist">
-							<li class="nav-item mr-5" role="presentation"><a
-								class="nav-link active" id="home-tab" data-toggle="tab"
-								href="#fame" role="tab" aria-controls="fame"
-								aria-selected="true">인기</a></li>
+				<ul class="nav nav-tabs nav-justified col-md-25" id="myTab"
+					role="tablist">
+					<li class="nav-item mr-5" role="presentation"><a
+						class="nav-link active" id="home-tab" data-toggle="tab"
+						href="#fame" role="tab" aria-controls="fame" aria-selected="true">인기</a></li>
 
-							<li class="nav-item mr-5" role="presentation"><a
-								class="nav-link" id="profile-tab" data-toggle="tab" href="#user"
-								role="tab" aria-controls="user" aria-selected="false">사용자</a></li>
+					<li class="nav-item mr-5" role="presentation"><a
+						class="nav-link" id="profile-tab" data-toggle="tab" href="#user"
+						role="tab" aria-controls="user" aria-selected="false">사용자</a></li>
 
-							<li class="nav-item mr-5" role="presentation"><a
-								class="nav-link" id="contact-tab" data-toggle="tab" href="#new"
-								role="tab" aria-controls="new" aria-selected="false">최신글</a></li>
+					<li class="nav-item mr-5" role="presentation"><a
+						class="nav-link" id="contact-tab" data-toggle="tab" href="#new"
+						role="tab" aria-controls="new" aria-selected="false">최신글</a></li>
 
-							<li class="nav-item mr-5" role="presentation"><a
-								class="nav-link" id="contact-tab" data-toggle="tab"
-								href="#contact" role="tab" aria-controls="photo"
-								aria-selected="false">사진</a></li>
+					<li class="nav-item mr-5" role="presentation"><a
+						class="nav-link" id="contact-tab" data-toggle="tab"
+						href="#contact" role="tab" aria-controls="photo"
+						aria-selected="false">사진</a></li>
 
-							<li class="nav-item mr-5" role="presentation"><a
-								class="nav-link" id="contact-tab" data-toggle="tab"
-								href="#contact" role="tab" aria-controls="video"
-								aria-selected="false">동영상</a></li>
-						</ul>
+					<li class="nav-item mr-5" role="presentation"><a
+						class="nav-link" id="contact-tab" data-toggle="tab"
+						href="#contact" role="tab" aria-controls="video"
+						aria-selected="false">동영상</a></li>
+				</ul>
 				<div class="tab-content" id="myTabContent">
 					<!-- 인기  -->
 					<div class="tab-pane fade show active" id="fame" role="tabpanel"
@@ -192,17 +192,22 @@
 					<div class="tab-pane fade" id="user" role="tabpanel"
 						aria-labelledby="profile-tab">
 						<c:forEach var="junghun" items="${listUser }">
-							<div class="card">
-								<div class="card-body">
-									<button type="button" class="btn btn-light float-right">⋯</button>
-									<div class="card-body"
-										style="font-size: 1.2rem; padding: 10px;">
-										<img src="/img/teemo.jpg" class="rounded-circle" width="40"
-											height="40"> <a class="card-title text-dark">${junghun.uNickName}</a>
-										<a class="card-subtitle mb-2 text-muted">@${junghun.uatId}</a>
-										<button type="button"
-											class="btn btn-outline-success btn-sm float-right"
-											style="font-size: 0.8rem;">팔로우</button>
+							<div class="card rounded">
+								<div class="card-hover">
+									<div class="card-body">
+										<div class="row no-gutters">
+											<img class="img-fluid rounded-circle" alt="Profile Picture"
+												src="/img/teemo.jpg" style="width: 50px; height: 50px;" />
+											<div style="margin-left: 10px; width: 90%">
+												<a href="#" class="card-title text-dark"
+													style="font-weight: bold;">${junghun.uNickName}</a>
+												<button type="button"
+													class="btn btn-outline-success btn-sm float-right"
+													style="font-size: 0.8rem; float: right;">팔로우</button>
+												<h6 class="card-title">@${junghun.uatId }</h6>
+												<p>${junghun.uintro }</p>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -319,30 +324,17 @@
 				<div class="card bg-light mb-3">
 					<div class="card-header">실시간 트랜드</div>
 					<div class="card-body" style="padding: 5px;">
-						<div class="card">
-							<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-								1위
-								<div>
-									<a href="#">#사랑해티모</a> <span class="float-right">11,333
-										봄</span>
+						<div class="card-hover">
+							<c:forEach var="Junghun" items="${listTrend }" begin="0" end="2"
+								varStatus="status">
+								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+									${status.count }위
+									<div>
+										<a href="searchView?search=${Junghun.search }">${Junghun.search }</a>
+										<span class="float-right"><fmt:formatNumber value="${Junghun.scount }" groupingUsed="true"></fmt:formatNumber> 봄</span>
+									</div>
 								</div>
-							</div>
-						</div>
-						<div class="card">
-							<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-								2위
-								<div>
-									<a href="#">#티세구</a> <span class="float-right">2,301 봄</span>
-								</div>
-							</div>
-						</div>
-						<div class="card">
-							<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-								3위
-								<div>
-									<a href="#">#롤하고싶다</a> <span class="float-right">1,300 봄</span>
-								</div>
-							</div>
+							</c:forEach>
 						</div>
 					</div>
 				</div>

@@ -23,7 +23,19 @@ public class JunghunController {
 	}
 
 	@RequestMapping(value = "hoon/explore")
-	public String explore() {
+	public String explore(Model model, Junghun junghun) {
+		System.out.println("hoon Controller explore Start");
+		List<Junghun> listCount = js.listCount(junghun);
+		List<Junghun> listHash = js.listHash(junghun);
+		List<Junghun> listTrend = js.listTrend(junghun);
+
+		System.out.println("listTrend count::" + listTrend.size());
+		System.out.println("listCount count:: " + listCount.size());
+		System.out.println("listHash count:: " + listHash.size());
+
+		model.addAttribute("listTrend", listTrend);
+		model.addAttribute("listHash", listHash);
+		model.addAttribute("listCount", listCount);
 		return "hoon/explore";
 	}
 
@@ -32,18 +44,22 @@ public class JunghunController {
 		System.out.println("hoon Controller search Start");
 		System.out.println("Controller ::" + search);
 		List<Junghun> listSearch = js.listSearch(search);
-		List<Junghun> listUser	 = js.listUser(search);
-		List<Junghun> listNew 	 = js.listNew(search);
-		
+		List<Junghun> listUser = js.listUser(search);
+		List<Junghun> listNew = js.listNew(search);
+		int searchData = js.searchData(junghun);
+		List<Junghun> listTrend = js.listTrend(junghun);
+
+		System.out.println("listTrend count::" + listTrend.size());
+		System.out.println("검색데이터 저장되면 1 ::" + searchData);
 		System.out.println("content ::" + listSearch.size());
 		System.out.println("user ::" + listUser.size());
-		System.out.println("new Content ::"+listNew.size());
+		System.out.println("new Content ::" + listNew.size());
 		
+		model.addAttribute("listTrend", listTrend);
 		model.addAttribute("search", search);
 		model.addAttribute("listSearch", listSearch);
-		model.addAttribute("listUser",listUser);
-		model.addAttribute("listNew",listNew);
-		
+		model.addAttribute("listUser", listUser);
+		model.addAttribute("listNew", listNew);
 		return "hoon/searchView";
 	}
 

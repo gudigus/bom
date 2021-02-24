@@ -29,4 +29,24 @@ public class JunghunDaoImpl implements JunghunDao{
 		return session.selectList("searchnew",search);
 	}
 
+	@Override
+	public List<Junghun> listCount(Junghun junghun) {
+		return session.selectList("searchcount",junghun);
+	}
+
+	@Override
+	public int searchData(Junghun junghun) {
+		return session.update("searchData",junghun);
+	}
+
+	@Override
+	public List<Junghun> listHash(Junghun junghun) {
+		return session.selectList("searchHash",junghun);
+	}
+
+	@Override
+	public List<Junghun> listTrend(Junghun junghun) {
+		return session.selectList("searchTrend",junghun);
+	}
+
 }

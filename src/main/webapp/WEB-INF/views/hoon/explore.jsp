@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -121,16 +123,36 @@
 							<td class="table-title">2월 첫째주 검색순</td>
 							<td class="table-title">2월 한달 검색순</td>
 						</tr>
-						<%-- <c:forEach var="" items=""> --%>
+						<c:forEach var="Junghun" items="${listCount }" varStatus="status"
+							begin="0" end="2">
 							<tr>
-								<td>1. <a href="#">블라블라블라</a></td>
-								<td>1.</td>
+								<td>${status.count }.<a
+									href="searchView?search=${Junghun.search }"
+									style="text-align: center;">${Junghun.search }</a>
+								</td>
+								<td>${status.count }.<a href="#"
+									style="text-align: center;">${Junghun.search }</a>
+								</td>
 							</tr>
-							<tr>
-								<td>2.</td>
-								<td>2.</td>
-							</tr>
-						<%-- </c:forEach> --%>
+						</c:forEach>
+					</table>
+					<table class="table">
+						<tr>
+							<td class="table-title">트랜드 추천</td>
+						</tr>
+							<c:forEach var="Junghun" items="${listHash }">
+								<tr>
+									<td><a class="table-content" href="searchView?search=${Junghun.search }"
+										style="text-align: center;">${Junghun.search }<br> <c:choose>
+												<c:when test="${Junghun.scount > 4999 }">
+													<fmt:formatNumber value="${Junghun.scount }"
+														groupingUsed="true"></fmt:formatNumber> 봄</c:when>
+												<c:when test="${Junghun.scount <4999}">
+												</c:when>
+											</c:choose>
+									</a></td>
+								</tr>
+							</c:forEach>
 					</table>
 				</div>
 			</div>
@@ -190,31 +212,20 @@
 					<div class="card bg-light mb-3">
 						<div class="card-header">실시간 트랜드</div>
 						<div class="card-body" style="padding: 5px;">
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									1위
-									<div>
-										<a href="#">#사랑해티모</a> <span class="float-right">11,333
-											봄</span>
+							<div class="card-hover">
+								<c:forEach var="Junghun" items="${listTrend }" begin="0" end="2"
+									varStatus="status">
+									<div class="card-body"
+										style="font-size: 0.8rem; padding: 10px;">
+										${status.count }위
+										<div>
+											<a href="searchView?search=${Junghun.search }">${Junghun.search }</a>
+											<span class="float-right"><fmt:formatNumber
+													value="${Junghun.scount }" groupingUsed="true"></fmt:formatNumber>
+												봄</span>
+										</div>
 									</div>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									2위
-									<div>
-										<a href="#">#티세구</a> <span class="float-right">2,301 봄</span>
-									</div>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									3위
-									<div>
-										<a href="#">#롤하고싶다</a> <span class="float-right">1,300
-											봄</span>
-									</div>
-								</div>
+								</c:forEach>
 							</div>
 						</div>
 					</div>

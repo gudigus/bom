@@ -5,29 +5,81 @@
 	<!-- 글검색 -->
 	<select id="searchfame" parameterType="String"
 		resultType="Junghun">
-		select b.bcontent , b.blikecount , u.uatid , u.unickname , b.btmpsavtime
+		select b.bcontent , b.blikecount , u.uatid , u.unickname ,
+		b.btmpsavtime
 		from board b, user_info u
-		where b.busercode = u.ucode
-		and b.bcontent
+		where b.ucode = u.ucode
+		and
+		b.bcontent
 		like '%'||#{search}||'%'
 		ORDER BY b.blikecount DESC
 	</select>
+
+	<!-- 검색시 검색어저장 -->
+	<update id="searchData" parameterType="Junghun">
+		merge into search
+		USING dual
+		on (search='${search}' and UCODE='52')
+		when MATCHED THEN
+		UPDATE SET
+		scount = scount+1
+		WHEN NOT MATCHED THEN
+		INSERT (search, UCODE,
+		SAGE, STYPE, STIME, SRECORD,SCOUNT)
+		VALUES ('${search}',52,10,
+		<choose>
+			<when test='search.contains("#")'>'hash'</when>
+			<when test='search.contains("@")'>'user'</when>
+			<otherwise>
+				'word'
+			</otherwise>
+		</choose>
+		,to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),1,0)
+	</update>
+
 	<!-- 회원검색 -->
 	<select id="searchuser" parameterType="String"
 		resultType="Junghun">
-		select uatid , unickname
+		select uatid , unickname , uintro
 		from user_info
-		where ( uatid like
+		where (
+		uatid like
 		'%'||#{search}||'%' or unickname like '%'||#{search}||'%')
 	</select>
+
 	<!-- 최신글검색 -->
 	<select id="searchnew" parameterType="String"
 		resultType="Junghun">
 		select b.bcontent , b.btmpsavtime, u.uatid , u.unickname
 		from board b, user_info u
-		where b.busercode = u.ucode
+		where b.ucode = u.ucode
 		and b.bcontent
-		like '%'||#{search}||'%'
+		like
+		'%'||#{search}||'%'
 		ORDER BY b.BTMPSAVTIME
+	</select>
+
+	<!-- explore 검색어순위 -->
+	<select id="searchcount" parameterType="Junghun"
+		resultType="Junghun">
+		select search , scount
+		from search
+		ORDER BY scount DESC
+	</select>
+	<!-- 해쉬태그 랜덤값 -->
+	<select id="searchHash" parameterType="Junghun"
+		resultType="Junghun">
+		<![CDATA[
+		select * from ( select * from search where search like '#'||'%' order by DBMS_RANDOM.RANDOM)
+		where rownum <10
+		and scount>3000
+		]]>
+	</select>
+	<!-- 해쉬태그 순위 -->
+		<select id="searchTrend" parameterType="Junghun"
+		resultType="Junghun">
+		select * from search 
+		where search like '#'||'%'
+		ORDER BY scount DESC
 	</select>
 </mapper>

@@ -29,4 +29,24 @@ public class JunghunServiceImpl implements JunghunService {
 		return jd.listNew(search);
 	}
 
+	@Override
+	public List<Junghun> listCount(Junghun junghun) {
+		return jd.listCount(junghun);
+	}
+
+	@Override
+	public int searchData(Junghun junghun) {
+		return jd.searchData(junghun);
+	}
+
+	@Override
+	public List<Junghun> listHash(Junghun junghun) {
+		return jd.listHash(junghun);
+	}
+
+	@Override
+	public List<Junghun> listTrend(Junghun junghun) {
+		return jd.listTrend(junghun);
+	}
+
 }

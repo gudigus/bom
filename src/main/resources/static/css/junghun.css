@@ -13,6 +13,10 @@
 	border: 1px solid green;
 	font-weight: bold;
 }
+.table-content{
+	font-weight: bold;
+	color: black;
+}
 
 ul li a {
 	color: black;
@@ -36,3 +40,11 @@ ul li a:hover {
 page-content-wrapper {
 	width: 800px;
 }
+.tab-pane fade .card .catd-body .card-title text-dark{
+	font-weight: bold;
+}
+
+.card-hover:hover {
+	background-color: #EFFBF5;
+}
+
