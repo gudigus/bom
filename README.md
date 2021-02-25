@@ -1,10 +1,17 @@
-# bom
-bom_springProject
+# Right
 
-**안녕**
+bom_springProject 정윤
+
+**210225**
+
+회원정보 수정 진짜 마무리 ㅠ: id 중복 체크
+
+2단계 인증
+
+탈퇴
+
+비밀번호 변경(2단계 인증 X)
+
+비밀번호 변경(2단계 인증 O)
 ```
-if(idJ.test(user_id)){
-										// 0 : 아이디 길이 / 문자열 검사
-										$("#id_check").text("");
-										$("#reg_submit").attr("disabled", false);
 ```
