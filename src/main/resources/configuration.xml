@@ -1,10 +1,7 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "HTTP://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
      <typeAliases>
-		<typeAlias alias="Emp"          type="com.oracle.oBootMyBatis03.model.Emp"   />
-		<typeAlias alias="Dept"         type="com.oracle.oBootMyBatis03.model.Dept"   />
-		<typeAlias alias="EmpDept"      type="com.oracle.oBootMyBatis03.model.EmpDept" />
-		<typeAlias alias="DeptVO"       type="com.oracle.oBootMyBatis03.model.DeptVO" />
-		<typeAlias alias="Member1"      type="com.oracle.oBootMyBatis03.model.Member1" />
+		<typeAlias alias="user_info"          type="com.spring.bom.model.user_info"   />
+		
      </typeAliases>
 </configuration>
