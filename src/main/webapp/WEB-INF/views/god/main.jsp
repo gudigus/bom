@@ -91,7 +91,6 @@ label {
 
 <body>
 	<div class="d-flex" id="wrapper">
-
 		<!-- Sidebar -->
 		<div class="border-right sidebar-fixed-top" id="sidebar-wrapper">
 			<div class="sidebar-heading" align="center">
@@ -144,8 +143,9 @@ label {
 								<span aria-hidden="true">&times;</span>
 							</button>
 							<a href='#'
-								style="float: right; color: black; text-decoration: none;">임시
-								저장한 봄 <span class="badge badge-success">1</span>
+								style="float: right; color: black; text-decoration: none;"
+								data-toggle="modal" data-target="#tempForm">임시 저장한 봄 <span
+								class="badge badge-success">1</span>
 							</a>
 						</fieldset>
 					</div>
@@ -244,29 +244,8 @@ label {
 			</div>
 		</div>
 		<!--글쓰기 팝업 끝-->
-		<!--예약 창 시작-->
-		<%
-			while(true){ 
-				SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy");
-				SimpleDateFormat sdf2 = new SimpleDateFormat("MM");
-				SimpleDateFormat sdf3 = new SimpleDateFormat("dd");
-				SimpleDateFormat sdf4 = new SimpleDateFormat("HH");
-				SimpleDateFormat sdf5 = new SimpleDateFormat("mm");
-				Date d = new Date();
-				
-				String year = sdf1.format(d); 
-				String month = sdf2.format(d); 
-				String day2 = sdf3.format(d); 
-				String hours = sdf4.format(d); 
-				String minute = sdf5.format(d); 
-				try { 
-					Thread.sleep(1000); 
-				}catch (InterruptedException e) {
-					
-				} 
-			}
 
-		%>
+		<!--예약 창 시작-->
 		<div class="modal" id="reserveForm" data-backdrop="static"
 			data-keyboard="false" tabindex="-1"
 			aria-labelledby="exampleModalLabel2" aria-hidden="true"
@@ -276,39 +255,79 @@ label {
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title">봄 예약하기</h5>
-						<button type="button" class="btn btn-success btn-sm float-right">예약</button>
+						<button type="button" id="reserveChk"
+							class="btn btn-success btn-sm float-right">예약</button>
 					</div>
 
 					<div class="modal-body col-12">
-						<h5 class="card-title">날짜</h5>
+						<h5 class="card-title">
+							날짜 <span id="alertTime"></span>
+						</h5>
 						<div class="form-row">
 							<label for="year" class="col-md-3 mr-5 ml-2">년</label> <label
 								for="month" class="col-md-3 mr-5">월</label> <label for="day2"
 								class="col-md-3">일</label>
 						</div>
 						<div class="form-row">
+							<!--올해 계산 -->
+							<%
+								SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy");
+							Date d = new Date();
+
+							int year = Integer.parseInt(sdf1.format(d));
+							%>
 							<select id="year" class="form-control col-md-3 mr-5 ml-2"
 								required="required">
-								<option>${year-1 }</option>
-								<option selected="selected">${year }</option>
-								<option>${year+1 }</option>
+								<option value="<%=year%>" selected="selected"><%=year%></option>
+								<option value="<%=year + 1%>"><%=year + 1%></option>
+								<option value="<%=year + 2%>"><%=year + 2%></option>
 							</select> <select id="month" class="form-control col-md-3 mr-5"
 								required="required">
-								<c:forEach var="i" begin="1" end="12" step="1">
-									<c:choose>
-										<c:when test="${i } ne ${month }">
-											<option>${i}</option>
-										</c:when>
-										<c:otherwise>
-											<option selected="selected">${i}</option>
-										</c:otherwise>
-									</c:choose>
-								</c:forEach>
+								<option value="1월">1</option>
+								<option value="2월">2</option>
+								<option value="3월">3</option>
+								<option value="4월">4</option>
+								<option value="5월">5</option>
+								<option value="6월">6</option>
+								<option value="7월">7</option>
+								<option value="8월">8</option>
+								<option value="9월">9</option>
+								<option value="10월">10</option>
+								<option value="11월">11</option>
+								<option value="12월">12</option>
 							</select> <select id="day2" class="form-control col-md-3"
 								required="required">
-								<c:forEach var="i" begin="0" end="59" step="1">
-									<option>${i}</option>
-								</c:forEach>
+								<option value="1일">1</option>
+								<option value="2일">2</option>
+								<option value="3일">3</option>
+								<option value="4일">4</option>
+								<option value="5일">5</option>
+								<option value="6일">6</option>
+								<option value="7일">7</option>
+								<option value="8일">8</option>
+								<option value="9일">9</option>
+								<option value="10일">10</option>
+								<option value="11일">11</option>
+								<option value="12일">12</option>
+								<option value="13일">13</option>
+								<option value="14일">14</option>
+								<option value="15일">15</option>
+								<option value="16일">16</option>
+								<option value="17일">17</option>
+								<option value="18일">18</option>
+								<option value="19일">19</option>
+								<option value="20일">20</option>
+								<option value="21일">21</option>
+								<option value="22일">22</option>
+								<option value="23일">23</option>
+								<option value="24일">24</option>
+								<option value="25일">25</option>
+								<option value="26일">26</option>
+								<option value="27일">27</option>
+								<option value="28일">28</option>
+								<option value="29일">29</option>
+								<option value="30일">30</option>
+								<option value="31일">31</option>
 							</select>
 						</div>
 						<div class="form-row mt-1">
@@ -318,20 +337,98 @@ label {
 						<div class="form-row">
 							<select id="hours" class="form-control col-md-3 mr-5 ml-2"
 								required="required">
-								<option>${year+1 }년</option>
+								<option value="1시">1</option>
+								<option value="2시">2</option>
+								<option value="3시">3</option>
+								<option value="4시">4</option>
+								<option value="5시">5</option>
+								<option value="6시">6</option>
+								<option value="7시">7</option>
+								<option value="8시">8</option>
+								<option value="9시">9</option>
+								<option value="10시">10</option>
+								<option value="11시">11</option>
+								<option value="12시">12</option>
+								<option value="13시">13</option>
+								<option value="14시">14</option>
+								<option value="15시">15</option>
+								<option value="16시">16</option>
+								<option value="17시">17</option>
+								<option value="18시">18</option>
+								<option value="19시">19</option>
+								<option value="20시">20</option>
+								<option value="21시">21</option>
+								<option value="22시">22</option>
+								<option value="23시">23</option>
 							</select> <select id="minute" class="form-control col-md-3"
 								required="required">
-								<c:forEach var="i" begin="1" end="12" step="1">
-									<c:if test="${i } ne ${month }">
-										<option>${i}월</option>
-									</c:if>
-								</c:forEach>
+								<option value="0분">0</option>
+								<option value="1분">1</option>
+								<option value="2분">2</option>
+								<option value="3분">3</option>
+								<option value="4분">4</option>
+								<option value="5분">5</option>
+								<option value="6분">6</option>
+								<option value="7분">7</option>
+								<option value="8분">8</option>
+								<option value="9분">9</option>
+								<option value="10분">10</option>
+								<option value="11분">11</option>
+								<option value="12분">12</option>
+								<option value="13분">13</option>
+								<option value="14분">14</option>
+								<option value="15분">15</option>
+								<option value="16분">16</option>
+								<option value="17분">17</option>
+								<option value="18분">18</option>
+								<option value="19분">19</option>
+								<option value="20분">20</option>
+								<option value="21분">21</option>
+								<option value="22분">22</option>
+								<option value="23분">23</option>
+								<option value="24분">24</option>
+								<option value="25분">25</option>
+								<option value="26분">26</option>
+								<option value="27분">27</option>
+								<option value="28분">28</option>
+								<option value="29분">29</option>
+								<option value="30분">30</option>
+								<option value="31분">31</option>
+								<option value="32분">32</option>
+								<option value="33분">33</option>
+								<option value="34분">34</option>
+								<option value="35분">35</option>
+								<option value="36분">36</option>
+								<option value="37분">37</option>
+								<option value="38분">38</option>
+								<option value="39분">39</option>
+								<option value="40분">40</option>
+								<option value="41분">41</option>
+								<option value="42분">42</option>
+								<option value="43분">43</option>
+								<option value="44분">44</option>
+								<option value="45분">45</option>
+								<option value="46분">46</option>
+								<option value="47분">47</option>
+								<option value="48분">48</option>
+								<option value="49분">49</option>
+								<option value="50분">50</option>
+								<option value="51분">51</option>
+								<option value="52분">52</option>
+								<option value="53분">53</option>
+								<option value="54분">54</option>
+								<option value="55분">55</option>
+								<option value="56분">56</option>
+								<option value="57분">57</option>
+								<option value="58분">58</option>
+								<option value="59분">59</option>
+								<option value="60분">60</option>
 							</select>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="close" id="reserveClose" data-dismiss="modal"
-							aria-label="Close">
+						<button type="button" class="close" id="reserveClose"
+							data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
@@ -339,10 +436,102 @@ label {
 			</div>
 		</div>
 		<!--예약 창 끝-->
+
+		<!--임시저장 창 시작-->
+		<div class="modal" id="tempForm" data-backdrop="static"
+			data-keyboard="false" tabindex="-1"
+			aria-labelledby="exampleModalLabel2" aria-hidden="true"
+			backdrop="false">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">임시 저장한 봄</h5>
+						<button type="button" class="btn btn-success btn-sm float-right">수정</button>
+					</div>
+					<div class="modal-body col-12">
+						<ul class="nav nav-tabs" id="myTab" role="tablist">
+							<li class="nav-item" role="presentation"><a
+								class="nav-link active" id="home-tab" data-toggle="tab"
+								href="#home" role="tab" aria-controls="home"
+								aria-selected="true">저장</a></li>
+							<li class="nav-item" role="presentation"><a class="nav-link"
+								id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+								aria-controls="profile" aria-selected="false">예약</a></li>
+						</ul>
+						<div class="tab-content" id="myTabContent">
+							<div class="tab-pane fade show active" id="home" role="tabpanel"
+								aria-labelledby="home-tab">
+								<ul class="list-group">
+									<li class="list-group-item">Cras justo odio</li>
+									<li class="list-group-item">Dapibus ac facilisis in</li>
+									<li class="list-group-item">Morbi leo risus</li>
+									<li class="list-group-item">Porta ac consectetur ac</li>
+									<li class="list-group-item">Vestibulum at eros</li>
+								</ul>
+							</div>
+							<div class="tab-pane fade" id="profile" role="tabpanel"
+								aria-labelledby="profile-tab">
+								<ul class="list-group">
+									<li class="list-group-item">Cras justo odio</li>
+									<li class="list-group-item">Dapibus ac facilisis in</li>
+									<li class="list-group-item">Morbi leo risus</li>
+									<li class="list-group-item">Porta ac consectetur ac</li>
+									<li class="list-group-item">Vestibulum at eros</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="close" id="reserveClose"
+							data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--임시저장 창 끝-->
+
+		<!--(주혜)글쓰기 폼 기능-->
 		<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 		<script type="text/javascript">
+		<!--예약하기 버튼(월-일맞춰서 경고창띄우기)-->
+		/* jQuery("#reserveChk").click(function(){
+			var month=$('#month option:selected').val();
+			var day=$('#day2 option:selected').val();
+			if(month==2&&(day==29||day==30||day==31))
+				$("#alertTime").text("시간이 맞지 않습니다.");
+			else if((month==4||month==6||month==9||month==11)&&day==31))
+				$("#alertTime").text("시간이 맞지 않습니다.");
+			else{
+				$("#alertTime").html("");
+				$("#reserveForm").modal('hide');
+			}
+				
+		}); */
+		 
 		<!--예약창 시간 가져오기-->
-		jQuery('#reserveBtn').click(function (){
+		jQuery('#reserveBtn').click(function () { 
+			var timer=new Date();
+			var y=timer.getFullYear();
+			var m=timer.getMonth()+1;
+			var d=timer.getDate();
+			var h=timer.getHours();
+			var m2=timer.getMinutes();
+			$("#month").val(m+"월").attr("selected",true);
+			$("#day2").val(d+"일").attr("selected",true);
+			$("#hours").val(h+"시").attr("selected",true);
+			$("#minute").val(m2+"분").attr("selected",true);
+		}); 
+		/* function getTime(){
+			var timer=new Date();
+			var y=timer.getFullYear();
+			var m=timer.getMonth()+1;
+			var d=timer.getDate();
+			var h=timer.getHours();
+			var m2=timer.getMinutes();
+		} */
+		/* jQuery('#reserveBtn').click(function (){
 			 $.ajax({
 		 		type: 'GET',
 				cache: false,
@@ -356,8 +545,22 @@ label {
 				      	$('#serverTime').text(date.toString());
 				    }
 			});
-		});
-
+		}); 
+ */
+		<%-- jQuery('#reserveBtn').click(function (){
+			$.ajax({
+				url:"<%=context%>/god/getTime",
+				type:'GET',
+				data:allData,
+				dataType:'json',
+				success:function(json){
+					alert("ajax success");
+					$.each(json, function(i, item){
+						
+					});
+				}
+			});
+		}); --%>
 		<%-- jQuery('#reserveBtn').click(function () {   
 			/* <jsp:useBean id="now" class="java.util.Date"/> */
 			<c:set var="now" value="<%= new java.util.Date() %>" />
@@ -377,24 +580,7 @@ label {
 				<fmt:formatDate value="${now}" pattern="mm" />
 			</c:set> 
 		});  --%>
-		/* jQuery('#reserveBtn').click(function () {   
-			$("#writeForm").modal('hide');
-			var timer1=0;
-			timer1=setInterval(function(){
-				var timer=new Date();
-				var y=timer.getFullYear();
-				var m=timer.getMonth()+1;
-				var d=timer.getDate();
-				var h=timer.getHours();
-				var m2=timer.getMinutes();
-				document.getElementById('times').innerHTML
-				="<c:set var='year' value='"+y+"'/>"
-				+"<c:set var='month' value='"+m+"'/>"
-				+"<c:set var='day2' value='"+d+"'/>"
-				+"<c:set var='hours' value='"+h+"'/>"
-				+"<c:set var='minute' value='"+m2+"'/>";
-			},1000);
-		});   */
+		 
 		
 		<!--글쓰기 창 숨기고 보여주고-->
 		/* $(document).ready(function(){
@@ -405,7 +591,7 @@ label {
 				$("#writeForm").modal('show');
 			});
 		}); */
-		
+		 
 		<!-- 투표 삭제 -->
 		jQuery('#deleteVote').click(function () {   
 			$('#vote_form').css("display","none");  
@@ -474,6 +660,7 @@ label {
 							currentVal = currentVal.replace(pattern,
 								'<a href="/?hashtag=$1">#$1</a>&nbsp');
 							$('#writeTextarea').html(currentVal);
+							/* $('#writeTextarea').selectRange(2,currentVal.length()); */
 						}
 							/* var div = document.getElementById('#writeTextarea');
 							setTimeout(function() {
@@ -495,6 +682,20 @@ label {
 							document.getElementById('writeTextarea').innerHTML = linkedContent; */
 						}
 					});
+		$.fn.selectRange=function(start, end) {
+		    return this.each(function() {
+		         if(this.setSelectionRange) {
+		             this.focus();
+		             this.setSelectionRange(start, end);
+		         } else if(this.createTextRange) {
+		             var range = this.createTextRange();
+		             range.collapse(true);
+		             range.moveEnd('character', end);
+		             range.moveStart('character', start);
+		             range.select();
+		         }
+		     });
+		 }; 
 			/* function pasteHtmlAtCaret(html) {
 				var sel, range;
 				if (window.getSelection) {
