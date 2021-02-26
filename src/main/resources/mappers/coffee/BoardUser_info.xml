@@ -35,9 +35,7 @@
    
    
    
-   <select id="total" resultType="int">
-       select COUNT(*) from user_info
-   </select>
+   
    <!-- <select id="listAll3"  parameterType="Emp" resultType="Emp">
 		select * from (select rownum rn, a.* 
 		               from (select * from emp order by empno) a

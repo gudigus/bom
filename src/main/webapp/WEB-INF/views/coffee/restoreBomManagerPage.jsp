@@ -33,7 +33,8 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 	integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 	crossorigin="anonymous"></script>
-<script src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/jquery.js"></script>
+
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
 <style>
@@ -42,18 +43,23 @@
 }
 </style>
 <script type="text/javascript">
-﻿﻿﻿	$("#btn_ban").click(function(){
-		$(this).hide();
-		$("#btn_restore").show();
-	});
-	﻿﻿﻿﻿﻿
-	$("#btn_restore").click(function(){
-		$(this).hide();
-		$("#btn_ban").show();
-	});
+﻿﻿﻿
 	
 	
-
+	$(function(){
+    	$(".btn.btn-danger.float-right").click(function(){
+			//alert("차단 누름")
+	 		$(this).hide();
+			$(".btn.btn-primary.float-right").show();
+	 	});
+		﻿﻿﻿﻿﻿
+		$(".btn.btn-primary.float-right").click(function(){
+			//alert("복원 누름")
+	 		$(this).hide();
+			$(".btn.btn-danger.float-right").show();
+		});
+		
+	})
 
 
 
@@ -144,8 +150,8 @@
 				<c:forEach var="list" items="${boardUser_infoList }">
 					<div class="card">
 						<div class="card-body">
-							<span class="btn_ban"><button type="button" id="btn_ban" class="btn btn-danger float-right">차단</button></span>
-							<span class="btn_restore"><button type="button" id="btn_restore" class="btn btn-primary float-right">복원</button></span>
+							<button type="button" id="btn_ban" class="btn btn-danger float-right">차단</button>
+							<button type="button" id="btn_restore" class="btn btn-primary float-right">복원</button>
 							<c:choose>
 								<c:when test="${not empty list.uimage }">
 									<img alt="회원 이미지" src="/img/profiles/${list.uimage }" class="rounded-circle" width="50"
@@ -158,7 +164,32 @@
 								class="card-subtitle mb-2 text-muted">@${list.uatid }</a> <a
 								class="card-subtitle mb-2 text-muted">${list.bregdate }</a> <a href="#"
 								class="card-text" style="margin-top: 10px;">${list.bcontent }</a>
-							
+							<div align="center">
+								<div class="btn-group col-md-12" role="group"
+									aria-label="Button group with nested dropdown">
+									<button type="button" class="btn btn-secondary mr-3 btn-light"
+										data-toggle="tooltip" data-placement="top" title="답글">
+										<img src="/img/speech-bubble.svg" width="20" height="20">
+									</button>
+									<button type="button" class="btn btn-secondary btn-light mr-3"
+										data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
+										<img src="/img/bring.svg" width="20" height="20">
+									</button>
+									<button type="button" class="btn btn-secondary btn-light mr-3"
+										data-toggle="tooltip" data-placement="top" title="좋아요">
+										<img src="/img/heart.svg" width="20" height="20">${list.blikecount }
+									</button>
+									<button type="button"
+										class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+										data-toggle="dropdown" aria-haspopup="true"
+										aria-expanded="false">
+										<img src="/img/share.svg" width="20" height="20">
+									</button>
+								</div>
+							</div>
+							<div>
+								<span class="bg-danger p-1 text-light"><img src="/img/coffee/accusation.svg" width="15" height="15">${list.breportcount }</span>
+							</div>
 						</div>
 					</div>
 				</c:forEach>

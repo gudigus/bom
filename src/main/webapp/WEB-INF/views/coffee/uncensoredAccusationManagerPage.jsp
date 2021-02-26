@@ -108,10 +108,10 @@
 				<div class="input-group col-auto">
 					<ul class="nav nav-tabs">
 					  <li class="nav-item">
-					    <a class="nav-link active" aria-current="page" href="censorAccusationManagerPage">전체</a>
+					    <a class="nav-link" href="censorAccusationManagerPage">전체</a>
 					  </li>
 					  <li class="nav-item">
-					    <a class="nav-link" href="uncensoredAccusationManagerPage">미처리</a>
+					    <a class="nav-link active" aria-current="page" href="#">미처리</a>
 					  </li>
 					  
 					  
@@ -122,11 +122,11 @@
 					</form>
 				</div>
 				<!--글 정렬-->
-				<c:forEach var="list" items="${ReportUser_infoBoardList }">
+				<c:forEach begin="1" end="10" step="1">
 					<div class="card">
 						<div class="card-body">
-							<span><button type="button" class="btn btn-outline-dark float-right">취소</button></span>
-							<span><button type="button" class="btn btn-dark float-right">처리</button></span>
+							<button type="button" class="btn btn-outline-dark float-right">취소</button>
+							<button type="button" class="btn btn-dark float-right">처리</button>
 							<a class="card-title text-dark">ropcode-닉네임</a> <a
 								class="card-subtitle mb-2 text-muted">ropcode-@atid</a> <a
 								class="card-subtitle mb-2 text-muted">rdatetime</a> <a href="#"
@@ -162,7 +162,6 @@
 												data-toggle="tooltip" data-placement="top" title="좋아요">
 												<img src="/img/heart.svg" width="20" height="20">{list.blikecount }
 											</button>
-											
 										</div>
 									</div>
 									<div align="left">

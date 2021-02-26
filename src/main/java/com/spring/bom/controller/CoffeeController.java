@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.spring.bom.model.coffee.BoardUser_info;
+import com.spring.bom.model.coffee.ReportUser_infoBoard;
 import com.spring.bom.model.coffee.User_info;
 import com.spring.bom.service.coffee.BoardService;
+import com.spring.bom.service.coffee.ReportService;
 import com.spring.bom.service.coffee.User_infoService;
 
 
@@ -22,6 +24,9 @@ public class CoffeeController {
 	
 	@Autowired
 	private BoardService bs;
+	
+	@Autowired
+	private ReportService rs;
 	
 	
 	@GetMapping(value = "/coffee/example")
@@ -85,4 +90,23 @@ public class CoffeeController {
 		return "coffee/accusationBomManagerPage";
 	}
 	
+	//신고 매니저
+	@GetMapping(value = "/coffee/censorAccusationManagerPage")
+	public String censorAccusationManagerPage(Model model) {
+		System.out.println("CoffeeController censorAccusationManagerPage start..");
+		List<ReportUser_infoBoard> list = rs.accusationList();
+		for(int i=0; i<list.size();i++) {
+			list.get(i).getRopcode();
+		}
+		
+		model.addAttribute("ReportUser_infoBoardList", list);
+		return "coffee/censorAccusationManagerPage";
+	}
+	@GetMapping(value = "/coffee/uncensoredAccusationManagerPage")
+	public String uncensoredAccusationManagerPage(Model model) {
+		System.out.println("CoffeeController uncensoredAccusationManagerPage start..");
+//		List<BoardUser_info> list = bs.sensorList();
+//		model.addAttribute("boardUser_infoList", list);
+		return "coffee/uncensoredAccusationManagerPage";
+	}
 }
