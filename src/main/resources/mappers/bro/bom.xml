@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="login">
-<select id="user_info" resultType="user_info">
-		SELECT UEmail, uPassword
+<mapper namespace="user_info">
+<select id="login" resultType="user_info" parameterType="user_info">
+		SELECT *
 		  FROM user_info
-		 WHERE UEmail = #{uEmail}
-		   AND uPassword = #{uPassword}  
+		 WHERE uEmail = #{uEmail}
+		 AND uPassword = #{uPassword }  
 	</select>
 	</mapper>

@@ -1,4 +1,4 @@
-package com.spring.bom.model;
+package com.spring.bom.model.bro;
 
 public class user_info {
 	int uCode;
