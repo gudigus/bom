@@ -88,7 +88,6 @@ label {
 }
 </style>
 </head>
-
 <body>
 	<div class="d-flex" id="wrapper">
 		<!-- Sidebar -->
@@ -122,9 +121,15 @@ label {
 				</div>
 				<div class="card">
 					<div class="card-body">
-						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-							width="50"> <a class="card-title text-dark">닉네임</a> <a
-							class="card-subtitle mb-2 text-muted">@atid</a>
+						<div class="form-row">
+							<img src="/img/teemo.jpg" class="rounded-circle" width="50"
+								width="50">
+							<div class="form-col ml-2">
+								<a class="card-title text-dark" style="font-size: 0.8em">${user.getUnickname() }</a><br>
+								<a class="card-subtitle mb-2 text-muted"
+									style="font-size: 0.8em">@${user.getUatid() }</a>
+							</div>
+						</div>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
 				</div>
@@ -138,8 +143,9 @@ label {
 				<div class="modal-content">
 					<div class="modal-header">
 						<fieldset class="w-100">
-							<button type="button" class="close" style="float: right;"
-								data-dismiss="modal" aria-label="Close">
+							<button type="button" id="closeWrite" class="close" style="float: right;"
+								data-toggle="modal" data-target="#saveModal"
+								 aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
 							<a href='#'
@@ -159,7 +165,8 @@ label {
 							<ul class="list-group list-group-flush">
 								<li class="list-group-item">
 									<div class="form-group">
-										<input type="text" class="form-control" placeholder="선택1">
+										<input type="text" name="" class="form-control"
+											placeholder="선택1">
 									</div>
 									<div class="form-group">
 										<input type="text" class="form-control" placeholder="선택2">
@@ -219,6 +226,9 @@ label {
 								</video>
 							</div>
 						</div>
+						<div id="setTime" class="text-success" style="font-size: 0.8em">
+
+						</div>
 						<select class="custom-select custom-select-sm">
 							<option value="All" selected>모든 사람이 답글 권한을 가집니다</option>
 							<option value="Follower">내가 팔로우하는 사람들만 답글 권한을 가집니다</option>
@@ -244,13 +254,11 @@ label {
 			</div>
 		</div>
 		<!--글쓰기 팝업 끝-->
-
 		<!--예약 창 시작-->
 		<div class="modal" id="reserveForm" data-backdrop="static"
 			data-keyboard="false" tabindex="-1"
 			aria-labelledby="exampleModalLabel2" aria-hidden="true"
 			backdrop="false">
-			<div id="serverTime"></div>
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -258,7 +266,8 @@ label {
 						<button type="button" id="reserveChk"
 							class="btn btn-success btn-sm float-right">예약</button>
 					</div>
-
+					<div id="checkTime" class="alert alert-danger" role="alert">
+						날짜가 맞지 않습니다. 다시 확인해 주세요.</div>
 					<div class="modal-body col-12">
 						<h5 class="card-title">
 							날짜 <span id="alertTime"></span>
@@ -278,9 +287,9 @@ label {
 							%>
 							<select id="year" class="form-control col-md-3 mr-5 ml-2"
 								required="required">
-								<option value="<%=year%>" selected="selected"><%=year%></option>
-								<option value="<%=year + 1%>"><%=year + 1%></option>
-								<option value="<%=year + 2%>"><%=year + 2%></option>
+								<option value="<%=year%>년" selected="selected"><%=year%></option>
+								<option value="<%=year + 1%>년"><%=year + 1%></option>
+								<option value="<%=year + 2%>년"><%=year + 2%></option>
 							</select> <select id="month" class="form-control col-md-3 mr-5"
 								required="required">
 								<option value="1월">1</option>
@@ -491,106 +500,81 @@ label {
 			</div>
 		</div>
 		<!--임시저장 창 끝-->
-
+		
+		<!--종료 전 저장 묻는 팝업 -->
+		<!-- Modal -->
+		<div class="modal fade" id="saveModal" tabindex="-1"
+			aria-labelledby="saveModal" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						봄을 저장하시겠습니까?
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body text-center">
+						이 내용을 저장하시면 <br>
+						다음에 이어서 작성하실 수 있습니다.
+					</div>
+					<div class="modal-footer">
+						<button type="button" id="notsaveBtn" class="btn btn-secondary">
+							아뇨 괜찮습니다</button>
+						<button type="button" class="btn btn-success">저장</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--저장 팝업 끝-->
+		
+		
 		<!--(주혜)글쓰기 폼 기능-->
 		<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 		<script type="text/javascript">
+		<!--마지막 저장창에서 저장안해 클릭-->
+		jQuery("#notsaveBtn").click(function(){
+			$("#saveModal .close").click();
+			$("#writeForm .close").click(); 
+		});
+		
+		<!--예약을 해뒀는지(현재시간으로 안바뀌게)-->
+		var reserve=0; //0 안함 1 함
 		<!--예약하기 버튼(월-일맞춰서 경고창띄우기)-->
-		/* jQuery("#reserveChk").click(function(){
-			var month=$('#month option:selected').val();
-			var day=$('#day2 option:selected').val();
-			if(month==2&&(day==29||day==30||day==31))
-				$("#alertTime").text("시간이 맞지 않습니다.");
-			else if((month==4||month==6||month==9||month==11)&&day==31))
-				$("#alertTime").text("시간이 맞지 않습니다.");
+		jQuery("#reserveChk").click(function(){
+			var year=$("#year option:selected").val();
+			var month=$("#month option:selected").val();
+			var day=$("#day2 option:selected").val()
+			var hours=$("#hours option:selected").val();
+			var minute=$("#minute option:selected").val();
+			if(month=="2월"&&(day=="29일"||day=="30일"||day=="31일"))
+				$('#checkTime').show();
+			else if((month=="4월"||month=="6월"||month=="9월"||month=="11월")&&day=="31일")
+				$('#checkTime').show();
 			else{
-				$("#alertTime").html("");
-				$("#reserveForm").modal('hide');
+				reserve=1;
+				$('#checkTime').hide(); //알림창 끄고
+				$("#reserveForm .close").click(); // 예약창 닫아주고
+				$('#setTime').text(year+" "+month+" "+day+" "+hours+" "+minute+"에 글 예약");
 			}
-				
-		}); */
+		 });
 		 
 		<!--예약창 시간 가져오기-->
 		jQuery('#reserveBtn').click(function () { 
-			var timer=new Date();
-			var y=timer.getFullYear();
-			var m=timer.getMonth()+1;
-			var d=timer.getDate();
-			var h=timer.getHours();
-			var m2=timer.getMinutes();
-			$("#month").val(m+"월").attr("selected",true);
-			$("#day2").val(d+"일").attr("selected",true);
-			$("#hours").val(h+"시").attr("selected",true);
-			$("#minute").val(m2+"분").attr("selected",true);
+			if(reserve==0){
+				var timer=new Date();
+				var y=timer.getFullYear();
+				var m=timer.getMonth()+1;
+				var d=timer.getDate();
+				var h=timer.getHours();
+				var m2=timer.getMinutes();
+				$("#month").val(m+"월").attr("selected",true);
+				$("#day2").val(d+"일").attr("selected",true);
+				$("#hours").val(h+"시").attr("selected",true);
+				$("#minute").val(m2+"분").attr("selected",true);
+				$('#checkTime').hide();
+			}
 		}); 
-		/* function getTime(){
-			var timer=new Date();
-			var y=timer.getFullYear();
-			var m=timer.getMonth()+1;
-			var d=timer.getDate();
-			var h=timer.getHours();
-			var m2=timer.getMinutes();
-		} */
-		/* jQuery('#reserveBtn').click(function (){
-			 $.ajax({
-		 		type: 'GET',
-				cache: false,
-			    url: location.href,
-			    complete: function (req, textStatus) {
-			      	var dateString = req.getResponseHeader('Date');
-			      	if (dateString.indexOf('GMT') === -1) {
-			    	  dateString += ' GMT';
-				  	}
-					var date = new Date(dateString);
-				      	$('#serverTime').text(date.toString());
-				    }
-			});
-		}); 
- */
-		<%-- jQuery('#reserveBtn').click(function (){
-			$.ajax({
-				url:"<%=context%>/god/getTime",
-				type:'GET',
-				data:allData,
-				dataType:'json',
-				success:function(json){
-					alert("ajax success");
-					$.each(json, function(i, item){
-						
-					});
-				}
-			});
-		}); --%>
-		<%-- jQuery('#reserveBtn').click(function () {   
-			/* <jsp:useBean id="now" class="java.util.Date"/> */
-			<c:set var="now" value="<%= new java.util.Date() %>" />
-			<c:set var="year">
-				<fmt:formatDate value="${now}" pattern="yyyy" />
-			</c:set>
-			<c:set var="month">
-				<fmt:formatDate value="${now}" pattern="MM" />
-			</c:set> 
-			<c:set var="day2">
-				<fmt:formatDate value="${now}" pattern="dd" />
-			</c:set> 
-			<c:set var="hours">
-				<fmt:formatDate value="${now}" pattern="HH" />
-			</c:set> 
-			<c:set var="minute">
-				<fmt:formatDate value="${now}" pattern="mm" />
-			</c:set> 
-		});  --%>
-		 
-		
-		<!--글쓰기 창 숨기고 보여주고-->
-		/* $(document).ready(function(){
-			$("#reserveBtn").click(function(){
-				$("#writeForm").modal('hide');
-			});
-			$("#reserveClose").click(function(){
-				$("#writeForm").modal('show');
-			});
-		}); */
 		 
 		<!-- 투표 삭제 -->
 		jQuery('#deleteVote').click(function () {   
