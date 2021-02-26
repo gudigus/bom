@@ -92,9 +92,12 @@ public class Right_Controller {
 	// id 중복 체크 컨트롤러
 	@RequestMapping(value = "/user/idCheck", method = RequestMethod.GET)
 	@ResponseBody
-	public int idCheck(@RequestParam("u_atid") String uatid) {
-
-		return us.userIdCheck(uatid);
+	public int idCheck(@RequestParam("uatid") String uatid) {
+		int cnt = us.userIdCheck(uatid);
+		System.out.println("uatid->"+ uatid);
+		System.out.println("idCheck "+cnt);
+		
+		return cnt;
 	}
 	
 	//2단계 인증
@@ -104,7 +107,7 @@ public class Right_Controller {
 		model.addAttribute("ucode",ucode);
 		HttpSession session = request.getSession();
 		session.setAttribute("ucode",ucode);
-
+		
 		return "/right/doubleSecurity";
 	}
 	// 비번 변경
@@ -117,7 +120,7 @@ public class Right_Controller {
 
 		return "/right/changePw";
 	}
-	
+	// 차단
 	@RequestMapping(value =  "right/block")
 	public String block(HttpServletRequest request,Model model) {
 		String ucode = request.getParameter("ucode");
@@ -127,7 +130,7 @@ public class Right_Controller {
 
 		return "/right/block";
 	}
-	
+	//탈퇴
 	@RequestMapping(value =  "right/userDisabled")
 	public String userDisabled(HttpServletRequest request,Model model) {
 		String ucode = request.getParameter("ucode");
@@ -136,5 +139,18 @@ public class Right_Controller {
 		session.setAttribute("ucode",ucode);
 
 		return "/right/userDisabled";
+	}
+	@PostMapping(value =  "right/userDisabledPro")
+	public String userDisabledPro(User_Info ui,Model model) {
+		int result = us.changeinsertstate(ui);
+		int result1 = us.statedDis(ui);
+		int result2 = us.changeInfoState(ui);
+		int result3 = us.boardBpermission(ui);
+		model.addAttribute("result",result);
+		model.addAttribute("result1",result1);
+		model.addAttribute("result2",result2);
+		model.addAttribute("result3",result3);
+
+		return "/right/userDisabledPro";
 	}
 }

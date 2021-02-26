@@ -98,7 +98,7 @@
 						<script type="text/javascript">
 							function chk(){
 								if(document.editForm.upassword.value != document.editForm.pwd.value){
-									alert("비밀번호가 맞지않습니다. 비밀번호확인을 다시 입력해주세요.");
+									alert("!비밀번호가 맞지않습니다!");
 									document.editForm.pwd.focus();	
 									return false;
 								}
@@ -112,7 +112,7 @@
 						<table>   <!-- <td> -->
 							<tr></tr>
 							<tr><td style="text-align: center; margin-top:5px;">비밀번호</td><td>></td><td>
-							<input type="text" name="pwd" placeholder="비밀번호를 입력해주세요." required="required"></td></tr>
+							<input type="password" name="pwd" placeholder="비밀번호를 입력해주세요." required="required"></td></tr>
 							<tr><td></td><td></td>
 							<td><input type="submit" value="확인" class="btn btn-outline-success">
 							<input type="reset" value="입력취소" class="btn btn-outline-secondary"></td></tr>						

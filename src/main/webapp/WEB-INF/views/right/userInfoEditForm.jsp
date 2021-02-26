@@ -3,6 +3,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
+<%
+	String context = request.getContextPath();
+	System.out.println("context->"+context);
+%>
 <html lang="en">
 
 <head>
@@ -14,6 +18,13 @@
 <meta name="author" content="">
 
 <title>BOM</title>
+<!-- 내가 ajax땜에 넣은것 
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/httpRequest.js"></script>
+<script type="text/javascript"
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+ 내가 ajax땜에 넣은것 -->
 
 <!-- Bootstrap core CSS -->
 <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -86,48 +97,47 @@
 
 		<!-- /#sidebar-wrapper -->
 		<!-- id 중복 check -->
-		<script>
+
+		<script type="text/javascript">
+		 var contextPath='${pageContext.request.contextPath}';
 			// 아이디 유효성 검사(1 = 중복 / 0 != 중복)
-				$("#uatid").blur(function() {
-					// id = "id_reg" / name = "uatid"
-					var user_id = $('#uatid').val();
+			//$("#uatid").blur(function(){
+				//	var uatid = $('#uatid').val();
+				function idCh(){
+					var uatid = $('#uatid').val();
 					$.ajax({
-						url : '${pageContext.request.contextPath}/right/idCheck?u_atid='+ uatid,
-						type : 'get',
-						success : function(data) {
+						url : "<%=context%>/right/idCheck",
+						dataType:'text',
+						success : function(data){
 							console.log("1 = 중복o / 0 = 중복x : "+ data);							
 							
-							if (data == 1) {
+							if (data == 1){
 									// 1 : 아이디가 중복되는 문구
 									$("#id_check").text("사용중인 아이디입니다 :p");
 									$("#id_check").css("color", "red");
 									$("#reg_submit").attr("disabled", true);
-								} else {
+							}else{
 									
-									if(idJ.test(user_id)){
+									if(idJ.test(uatid)){
 										// 0 : 아이디 길이 / 문자열 검사
 										$("#id_check").text("");
 										$("#reg_submit").attr("disabled", false);
 							
-									} else if(user_id == ""){
+									}else if(uatid == ""){
 										
 										$('#id_check').text('아이디를 입력해주세요 :)');
 										$('#id_check').css('color', 'red');
 										$("#reg_submit").attr("disabled", true);				
 										
-									} else {
-										
+									}else{
 										$('#id_check').text("아이디는 소문자와 숫자 4~12자리만 가능합니다 :) :)");
 										$('#id_check').css('color', 'red');
 										$("#reg_submit").attr("disabled", true);
 									}
-									
 								}
-							}, error : function() {
-									console.log("실패");
 							}
 						});
-					});
+					}
 			</script>
 		
 		<!-- Page Content -->
@@ -143,31 +153,48 @@
 						<input type="hidden" name="ucode" value="${ui.ucode }">
 						<p>
 						<h2>계정 정보 수정</h2>
-						<table>   <!-- <td> -->
-							<tr></tr>
-							<tr><th style="font-size:15px;">이메일  </th><td></td><td>></td><td></td><td>${ui.uemail }</td></tr>
-							<tr><th style="font-size:15px;">아이디	</th><td></td><td>></td><td></td><td><input type="text" name="uatid" required="required" value="${ui.uatid }"  class="form-control" id="uatid" ></td></tr>
-							<tr><th></th><td></td><td>></td><td></td><td><div class="check_font" id="id_check"></div></td></tr>
-							<tr><th style="font-size:15px;">생년월일	</th><td></td><td>></td><td></td><td><input type="date"  name="ubirth" required="required" value="${ui.ubirth }" class="input"></td></tr>
-							<tr><th style="font-size:15px;">성별	</th><td></td><td>></td><td></td>
-								<td><select class="form-select" id="inputGroupSelect01" name="ugender">
-							    <option selected selected="selected">
-							    <c:set var="ugender" scope = "session" value="${ui.ugender}"/>
-								<c:choose>
-								 	<c:when test="${ugender eq 'm' }">
-								 		남
-								 	</c:when>
-								 	<c:when test="${ugender eq 'w' }">
-								 		여
-								 	</c:when>
-								 	<c:otherwise></c:otherwise>
-								</c:choose>
-							   </option>
-							    <option value="m">남</option>
-							    <option value="w">여</option></select></td></tr>
-							<tr><th>국가</th><td></td><td>></td><td></td><td>
-							  <select class="form-select" id="inputGroupSelect01" name="unation">
-							    <option selected selected="selected">${ui.unation }</option>
+						<!-- 이메일 -->
+						<div class="form-group">
+							<label for="uemail">이메일</label>
+								<span>${ui.uemail }</span>
+						</div>
+						<!-- 아이디 -->
+						<div class="form-group">
+							<label for="uatid">아이디</label>
+								<input type="text" class="form-control" id="uatid" name="uatid" placeholder="ID" value="${ui.uatid }" required>
+								<input type="button" value="중복확인" class="btn btn-outline-success" id="idCh">
+						<div class="check_font" id="id_check"></div>
+						</div>
+						<!-- 생년월일 -->
+						<div class="form-group">
+							<label for="user_id">생년월일</label>
+								<input type="date"  name="ubirth" required="required" value="${ui.ubirth }">
+						</div>
+						<!-- 성별 -->
+						<div class="form-group">
+							<label for="ugender">성별</label>
+								<select class="form-select" id="inputGroupSelect01" name="ugender">
+								<option selected value="${ui.ugender}">
+									<c:set var="ugender" scope = "session" value="${ui.ugender}"/>
+									<c:choose>
+										<c:when test="${ugender eq 'm' }">
+											남
+										</c:when>
+										<c:when test="${ugender eq 'w' }">
+											여
+										</c:when>
+										<c:otherwise></c:otherwise>
+									</c:choose>
+										</option>
+										<option value="m">남</option>
+										<option value="w">여</option>
+								</select>
+						</div>
+						<!-- 국가 -->
+						<div class="form-group">
+							<label for="unation">국가</label>
+								<select class="form-select" id="inputGroupSelect01" name="unation">
+							    <option selected value="${ui.unation }">${ui.unation }</option>
 							    <option value="가나">가나</option>
 								<option value="가봉">가봉</option>
 								<option value="가이아나">가이아나</option>
@@ -368,39 +395,92 @@
 								<option value="필리핀">필리핀</option>
 								<option value="홍콩(중국 특별행정구)">홍콩(중국 특별행정구)</option>
 								<option value="헝가리">헝가리</option>
-						 	  </select></td></tr>
-						 	  <tr><th style="font-size:15px;">공개 범위</th><td></td><td>></td><td></td><td>
-						 	  <select class="form-select" id="inputGroupSelect01" name="uprivate">
-							    <option selected selected="selected">
-						 	  	  <c:set var="uprivate" scope = "session" value="${ui.uprivate}"/>
+  								</select>
+						</div>
+						<!-- 공개 범위 -->
+						<div class="form-group">
+							<label for="uprivate">공개 범위</label>
+							   <select class="form-select" id="inputGroupSelect01" name="uprivate">
+								<option selected value="${ui.uprivate}">
+							   	  <c:set var="uprivate" scope = "session" value="${ui.uprivate}"/>
+								  <c:choose>
+									<c:when test="${uprivate eq 0 }">
+										전체 공개
+									</c:when>
+									<c:when test="${uprivate eq 1 }">
+										필로워에게만
+									</c:when>
+									<c:otherwise></c:otherwise>
+								  </c:choose>
+									 </option>
+								    <option value="0">0</option>
+								    <option value="1">1</option>
+							  </select>						
+						</div>
+						<!-- 쪽지 범위 -->
+						<div class="form-group">
+							<label for="uchat">쪽지 범위</label>
+								<select class="form-select" id="inputGroupSelect01" name="uchat">
+							    <option selected value="${ui.uchat}">
+   	  								<c:set var="uchat" scope = "session" value="${ui.uchat}"/>
 									<c:choose>
-									 	<c:when test="${uprivate eq '0' }">
-									 		전체 공개
-									 	</c:when>
-									 	<c:when test="${uprivate eq '1' }">
-									 		필로워에게만
-									 	</c:when>
-									 	<c:otherwise></c:otherwise>
+										<c:when test="${uchat eq 0 }">
+											전체
+										</c:when>
+										<c:when test="${uchat eq 1 }">
+											필로워만
+										</c:when>
+										<c:otherwise></c:otherwise>
 									</c:choose>
 								 </option>
-							    <option value="0">전체 공개</option>
-							    <option value="1">필로워에게만</option></select></td></tr>
-						 	  <tr><th style="font-size:15px;">2단계 인증 여부 </th><td></td><td>></td><td></td><td>
-						 	  	  <c:set var="uidentify" value="${ui.uidentify}"/>
+							    <option value="0">0</option>
+							    <option value="1">1</option>
+							  </select>
+						</div>
+						<!-- 알림 범위 -->
+						<div class="form-group">
+							<label for="ualarm">알림 범위</label>
+								<select class="form-select" id="inputGroupSelect01" name="ualarm">
+							    <option selected value="${ui.ualarm}">
+								   <c:set var="ualarm" scope = "session" value="${ui.ualarm}"/>
+								   <c:choose>
+									<c:when test="${ualarm eq 0 }">
+										전체
+									</c:when>
+									<c:when test="${ualarm eq 1 }">
+										필로워만
+									</c:when>
+									<c:otherwise></c:otherwise>
+								   </c:choose>
+								 </option>
+							    <option value="0">0</option>
+							    <option value="1">1</option>
+							  </select>
+						</div>
+						<!-- 2단계 인증여부 -->
+						<div class="form-group">
+							<label for="uidentify">2단계 인증여부</label>
+								 <c:set var="uidentify" value="${ui.uidentify}"/>
 									<c:choose>
-								 	<c:when test="${uidentify eq '0' }">
-								 		미인증	<input type="button"  value="2단계 인증하러 가기 " class="btn btn-outline-success" 
+										<c:when test="${uidentify eq '0' }">
+											미인증	<input type="button"  value="2단계 인증하러 가기 " class="btn btn-outline-warning" 
 												 onclick="location.href='/right/doubleSecurity'" >
-								 	</c:when>
-								 	<c:when test="${uidentify eq '1' }">
-								 		인증됨
-								 	</c:when>
-								 	<c:otherwise></c:otherwise>
-								</c:choose></td></tr>
-						 	  <tr><th style="font-size:15px;">가입 일자  </th><td></td><td>></td><td></td><td>${ui.uregdate }</td></tr>
-						 	  <tr></tr>
-							<tr><td colspan="5" style="text-align: center;"><input type="reset" value="수정취소" class="btn btn-outline-secondary" style="margin-right: 0.5%;'"> <input type="submit" value="수정완료" class="btn btn-outline-success"></td></tr>
-						</table>
+										</c:when>
+										<c:when test="${uidentify eq '1' }">
+											인증됨
+										</c:when>
+										<c:otherwise></c:otherwise>
+								</c:choose>
+						</div>
+						<!-- 가입 일자 -->
+						<div class="form-group">
+							<label for="uregdate">가입 일자</label>
+								<span>${ui.uregdate }</span>
+						</div>
+						<div class="form-group">
+							<input type="reset" value="수정취소" class="btn btn-outline-secondary" style="margin-right: 0.5%;'"> 
+							<input type="submit" value="수정완료" class="btn btn-outline-success" id="reg_submit">
+						</div>
 						</form>
 						<p>
 					</div>

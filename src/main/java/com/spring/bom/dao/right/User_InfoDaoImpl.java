@@ -60,11 +60,60 @@ public class User_InfoDaoImpl implements User_InfoDao {
 	}
 	@Override
 	public int userIdCheck(String uatid) {
-
-		return session.selectOne("checkId", uatid);
+		System.out.println("User_InfoDaoImpl userIdCheck start..");
+		int cnt = session.selectOne("checkId", uatid);
+		try {
+			cnt = session.selectOne("checkId", uatid);
+		} catch (Exception e) {
+			System.out.println("User_InfoDaoImpl userIdCheck Exception->"+e.getMessage());
+		}
+		
+		return cnt;
+	}
+	@Override
+	public int changeinsertstate(User_Info ui) {
+		System.out.println("User_InfoDaoImpl changeinsertstate start..");
+		int result = session.insert("rightUserDisabl", ui);
+		try {
+			result = session.insert("rightUserDisabl", ui);
+		} catch (Exception e) {
+			System.out.println("User_InfoDaoImpl changeinsertstate Exception->"+e.getMessage());
+		}
+		return result;
+	}
+	@Override
+	public int statedDis(User_Info ui) {
+		System.out.println("User_InfoDaoImpl statedDis start..");
+		int result1 = session.update("rightUserDisabl1", ui);
+		try {
+			result1 = session.update("rightUserDisabl1", ui);
+		} catch (Exception e) {
+			System.out.println("User_InfoDaoImpl statedDis Exception->"+e.getMessage());
+		}
+		return result1;
+	}
+	@Override
+	public int changeInfoState(User_Info ui) {
+		System.out.println("User_InfoDaoImpl changeInfoState start..");
+		int result2 = session.update("rightUserDisabl2", ui);
+		try {
+			result2 = session.update("rightUserDisabl2", ui);
+		} catch (Exception e) {
+			System.out.println("User_InfoDaoImpl changeInfoState Exception->"+e.getMessage());
+		}
+		return result2;
+	}
+	@Override
+	public int boardBpermission(User_Info ui) {
+		System.out.println("User_InfoDaoImpl userIdCheck start..");
+		int result3 = session.update("rightUserDisabl3", ui);
+		try {
+			result3 = session.update("rightUserDisabl3", ui);
+		} catch (Exception e) {
+			System.out.println("User_InfoDaoImpl boardBpermission Exception->"+e.getMessage());
+		}
+		return result3;
 	}
 
-	
-	
-	
+
 }

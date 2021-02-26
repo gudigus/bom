@@ -8,5 +8,9 @@ public interface User_InfoService {
 	int				edit(User_Info ui);
 	int				changeinsert(User_Info ui);
 	int				changeupdate(User_Info ui); 
-	int 			userIdCheck(String uatid);
+	int 			userIdCheck(String uatid); 
+	int	 			statedDis(User_Info ui);
+	int 			changeInfoState(User_Info ui);
+	int 			boardBpermission(User_Info ui); 
+	int 			changeinsertstate(User_Info ui);
 }

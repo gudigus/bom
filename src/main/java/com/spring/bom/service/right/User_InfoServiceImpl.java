@@ -37,8 +37,32 @@ public class User_InfoServiceImpl implements User_InfoService {
 
 	@Override
 	public int userIdCheck(String uatid) {
-		// TODO Auto-generated method stub
+		System.out.println("User_InfoServiceImpl userIdCheck ...");
 		return ud.userIdCheck(uatid);
+	}
+
+	@Override
+	public int statedDis(User_Info ui) {
+		System.out.println("User_InfoServiceImpl statedDis ...");
+		return ud.statedDis(ui);
+	}
+
+	@Override
+	public int changeInfoState(User_Info ui) {
+		System.out.println("User_InfoServiceImpl changeInfoState ...");
+		return ud.changeInfoState(ui);
+	}
+
+	@Override
+	public int boardBpermission(User_Info ui) {
+		System.out.println("User_InfoServiceImpl boardBpermission ...");
+		return ud.boardBpermission(ui);
+	}
+
+	@Override
+	public int changeinsertstate(User_Info ui) {
+		System.out.println("User_InfoServiceImpl changeinsertstate ...");
+		return ud.changeinsertstate(ui);
 	}
 
 	

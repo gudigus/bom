@@ -87,20 +87,43 @@
 
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
-
+				<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+					<button class="btn btn-success" id="menu-toggle" onclick="location.href='moreSee'">←</button>
+				</nav>
 			<div class="container-fluid">
 				<p>
 				<div class="card">
 					<div align="center">
-						<div class="d-grid gap-2 row-6 mx-auto">
-							<button type="button" class="btn btn-outline-success" onclick="location.href='userInfoEdit'">계정 정보 수정</button><p>
-							<button type="button" class="btn btn-outline-success" onclick="location.href='doubleSecurity'">2단계 인증 보안</button><p>
-							<button type="button" class="btn btn-outline-success" onclick="location.href='changePw'">비밀번호 변경</button><p>
-							<button type="button" class="btn btn-outline-success" onclick="location.href='block'">차단 관리</button><p>
-							<button type="button" class="btn btn-outline-success" onclick="location.href='userDisabled'">탈퇴</button><p>
-						</div>
+						<script type="text/javascript">
+							function chk(){
+								if(document.disabledForm.upassword.value != document.disabledForm.pwd.value){
+									alert("!비밀번호가 맞지않습니다!이것은 탈퇴하지 말라는 운명..?^-^");
+									document.disabledForm.pwd.focus();	
+									return false;
+								} else{
+									alert("탈퇴 되었습니다...");
+									return true;
+								}
+							}
+						</script>
+						<form action="userDisabledPro" name="disabledForm" onsubmit="return chk()">
+						<input type="hidden" name="ucode" value="${ui.ucode }">
+						<input type="hidden" name="upassword" value="${ui.upassword }">
+						<p>
+						<h2>계정 탈퇴</h2>
+						<table>   <!-- <td> -->
+							<tr></tr>
+							<tr><td style="text-align: center; margin-top:5px;">비밀번호</td><td>></td><td>
+							<input type="password" name="pwd" placeholder="비밀번호를 입력해주세요." required="required"></td></tr>
+							<tr><td></td><td></td>
+							<td><input type="submit" value="확인" class="btn btn-outline-secondary">
+							<input type="reset" value="입력취소" class="btn btn-outline-success"></td></tr>						
+						</table>
+						</form>
+						<p>
 					</div>
 				</div>
+			</div>
 		</div>
 		<!-- /#page-content-wrapper -->
 

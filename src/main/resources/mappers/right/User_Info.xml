@@ -26,10 +26,34 @@
 							 ubirth = #{ubirth},
 							 ugender = #{ugender},
 							 unation = #{unation},
-							 uprivate = #{uprivate}							 
+							 uprivate = #{uprivate},
+							 ualarm   = #{ualarm}				 
 		where ucode=#{ucode}
 	</update>
-	<select id="checkId" resultType="int">
+	<!-- id check ajax가 하고싶었다... -->
+	<select id="checkId" parameterType="String" resultType="int">
 		select count(*) from user_info where uatid = #{uatid}
 	</select>
+	<!-- change_info에 바뀐 데이터 insert -->
+	<insert id="rightUserDisabl" parameterType="User_info">
+		insert into change_info 
+							values(to_char(sysdate,'yyyy/mm/dd hh24:mi:ss'),#{ucode},
+									null,null,null,null,null,null,1,null,
+									null,null,null,null,null,0 )
+	</insert>
+	<!-- 회원 탈퇴 user_info ustate = 0으로 업데이트 -->
+	<update id="rightUserDisabl1" parameterType="User_info">
+		update user_info set ustate = 0			 
+		where ucode=#{ucode}
+	</update>
+	<!-- 회원 탈퇴  ustate = 0으로 업데이트 -->
+	<update id="rightUserDisabl2" parameterType="User_info">
+		update board set ubpremission = 'Nobody' 
+		where ucode = #{ucode}
+	</update>
+	<!-- 회원 탈퇴 change_info ustate = 0으로 업데이트 -->
+	<update id="rightUserDisabl3" parameterType="User_info">
+		update user_info set ustate = 0			 
+		where ucode=#{ucode}
+	</update>
 </mapper>
