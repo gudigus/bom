@@ -73,13 +73,17 @@
 					</button>
 				</a>
 				<div class="card">
-					<div class="card-body">
-						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-							width="50"> <a class="card-title text-dark">닉네임</a> <a
-							class="card-subtitle mb-2 text-muted">@atid</a>
-					</div>
-					<button type="button" class="btn btn-success">로그아웃</button>
-				</div>
+               <div class="card-body">
+                  <div class="form-row">
+                     <img src="/img/teemo.jpg" class="rounded-circle" width="50" width="50"> 
+                     <div class="form-col ml-2">
+                     <a class="card-title text-dark" style="font-size:0.8em">${user.getUnickname() }</a><br> 
+                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${user.getUatid() }</a>
+                     </div>
+                     </div>
+                  </div>
+               <button type="button" class="btn btn-success">로그아웃</button>
+            </div>
 			</div>
 		</div>
 

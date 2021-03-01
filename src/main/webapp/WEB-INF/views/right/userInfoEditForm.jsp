@@ -413,8 +413,8 @@
 									<c:otherwise></c:otherwise>
 								  </c:choose>
 									 </option>
-								    <option value="0">0</option>
-								    <option value="1">1</option>
+								    <option value="0">전체 공개</option>
+								    <option value="1">필로워에게만</option>
 							  </select>						
 						</div>
 						<!-- 쪽지 범위 -->
@@ -428,13 +428,13 @@
 											전체
 										</c:when>
 										<c:when test="${uchat eq 1 }">
-											필로워만
+											팔로워만
 										</c:when>
 										<c:otherwise></c:otherwise>
 									</c:choose>
 								 </option>
-							    <option value="0">0</option>
-							    <option value="1">1</option>
+							    <option value="0">전체</option>
+							    <option value="1">팔로워만</option>
 							  </select>
 						</div>
 						<!-- 알림 범위 -->
@@ -448,13 +448,13 @@
 										전체
 									</c:when>
 									<c:when test="${ualarm eq 1 }">
-										필로워만
+										팔로워만
 									</c:when>
 									<c:otherwise></c:otherwise>
 								   </c:choose>
 								 </option>
-							    <option value="0">0</option>
-							    <option value="1">1</option>
+							    <option value="0">전체</option>
+							    <option value="1">팔로워만</option>
 							  </select>
 						</div>
 						<!-- 2단계 인증여부 -->

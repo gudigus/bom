@@ -96,7 +96,6 @@
 						<div class="d-grid gap-2">
 						 <p><button type="button" class="btn btn-outline-success" onclick="location.href='userDisabled'">나의 봄 통계</button><p>
 						 	<button type="button" class="btn btn-outline-success" onclick="location.href='insertpw'">계정 정보 수정</button><p>
-							<button type="button" class="btn btn-outline-success" onclick="location.href='doubleSecurity'">2단계 인증 보안</button><p>
 							<button type="button" class="btn btn-outline-success" onclick="location.href='changePw'">비밀번호 변경</button><p>
 							<button type="button" class="btn btn-outline-success" onclick="location.href='block'">차단 관리</button><p>
 							<button type="button" class="btn btn-outline-success" onclick="location.href='userDisabled'">탈퇴</button><p>
