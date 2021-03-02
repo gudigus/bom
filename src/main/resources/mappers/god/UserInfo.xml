@@ -1,0 +1,9 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="User_info">
+	<select id="JHgetReserveNum" parameterType="int" resultType="java.lang.String">
+		select count(*) from board where btmpsav=1 and bregdate is not null and ucode=#{ucode}
+	</select>
+	<select id="JHgetReserveList" parameterType="int" resultType="java.util.HashMap">
+		select bcontent from board where btmpsav=1 and bregdate is not null and ucode=#{ucode}
+	</select>
+</mapper>

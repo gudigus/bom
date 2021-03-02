@@ -87,6 +87,7 @@ label {
 	margin: 0px;
 }
 </style>
+
 </head>
 <body>
 	<div class="d-flex" id="wrapper">
@@ -114,7 +115,8 @@ label {
 				</a>
 				<div class="list-group-item list-group-item-action">
 					<!--주혜 -->
-					<button type="button" class="btn btn-outline-success"
+					<button type="button" class="btn btn-outline-success" id="writeBtn"
+						onclick="clickWriteBtn();"
 						data-toggle="modal" data-target="#writeForm">
 						<img src="/img/write.svg" width="15" height="15"> 글 쓰기
 					</button>
@@ -148,10 +150,10 @@ label {
 								 aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
-							<a href='#'
+							<a href='javascript:clickReserveBtn()'
 								style="float: right; color: black; text-decoration: none;"
 								data-toggle="modal" data-target="#tempForm">임시 저장한 봄 <span
-								class="badge badge-success">1</span>
+								class="badge badge-success" id="saveNum"></span>
 							</a>
 						</fieldset>
 					</div>
@@ -460,32 +462,22 @@ label {
 					<div class="modal-body col-12">
 						<ul class="nav nav-tabs" id="myTab" role="tablist">
 							<li class="nav-item" role="presentation"><a
-								class="nav-link active" id="home-tab" data-toggle="tab"
-								href="#home" role="tab" aria-controls="home"
+								class="nav-link active" id="save-tab" data-toggle="save"
+								href="#save" role="tab" aria-controls="save"
 								aria-selected="true">저장</a></li>
 							<li class="nav-item" role="presentation"><a class="nav-link"
-								id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-								aria-controls="profile" aria-selected="false">예약</a></li>
+								id="reserve-tab" data-toggle="reserve" href="#reserve" role="tab"
+								aria-controls="reserve" aria-selected="false">예약</a></li>
 						</ul>
 						<div class="tab-content" id="myTabContent">
-							<div class="tab-pane fade show active" id="home" role="tabpanel"
-								aria-labelledby="home-tab">
-								<ul class="list-group">
-									<li class="list-group-item">Cras justo odio</li>
-									<li class="list-group-item">Dapibus ac facilisis in</li>
-									<li class="list-group-item">Morbi leo risus</li>
-									<li class="list-group-item">Porta ac consectetur ac</li>
-									<li class="list-group-item">Vestibulum at eros</li>
+							<div class="tab-pane fade show active" id="save" role="tabpanel"
+								aria-labelledby="save-tab">
+								<ul class="list-group" id="saveList">
 								</ul>
 							</div>
-							<div class="tab-pane fade" id="profile" role="tabpanel"
-								aria-labelledby="profile-tab">
-								<ul class="list-group">
-									<li class="list-group-item">Cras justo odio</li>
-									<li class="list-group-item">Dapibus ac facilisis in</li>
-									<li class="list-group-item">Morbi leo risus</li>
-									<li class="list-group-item">Porta ac consectetur ac</li>
-									<li class="list-group-item">Vestibulum at eros</li>
+							<div class="tab-pane fade" id="reserve" role="tabpanel"
+								aria-labelledby="reserve-tab">
+								<ul class="list-group" id="reserveList">
 								</ul>
 							</div>
 						</div>
@@ -530,15 +522,47 @@ label {
 		
 		
 		<!--(주혜)글쓰기 폼 기능-->
+		<%
+			String context = request.getContextPath();
+		%>
+		
 		<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 		<script type="text/javascript">
-		<!--마지막 저장창에서 저장안해 클릭-->
+		/*글쓰기 버튼 누르면 임시저장 글, 수 가져오기*/
+		function clickWriteBtn(){
+			$.ajax({
+				url:"<%=context%>/god/getReserveNum",
+				data:{ucode:${user.getUcode()}},
+				dataType:'text',
+				success:function(data){
+					$('#saveNum').html(data);
+				}
+			});
+		}
+		
+		function clickReserveBtn(){
+			$.ajax({
+				url:"<%=context%>/god/getReserveList",
+				type:'post',
+				data:{ucode:user.getUcode()},
+				dataType:'html',
+				success:function(data){
+					var str="";
+					$.each(results, function(i){
+						str+="<li class='list-group-item'>"+data[i]+"</li>";
+					});
+					$("#reserveList").append(str);
+				}
+			});
+		}
+		
+		/*마지막 저장창에서 저장안해 클릭*/
 		jQuery("#notsaveBtn").click(function(){
 			$("#saveModal .close").click();
 			$("#writeForm .close").click(); 
 		});
 		
-		<!--예약을 해뒀는지(현재시간으로 안바뀌게)-->
+		/*예약을 해뒀는지(현재시간으로 안바뀌게)*/
 		var reserve=0; //0 안함 1 함
 		<!--예약하기 버튼(월-일맞춰서 경고창띄우기)-->
 		jQuery("#reserveChk").click(function(){
