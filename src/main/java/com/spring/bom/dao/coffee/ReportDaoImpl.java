@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.spring.bom.model.coffee.ReportUser_infoBoard;
+import com.spring.bom.model.coffee.User_info;
 
 @Repository
 public class ReportDaoImpl implements ReportDao {
@@ -16,21 +17,30 @@ public class ReportDaoImpl implements ReportDao {
 	@Override
 	public List<ReportUser_infoBoard> accusationList() {
 		List<ReportUser_infoBoard> list = null;
-		list = session.selectList("accusationSelectReportUser_infoBoard");
+		System.out.println("ReportDaoImpl accusationList start..");
+
+		try {
+			list = session.selectList("accusationSelectReportUser_infoBoard");
+		}catch (Exception e) {
+			System.out.println("ReportDaoImpl accusationList ->"+e.getMessage());
+		}
+		
 		
 		return list;
 	}
 
 	@Override
-	public String getROPUnickname(int ropcode) {
-		String result = session.selectOne("getROPUnickname", ropcode);
-		return result;
+	public List<ReportUser_infoBoard> uncensoredList() {
+		List<ReportUser_infoBoard> list = null;
+		System.out.println("ReportDaoImpl uncensoredList start..");
+
+		try {
+			list = session.selectList("accusationSelectUncensoredReportUser_infoBoard");
+		}catch (Exception e) {
+			System.out.println("ReportDaoImpl uncensoredList ->"+e.getMessage());
+		}
+		return list;
 	}
 
-	@Override
-	public String getROPUatid(int ropcode) {
-		String result = session.selectOne("getROPUatid", ropcode);
-		return result;
-	}
-
+	
 }

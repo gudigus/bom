@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.bom.dao.coffee.ReportDao;
 import com.spring.bom.model.coffee.ReportUser_infoBoard;
+import com.spring.bom.model.coffee.User_info;
 
 @Service
 public class ReportServiceImpl implements ReportService {
@@ -14,18 +15,17 @@ public class ReportServiceImpl implements ReportService {
 	private ReportDao rd;
 	@Override
 	public List<ReportUser_infoBoard> accusationList() {
+		System.out.println("ReportServiceImpl accusationList start..");
+
 		List<ReportUser_infoBoard> list = rd.accusationList();
 		return list;
 	}
 	@Override
-	public String getROPUnickname(int ropcode) {
-		String rOPUnickname = rd.getROPUnickname(ropcode);
-		return null;
+	public List<ReportUser_infoBoard> uncensoredList() {
+		List<ReportUser_infoBoard> list = rd.uncensoredList();
+		return list;
 	}
-	@Override
-	public String getROPUatid(int ropcode) {
-		String rOPUatid = rd.getROPUatid(ropcode);
-		return null;
-	}
+	
+	
 
 }

@@ -19,6 +19,8 @@ public class BoardUser_info {
 	private int bjoincount;
 	private int bstate;
 	private int breportcount;
+	private int breplycount;
+	private int bquotecount;
 	//User_info
 	private String uemail;		
 	private String upassword;
@@ -144,6 +146,19 @@ public class BoardUser_info {
 	public void setBreportcount(int breportcount) {
 		this.breportcount = breportcount;
 	}
+	public int getBreplycount() {
+		return breplycount;
+	}
+	public void setBreplycount(int breplycount) {
+		this.breplycount = breplycount;
+	}
+	public int getBquotecount() {
+		return bquotecount;
+	}
+	public void setBquotecount(int bquotecount) {
+		this.bquotecount = bquotecount;
+	}
+	
 	public String getUemail() {
 		return uemail;
 	}

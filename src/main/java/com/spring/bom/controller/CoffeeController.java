@@ -29,19 +29,13 @@ public class CoffeeController {
 	private ReportService rs;
 	
 	
-	@GetMapping(value = "/coffee/example")
-	public String example() {
-		System.out.println("CoffeeController example start..");
-		return "coffee/example";
-	}
+//	@GetMapping(value = "/coffee/example")
+//	public String example() {
+//		System.out.println("CoffeeController example start..");
+//		return "coffee/example";
+//	}
 	
 	
-	@RequestMapping(value = "/coffee/censorAccusationManagerPage")
-	public String censorAccusationManagerPage() {
-		System.out.println("CoffeeController censorAccusationManagerPage start..");
-		
-		return "coffee/censorAccusationManagerPage";
-	}
 	// 회원 매니저
 	@GetMapping(value = "/coffee/censorMemberManagerPage")
 	public String censorMemberManagerPage(Model model) {
@@ -86,6 +80,7 @@ public class CoffeeController {
 	public String accusationBomManagerPage(Model model) {
 		System.out.println("CoffeeController accusationBomManagerPage start..");
 		List<BoardUser_info> list = bs.accusationList();
+//		System.out.println(list.get(0).getBcode());
 		model.addAttribute("boardUser_infoList", list);
 		return "coffee/accusationBomManagerPage";
 	}
@@ -95,9 +90,9 @@ public class CoffeeController {
 	public String censorAccusationManagerPage(Model model) {
 		System.out.println("CoffeeController censorAccusationManagerPage start..");
 		List<ReportUser_infoBoard> list = rs.accusationList();
-		for(int i=0; i<list.size();i++) {
-			list.get(i).getRopcode();
-		}
+//		System.out.println("list.get(0).getUnickname_1()->"+list.get(0).getUnickname_1());
+//		System.out.println("list.get(0).getUnickname()->"+list.get(0).getUnickname());
+		
 		
 		model.addAttribute("ReportUser_infoBoardList", list);
 		return "coffee/censorAccusationManagerPage";
@@ -105,8 +100,12 @@ public class CoffeeController {
 	@GetMapping(value = "/coffee/uncensoredAccusationManagerPage")
 	public String uncensoredAccusationManagerPage(Model model) {
 		System.out.println("CoffeeController uncensoredAccusationManagerPage start..");
-//		List<BoardUser_info> list = bs.sensorList();
-//		model.addAttribute("boardUser_infoList", list);
+		List<ReportUser_infoBoard> list = rs.uncensoredList();
+//		System.out.println("list.get(0).getUnickname_1()->"+list.get(0).getUnickname_1());
+//		System.out.println("list.get(0).getUnickname()->"+list.get(0).getUnickname());
+		
+		
+		model.addAttribute("ReportUser_infoBoardList", list);
 		return "coffee/uncensoredAccusationManagerPage";
 	}
 }

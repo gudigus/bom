@@ -57,6 +57,8 @@ public class ReportUser_infoBoard {
 	private int bjoincount;
 	private int bstate;
 	private int breportcount;
+	private int breplycount;
+	private int bquotecount;
 	
 	//신고한 User_info
 	
@@ -351,6 +353,18 @@ public class ReportUser_infoBoard {
 	}
 	public void setBreportcount(int breportcount) {
 		this.breportcount = breportcount;
+	}
+	public int getBreplycount() {
+		return breplycount;
+	}
+	public void setBreplycount(int breplycount) {
+		this.breplycount = breplycount;
+	}
+	public int getBquotecount() {
+		return bquotecount;
+	}
+	public void setBquotecount(int bquotecount) {
+		this.bquotecount = bquotecount;
 	}
 	public String getUemail_1() {
 		return uemail_1;

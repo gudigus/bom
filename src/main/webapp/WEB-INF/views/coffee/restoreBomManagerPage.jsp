@@ -44,20 +44,31 @@
 </style>
 <script type="text/javascript">
 ﻿﻿﻿
-	
-	
 	$(function(){
-    	$(".btn.btn-danger.float-right").click(function(){
-			//alert("차단 누름")
-	 		$(this).hide();
-			$(".btn.btn-primary.float-right").show();
-	 	});
-		﻿﻿﻿﻿﻿
-		$(".btn.btn-primary.float-right").click(function(){
-			//alert("복원 누름")
-	 		$(this).hide();
-			$(".btn.btn-danger.float-right").show();
-		});
+		<c:set var="num" value="0"></c:set>
+		<c:forEach var="list" items="${boardUser_infoList }">
+	
+			var state = "<c:out value='${list.bstate}'/>";
+			var num = "<c:out value='${num}'/>";
+			// console.log(state);
+			if(state == '1'){
+				$(".btn.btn-primary.float-right.${num}").hide();
+			}else if(state == '2'){
+				$(".btn.btn-danger.float-right.${num}").hide();
+			}
+	    	$(".btn.btn-danger.float-right.${num}").click(function(){
+				//alert("차단 누름")
+		 		$(this).hide();
+				$(".btn.btn-primary.float-right.${num}").show();
+		 	});
+			﻿﻿﻿﻿﻿
+			$(".btn.btn-primary.float-right.${num}").click(function(){
+				//alert("복원 누름")
+		 		$(this).hide();
+				$(".btn.btn-danger.float-right.${num}").show();
+			});
+			<c:set var="num" value="${num+1}"></c:set>
+		</c:forEach>
 		
 	})
 
@@ -147,11 +158,13 @@
 					</form>
 				</div>
 				<!--글 정렬-->
+				<c:set var="num" value="-1"></c:set>
 				<c:forEach var="list" items="${boardUser_infoList }">
+					<c:set var="num" value="${num+1 }"></c:set>
 					<div class="card">
 						<div class="card-body">
-							<button type="button" id="btn_ban" class="btn btn-danger float-right">차단</button>
-							<button type="button" id="btn_restore" class="btn btn-primary float-right">복원</button>
+							<button type="button" id="btn_ban" class="btn btn-danger float-right ${num }">차단</button>
+							<button type="button" id="btn_restore" class="btn btn-primary float-right ${num }">복원</button>
 							<c:choose>
 								<c:when test="${not empty list.uimage }">
 									<img alt="회원 이미지" src="/img/profiles/${list.uimage }" class="rounded-circle" width="50"

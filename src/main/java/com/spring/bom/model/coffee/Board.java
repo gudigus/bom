@@ -18,6 +18,8 @@ public class Board {
 	private int bjoincount;
 	private int bstate;
 	private int breportcount;
+	private int breplycount;
+	private int bquotecount;
 	
 	public int getBcode() {
 		return bcode;
@@ -120,5 +122,17 @@ public class Board {
 	}
 	public void setBreportcount(int breportcount) {
 		this.breportcount = breportcount;
+	}
+	public int getBreplycount() {
+		return breplycount;
+	}
+	public void setBreplycount(int breplycount) {
+		this.breplycount = breplycount;
+	}
+	public int getBquotecount() {
+		return bquotecount;
+	}
+	public void setBquotecount(int bquotecount) {
+		this.bquotecount = bquotecount;
 	}
 }

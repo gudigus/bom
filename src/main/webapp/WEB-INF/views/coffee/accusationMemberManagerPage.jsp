@@ -42,11 +42,33 @@
 }
 </style>
 <script type="text/javascript">
-
-
-
-
-
+	$(function(){
+		<c:set var="num" value="0"></c:set>
+		<c:forEach var="list" items="${boardUser_infoList }">
+	
+			var state = "<c:out value='${list.bstate}'/>";
+			var num = "<c:out value='${num}'/>";
+			// console.log(state);
+			if(state == '1'){
+				$(".btn.btn-primary.float-right.${num}").hide();
+			}else if(state == '2'){
+				$(".btn.btn-danger.float-right.${num}").hide();
+			}
+	    	$(".btn.btn-danger.float-right.${num}").click(function(){
+				//alert("차단 누름")
+		 		$(this).hide();
+				$(".btn.btn-primary.float-right.${num}").show();
+		 	});
+			﻿﻿﻿﻿﻿
+			$(".btn.btn-primary.float-right.${num}").click(function(){
+				//alert("복원 누름")
+		 		$(this).hide();
+				$(".btn.btn-danger.float-right.${num}").show();
+			});
+			<c:set var="num" value="${num+1}"></c:set>
+		</c:forEach>
+		
+	})
 
 </script>
 </head>
@@ -132,14 +154,16 @@
 					</form>
 				</div>
 				<!--글 정렬-->
+				<c:set var="num" value="-1"></c:set>
 				<c:forEach var="list" items="${user_infoList }">
+					<c:set var="num" value="${num+1 }"></c:set>
 					<div class="card">
 						<div class="card-body">
 							<div align="center"><img src="/img/coffee/news_img_02_m.jpg" style="width: auto;
     							height: 200px; object-fit:contain;">
 							</div>
-							<span class="ban"><button type="button" class="btn btn-danger float-right">탈퇴</button></span>
-							<span class="unban"><button type="button" class="btn btn-primary float-right">복원</button></span>
+							<span class="ban"><button type="button" class="btn btn-danger float-right ${num }">탈퇴</button></span>
+							<span class="unban"><button type="button" class="btn btn-primary float-right ${num }">복원</button></span>
 							
 							<c:choose>
 								<c:when test="${not empty list.uimage }">

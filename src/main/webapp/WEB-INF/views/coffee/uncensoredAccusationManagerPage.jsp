@@ -122,51 +122,88 @@
 					</form>
 				</div>
 				<!--글 정렬-->
-				<c:forEach begin="1" end="10" step="1">
+				<c:forEach var="list" items="${ReportUser_infoBoardList }">
 					<div class="card">
 						<div class="card-body">
-							<button type="button" class="btn btn-outline-dark float-right">취소</button>
-							<button type="button" class="btn btn-dark float-right">처리</button>
-							<a class="card-title text-dark">ropcode-닉네임</a> <a
-								class="card-subtitle mb-2 text-muted">ropcode-@atid</a> <a
-								class="card-subtitle mb-2 text-muted">rdatetime</a> <a href="#"
-								class="card-text" style="margin-top: 10px;">rcontent</a>
+							<span><button type="button" class="btn btn-outline-dark float-right">취소</button></span>
+							<span><button type="button" class="btn btn-dark float-right">처리</button></span>
+							<a class="card-title text-dark">${list.unickname_1}</a> <a
+								class="card-subtitle mb-2 text-muted">${list.uatid_1 }</a> <a
+								class="card-subtitle mb-2 text-muted">${list.rdatetime}</a> <a href="#"
+								class="card-text" style="margin-top: 10px;">${list.rcontent}</a>
 							<div class="card">
 								<div class="card-body">
-									<span><button type="button" class="btn btn-danger float-right">차단</button></span>
-									<span><button type="button" class="btn btn-primary float-right">복원</button></span>
-									<%--<c:choose>
-										 <c:when test="{not empty list.uimage }">
-											<img alt="회원 이미지" src="/img/profiles/{list.uimage }" class="rounded-circle" width="50"
-											height="50"></c:when>
-										<c:otherwise> --%>
-											<img src="/img/coffee/user_basic.svg" class="rounded-circle" width="50" height="50">
-										<%-- </c:otherwise> 
-									</c:choose>--%>
-									<span class="card-title text-dark">{list.unickname }</span> <a
-										class="card-subtitle mb-2 text-muted">@{list.uatid }</a> <a
-										class="card-subtitle mb-2 text-muted">{list.bregdate }</a> <a href="#"
-										class="card-text" style="margin-top: 10px;">{list.bcontent }</a>
-									<div align="center">
-										<div class="btn-group col-md-12" role="group"
-											aria-label="Button group with nested dropdown">
-											<button type="button" class="btn btn-secondary mr-4 btn-light"
-												data-toggle="tooltip" data-placement="top" title="답글">
-												<img src="/img/speech-bubble.svg" width="20" height="20">
-											</button>
-											<button type="button" class="btn btn-secondary btn-light mr-4"
-												data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
-												<img src="/img/bring.svg" width="20" height="20">
-											</button>
-											<button type="button" class="btn btn-secondary btn-light mr-4"
-												data-toggle="tooltip" data-placement="top" title="좋아요">
-												<img src="/img/heart.svg" width="20" height="20">{list.blikecount }
-											</button>
-										</div>
-									</div>
-									<div align="left">
-										<span class="bg-danger p-1 text-light"><img src="/img/coffee/accusation.svg" width="15" height="15">{list.breportcount }</span>
-									</div>
+									<c:choose>
+										<c:when test="${list.rtype == 1}">
+											<span><button type="button" class="btn btn-danger float-right">차단</button></span>
+											<span><button type="button" class="btn btn-primary float-right">복원</button></span>
+											<c:choose>
+												 <c:when test="${not empty list.uimage }">
+													<img alt="회원 이미지" src="/img/profiles/${list.uimage }" class="rounded-circle" width="50"
+													height="50"></c:when>
+												<c:otherwise>
+													<img src="/img/coffee/user_basic.svg" class="rounded-circle" width="50" height="50">
+												</c:otherwise> 
+											</c:choose>
+											<span class="card-title text-dark">${list.unickname }</span> <a
+												class="card-subtitle mb-2 text-muted">@${list.uatid }</a> <a
+												class="card-subtitle mb-2 text-muted">${list.bregdate }</a> <a href="#"
+												class="card-text" style="margin-top: 10px;">${list.bcontent }</a>
+											<div align="center">
+												<div class="btn-group col-md-12" role="group"
+													aria-label="Button group with nested dropdown">
+													<button type="button" class="btn btn-secondary mr-4 btn-light"
+														data-toggle="tooltip" data-placement="top" title="답글">
+														<img src="/img/speech-bubble.svg" width="20" height="20">
+													</button>
+													<button type="button" class="btn btn-secondary btn-light mr-4"
+														data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
+														<img src="/img/bring.svg" width="20" height="20">
+													</button>
+													<button type="button" class="btn btn-secondary btn-light mr-4"
+														data-toggle="tooltip" data-placement="top" title="좋아요">
+														<img src="/img/heart.svg" width="20" height="20">${list.blikecount }
+													</button>
+													
+												</div>
+											</div>
+											<div align="left">
+												<span class="bg-danger p-1 text-light"><img src="/img/coffee/accusation.svg" width="15" height="15">${list.breportcount }</span>
+											</div>
+										</c:when>
+										<c:otherwise>
+											<div class="card-body">
+												<div align="center"><img src="/img/coffee/news_img_02_m.jpg" style="width: auto;
+				    							height: 200px; object-fit:contain;">
+												</div>
+											<span class="ban"><button type="button" class="btn btn-danger float-right">탈퇴</button></span>
+											<span class="unban"><button type="button" class="btn btn-primary float-right">복원</button></span>
+											
+											<c:choose>
+												<c:when test="${not empty list.uimage }">
+													<img alt="회원 이미지" src="/img/profiles/${list.uimage }" class="rounded-circle" width="100"
+													height="100">
+												</c:when>
+												<c:otherwise>
+													<img src="/img/coffee/user_basic.svg" class="rounded-circle" width="100" height="100">
+												</c:otherwise>
+											</c:choose>
+											<span class="card-title text-dark">${list.unickname }</span> <a
+												class="card-subtitle mb-2 text-muted">@${list.uatid }</a> 
+												<a class="card-text" style="margin-top: 10px;">${list.uintro } 
+												</a>
+											<div><c:if test="${not empty list.unation }"><img alt="국적" src="/img/coffee/flags.svg" width="15" height="15">${list.unation }</c:if> 
+											<c:if test="${not empty list.uloc }"><img alt="위치" src="/img/coffee/placeholder.svg" width="15" height="15">${list.uloc }</c:if>
+											</div>
+											<div> 
+											<c:if test="${not empty list.uprofilelink }"><img src="/img/coffee/link.svg" width="15" height="15"><a href="#">${list.uprofilelink }</a></c:if>
+											<img src="/img/coffee/calendar-interface-symbol-tool.svg" width="15" height="15">${list.uregdate }
+											</div>
+											<div>팔로잉수 Following 팔로워수 Follower</div>
+											<span class="bg-danger p-1 text-light"><img src="/img/coffee/accusation.svg" width="15" height="15">${list.ureportcount }</span>
+											</div>
+										</c:otherwise>
+									</c:choose>
 								</div>
 							</div>
 						</div>

@@ -2,9 +2,12 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "HTTP://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
      <typeAliases>
-		<typeAlias alias="Board"          type="com.spring.bom.model.coffee.Board"   />
-		<typeAlias alias="User_info"          type="com.spring.bom.model.coffee.User_info"   />
-		<typeAlias alias="BoardUser_info"          type="com.spring.bom.model.coffee.BoardUser_info"   />
-		<typeAlias alias="ReportUser_infoBoard"          type="com.spring.bom.model.coffee.ReportUser_infoBoard"   />
+		<!-- 경빈 -->
+		<typeAlias alias="CoffeeBoard"          type="com.spring.bom.model.coffee.Board"   />
+		<typeAlias alias="CoffeeUser_info"          type="com.spring.bom.model.coffee.User_info"   />
+		<typeAlias alias="CoffeeBoardUser_info"          type="com.spring.bom.model.coffee.BoardUser_info"   />
+		<typeAlias alias="CoffeeReportUser_infoBoard"          type="com.spring.bom.model.coffee.ReportUser_infoBoard"   />
+		<!-- 진형 -->
+		<typeAlias alias="user_info" type="com.spring.bom.model.bro.user_info" />
      </typeAliases>
 </configuration>
