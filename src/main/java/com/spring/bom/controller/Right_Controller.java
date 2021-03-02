@@ -1,6 +1,10 @@
 package com.spring.bom.controller;
 
 
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -8,8 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,7 +37,7 @@ public class Right_Controller {
 	
 	@RequestMapping(value =  "/right/main")
 	public String main(HttpServletRequest request,Model model) {
-		String ucode = request.getParameter("ucode");
+		int ucode = Integer.parseInt(request.getParameter("ucode"));
 		model.addAttribute("ucode",ucode);
 		HttpSession session = request.getSession();
 		session.setAttribute("ucode",ucode);
@@ -103,17 +109,55 @@ public class Right_Controller {
 	//2단계 인증
 	@RequestMapping(value =  "right/doubleSecurity")
 	public String doubleSecurity(HttpServletRequest request,Model model) {
-		String ucode = request.getParameter("ucode");
+		int ucode = Integer.parseInt(request.getParameter("ucode"));
 		model.addAttribute("ucode",ucode);
 		HttpSession session = request.getSession();
+		User_Info ui = us.detail(ucode);
+		
 		session.setAttribute("ucode",ucode);
+		model.addAttribute("ui",ui);
 		
 		return "/right/doubleSecurity";
 	}
+	@GetMapping(value="right/mailTransport")
+	public String mailTransport(HttpServletRequest request, Model model) {
+		int ucode = Integer.parseInt(request.getParameter("ucode"));
+		model.addAttribute("ucode",ucode);
+		HttpSession session = request.getSession();
+		
+		User_Info ui = us.detail(ucode);
+		
+		session.setAttribute("ucode",ucode);
+		model.addAttribute("ui",ui);
+		
+		System.out.println("mailSending...");
+		String tomail = request.getParameter("uemail");           // 받는 사람 이메일
+		System.out.println(tomail);
+		String setfrom = request.getParameter("uemail");
+		String title = "Bom 2단계 인증 메일 입니다.";                 // 제목
+		try {
+			// Mime 전자우편 Internet 표준 Format
+			MimeMessage message = mailSender.createMimeMessage();
+			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+			messageHelper.setFrom(setfrom);    // 보내는사람 생략하거나 하면 정상작동을 안함
+			messageHelper.setTo(tomail);       // 받는사람 이메일
+			messageHelper.setSubject(title);   // 메일제목은 생략이 가능하다
+			String tempPassword = (int) (Math.random() * 999999) + 1 + "";
+			messageHelper.setText("인증번호 : " + tempPassword); // 메일 내용
+			System.out.println("인증번호 : " + tempPassword);
+				  mailSender.send(message);
+				  model.addAttribute("check", 1);   // 정상 전달
+//					s.tempPw(u_id, tempPassword)  ;// db에 비밀번호를 임시비밀번호로 업데이트
+			} catch (Exception e) {
+				System.out.println(e);
+				model.addAttribute("check", 2);  // 메일 전달 실패
+			}
+			return "right/mailResult";
+		}
 	// 비번 변경
 	@RequestMapping(value =  "right/changePw")
 	public String changePw(HttpServletRequest request,Model model) {
-		String ucode = request.getParameter("ucode");
+		int ucode = Integer.parseInt(request.getParameter("ucode"));
 		model.addAttribute("ucode",ucode);
 		HttpSession session = request.getSession();
 		session.setAttribute("ucode",ucode);
@@ -123,7 +167,7 @@ public class Right_Controller {
 	// 차단
 	@RequestMapping(value =  "right/block")
 	public String block(HttpServletRequest request,Model model) {
-		String ucode = request.getParameter("ucode");
+		int ucode = Integer.parseInt(request.getParameter("ucode"));
 		model.addAttribute("ucode",ucode);
 		HttpSession session = request.getSession();
 		session.setAttribute("ucode",ucode);
@@ -133,7 +177,7 @@ public class Right_Controller {
 	//탈퇴
 	@RequestMapping(value =  "right/userDisabled")
 	public String userDisabled(HttpServletRequest request,Model model) {
-		String ucode = request.getParameter("ucode");
+		int ucode = Integer.parseInt(request.getParameter("ucode"));
 		model.addAttribute("ucode",ucode);
 		HttpSession session = request.getSession();
 		session.setAttribute("ucode",ucode);

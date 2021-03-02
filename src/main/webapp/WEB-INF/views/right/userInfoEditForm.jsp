@@ -163,7 +163,7 @@
 							<label for="uatid">아이디</label>
 								<input type="text" class="form-control" id="uatid" name="uatid" placeholder="ID" value="${ui.uatid }" required>
 								<input type="button" value="중복확인" class="btn btn-outline-success" id="idCh">
-						<div class="check_font" id="id_check"></div>
+						<div id="id_check"></div>
 						</div>
 						<!-- 생년월일 -->
 						<div class="form-group">
@@ -464,7 +464,7 @@
 									<c:choose>
 										<c:when test="${uidentify eq '0' }">
 											미인증	<input type="button"  value="2단계 인증하러 가기 " class="btn btn-outline-warning" 
-												 onclick="location.href='/right/doubleSecurity'" >
+												 onclick="location.href='/right/mailTransport'" >
 										</c:when>
 										<c:when test="${uidentify eq '1' }">
 											인증됨
