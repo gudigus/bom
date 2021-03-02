@@ -14,7 +14,6 @@
 							values(to_char(sysdate,'yyyy/mm/dd hh24:mi:ss'),#{ucode},
 									null,null,null,null,null,null,null,null,
 									#{uatid},null,to_date(#{ubirth}, 'yyyy/mm/dd'),#{ugender},#{unation},null )
-		commit
 	</insert>
 	<!-- change_info에 기존 데이터 update -->
 	<update id="rightUserEdit2" parameterType="User">

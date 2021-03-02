@@ -3,10 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
-<%
-	String context = request.getContextPath();
-	System.out.println("context->"+context);
-%>
 <html lang="en">
 
 <head>
@@ -52,6 +48,62 @@
 	display: none;
 }
 </style>
+
+<!-- id 중복 check -->
+		<%
+			String context = request.getContextPath();
+			System.out.println("context->"+context);
+		%>
+		<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+		<script type="text/javascript">
+		 var contextPath='${pageContext.request.contextPath}';
+		 
+			// 아이디 유효성 검사(1 = 중복 / 0 != 중복)
+			//$("#uatid").blur(function(){
+				function idCh(){
+					var uatid = $('#uatid').val();
+					console.log(uatid);
+					alert('function idCh()');
+					$.ajax({
+						url : "<%=context%>/right/idCheck",
+						data: {uatid : uatid},
+						dataType:'text',
+						success : function(data){						
+							
+							if (data==='1'){
+									// 1 : 아이디가 중복되는 문구
+									$('#id_check').html('사용중인 아이디입니다 :p');
+									$('#id_check').css('color', 'red');
+									$('#reg_submit').attr('disabled', true);
+									alert('function idCh() data 1');
+
+							}else{
+								alert('function idCh() data 2');
+								$('#id_check').html('사용가능한 아이디입니다 :p');
+								$('#id_check').css('color', 'green');
+/* 									if(idJ.test(uatid)){
+										// 0 : 아이디 길이 / 문자열 검사
+										$("#id_check").text("");
+										$("#reg_submit").attr("disabled", false);
+							
+									}else if(uatid == ""){
+										
+										$('#id_check').text('아이디를 입력해주세요 :)');
+										$('#id_check').css('color', 'red');
+										$("#reg_submit").attr("disabled", true);				
+										
+									}else{
+										$('#id_check').text("아이디는 소문자와 숫자 4~12자리만 가능합니다 :) :)");
+										$('#id_check').css('color', 'red');
+										$("#reg_submit").attr("disabled", true);
+									} */
+								}
+							}
+						});
+					}
+			</script>
+
+
 </head>
 
 <body>
@@ -96,50 +148,6 @@
 		</div>
 
 		<!-- /#sidebar-wrapper -->
-		<!-- id 중복 check -->
-
-		<script type="text/javascript">
-		 var contextPath='${pageContext.request.contextPath}';
-			// 아이디 유효성 검사(1 = 중복 / 0 != 중복)
-			//$("#uatid").blur(function(){
-				//	var uatid = $('#uatid').val();
-				function idCh(){
-					var uatid = $('#uatid').val();
-					$.ajax({
-						url : "<%=context%>/right/idCheck",
-						dataType:'text',
-						success : function(data){
-							console.log("1 = 중복o / 0 = 중복x : "+ data);							
-							
-							if (data == 1){
-									// 1 : 아이디가 중복되는 문구
-									$("#id_check").text("사용중인 아이디입니다 :p");
-									$("#id_check").css("color", "red");
-									$("#reg_submit").attr("disabled", true);
-							}else{
-									
-									if(idJ.test(uatid)){
-										// 0 : 아이디 길이 / 문자열 검사
-										$("#id_check").text("");
-										$("#reg_submit").attr("disabled", false);
-							
-									}else if(uatid == ""){
-										
-										$('#id_check').text('아이디를 입력해주세요 :)');
-										$('#id_check').css('color', 'red');
-										$("#reg_submit").attr("disabled", true);				
-										
-									}else{
-										$('#id_check').text("아이디는 소문자와 숫자 4~12자리만 가능합니다 :) :)");
-										$('#id_check').css('color', 'red');
-										$("#reg_submit").attr("disabled", true);
-									}
-								}
-							}
-						});
-					}
-			</script>
-		
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
 				<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
@@ -161,9 +169,10 @@
 						<!-- 아이디 -->
 						<div class="form-group">
 							<label for="uatid">아이디</label>
-								<input type="text" class="form-control" id="uatid" name="uatid" placeholder="ID" value="${ui.uatid }" required>
-								<input type="button" value="중복확인" class="btn btn-outline-success" id="idCh">
-						<div id="id_check"></div>
+									<input type="text" class="form-control" id="uatid" name="uatid" placeholder="ID" value="${ui.uatid }" required="required">
+									<input type="button" value="중복확인" class="btn btn-outline-success" onclick="idCh()">
+									
+							<div id="id_check"></div>
 						</div>
 						<!-- 생년월일 -->
 						<div class="form-group">
@@ -585,6 +594,10 @@
 	</div>
 	<!-- 오른쪽 사이드바 끝 -->
 	<!-- /#wrapper -->
+	
+	
+		
+	
 </body>
 
 </html>

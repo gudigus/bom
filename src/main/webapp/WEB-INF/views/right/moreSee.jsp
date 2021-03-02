@@ -77,8 +77,8 @@
                   <div class="form-row">
                      <img src="/img/teemo.jpg" class="rounded-circle" width="50" width="50"> 
                      <div class="form-col ml-2">
-                     <a class="card-title text-dark" style="font-size:0.8em">${user.uNickname }</a><br> 
-                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${user.uAtid }</a>
+                     <a class="card-title text-dark" style="font-size:0.8em">${ui.unickname }</a><br> 
+                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${ui.uatid }</a>
                      </div>
                      </div>
                   </div>
@@ -98,11 +98,11 @@
 				<p>
 					<div align="center">
 						<div class="d-grid gap-2">
-						 <p><button type="button" class="btn btn-outline-success" onclick="location.href='userDisabled?ucode=${user.uCode }'">나의 봄 통계</button><p>
-						 	<button type="button" class="btn btn-outline-success" onclick="location.href='insertpw?ucode=${user.uCode }'">계정 정보 수정</button><p>
-							<button type="button" class="btn btn-outline-success" onclick="location.href='changePw?ucode=${user.uCode }'">비밀번호 변경</button><p>
-							<button type="button" class="btn btn-outline-success" onclick="location.href='block?ucode=${user.uCode }'">차단 관리</button><p>
-							<button type="button" class="btn btn-outline-success" onclick="location.href='userDisabled?ucode=${user.uCode }'">탈퇴</button><p>
+						 <p><button type="button" class="btn btn-outline-success" onclick="location.href='userDisabled?ucode=${ui.ucode }'">나의 봄 통계</button><p>
+						 	<button type="button" class="btn btn-outline-success" onclick="location.href='insertpw?ucode=${ui.ucode }'">계정 정보 수정</button><p>
+							<button type="button" class="btn btn-outline-success" onclick="location.href='changePw?ucode=${ui.ucode }'">비밀번호 변경</button><p>
+							<button type="button" class="btn btn-outline-success" onclick="location.href='block?ucode=${ui.ucode }'">차단 관리</button><p>
+							<button type="button" class="btn btn-outline-success" onclick="location.href='userDisabled?ucode=${ui.ucode }'">탈퇴</button><p>
 						</div>
 					</div>
 				</div>

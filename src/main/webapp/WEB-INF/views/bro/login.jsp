@@ -21,7 +21,7 @@
 	<form action="login" method="post">
 			<div>
 				<label for="uEmail"></label>
-				<input type="text" id="uEmail" name="uEmail">
+				<input type="email" id="uEmail" name="uEmail" required="required">
 			</div>
 			<div>
 				<label for="uPassword"></label>
