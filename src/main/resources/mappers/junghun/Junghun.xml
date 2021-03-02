@@ -8,31 +8,29 @@
 		select b.bcontent , b.blikecount , u.uatid , u.unickname ,
 		b.btmpsavtime
 		from board b, user_info u
-		where b.ucode = u.ucode
+		where b.uCode = u.uCode
 		and
 		b.bcontent
 		like '%'||#{search}||'%'
 		ORDER BY b.blikecount DESC
 	</select>
-
+	
 	<!-- 검색시 검색어저장 -->
 	<update id="searchData" parameterType="Junghun">
 		merge into search
 		USING dual
-		on (search='${search}' and UCODE='52')
+		on (search='${search}' and UCODE=${loginUcode})
 		when MATCHED THEN
 		UPDATE SET
 		scount = scount+1
 		WHEN NOT MATCHED THEN
 		INSERT (search, UCODE,
 		SAGE, STYPE, STIME, SRECORD,SCOUNT)
-		VALUES ('${search}',52,10,
+		VALUES ('${search}',${loginUcode},10,
 		<choose>
 			<when test='search.contains("#")'>'hash'</when>
-			<when test='search.contains("@")'>'user'</when>
-			<otherwise>
-				'word'
-			</otherwise>
+			<when test='search.contains("@")'>'user'</when> 
+			<otherwise>'word'</otherwise>
 		</choose>
 		,to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),1,0)
 	</update>
@@ -66,6 +64,7 @@
 		from search
 		ORDER BY scount DESC
 	</select>
+	
 	<!-- 해쉬태그 랜덤값 -->
 	<select id="searchHash" parameterType="Junghun"
 		resultType="Junghun">
@@ -75,6 +74,7 @@
 		and scount>3000
 		]]>
 	</select>
+	
 	<!-- 해쉬태그 순위 -->
 		<select id="searchTrend" parameterType="Junghun"
 		resultType="Junghun">

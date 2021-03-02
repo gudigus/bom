@@ -2,5 +2,6 @@
 <configuration>
      <typeAliases>
     	 <typeAlias alias="Junghun"          type="com.spring.bom.model.hoon.Junghun"   />
+	     <typeAlias alias="user_info" 		 type="com.spring.bom.model.hoon.user_info" />
      </typeAliases>
 </configuration>

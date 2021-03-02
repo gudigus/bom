@@ -47,7 +47,7 @@
 </style>
 </head>
 
-<body>
+<body class="pt-5">
 
 	<div class="d-flex" id="wrapper">
 
@@ -79,9 +79,15 @@
 				</a>
 				<div class="card">
 					<div class="card-body">
-						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-							width="50"> <a class="card-title text-dark">닉네임</a> <a
-							class="card-subtitle mb-2 text-muted">@atid</a>
+						<div class="form-row">
+							<img src="/img/teemo.jpg" class="rounded-circle" width="50"
+								width="50">
+							<div class="form-col ml-2">
+								<a class="card-title text-dark" style="font-size: 0.8em">${login.uNickname}</a><br>
+								<a class="card-subtitle mb-2 text-muted"
+									style="font-size: 0.8em">@${login.uAtid}</a>
+							</div>
+						</div>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
 				</div>
@@ -89,32 +95,27 @@
 		</div>
 
 		<!-- /#sidebar-wrapper -->
-
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
 			<nav
-				class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-				<button class="btn btn-success" id="menu-toggle">←</button>
-			</nav>
-			<div class="container-fluid">
-				<p>
-				<div class="card">
-					<div class="card-body">
-						<div class="form-group">
-							<form class="well form-search" action="searchView" method="get">
-								<div class="input-group flex-nowrap">
-									<div class="input-group-prepend">
-										<span class="input-group-text" id="addon-wrapping"><img
-											src="/img/search.svg" width="15" height="15"> </span>
-									</div>
-									<input type="text" class="form-control"
-										placeholder="Bom search" aria-label="Username"
-										aria-describedby="addon-wrapping" name="search">
-								</div>
-							</form>
+				class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top"
+				style="left: 241px; right: 241px;">
+				<div class="container">
+					<form class="well form-search" action="searchView" method="get">
+						<div class="input-group flex-nowrap">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="addon-wrapping"><img
+									src="/img/search.svg" width="15" height="15"> </span>
+							</div>
+							<input type="text" class="form-control" placeholder="봄 검색"
+								aria-label="Username" aria-describedby="addon-wrapping"
+								name="search">
 						</div>
-					</div>
+					</form>
 				</div>
+			</nav>
+
+			<div class="container-fluid">
 				<!--글 정렬-->
 				<div class="panel panel-default">
 					<!-- Table -->
@@ -130,7 +131,8 @@
 									href="searchView?search=${Junghun.search }"
 									style="text-align: center;">${Junghun.search }</a>
 								</td>
-								<td>${status.count }.<a href="#"
+								<td>${status.count }.<a
+									href="searchView?search=${Junghun.search }"
 									style="text-align: center;">${Junghun.search }</a>
 								</td>
 							</tr>
@@ -140,19 +142,20 @@
 						<tr>
 							<td class="table-title">트랜드 추천</td>
 						</tr>
-							<c:forEach var="Junghun" items="${listHash }">
-								<tr>
-									<td><a class="table-content" href="searchView?search=${Junghun.search }"
-										style="text-align: center;">${Junghun.search }<br> <c:choose>
-												<c:when test="${Junghun.scount > 4999 }">
-													<fmt:formatNumber value="${Junghun.scount }"
-														groupingUsed="true"></fmt:formatNumber> 봄</c:when>
-												<c:when test="${Junghun.scount <4999}">
-												</c:when>
-											</c:choose>
-									</a></td>
-								</tr>
-							</c:forEach>
+						<c:forEach var="Junghun" items="${listHash }">
+							<tr>
+								<td><a class="table-content"
+									href="searchView?search=${Junghun.search }"
+									style="text-align: center;">${Junghun.search }<br> <c:choose>
+											<c:when test="${Junghun.scount > 4999 }">
+												<fmt:formatNumber value="${Junghun.scount }"
+													groupingUsed="true"></fmt:formatNumber> 봄</c:when>
+											<c:when test="${Junghun.scount <4999}">
+											</c:when>
+										</c:choose>
+								</a></td>
+							</tr>
+						</c:forEach>
 					</table>
 				</div>
 			</div>

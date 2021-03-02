@@ -54,8 +54,8 @@
 			<div class="list-group list-group-flush">
 				<a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/home.svg" width="15" height="15"> 타임라인
-				</a> <a href="explore" class="list-group-item list-group-item-action"> <img
-					src="/img/search.svg" width="15" height="15"> 검색하기
+				</a> <a href="explore" class="list-group-item list-group-item-action">
+					<img src="/img/search.svg" width="15" height="15"> 검색하기
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
@@ -74,9 +74,15 @@
 				</a>
 				<div class="card">
 					<div class="card-body">
-						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-							width="50"> <a class="card-title text-dark">닉네임</a> <a
-							class="card-subtitle mb-2 text-muted">@atid</a>
+						<div class="form-row">
+							<img src="/img/teemo.jpg" class="rounded-circle" width="50"
+								width="50">
+							<div class="form-col ml-2">
+								<a class="card-title text-dark" style="font-size: 0.8em">${login.uNickname}</a><br>
+								<a class="card-subtitle mb-2 text-muted"
+									style="font-size: 0.8em">@${login.uAtid}</a>
+							</div>
+						</div>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
 				</div>

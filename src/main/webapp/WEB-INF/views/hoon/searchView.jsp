@@ -47,7 +47,7 @@
 </style>
 </head>
 
-<body>
+<body class="pt-5">
 
 	<div class="d-flex" id="wrapper">
 
@@ -79,9 +79,15 @@
 				</a>
 				<div class="card">
 					<div class="card-body">
-						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-							width="50"> <a class="card-title text-dark">닉네임</a> <a
-							class="card-subtitle mb-2 text-muted">@atid</a>
+						<div class="form-row">
+							<img src="/img/teemo.jpg" class="rounded-circle" width="50"
+								width="50">
+							<div class="form-col ml-2">
+								<a class="card-title text-dark" style="font-size: 0.8em">${login.uNickname}</a><br>
+								<a class="card-subtitle mb-2 text-muted"
+									style="font-size: 0.8em">@${login.uAtid}</a>
+							</div>
+						</div>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
 				</div>
@@ -93,181 +99,189 @@
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
 			<nav
-				class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-				<button class="btn btn-success" id="menu-toggle">←</button>
+				class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top"
+				style="left: 241px; right: 241px;">
+				<div class="container">
+					<form class="well form-search" action="searchView" method="get">
+						<div class="input-group flex-nowrap">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="addon-wrapping"><img
+									src="/img/search.svg" width="15" height="15"> </span>
+							</div>
+							<input type="text" class="form-control" placeholder="봄 검색"
+								aria-label="Username" aria-describedby="addon-wrapping"
+								name="search">
+						</div>
+					</form>
+				</div>
+				<ul class="nav nav-tabs nav-justified col-md-25" id="myTab"
+				role="tablist">
+				<li class="nav-item mr-5" role="presentation"><a
+					class="nav-link active" id="home-tab" data-toggle="tab"
+					href="#fame" role="tab" aria-controls="fame" aria-selected="true">인기</a></li>
+
+				<li class="nav-item mr-5" role="presentation"><a
+					class="nav-link" id="profile-tab" data-toggle="tab" href="#user"
+					role="tab" aria-controls="user" aria-selected="false">사용자</a></li>
+
+				<li class="nav-item mr-5" role="presentation"><a
+					class="nav-link" id="contact-tab" data-toggle="tab" href="#new"
+					role="tab" aria-controls="new" aria-selected="false">최신글</a></li>
+
+				<li class="nav-item mr-5" role="presentation"><a
+					class="nav-link" id="contact-tab" data-toggle="tab" href="#contact"
+					role="tab" aria-controls="photo" aria-selected="false">사진</a></li>
+
+				<li class="nav-item mr-5" role="presentation"><a
+					class="nav-link" id="contact-tab" data-toggle="tab" href="#contact"
+					role="tab" aria-controls="video" aria-selected="false">동영상</a></li>
+			</ul>
 			</nav>
 			<p>
-			<div class="container-fluid">
-				<div class="card">
-					<div class="card-body">
-						<div class="form-group">
-							<form class="well form-search" action="searchView" method="get">
-								<div class="input-group flex-nowrap">
-									<div class="input-group-prepend">
-										<span class="input-group-text" id="addon-wrapping"><img
-											src="/img/search.svg" width="15" height="15"> </span>
+				<!--글 정렬-->
+			<ul class="nav nav-tabs nav-justified col-md-25" id="myTab"
+				role="tablist">
+				<li class="nav-item mr-5" role="presentation"><a
+					class="nav-link active" id="home-tab" data-toggle="tab"
+					href="#fame" role="tab" aria-controls="fame" aria-selected="true">인기</a></li>
+
+				<li class="nav-item mr-5" role="presentation"><a
+					class="nav-link" id="profile-tab" data-toggle="tab" href="#user"
+					role="tab" aria-controls="user" aria-selected="false">사용자</a></li>
+
+				<li class="nav-item mr-5" role="presentation"><a
+					class="nav-link" id="contact-tab" data-toggle="tab" href="#new"
+					role="tab" aria-controls="new" aria-selected="false">최신글</a></li>
+
+				<li class="nav-item mr-5" role="presentation"><a
+					class="nav-link" id="contact-tab" data-toggle="tab" href="#contact"
+					role="tab" aria-controls="photo" aria-selected="false">사진</a></li>
+
+				<li class="nav-item mr-5" role="presentation"><a
+					class="nav-link" id="contact-tab" data-toggle="tab" href="#contact"
+					role="tab" aria-controls="video" aria-selected="false">동영상</a></li>
+			</ul>
+			<div class="tab-content" id="myTabContent">
+				<!-- 인기  -->
+				<div class="tab-pane fade show active" id="fame" role="tabpanel"
+					aria-labelledby="home-tab">
+					<c:forEach var="junghun" items="${listSearch }">
+						<div class="card">
+							<div class="card-body">
+								<button type="button" class="btn btn-light float-right">⋯</button>
+								<img src="/img/teemo.jpg" class="rounded-circle" width="50"
+									width="50"> <a class="card-title text-dark">${junghun.uNickName}</a>
+								<a class="card-subtitle mb-2 text-muted">${junghun.uatId}</a> <a
+									class="card-subtitle mb-2 text-muted">${junghun.btmpsavtime }</a>
+								<a href="#" class="card-text" style="margin-top: 10px;">${junghun.bcontent }</a>
+								<div align="center">
+									<div class="btn-group col-md-12" role="group"
+										aria-label="Button group with nested dropdown">
+										<button type="button" class="btn btn-secondary mr-3 btn-light"
+											data-toggle="tooltip" data-placement="top" title="답글">
+											<img src="/img/speech-bubble.svg" width="20" height="20">
+										</button>
+										<button type="button" class="btn btn-secondary btn-light mr-3"
+											data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
+											<img src="/img/bring.svg" width="20" height="20">
+										</button>
+										<button type="button" class="btn btn-secondary btn-light mr-3"
+											data-toggle="tooltip" data-placement="top" title="좋아요">
+											<img src="/img/heart.svg" width="20" height="20">
+										</button>
+										<button type="button"
+											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+											data-toggle="dropdown" aria-haspopup="true"
+											aria-expanded="false">
+											<img src="/img/share.svg" width="20" height="20">
+										</button>
+										<div class="dropdown-menu">
+											<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
+												class="dropdown-item" href="#">URL담아가기</a>
+										</div>
 									</div>
-									<input type="text" class="form-control"
-										placeholder="Bom search" aria-label="Username"
-										aria-describedby="addon-wrapping" name="search">
 								</div>
-							</form>
+							</div>
 						</div>
-					</div>
+					</c:forEach>
 				</div>
-				<p>
-					<!--글 정렬-->
-				<ul class="nav nav-tabs nav-justified col-md-25" id="myTab"
-					role="tablist">
-					<li class="nav-item mr-5" role="presentation"><a
-						class="nav-link active" id="home-tab" data-toggle="tab"
-						href="#fame" role="tab" aria-controls="fame" aria-selected="true">인기</a></li>
-
-					<li class="nav-item mr-5" role="presentation"><a
-						class="nav-link" id="profile-tab" data-toggle="tab" href="#user"
-						role="tab" aria-controls="user" aria-selected="false">사용자</a></li>
-
-					<li class="nav-item mr-5" role="presentation"><a
-						class="nav-link" id="contact-tab" data-toggle="tab" href="#new"
-						role="tab" aria-controls="new" aria-selected="false">최신글</a></li>
-
-					<li class="nav-item mr-5" role="presentation"><a
-						class="nav-link" id="contact-tab" data-toggle="tab"
-						href="#contact" role="tab" aria-controls="photo"
-						aria-selected="false">사진</a></li>
-
-					<li class="nav-item mr-5" role="presentation"><a
-						class="nav-link" id="contact-tab" data-toggle="tab"
-						href="#contact" role="tab" aria-controls="video"
-						aria-selected="false">동영상</a></li>
-				</ul>
-				<div class="tab-content" id="myTabContent">
-					<!-- 인기  -->
-					<div class="tab-pane fade show active" id="fame" role="tabpanel"
-						aria-labelledby="home-tab">
-						<c:forEach var="junghun" items="${listSearch }">
-							<div class="card">
+				<!-- 사용자 -->
+				<div class="tab-pane fade" id="user" role="tabpanel"
+					aria-labelledby="profile-tab">
+					<c:forEach var="junghun" items="${listUser }">
+						<div class="card rounded">
+							<div class="card-hover">
 								<div class="card-body">
-									<button type="button" class="btn btn-light float-right">⋯</button>
-									<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-										width="50"> <a class="card-title text-dark">${junghun.uNickName}</a>
-									<a class="card-subtitle mb-2 text-muted">${junghun.uatId}</a> <a
-										class="card-subtitle mb-2 text-muted">${junghun.btmpsavtime }</a>
-									<a href="#" class="card-text" style="margin-top: 10px;">${junghun.bcontent }</a>
-									<div align="center">
-										<div class="btn-group col-md-12" role="group"
-											aria-label="Button group with nested dropdown">
+									<div class="row no-gutters">
+										<img class="img-fluid rounded-circle" alt="Profile Picture"
+											src="/img/teemo.jpg" style="width: 50px; height: 50px;" />
+										<div style="margin-left: 10px; width: 90%">
+											<a href="#" class="card-title text-dark"
+												style="font-weight: bold;">${junghun.uNickName}</a>
 											<button type="button"
-												class="btn btn-secondary mr-3 btn-light"
-												data-toggle="tooltip" data-placement="top" title="답글">
-												<img src="/img/speech-bubble.svg" width="20" height="20">
-											</button>
-											<button type="button"
-												class="btn btn-secondary btn-light mr-3"
-												data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
-												<img src="/img/bring.svg" width="20" height="20">
-											</button>
-											<button type="button"
-												class="btn btn-secondary btn-light mr-3"
-												data-toggle="tooltip" data-placement="top" title="좋아요">
-												<img src="/img/heart.svg" width="20" height="20">
-											</button>
-											<button type="button"
-												class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
-												data-toggle="dropdown" aria-haspopup="true"
-												aria-expanded="false">
-												<img src="/img/share.svg" width="20" height="20">
-											</button>
-											<div class="dropdown-menu">
-												<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
-													class="dropdown-item" href="#">URL담아가기</a>
-											</div>
+												class="btn btn-outline-success btn-sm float-right"
+												style="font-size: 0.8rem; float: right;">팔로우</button>
+											<h6 class="card-title">@${junghun.uatId }</h6>
+											<p>${junghun.uintro }</p>
 										</div>
 									</div>
 								</div>
 							</div>
-						</c:forEach>
-					</div>
-					<!-- 사용자 -->
-					<div class="tab-pane fade" id="user" role="tabpanel"
-						aria-labelledby="profile-tab">
-						<c:forEach var="junghun" items="${listUser }">
-							<div class="card rounded">
-								<div class="card-hover">
-									<div class="card-body">
-										<div class="row no-gutters">
-											<img class="img-fluid rounded-circle" alt="Profile Picture"
-												src="/img/teemo.jpg" style="width: 50px; height: 50px;" />
-											<div style="margin-left: 10px; width: 90%">
-												<a href="#" class="card-title text-dark"
-													style="font-weight: bold;">${junghun.uNickName}</a>
-												<button type="button"
-													class="btn btn-outline-success btn-sm float-right"
-													style="font-size: 0.8rem; float: right;">팔로우</button>
-												<h6 class="card-title">@${junghun.uatId }</h6>
-												<p>${junghun.uintro }</p>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</c:forEach>
-					</div>
-					<!-- 최신 -->
-					<div class="tab-pane fade" id="new" role="tabpanel"
-						aria-labelledby="contact-tab">
-						<c:forEach var="junghun" items="${listNew }">
-							<div class="card">
-								<div class="card-body">
-									<button type="button" class="btn btn-light float-right">⋯</button>
-									<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-										width="50"> <a class="card-title text-dark">${junghun.uNickName}</a>
-									<a class="card-subtitle mb-2 text-muted">${junghun.uatId}</a> <a
-										class="card-subtitle mb-2 text-muted">${junghun.btmpsavtime }</a>
-									<a href="#" class="card-text" style="margin-top: 10px;">${junghun.bcontent }</a>
-									<div align="center">
-										<div class="btn-group col-md-12" role="group"
-											aria-label="Button group with nested dropdown">
-											<button type="button"
-												class="btn btn-secondary mr-3 btn-light"
-												data-toggle="tooltip" data-placement="top" title="답글">
-												<img src="/img/speech-bubble.svg" width="20" height="20">
-											</button>
-											<button type="button"
-												class="btn btn-secondary btn-light mr-3"
-												data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
-												<img src="/img/bring.svg" width="20" height="20">
-											</button>
-											<button type="button"
-												class="btn btn-secondary btn-light mr-3"
-												data-toggle="tooltip" data-placement="top" title="좋아요">
-												<img src="/img/heart.svg" width="20" height="20">
-											</button>
-											<button type="button"
-												class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
-												data-toggle="dropdown" aria-haspopup="true"
-												aria-expanded="false">
-												<img src="/img/share.svg" width="20" height="20">
-											</button>
-											<div class="dropdown-menu">
-												<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
-													class="dropdown-item" href="#">URL담아가기</a>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</c:forEach>
-					</div>
-					<!-- 사진 -->
-					<div class="tab-pane fade" id="photo" role="tabpanel"
-						aria-labelledby="contact-tab"></div>
-					<!-- 동영상 -->
-					<div class="tab-pane fade" id="video" role="tabpanel"
-						aria-labelledby="contact-tab">...</div>
+						</div>
+					</c:forEach>
 				</div>
+				<!-- 최신 -->
+				<div class="tab-pane fade" id="new" role="tabpanel"
+					aria-labelledby="contact-tab">
+					<c:forEach var="junghun" items="${listNew }">
+						<div class="card">
+							<div class="card-body">
+								<button type="button" class="btn btn-light float-right">⋯</button>
+								<img src="/img/teemo.jpg" class="rounded-circle" width="50"
+									width="50"> <a class="card-title text-dark">${junghun.uNickName}</a>
+								<a class="card-subtitle mb-2 text-muted">${junghun.uatId}</a> <a
+									class="card-subtitle mb-2 text-muted">${junghun.btmpsavtime }</a>
+								<a href="#" class="card-text" style="margin-top: 10px;">${junghun.bcontent }</a>
+								<div align="center">
+									<div class="btn-group col-md-12" role="group"
+										aria-label="Button group with nested dropdown">
+										<button type="button" class="btn btn-secondary mr-3 btn-light"
+											data-toggle="tooltip" data-placement="top" title="답글">
+											<img src="/img/speech-bubble.svg" width="20" height="20">
+										</button>
+										<button type="button" class="btn btn-secondary btn-light mr-3"
+											data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
+											<img src="/img/bring.svg" width="20" height="20">
+										</button>
+										<button type="button" class="btn btn-secondary btn-light mr-3"
+											data-toggle="tooltip" data-placement="top" title="좋아요">
+											<img src="/img/heart.svg" width="20" height="20">
+										</button>
+										<button type="button"
+											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+											data-toggle="dropdown" aria-haspopup="true"
+											aria-expanded="false">
+											<img src="/img/share.svg" width="20" height="20">
+										</button>
+										<div class="dropdown-menu">
+											<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
+												class="dropdown-item" href="#">URL담아가기</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</c:forEach>
+				</div>
+				<!-- 사진 -->
+				<div class="tab-pane fade" id="photo" role="tabpanel"
+					aria-labelledby="contact-tab"></div>
+				<!-- 동영상 -->
+				<div class="tab-pane fade" id="video" role="tabpanel"
+					aria-labelledby="contact-tab">...</div>
 			</div>
 		</div>
+	</div>
 	</div>
 	<!-- /#page-content-wrapper -->
 
@@ -330,8 +344,10 @@
 								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
 									${status.count }위
 									<div>
-										<a href="searchView?search=${Junghun.search }">${Junghun.search }</a>
-										<span class="float-right"><fmt:formatNumber value="${Junghun.scount }" groupingUsed="true"></fmt:formatNumber> 봄</span>
+										<a href="searchhastag?search=${Junghun.search }">${Junghun.search }</a>
+										<span class="float-right"><fmt:formatNumber
+												value="${Junghun.scount }" groupingUsed="true"></fmt:formatNumber>
+											봄</span>
 									</div>
 								</div>
 							</c:forEach>
@@ -349,7 +365,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 	<!-- 오른쪽 사이드바 끝 -->
 	<!-- /#wrapper -->

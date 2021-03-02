@@ -3,7 +3,7 @@ package com.spring.bom.model.hoon;
 public class Junghun {
 	// search
 	private String search;
-	private int ucode;
+	private int uCode;
 	private int sage;
 	private String stime;
 	private String stype;
@@ -19,7 +19,17 @@ public class Junghun {
 	private String uatId;
 	private String uintro;
 	
+	// login된 Ucode
+	static private int loginUcode;	//로그인 확인용
 	
+	public int getLoginUcode() {
+		return loginUcode;
+	}
+
+	public void setLoginUcode(int loginUcode) {
+		this.loginUcode = loginUcode;
+	}
+
 	public int getScount() {
 		return scount;
 	}
@@ -44,12 +54,12 @@ public class Junghun {
 		this.search = search;
 	}
 
-	public int getUcode() {
-		return ucode;
+	public int getuCode() {
+		return uCode;
 	}
 
-	public void setUcode(int ucode) {
-		this.ucode = ucode;
+	public void setuCode(int ucode) {
+		this.uCode = ucode;
 	}
 
 	public int getSage() {
