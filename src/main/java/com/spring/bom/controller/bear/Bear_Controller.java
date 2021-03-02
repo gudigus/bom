@@ -103,6 +103,7 @@ public class Bear_Controller {
 		if(new_list != null && new_list.size() > 0) {
 			mv.addObject("roomName", params.get("roomName"));
 			mv.addObject("roomNumber", params.get("roomNumber"));
+			System.out.println("controller chating mv -> " + mv);
 			mv.setViewName("bear/chat2");
 		}else {
 			System.out.println("chating else -> ");

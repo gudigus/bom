@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.spring.bom.model.bear.Chat;
 import com.spring.bom.model.bear.User;
 
 @Repository
@@ -26,6 +27,13 @@ public class ChatDaoImpl implements ChatDao {
 		}
 		System.out.println("UserDaoImpl uonline.size() ->  "   + uonline.size());
 		return uonline;
+	}
+
+	@Override
+	public int chatmsg(Chat chat) {
+		
+		
+		return session.insert("insertmsg",chat);
 	}
 	
 		

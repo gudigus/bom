@@ -1,7 +1,7 @@
 package com.spring.bom.model.bear;
 
 public class Chat {
-	//ucdoe : 회원코드 , ccode: 쪽지방코드 , uopcode : 상대방코드 , udelstate : 삭제여부
+	//ucode : 회원코드 , ccode: 쪽지방코드 , uopcode : 상대방코드 , udelstate : 삭제여부
 	private int ucode,ccode,udelstate;
 	// cdmessage : 대화 메세지 , 톡 시간
 	private String cdmessage , cdtime,uopcode ;

@@ -427,7 +427,7 @@ img{ max-width:100%;}
 								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
 									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
 										height="20"> <a class="card-title text-dark">${user.unickname}</a> <a
-										class="card-subtitle mb-2 text-muted">${user.ucode}</a>
+										class="card-subtitle mb-2 text-muted"> ${user.uatid}</a>
 									<img src="/img/online.svg" style="float: right"  width="50"
 										height="20">
 								</div>

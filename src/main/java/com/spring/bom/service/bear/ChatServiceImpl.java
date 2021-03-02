@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.bom.dao.bear.ChatDao;
+import com.spring.bom.model.bear.Chat;
 import com.spring.bom.model.bear.User;
 
 @Service
@@ -22,5 +23,12 @@ public class ChatServiceImpl implements ChatService {
 		System.out.println("ChatServiceImpl uonline userlist => " + userlist);
 		
 		return userlist;
+	}
+
+	@Override
+	public int chatmsg(Chat chat) {
+		System.out.println("ChatServiceImpl chatmsg - > " );
+		
+		return cd.chatmsg(chat);
 	}
 }
