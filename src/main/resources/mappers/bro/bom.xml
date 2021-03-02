@@ -8,4 +8,14 @@
 		 WHERE uEmail = #{uEmail}
 		 AND uPassword = #{uPassword }  
 	</select>
+	<insert id="join">
+	    INSERT INTO user_info(   uCode, uEmail, uPassword, uAtid, uNickName, uBirth,
+	                             uGender, uNation, uIdentify, uChat, uAlarm, uPrivate,
+	                             uRegDate, uIntro , uLoc, uImage, uBg, uProfileLink,
+	                             uState, uReportCount, uOnline, uLogInCount
+	     
+	   					       	)
+	                  VALUES(   )
+   
+    </insert>
 	</mapper>

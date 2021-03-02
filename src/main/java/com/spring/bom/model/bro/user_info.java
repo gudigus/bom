@@ -39,11 +39,11 @@ public class user_info {
 	public void setuBirth(String uBirth) {
 		this.uBirth = uBirth;
 	}
-	public String getuGenger() {
-		return uGenger;
+	public String getuGender() {
+		return uGender;
 	}
-	public void setuGenger(String uGenger) {
-		this.uGenger = uGenger;
+	public void setuGender(String uGenger) {
+		this.uGender = uGenger;
 	}
 	public String getuNation() {
 		return uNation;
@@ -139,7 +139,7 @@ public class user_info {
 	String uAtid;
 	String uNickname;
 	String uBirth;
-	String uGenger;
+	String uGender;
 	String uNation;
 	int uIdentify;
 	int uChat;

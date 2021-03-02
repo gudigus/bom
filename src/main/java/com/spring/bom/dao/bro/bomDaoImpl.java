@@ -27,6 +27,13 @@ public class bomDaoImpl implements bomDao {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void join(user_info ui) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	 
 
 	

@@ -23,6 +23,12 @@ public class bomServiceImpl implements bomService {
 		session.invalidate();
 		
 	}
+
+	@Override
+	public void join(user_info ui) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 	

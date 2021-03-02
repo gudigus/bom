@@ -7,5 +7,6 @@ import com.spring.bom.model.bro.user_info;
 public interface bomDao {
 	public user_info loginCheck(user_info ui) throws Exception;
 	public void logout(HttpSession session);
+	public void join(user_info ui);
 
 }

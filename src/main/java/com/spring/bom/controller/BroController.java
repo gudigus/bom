@@ -49,5 +49,9 @@ public class BroController {
      public String index() {
 	 return "bro/login";
 	}
+	@RequestMapping(value ="bro/jonForm")
+	public String joinForm() {
+		return "bro/joinForm";
+	}
 
 }
