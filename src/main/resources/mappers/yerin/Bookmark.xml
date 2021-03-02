@@ -6,17 +6,27 @@
 <mapper namespace="Bookmark">
    <select id="ubmBoardListMapper" parameterType="int" resultType="UserBookmarkBoard">
    
-        SELECT  b.bcontent bcontent, ui.uatid uatid, ui.unickname unickname, ui.uimage uimage
+        SELECT  b.bcontent bcontent, ui.uatid uatid, ui.unickname unickname, ui.uimage uimage, b.ucode ucode, b.bcode bcode
         FROM    user_info ui, like_bookmark lb, board b
         WHERE   lb.ucode = #{ucode}
         AND     lb.bcode = b.bcode
         AND     b.ucode = ui.ucode
-
-
    </select>
 
+    <delete id="delete" parameterType="Board">
+       delete 
+       from like_bookmark 
+       where ucode = #{ucode}
+       and  bcode = #{bcode}
+    
+    </delete>
 
-
+    <delete id="deleteAll" parameterType="String">
+      delete
+      from like_bookmark
+      where ucode = #{ucode}
+      
+    </delete> 
 
 
 

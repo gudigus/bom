@@ -1,11 +1,13 @@
 package com.spring.bom.dao.yeah;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.spring.bom.model.yeah.Board;
 import com.spring.bom.model.yeah.UserBookmarkBoard;
 
 
@@ -30,5 +32,40 @@ public class BookmarkDaoImpl implements BookmarkDao{
 		
 		return ubmBoardListDao;
 	}
+
+	@Override
+	public int delete(Board board) {
+	    System.out.println("BookmarkDaoImpl delete...");  
+		int delete = 0;
+	
+		try {
+	    	delete = session.delete("delete",board);
+	    		
+		} catch (Exception e) {
+			System.out.println("BookmarkDaoImpl Exception =>" +e.getMessage());
+		}  
+		
+		
+		
+		return delete;
+	}
+
+	@Override
+	public int deleteAll(String ucode) {
+		System.out.println("BookmarkDaoImpl deleteAll");
+		int deleteAll = 0;
+		try {
+			deleteAll = session.delete("deleteAll" , ucode);
+		
+		}catch (Exception e) {
+			System.out.println("BookmarkDaoImpl Exception => " +e.getMessage());
+			
+		}
+		
+		
+		return deleteAll;
+	}
+
+
 
 }

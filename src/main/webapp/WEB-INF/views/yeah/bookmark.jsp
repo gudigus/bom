@@ -39,6 +39,11 @@
 .dropdown-toggle.caret-off::after {
 	display: none;
 }
+.dropdown {
+align: right;}
+
+
+
 </style>
 </head>
 
@@ -52,7 +57,7 @@
 				<img src="/img/logo2.jpg" width="150" height="150">
 			</div>
 			<div class="list-group list-group-flush">
-				<a href="#" class="list-group-item list-group-item-action"> <img
+				<a href="yeah/main.jsp" class="list-group-item list-group-item-action"> <img
 					src="/img/home.svg" width="15" height="15"> 타임라인
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
@@ -74,9 +79,9 @@
 				</a>
 				<div class="card">
 					<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-						<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-							width="50"> <a class="card-title text-dark">닉네임</a> <a
-							class="card-subtitle mb-2 text-muted">@atid</a>
+						<img src="/img/profile/${login.uImage}" class="rounded-circle" width="20"
+							width="50"> <a class="card-title text-dark">${login.uNickname }</a> <a
+							class="card-subtitle mb-2 text-muted">@${login.uAtid }</a>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
 				</div>
@@ -106,11 +111,44 @@
 				</div> -->
 
 			<!--글 정렬-->
+			<div class="container-fluid">
+				<p>
+				<div class="card">
+
+		  <!-- 	<button type="button" class="btn btn-light float-right">⋯</button> -->
+			<!-- <div class="card-header" style="font-weight:bold;">북마크</div>
+			<div class="dropdown"> -->
+<!--   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    ...
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+    <button class="dropdown-item" type="button">Action</button>
+    <button class="dropdown-item" type="button">Another action</button>
+    <button class="dropdown-item" type="button">Something else here</button>
+  </div>
+</div> -->
+		
+            <!-- <div class="alert alert-light" role="alert" style="font-weight:bold;">북마크 -->
+            <div class="card">
+					<div class="card-header" style="font-weight:bold;">북마크</div>
+              <div class="dropdown">
+                 <button class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off btn btn-light float-left" type="button" id="dropdownMenu2"
+                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">...
+                 </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                        <form action="deleteAll">
+                         <input type="hidden" name="ucode" value="${ucode }">
+                         <button type="submit" class="dropdown-item">모든 북마크 지우기</button>
+                     </form>
+                    </div>
+                  </div>
+		
+		 			<div class="card-body">
 			<c:forEach var="bookmark" items="${ubmBoardList}" > 
 				<div class="card">
 					<div class="card-body">
 						<button type="button" class="btn btn-light float-right">⋯</button>
-						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
+						<img src="/img/profile/${bookmark.uimage }" class="rounded-circle" width="50"
 							width="50"> <a class="card-title text-dark">${bookmark.unickname }</a> <a
 							class="card-subtitle mb-2 text-muted">@${bookmark.uatid }</a> <a
 							class="card-subtitle mb-2 text-muted">${bookmark.bregdate }</a> <a href="#"
@@ -137,8 +175,15 @@
 									<img src="/img/share.svg" width="20" height="20">
 								</button>
 								<div class="dropdown-menu">
-									<a class="dropdown-item" href="#">북마크 삭제</a> <a
-										class="dropdown-item" href="#">URL담아가기</a>
+									<form action="delete">
+                                       <input type="hidden" name="ucode" value="${bookmark.ucode }">
+                                       <input type="hidden" name="bcode" value="${bookmark.bcode }">
+ 										<button type="submit" class="dropdown-item">${bookmark.ucode }북마크 삭제${bookmark.bcode }</button>
+									</form>
+								
+                                    <form>
+									<button class="dropdown-item">URL담아가기</button>
+									</form>
 								</div>
 							</div>
 						</div>

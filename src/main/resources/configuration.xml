@@ -2,6 +2,8 @@
 <configuration>
    <typeAliases>
       <typeAlias alias="UserBookmarkBoard"     type="com.spring.bom.model.yeah.UserBookmarkBoard"/>
+      <typeAlias alias="Board"     type="com.spring.bom.model.yeah.Board"/>
+      <typeAlias alias="user_info" type="com.spring.bom.model.bro.user_info"/>
       
       
     </typeAliases>

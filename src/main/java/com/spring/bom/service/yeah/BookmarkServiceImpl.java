@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.bom.dao.yeah.BookmarkDao;
+import com.spring.bom.model.yeah.Board;
 import com.spring.bom.model.yeah.UserBookmarkBoard;
 
 
@@ -22,5 +23,23 @@ public class BookmarkServiceImpl implements BookmarkService {
 
 		return ubmBoardListSrv;
 	}
+
+
+
+	@Override
+	public int delete(Board board) {
+	    
+		return bmd.delete(board);
+	}
+
+
+
+	@Override
+	public int deleteAll(String ucode) {
+		
+		return bmd.deleteAll(ucode);
+	}
+
+
 
 }

@@ -61,10 +61,14 @@
 					class="badge badge-success">1</span>
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/send.svg" width="15" height="15"> 쪽지
-				</a> <a href="bookmark" class="list-group-item list-group-item-action"> <img
-					src="/img/bookmark.svg" width="15" height="15" > 북마크
-					
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
+				</a>
+				
+				 <a href="/yeah/bookmark?ucode=${login.uCode }" class="list-group-item list-group-item-action"> <img
+					src="/img/bookmark.svg" width="15" height="15"> 북마크
+				</a>
+				
+				
+				 <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/user.svg" width="15" height="15"> 프로필
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/more.svg" width="15" height="15"> 더보기
@@ -74,13 +78,17 @@
 					</button>
 				</a>
 				<div class="card">
-					<div class="card-body" style="font-size:0.8rem; padding: 10px;">
-						<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-							width="50"> <a class="card-title text-dark">닉네임</a> <a
-							class="card-subtitle mb-2 text-muted">@atid</a>
-					</div>
-					<button type="button" class="btn btn-success">로그아웃</button>
-				</div>
+               <div class="card-body">
+                  <div class="form-row">
+                     <img src="/img/profile/${login.uImage}" class="rounded-circle" width="50" width="50"> 
+                     <div class="form-col ml-2">
+                     <a class="card-title text-dark" style="font-size:0.8em">${login.uNickname }</a><br> 
+                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${login.uAtid }</a>
+                     </div>
+                     </div>
+                  </div>
+               <button type="button" class="btn btn-success">로그아웃</button>
+            </div>
 			</div>
 		</div>
 
