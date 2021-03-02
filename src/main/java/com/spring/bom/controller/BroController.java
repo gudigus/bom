@@ -6,33 +6,42 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 
 
 import com.spring.bom.model.bro.user_info;
+import com.spring.bom.model.right.User_Info;
 import com.spring.bom.service.bro.bomService;
+import com.spring.bom.service.right.User_InfoService;
 
 
 @Controller
 public class BroController {
 	@Autowired
 	private bomService bs;
-	
+	@Autowired
+	private User_InfoService us;
 	
 		
 	@RequestMapping(value = "bro/login" , method=RequestMethod.POST)
-	public String login(user_info ui, HttpServletRequest req) throws Exception{
+	public String login(user_info ui, HttpServletRequest req,Model model) throws Exception{
 		HttpSession session = req.getSession();
-		user_info login = bs.loginCheck(ui);
-		if(login == null) {
-			session.setAttribute("login", null);
+		user_info user = bs.loginCheck(ui);
+		if(user == null) {
+			session.setAttribute("user", null);
 			System.out.println("login off");
 			return "bro/index";
 		}else {
-			session.setAttribute("login", login);
+			String uemail = req.getParameter("uemail");
+			model.addAttribute("uemail",uemail);
+
+			model.addAttribute("user",user);
+			System.out.println("uemail : "+ user.getuEmail());
+			
+			session.setAttribute("ucode", user.getuCode());
 			System.out.println("login on");
 			return "right/main";
 		}

@@ -114,6 +114,18 @@ public class User_InfoDaoImpl implements User_InfoDao {
 		}
 		return result3;
 	}
+	@Override
+	public User_Info select(String uemail) {
+		System.out.println("User_InfoDaoImpl select start..");
+		
+		User_Info ui = new User_Info();
+		try {
+			ui = session.selectOne("rightUserSelectemail", uemail);
+		} catch (Exception e) {
+			System.out.println("User_InfoDaoImpl select Exception->"+e.getMessage());
+		}
+		return ui;
+	}
 
 
 }

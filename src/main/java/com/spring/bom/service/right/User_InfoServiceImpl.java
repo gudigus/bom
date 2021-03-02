@@ -65,6 +65,12 @@ public class User_InfoServiceImpl implements User_InfoService {
 		return ud.changeinsertstate(ui);
 	}
 
+	@Override
+	public User_Info select(String uemail) {
+		System.out.println("User_InfoServiceImpl select ...");
+		return ud.select(uemail);
+	}
+
 	
 	
 }

@@ -3,6 +3,8 @@ package com.spring.bom.service.right;
 import com.spring.bom.model.right.User_Info;
 
 public interface User_InfoService {
+	//login 후 ucode 검색
+	User_Info 		select(String uemail);
 	//회원 정보 수정
 	User_Info		detail(int ucode);
 	int				edit(User_Info ui);
@@ -12,5 +14,6 @@ public interface User_InfoService {
 	int	 			statedDis(User_Info ui);
 	int 			changeInfoState(User_Info ui);
 	int 			boardBpermission(User_Info ui); 
-	int 			changeinsertstate(User_Info ui);
+	int 			changeinsertstate(User_Info ui); 
+
 }

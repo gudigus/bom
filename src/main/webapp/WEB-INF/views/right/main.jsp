@@ -65,7 +65,7 @@
 					src="/img/bookmark.svg" width="15" height="15"> 북마크
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/user.svg" width="15" height="15"> 프로필
-				</a> <a href="/right/moreSee" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/right/moreSee?ucode=${user.uCode }" class="list-group-item list-group-item-action"> <img
 					src="/img/more.svg" width="15" height="15"> 더보기
 				</a> <a href="#" class="list-group-item list-group-item-action">
 					<button type="button" class="btn btn-outline-success">
@@ -77,8 +77,8 @@
                   <div class="form-row">
                      <img src="/img/teemo.jpg" class="rounded-circle" width="50" width="50"> 
                      <div class="form-col ml-2">
-                     <a class="card-title text-dark" style="font-size:0.8em">${user.getUnickname() }</a><br> 
-                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${user.getUatid() }</a>
+                     <a class="card-title text-dark" style="font-size:0.8em">${user.uNickname }</a><br> 
+                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${user.uAtid }</a>
                      </div>
                      </div>
                   </div>

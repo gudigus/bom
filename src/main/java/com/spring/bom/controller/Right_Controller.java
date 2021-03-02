@@ -1,10 +1,7 @@
 package com.spring.bom.controller;
 
 
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeUtility;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -37,18 +34,18 @@ public class Right_Controller {
 	
 	@RequestMapping(value =  "/right/main")
 	public String main(HttpServletRequest request,Model model) {
-		int ucode = Integer.parseInt(request.getParameter("ucode"));
-		model.addAttribute("ucode",ucode);
-		HttpSession session = request.getSession();
-		session.setAttribute("ucode",ucode);
-
+		String uemail = request.getParameter("uemail");
+		model.addAttribute("uemail",uemail);
+		User_Info ui = us.select(uemail);
+		model.addAttribute("ui",ui);
+		System.out.println("uemail : "+ uemail);
+		
 		return "/right/main";
 	}
 	//더보기
 	@RequestMapping(value =  "right/moreSee")
 	public String moreSee(HttpServletRequest request,Model model) {
-		//int ucode = Integer.parseInt(request.getParameter("ucode"));
-		int ucode = 2;
+		int ucode = Integer.parseInt(request.getParameter("ucode"));
 		model.addAttribute("ucode",ucode);
 		HttpSession session = request.getSession();
 		session.setAttribute("ucode",ucode);
@@ -58,12 +55,12 @@ public class Right_Controller {
 	//회원수정 전 비밀번호 입력
 	@RequestMapping(value = "right/insertpw") 
 	public String insertpw(HttpServletRequest request,Model model) { 
-		//int ucode = Integer.parseInt(request.getParameter("ucode")); 
-		int ucode = 2;
-		model.addAttribute("ucode",ucode); HttpSession session =
-		request.getSession();
+		int ucode = Integer.parseInt(request.getParameter("ucode")); 
+		model.addAttribute("ucode",ucode); 
+		HttpSession session = request.getSession();
 		User_Info ui = us.detail(ucode);
-		session.setAttribute("ucode",ucode); model.addAttribute("ui",ui);
+		session.setAttribute("ucode",ucode); 
+		model.addAttribute("ui",ui);
 		  
 		return "/right/insertpw"; 
 	}
@@ -71,8 +68,7 @@ public class Right_Controller {
 	//회원수정 edit
 	@RequestMapping(value =  "right/userInfoEditForm")
 	public String userInfoEditForm(HttpServletRequest request,Model model) {
-		//int ucode = Integer.parseInt(request.getParameter("ucode"));
-		int ucode = 2;
+		int ucode = Integer.parseInt(request.getParameter("ucode"));
 		model.addAttribute("ucode",ucode);
 		HttpSession session = request.getSession();
 		
