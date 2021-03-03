@@ -87,7 +87,12 @@ label {
 	margin: 0px;
 }
 </style>
-
+<script type="text/javascript">
+window.onload = function(){
+	clickWriteBtn();
+	clickSaveBtn();
+ }
+</script>
 </head>
 <body>
 	<div class="d-flex" id="wrapper">
@@ -116,7 +121,6 @@ label {
 				<div class="list-group-item list-group-item-action">
 					<!--주혜 -->
 					<button type="button" class="btn btn-outline-success" id="writeBtn"
-						onclick="clickWriteBtn();"
 						data-toggle="modal" data-target="#writeForm">
 						<img src="/img/write.svg" width="15" height="15"> 글 쓰기
 					</button>
@@ -150,7 +154,7 @@ label {
 								 aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
-							<a href='javascript:clickReserveBtn()'
+							<a
 								style="float: right; color: black; text-decoration: none;"
 								data-toggle="modal" data-target="#tempForm">임시 저장한 봄 <span
 								class="badge badge-success" id="saveNum"></span>
@@ -461,22 +465,19 @@ label {
 					</div>
 					<div class="modal-body col-12">
 						<ul class="nav nav-tabs" id="myTab" role="tablist">
-							<li class="nav-item" role="presentation"><a
-								class="nav-link active" id="save-tab" data-toggle="save"
-								href="#save" role="tab" aria-controls="save"
-								aria-selected="true">저장</a></li>
-							<li class="nav-item" role="presentation"><a class="nav-link"
-								id="reserve-tab" data-toggle="reserve" href="#reserve" role="tab"
-								aria-controls="reserve" aria-selected="false">예약</a></li>
+							<li class="nav-item" role="presentation">
+								<a class="nav-link active" id="save-tab" data-toggle="save" href="#save" role="tab" aria-controls="save" aria-selected="true">저장</a>
+							</li>
+							<li class="nav-item" role="presentation">
+								<a class="nav-link" id="reserve-tab" data-toggle="reserve" href="#reserve" role="tab" aria-controls="reserve" aria-selected="false">예약</a>
+							</li>
 						</ul>
 						<div class="tab-content" id="myTabContent">
-							<div class="tab-pane fade show active" id="save" role="tabpanel"
-								aria-labelledby="save-tab">
+							<div class="tab-pane fade show active" id="save" role="tabpanel" aria-labelledby="save-tab">
 								<ul class="list-group" id="saveList">
 								</ul>
 							</div>
-							<div class="tab-pane fade" id="reserve" role="tabpanel"
-								aria-labelledby="reserve-tab">
+							<div class="tab-pane fade" id="reserve" role="tabpanel" aria-labelledby="reserve-tab">
 								<ul class="list-group" id="reserveList">
 								</ul>
 							</div>
@@ -528,33 +529,91 @@ label {
 		
 		<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 		<script type="text/javascript">
-		/*글쓰기 버튼 누르면 임시저장 글, 수 가져오기*/
+		/* 글쓰기 버튼 누르면 임시저장 글 수 가져오기 */
 		function clickWriteBtn(){
 			$.ajax({
 				url:"<%=context%>/god/getReserveNum",
 				data:{ucode:${user.getUcode()}},
 				dataType:'text',
+				async:false,
 				success:function(data){
 					$('#saveNum').html(data);
 				}
 			});
 		}
 		
-		function clickReserveBtn(){
+		/*저장,예약 글 불러오기*/
+		function clickSaveBtn(){
+			var str="";
+			$.ajax({
+				url:"<%=context%>/god/getSaveList",
+				data:{ucode:${user.getUcode()}},
+				dataType:'json',
+				async:false,
+				success:function(list){
+					for(var i=0; i<list.length; i++){
+						str+="<li class='list-group-item'>"+list[i].bcontent+"</li>";
+						/* alert(board.getBcontent()); */
+					}
+						
+					$("#saveList").append(str);
+				},
+				 error : function(request,status,error) {
+				        alert("message:"+request.responseText+"\n"+"Error -> "+error);
+				}
+			});
+			
+			str="";
 			$.ajax({
 				url:"<%=context%>/god/getReserveList",
-				type:'post',
-				data:{ucode:user.getUcode()},
-				dataType:'html',
+				data:{ucode:${user.getUcode()}},  
+				dataType:'json',
+				async:false,
+				success:function(list){
+					for(var i=0; i<list.length; i++){
+						str+="<li class='list-group-item'>"+list[i].bcontent+"</li>";
+						/* alert(board.getBcontent()); */
+					} 
+					$("#reserveList").append(str);
+				}, 
+				 error : function(request,status,error) {
+				        alert("message:"+request.responseText+"\n"+"Error -> "+error);
+				}
+			});
+		}
+		
+		<%-- function clickSaveBtn(userCode){
+			$.ajax({
+				url:"<%=context%>/god/getSaveList",
+				data:{ucode:userCode},
+				datatType:'json',
 				success:function(data){
 					var str="";
 					$.each(results, function(i){
 						str+="<li class='list-group-item'>"+data[i]+"</li>";
 					});
+					$("#saveList").append(str);
+			});
+		} --%>
+		
+		
+		/* 예약 글 가져오기 */
+		<%-- function clickReserveBtn(){
+			str="";
+			$.ajax({
+				url:"<%=context%>/god/getReserveList",
+				data:{ucode:userCode},
+				dataType:'html',
+				success:function(data){
+					$(data).each(
+						function(){
+							str+="<li class='list-group-item'>"+data.get(i)+"</li>";
+						}		
+					);
 					$("#reserveList").append(str);
 				}
 			});
-		}
+		} --%>
 		
 		/*마지막 저장창에서 저장안해 클릭*/
 		jQuery("#notsaveBtn").click(function(){

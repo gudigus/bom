@@ -3,7 +3,4 @@
 	<select id="JHgetReserveNum" parameterType="int" resultType="java.lang.String">
 		select count(*) from board where btmpsav=1 and bregdate is not null and ucode=#{ucode}
 	</select>
-	<select id="JHgetReserveList" parameterType="int" resultType="java.util.HashMap">
-		select bcontent from board where btmpsav=1 and bregdate is not null and ucode=#{ucode}
-	</select>
 </mapper>

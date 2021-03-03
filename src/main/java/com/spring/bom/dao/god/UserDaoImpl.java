@@ -6,6 +6,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.spring.bom.model.god.Board;
+
 @Repository
 public class UserDaoImpl implements UserDao {
 	@Autowired
@@ -18,8 +20,15 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public List<String> getReserveList(int ucode) {
+	public List<Board> getReserveList(int ucode) {
 		// TODO Auto-generated method stub
 		return session.selectList("JHgetReserveList",ucode);
+	}
+
+	@Override
+	public List<Board> getSaveList(int ucode) {
+		// TODO Auto-generated method stub
+		System.out.println("UserDaoImpl getSaveList");
+		return session.selectList("JHgetSaveList",ucode);
 	}
 }

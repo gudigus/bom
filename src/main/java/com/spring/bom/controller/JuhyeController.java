@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.spring.bom.model.god.Board;
 import com.spring.bom.service.god.UserService;
 
 @Controller
@@ -33,9 +34,20 @@ public class JuhyeController {
 		return us.getReserveNum(ucode);
 	}
 	
-	@RequestMapping(value="god/getReserveList", produces="application/text;charset=UTF-8")
+	@RequestMapping(value="god/getReserveList", produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public List<String> getReserveList(int ucode, Model model){
+	public List<Board> getReserveList(int ucode, Model model){
+		System.out.println("getReserveList start");
+		System.out.println("ucode -> "+ucode);
 		return us.getReserveList(ucode);
 	}
+	
+	@RequestMapping(value="god/getSaveList")
+	@ResponseBody
+	public List<Board> getSaveList(int ucode){
+		System.out.println("getSaveList ucode -> "+ucode);
+		List<Board> list=us.getSaveList(ucode);
+		System.out.println("list length -> "+list.size());
+		return list;
+	} 
 }

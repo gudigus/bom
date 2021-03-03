@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.bom.dao.god.UserDao;
+import com.spring.bom.model.god.Board;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -18,8 +19,15 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public List<String> getReserveList(int ucode) {
+	public List<Board> getReserveList(int ucode) {
 		// TODO Auto-generated method stub
 		return ud.getReserveList(ucode);
+	}
+
+	@Override
+	public List<Board> getSaveList(int ucode) {
+		// TODO Auto-generated method stub
+		System.out.println("UserServiceImpl getSaveList()");
+		return ud.getSaveList(ucode);
 	}
 }

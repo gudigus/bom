@@ -3,5 +3,6 @@
  <configuration>
  	<typeAliases>
  		<typeAlias alias="User_info" type="com.spring.bom.model.bro.User_info"/>
+ 		<typeAlias alias="Board" type="com.spring.bom.model.god.Board"/>
  	</typeAliases>
  </configuration>
