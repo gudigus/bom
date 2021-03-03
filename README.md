@@ -54,3 +54,9 @@ bom_springProject 주혜 - 글쓰기 기능
 > 임시저장글 ajax이용해서 개수 가져오기
 > 
 > 목록 가져오는 건 내일하겠음
+
+**2021-03-03**
+> 저장 목록 가져오는거 성공
+> 
+> produces="application/json;charset=UTF-8" 이거중요했다 리얼
+> 예약목록은 왜 못가져오는지,, 내일 
