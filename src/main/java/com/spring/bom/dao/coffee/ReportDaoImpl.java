@@ -21,6 +21,11 @@ public class ReportDaoImpl implements ReportDao {
 
 		try {
 			list = session.selectList("accusationSelectReportUser_infoBoard");
+			for(int i=0; i<list.size();i++) {
+				list.get(i).setUfollowing(session.selectOne("coffeeSensorFollowingReport", list.get(i).getRucode()));
+				list.get(i).setUfollower(session.selectOne("coffeeSensorFollowerReport", list.get(i).getRucode()));
+				
+			}
 		}catch (Exception e) {
 			System.out.println("ReportDaoImpl accusationList ->"+e.getMessage());
 		}
@@ -36,10 +41,29 @@ public class ReportDaoImpl implements ReportDao {
 
 		try {
 			list = session.selectList("accusationSelectUncensoredReportUser_infoBoard");
+			for(int i=0; i<list.size();i++) {
+				list.get(i).setUfollowing(session.selectOne("coffeeSensorFollowingReport", list.get(i).getRucode()));
+				list.get(i).setUfollower(session.selectOne("coffeeSensorFollowerReport", list.get(i).getRucode()));
+				
+			}
 		}catch (Exception e) {
 			System.out.println("ReportDaoImpl uncensoredList ->"+e.getMessage());
 		}
 		return list;
+	}
+
+	@Override
+	public int updateRaction(int rcode, int updateValue) {
+		int result = 0;
+		ReportUser_infoBoard ruib = new ReportUser_infoBoard();
+		ruib.setRcode(rcode);
+		ruib.setRaction(updateValue);
+		try{
+			result = session.update("coffeeUpdateRaction", ruib);
+		}catch (Exception e) {
+			System.out.println("ReportDaoImpl updateRaction"+e.getMessage());
+		}
+		return result;
 	}
 
 	

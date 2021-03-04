@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ include file="/WEB-INF/views/coffee/header.jsp" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,6 +43,76 @@
 	display: none;
 }
 </style>
+<script type="text/javascript">
+	$(function(){
+		<c:set var="num" value="0"></c:set>
+		<c:forEach var="list" items="${ReportUser_infoBoardList }">
+			
+			var num = "<c:out value='${num}'/>";
+			
+			// 처리 버튼
+			var state = "<c:out value='${list.raction}'/>";
+			if(state == '0'){
+				$(".btn.btn-outline-dark.float-right.${num}").hide();
+			}else if(state == '1'){
+				$(".btn.btn-dark.float-right.${num}").hide();
+			}
+	    	$(".btn.btn-dark.float-right.${num}").click(function(){
+				//alert("처리 누름")
+		 		$(this).hide();
+				$(".btn.btn-outline-dark.float-right.${num}").show();
+		 	});
+			﻿﻿﻿﻿﻿
+			$(".btn.btn-outline-dark.float-right.${num}").click(function(){
+				//alert("취소 누름")
+		 		$(this).hide();
+				$(".btn.btn-dark.float-right.${num}").show();
+			});
+			// console.log(state);
+			// 봄 버튼
+			var state1 = "<c:out value='${list.bstate}'/>";
+			if(state1 == '1'){
+				$(".btn.btn-primary.float-right.${num}").hide();
+			}else if(state1 == '2'){
+				$(".btn.btn-danger.float-right.${num}").hide();
+			}
+	    	$(".btn.btn-danger.float-right.${num}").click(function(){
+				//alert("차단 누름")
+		 		$(this).hide();
+				$(".btn.btn-primary.float-right.${num}").show();
+		 	});
+			﻿﻿﻿﻿﻿
+			$(".btn.btn-primary.float-right.${num}").click(function(){
+				//alert("복원 누름")
+		 		$(this).hide();
+				$(".btn.btn-danger.float-right.${num}").show();
+			});
+			
+			//회원 버튼
+			var state2 = "<c:out value='${list.ustate}'/>";
+			console.log(state2);
+			if(state2 == '1'){
+				$(".btn.btn-primary.float-right.${num}").hide();
+			}else if(state2 == '2'){
+				$(".btn.btn-danger.float-right.${num}").hide();
+			}
+	    	$(".btn.btn-danger.float-right.${num}").click(function(){
+				//alert("차단 누름")
+		 		$(this).hide();
+				$(".btn.btn-primary.float-right.${num}").show();
+		 	});
+			﻿﻿﻿﻿﻿
+			$(".btn.btn-primary.float-right.${num}").click(function(){
+				//alert("복원 누름")
+		 		$(this).hide();
+				$(".btn.btn-danger.float-right.${num}").show();
+			});
+			<c:set var="num" value="${num+1}"></c:set>
+		</c:forEach>
+		
+	})
+
+</script>
 </head>
 
 <body>
@@ -122,11 +194,14 @@
 					</form>
 				</div>
 				<!--글 정렬-->
+				
+				<c:set var="num" value="-1"></c:set>
 				<c:forEach var="list" items="${ReportUser_infoBoardList }">
+					<c:set var="num" value="${num+1 }"></c:set>
 					<div class="card">
 						<div class="card-body">
-							<span><button type="button" class="btn btn-outline-dark float-right">취소</button></span>
-							<span><button type="button" class="btn btn-dark float-right">처리</button></span>
+							<span><button type="button" class="btn btn-outline-dark float-right ${num }">취소</button></span>
+							<span><button type="button" class="btn btn-dark float-right ${num }">처리</button></span>
 							<a class="card-title text-dark">${list.unickname_1}</a> <a
 								class="card-subtitle mb-2 text-muted">${list.uatid_1 }</a> <a
 								class="card-subtitle mb-2 text-muted">${list.rdatetime}</a> <a href="#"
@@ -135,8 +210,8 @@
 								<div class="card-body">
 									<c:choose>
 										<c:when test="${list.rtype == 1}">
-											<span><button type="button" class="btn btn-danger float-right">차단</button></span>
-											<span><button type="button" class="btn btn-primary float-right">복원</button></span>
+											<span><button type="button" class="btn btn-danger float-right ${num }">차단</button></span>
+											<span><button type="button" class="btn btn-primary float-right ${num }">복원</button></span>
 											<c:choose>
 												 <c:when test="${not empty list.uimage }">
 													<img alt="회원 이미지" src="/img/profiles/${list.uimage }" class="rounded-circle" width="50"
@@ -176,8 +251,8 @@
 												<div align="center"><img src="/img/coffee/news_img_02_m.jpg" style="width: auto;
 				    							height: 200px; object-fit:contain;">
 												</div>
-											<span class="ban"><button type="button" class="btn btn-danger float-right">탈퇴</button></span>
-											<span class="unban"><button type="button" class="btn btn-primary float-right">복원</button></span>
+											<span class="ban"><button type="button" class="btn btn-danger float-right ${num }">탈퇴</button></span>
+											<span class="unban"><button type="button" class="btn btn-primary float-right ${num }">복원</button></span>
 											
 											<c:choose>
 												<c:when test="${not empty list.uimage }">
@@ -199,7 +274,7 @@
 											<c:if test="${not empty list.uprofilelink }"><img src="/img/coffee/link.svg" width="15" height="15"><a href="#">${list.uprofilelink }</a></c:if>
 											<img src="/img/coffee/calendar-interface-symbol-tool.svg" width="15" height="15">${list.uregdate }
 											</div>
-											<div>팔로잉수 Following 팔로워수 Follower</div>
+											<div>${list.ufollowing } Following ${list.ufollower } Follower</div>
 											<span class="bg-danger p-1 text-light"><img src="/img/coffee/accusation.svg" width="15" height="15">${list.ureportcount }</span>
 											</div>
 										</c:otherwise>

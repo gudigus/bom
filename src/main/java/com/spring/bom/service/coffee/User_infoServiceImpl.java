@@ -30,5 +30,10 @@ public class User_infoServiceImpl implements User_infoService {
 		user_infoList = uid.user_infoAccusationList();
 		return user_infoList;
 	}
+	@Override
+	public int updateUstate(int ucode, int updateValue) {
+		int result = uid.updateUstate(ucode, updateValue);
+		return result;
+	}
 
 }

@@ -9,4 +9,5 @@ public interface BoardDao {
 	List<BoardUser_info> sensorList();
 	List<BoardUser_info> restoreList();
 	List<BoardUser_info> accusationList();
+	int updateBstate(int bcode, int updateValue);
 }

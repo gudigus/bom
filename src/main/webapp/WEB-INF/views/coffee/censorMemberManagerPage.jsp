@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ include file="/WEB-INF/views/coffee/header.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,11 +43,74 @@
 }
 </style>
 <script type="text/javascript">
+    //var contextPath='${pageContext.request.contextPath}';
 
+	$(function(){
+		<c:forEach var="i" begin = "0" end= "${fn:length(user_infoList)}">
+	
+			var state = $(".ustate${i}").val();
+			// console.log(state);
+			//console.log(vUcode);
+    		var vUcode${i} = $(".ucode${i}").val();
+    		// var vUnickname = $(".unickname${i}").val();
 
+			if(state == '1'){
+				$(".btn.btn-primary.float-right.${i}").hide();
+			}else if(state == '2'){
+				$(".btn.btn-danger.float-right.${i}").hide();
+			}
+	    	$(".btn.btn-danger.float-right.${i}").click(function(){
+				
+	    		
 
-
-
+				/* alert("차단 누름")
+				alert("vUcode->"+vUcode);
+				alert("vUnickname->"+vUnickname); */
+				$.ajax({
+    				url:"<%=context%>/coffee/coffeeUpdateUstate",  
+    				data:{updateValue : 2, ucode : vUcode${i} },
+    				dataType:'text',
+    				success:function(data){
+    					$(".btn.btn-danger.float-right.${i}").hide();
+    					$(".btn.btn-primary.float-right.${i}").show();
+    					if(data == 1){
+    						alert("업데이트 성공");
+    					}else{
+    						alert("업데이트 실패")
+    					}
+    						
+    				},
+    				error:function(request,status,error){
+    				    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+    				}
+    				
+    			});	 		
+		 	});
+			﻿﻿﻿﻿﻿
+			$(".btn.btn-primary.float-right.${i}").click(function(){
+				//alert("복원 누름")
+				$.ajax({
+    				url:"<%=context%>/coffee/coffeeUpdateUstate",  
+    				data:{updateValue : 1, ucode : vUcode${i} },
+    				dataType:'text',
+    				success:function(data){
+    					$(".btn.btn-primary.float-right.${i}").hide();
+    					$(".btn.btn-danger.float-right.${i}").show();
+    					if(data == 1){
+    						alert("업데이트 성공");
+    					}else{
+    						alert("업데이트 실패")
+    					}
+    				},
+    				error:function(request,status,error){
+    				    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+    				}
+    			});	 
+		 		
+			});
+		</c:forEach>
+		
+	})
 
 </script>
 </head>
@@ -107,9 +171,9 @@
 				<button class="btn btn-success" id="menu-toggle">←</button>
 			</nav>
 			<h2>회원 검열 페이지</h2>
-			<div class="alert alert-success" role="alert">
+			<!-- <div class="alert alert-success" role="alert">
 				회원이 탈퇴처리 되었습니다.
-			</div>
+			</div> -->
 			
 			<div class="container-fluid">
 				<p>
@@ -132,14 +196,28 @@
 					</form>
 				</div>
 				<!--글 정렬-->
-				<c:forEach var="list" items="${user_infoList }">
+				<c:forEach var="list" items="${user_infoList }" varStatus="status">
+					
+					<input type="hidden" class="ustate${status.index }"      value="${list.ustate}">
+					<input type="hidden" class="ucode${status.index }"      value="${list.ucode}">
+					<%-- <input type="hidden" class="unickname${status.index }"  value="${list.unickname }"> --%>
+					
 					<div class="card">
+						
 						<div class="card-body">
-							<div align="center"><img src="/img/coffee/news_img_02_m.jpg" style="width: auto;
+							<div align="center"><c:choose>
+								<c:when test="${not empty list.ubg }">
+									<img src="/img/coffee/${list.ubg }" style="width: auto;
     							height: 200px; object-fit:contain;">
+								</c:when>
+								<c:otherwise>
+									<img src="/img/coffee/news_img_02_m.jpg" style="width: auto;
+    								height: 200px; object-fit:contain;">
+    							</c:otherwise>
+    							</c:choose>
 							</div>
-							<span class="ban"><button type="button" class="btn btn-danger float-right">탈퇴</button></span>
-							<span class="unban"><button type="button" class="btn btn-primary float-right">복원</button></span>
+							<span><button type="button" class="btn btn-danger float-right ${status.index }">탈퇴</button></span>
+							<span><button type="button" class="btn btn-primary float-right ${status.index }">복원</button></span>
 							
 							<c:choose>
 								<c:when test="${not empty list.uimage }">
@@ -160,7 +238,7 @@
 							<c:if test="${not empty list.uprofilelink }"><img src="/img/coffee/link.svg" width="15" height="15"><a href="#">${list.uprofilelink }</a></c:if>
 							<img src="/img/coffee/calendar-interface-symbol-tool.svg" width="15" height="15">${list.uregdate }
 							</div>
-							<div>팔로잉수 Following 팔로워수 Follower</div>
+							<div>${list.ufollowing } Following ${list.ufollower } Follower</div>
 							<span class="bg-danger p-1 text-light"><img src="/img/coffee/accusation.svg" width="15" height="15">${list.ureportcount }</span>
 						</div>
 					</div>

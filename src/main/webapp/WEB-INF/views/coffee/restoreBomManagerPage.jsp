@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ include file="/WEB-INF/views/coffee/header.jsp" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -43,36 +45,69 @@
 }
 </style>
 <script type="text/javascript">
-﻿﻿﻿
+    //var contextPath='${pageContext.request.contextPath}';
+
 	$(function(){
-		<c:set var="num" value="0"></c:set>
-		<c:forEach var="list" items="${boardUser_infoList }">
+		<c:forEach var="i" begin = "0" end= "${fn:length(boardUser_infoList)}">
 	
-			var state = "<c:out value='${list.bstate}'/>";
-			var num = "<c:out value='${num}'/>";
+			var state = $(".bstate${i}").val();
 			// console.log(state);
+			//console.log(vUcode);
+    		var vBcode${i} = $(".bcode${i}").val();
+    		// var vUnickname = $(".unickname${i}").val();
+
 			if(state == '1'){
-				$(".btn.btn-primary.float-right.${num}").hide();
+				$(".btn.btn-primary.float-right.${i}").hide();
 			}else if(state == '2'){
-				$(".btn.btn-danger.float-right.${num}").hide();
+				$(".btn.btn-danger.float-right.${i}").hide();
 			}
-	    	$(".btn.btn-danger.float-right.${num}").click(function(){
-				//alert("차단 누름")
-		 		$(this).hide();
-				$(".btn.btn-primary.float-right.${num}").show();
+	    	$(".btn.btn-danger.float-right.${i}").click(function(){
+				
+				/* alert("차단 누름")
+				alert("vUcode->"+vUcode);
+				alert("vUnickname->"+vUnickname); */
+				$.ajax({
+    				url:"<%=context%>/coffee/coffeeUpdateBstate",  
+    				data:{updateValue : 2, bcode : vBcode${i} },
+    				dataType:'text',
+    				success:function(data){
+    					$(".btn.btn-danger.float-right.${i}").hide();
+    					$(".btn.btn-primary.float-right.${i}").show();
+    					if(data == 1){
+    						alert("업데이트 성공");
+    					}else{
+    						alert("업데이트 실패")
+    					}
+    				},
+    				error:function(request,status,error){
+    				    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+    				}
+    				
+    			});	 		
 		 	});
 			﻿﻿﻿﻿﻿
-			$(".btn.btn-primary.float-right.${num}").click(function(){
+			$(".btn.btn-primary.float-right.${i}").click(function(){
 				//alert("복원 누름")
-		 		$(this).hide();
-				$(".btn.btn-danger.float-right.${num}").show();
+				$.ajax({
+    				url:"<%=context%>/coffee/coffeeUpdateBstate",  
+    				data:{updateValue : 1, bcode : vBcode${i} },
+    				dataType:'text',
+    				success:function(data){
+    					$(".btn.btn-primary.float-right.${i}").hide();
+    					$(".btn.btn-danger.float-right.${i}").show();
+    					if(data == 1){
+    						alert("업데이트 성공");
+    					}else{
+    						alert("업데이트 실패")
+    					}
+    				},
+    				error:function(request,status,error){
+    				    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+    				}
+    			});	 
 			});
-			<c:set var="num" value="${num+1}"></c:set>
 		</c:forEach>
-		
 	})
-
-
 
 </script>
 </head>
@@ -158,13 +193,15 @@
 					</form>
 				</div>
 				<!--글 정렬-->
-				<c:set var="num" value="-1"></c:set>
-				<c:forEach var="list" items="${boardUser_infoList }">
-					<c:set var="num" value="${num+1 }"></c:set>
+				<c:forEach var="list" items="${boardUser_infoList }" varStatus="status">
+					
+					<input type="hidden" class="bstate${status.index }"      value="${list.bstate}">
+					<input type="hidden" class="bcode${status.index }"      value="${list.bcode}">
+					<%-- <input type="hidden" class="unickname${status.index }"  value="${list.unickname }"> --%>
 					<div class="card">
 						<div class="card-body">
-							<button type="button" id="btn_ban" class="btn btn-danger float-right ${num }">차단</button>
-							<button type="button" id="btn_restore" class="btn btn-primary float-right ${num }">복원</button>
+							<button type="button" id="btn_ban" class="btn btn-danger float-right ${status.index }">차단</button>
+							<button type="button" id="btn_restore" class="btn btn-primary float-right ${status.index }">복원</button>
 							<c:choose>
 								<c:when test="${not empty list.uimage }">
 									<img alt="회원 이미지" src="/img/profiles/${list.uimage }" class="rounded-circle" width="50"

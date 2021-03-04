@@ -25,6 +25,11 @@ public class ReportServiceImpl implements ReportService {
 		List<ReportUser_infoBoard> list = rd.uncensoredList();
 		return list;
 	}
+	@Override
+	public int updateRaction(int rcode, int updateValue) {
+		int result = rd.updateRaction(rcode, updateValue);
+		return result;
+	}
 	
 	
 

@@ -8,4 +8,5 @@ public interface User_infoService {
 	List<User_info> user_infoSensorList();
 	List<User_info> user_infoRestoreList();
 	List<User_info> user_infoAccusationList();
+	int updateUstate(int ucode, int updateValue);
 }

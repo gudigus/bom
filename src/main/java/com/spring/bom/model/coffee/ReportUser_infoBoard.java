@@ -37,6 +37,8 @@ public class ReportUser_infoBoard {
 	private int ureportcount;
 	private int uonline;
 	private int ulogincount;
+	private int ufollowing;
+	private int ufollower;
 	
 		//신고된 Board
 	
@@ -83,6 +85,8 @@ public class ReportUser_infoBoard {
 	private int ureportcount_1;
 	private int uonline_1;
 	private int ulogincount_1;
+	private int ufollowing_1;
+	private int ufollower_1;
 	
 	public int getRcode() {
 		return rcode;
@@ -263,6 +267,18 @@ public class ReportUser_infoBoard {
 	}
 	public void setUcode(int ucode) {
 		this.ucode = ucode;
+	}
+	public int getUfollowing() {
+		return ufollowing;
+	}
+	public void setUfollowing(int ufollowing) {
+		this.ufollowing = ufollowing;
+	}
+	public int getUfollower() {
+		return ufollower;
+	}
+	public void setUfollower(int ufollower) {
+		this.ufollower = ufollower;
 	}
 	public String getBcontent() {
 		return bcontent;
@@ -492,5 +508,18 @@ public class ReportUser_infoBoard {
 	public void setUlogincount_1(int ulogincount_1) {
 		this.ulogincount_1 = ulogincount_1;
 	}
+	public int getUfollowing_1() {
+		return ufollowing_1;
+	}
+	public void setUfollowing_1(int ufollowing_1) {
+		this.ufollowing_1 = ufollowing_1;
+	}
+	public int getUfollower_1() {
+		return ufollower_1;
+	}
+	public void setUfollower_1(int ufollower_1) {
+		this.ufollower_1 = ufollower_1;
+	}
+	
 	
 }

@@ -8,14 +8,15 @@
         u.ualarm, u.uprivate, u.uregdate, u.uintro, u.uloc, u.uimage, u.ubg, u.uprofilelink, u.ustate, u.ureportcount,
         u.uonline, u.ulogincount,
         <!-- -1 bcode, --> -1 ucode , '' bcontent, '' bregdate, '' btype, -1 banchor, '' bpermission, -1 bbcode, '' battach, -1 bvotecode,
-        -1 btmpsav, '' btmpsavtime, -1 blikecount, -1 bexpcount, -1 bjoincount, -1 bstate, -1 breportcount, -1 b.breplycount, -1 b.bquotecount,
+        -1 btmpsav, '' btmpsavtime, -1 blikecount, -1 bexpcount, -1 bjoincount, -1 bstate, -1 breportcount, -1 breplycount, -1 bquotecount,
         <!-- ru.ucode, --> ru.uemail uemail_1, ru.upassword upassword_1, ru.uatid uatid_1, ru.unickname unickname_1, ru.ubirth ubirth_1, ru.ugender ugender_1, ru.unation unation_1, ru.uidentify uidentify_1, ru.uchat uchat_1,
         ru.ualarm ualarm_1, ru.uprivate uprivate_1, ru.uregdate uregdate_1, ru.uintro uintro_1, ru.uloc uloc_1, ru.uimage uimage_1, ru.ubg ubg_1, ru.uprofilelink uprofilelink_1, ru.ustate ustate_1, ru.ureportcount ureportcount_1,
         ru.uonline uonline_1, ru.ulogincount ulogincount_1
         
-		FROM     report r,  user_info ru  , user_info u 
+		FROM     report r, user_info u, user_info ru  
 		WHERE    r.ropcode = ru.ucode   
-		and      u.ucode = r.rucode(+)  
+		and      u.ucode = r.rucode(+)
+ 		and		 r.rucode != 0
 		UNION 
 		SELECT  r.rcode, r.rucode, r.rbcode, r.ropcode, r.rcontent, r.rdatetime, r.rtype, r.raction,
         <!-- '' ucode, --> '' uemail, '' upassword, '' uatid, '' unickname, '' ubirth, '' ugender, '' unation, -1 uidentify, -1 uchat,
@@ -27,12 +28,19 @@
         ru.ualarm ualarm_1, ru.uprivate uprivate_1, ru.uregdate uregdate_1, ru.uintro uintro_1, ru.uloc uloc_1, ru.uimage uimage_1, ru.ubg ubg_1, ru.uprofilelink uprofilelink_1, ru.ustate ustate_1, ru.ureportcount ureportcount_1,
         ru.uonline uonline_1, ru.ulogincount ulogincount_1
            
-		FROM     report r,  user_info ru  ,  board b
+		FROM     report r,  user_info ru,  board b
 		WHERE    r.ropcode = ru.ucode   
 		and      b.bcode = r.rbcode (+)
+		and		 b.ucode != 0
 		ORDER BY rdatetime desc
  
 	</select>
+	<select id="coffeeSensorFollowingReport" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM follow where ucode = #{rucode}
+   	</select>
+   	<select id="coffeeSensorFollowerReport" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM follow where fopcode = #{rucode}
+   	</select>
 	
 	<select id="accusationSelectUncensoredReportUser_infoBoard" resultType="CoffeeReportUser_infoBoard">
 		SELECT  r.rcode, r.rucode, r.rbcode, r.ropcode, r.rcontent, r.rdatetime, r.rtype, r.raction,
@@ -40,14 +48,15 @@
         u.ualarm, u.uprivate, u.uregdate, u.uintro, u.uloc, u.uimage, u.ubg, u.uprofilelink, u.ustate, u.ureportcount,
         u.uonline, u.ulogincount,
         <!-- -1 bcode, --> -1 ucode , '' bcontent, '' bregdate, '' btype, -1 banchor, '' bpermission, -1 bbcode, '' battach, -1 bvotecode,
-        -1 btmpsav, '' btmpsavtime, -1 blikecount, -1 bexpcount, -1 bjoincount, -1 bstate, -1 breportcount, -1 b.breplycount, -1 b.bquotecount,
+        -1 btmpsav, '' btmpsavtime, -1 blikecount, -1 bexpcount, -1 bjoincount, -1 bstate, -1 breportcount, -1 breplycount, -1 bquotecount,
         <!-- ru.ucode, --> ru.uemail uemail_1, ru.upassword upassword_1, ru.uatid uatid_1, ru.unickname unickname_1, ru.ubirth ubirth_1, ru.ugender ugender_1, ru.unation unation_1, ru.uidentify uidentify_1, ru.uchat uchat_1,
         ru.ualarm ualarm_1, ru.uprivate uprivate_1, ru.uregdate uregdate_1, ru.uintro uintro_1, ru.uloc uloc_1, ru.uimage uimage_1, ru.ubg ubg_1, ru.uprofilelink uprofilelink_1, ru.ustate ustate_1, ru.ureportcount ureportcount_1,
         ru.uonline uonline_1, ru.ulogincount ulogincount_1
         
-		FROM     report r,  user_info ru  , user_info u 
+		FROM     report r, user_info u, user_info ru 
 		WHERE    r.ropcode = ru.ucode   
 		and      u.ucode = r.rucode(+)
+		and		 r.rucode != 0
 		and		 r.raction = 0  
 		UNION 
 		SELECT  r.rcode, r.rucode, r.rbcode, r.ropcode, r.rcontent, r.rdatetime, r.rtype, r.raction,
@@ -60,13 +69,16 @@
         ru.ualarm ualarm_1, ru.uprivate uprivate_1, ru.uregdate uregdate_1, ru.uintro uintro_1, ru.uloc uloc_1, ru.uimage uimage_1, ru.ubg ubg_1, ru.uprofilelink uprofilelink_1, ru.ustate ustate_1, ru.ureportcount ureportcount_1,
         ru.uonline uonline_1, ru.ulogincount ulogincount_1
            
-		FROM     report r,  user_info ru  ,  board b
+		FROM     report r,  user_info ru,  board b
 		WHERE    r.ropcode = ru.ucode   
 		and      b.bcode = r.rbcode (+)
-		and		 r.raction = 0 
+		and		 r.raction = 0
+		and		 b.ucode != 0
 		ORDER BY rdatetime desc
  
 	</select>
- 
+ 	<update id="coffeeUpdateRaction" parameterType="CoffeeReportUser_infoBoard">
+   		UPDATE report SET raction = #{raction} WHERE rcode = #{rcode}
+   	</update>
 
 </mapper>

@@ -43,6 +43,8 @@ public class BoardUser_info {
 	private int ureportcount;
 	private int uonline;
 	private int ulogincount;
+	private int ufollowing;
+	private int ufollower;
 	
 	public int getBcode() {
 		return bcode;
@@ -284,5 +286,17 @@ public class BoardUser_info {
 	}
 	public void setUlogincount(int ulogincount) {
 		this.ulogincount = ulogincount;
+	}
+	public int getUfollowing() {
+		return ufollowing;
+	}
+	public void setUfollowing(int ufollowing) {
+		this.ufollowing = ufollowing;
+	}
+	public int getUfollower() {
+		return ufollower;
+	}
+	public void setUfollower(int ufollower) {
+		this.ufollower = ufollower;
 	}
 }

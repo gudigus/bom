@@ -33,4 +33,10 @@ public class BoardServiceImpl implements BoardService {
 		return list;
 	}
 
+	@Override
+	public int updateBstate(int bcode, int updateValue) {
+		int result = bd.updateBstate(bcode, updateValue);
+		return result;
+	}
+
 }

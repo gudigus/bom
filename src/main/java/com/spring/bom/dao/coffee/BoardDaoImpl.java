@@ -18,6 +18,7 @@ public class BoardDaoImpl implements BoardDao {
 	public List<BoardUser_info> sensorList() {
 		List<BoardUser_info> list = new ArrayList<BoardUser_info>();
 		list = session.selectList("coffeeSensorSelectBoardUser_info");
+		
 		return list;
 	}
 
@@ -33,6 +34,20 @@ public class BoardDaoImpl implements BoardDao {
 		List<BoardUser_info> list = new ArrayList<BoardUser_info>();
 		list = session.selectList("coffeeAccusationSelectBoardUser_info");
 		return list;
+	}
+
+	@Override
+	public int updateBstate(int bcode, int updateValue) {
+		int result = 0;
+		BoardUser_info bui = new BoardUser_info();
+		bui.setBcode(bcode);
+		bui.setBstate(updateValue);
+		try{
+			result = session.update("coffeeUpdateBstate", bui);
+		}catch (Exception e) {
+			System.out.println("BoardDaoImpl updateBstate"+e.getMessage());
+		}
+		return result;
 	}
 
 }

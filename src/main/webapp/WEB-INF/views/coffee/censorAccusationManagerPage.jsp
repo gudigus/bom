@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ include file="/WEB-INF/views/coffee/header.jsp" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -43,29 +45,105 @@
 </style>
 <script type="text/javascript">
 	$(function(){
-		<c:set var="num" value="0"></c:set>
-		<c:forEach var="list" items="${boardUser_infoList }">
-	
-			var state = "<c:out value='${list.bstate}'/>";
-			var num = "<c:out value='${num}'/>";
-			// console.log(state);
-			if(state == '1'){
-				$(".btn.btn-primary.float-right.${num}").hide();
-			}else if(state == '2'){
-				$(".btn.btn-danger.float-right.${num}").hide();
+		<c:forEach var="i" begin = "0" end= "${fn:length(ReportUser_infoBoardList)}">
+
+			// 처리 버튼
+			var state = $(".raction${i }").val();
+    		var vRcode${i} = $(".rcode${i}").val();
+
+			if(state == '0'){
+				$(".btn.btn-outline-dark.float-right.${i}").hide();
+			}else if(state == '1'){
+				$(".btn.btn-dark.float-right.${i}").hide();
 			}
-	    	$(".btn.btn-danger.float-right.${num}").click(function(){
-				//alert("차단 누름")
-		 		$(this).hide();
-				$(".btn.btn-primary.float-right.${num}").show();
+	    	$(".btn.btn-dark.float-right.${i}").click(function(){
+				//alert("처리 누름")
+				$.ajax({
+    				url:"<%=context%>/coffee/coffeeUpdateRaction",  
+    				data:{updateValue : 1, rcode : vRcode${i} },
+    				dataType:'text',
+    				success:function(data){
+    					$(".btn.btn-dark.float-right.${i}").hide();
+    					$(".btn.btn-outline-dark.float-right.${i}").show();
+    					if(data == 1){
+    						alert("업데이트 성공");
+    					}else{
+    						alert("업데이트 실패")
+    					}
+    				},
+    				error:function(request,status,error){
+    				    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+    				}
+    				
+    			});	 
+		 		
 		 	});
 			﻿﻿﻿﻿﻿
-			$(".btn.btn-primary.float-right.${num}").click(function(){
+			$(".btn.btn-outline-dark.float-right.${i}").click(function(){
+				//alert("취소 누름")
+				$.ajax({
+    				url:"<%=context%>/coffee/coffeeUpdateRaction",  
+    				data:{updateValue : 0, rcode : vRcode${i} },
+    				dataType:'text',
+    				success:function(data){
+    					$(".btn.btn-outline-dark.float-right.${i}").hide();
+    					$(".btn.btn-dark.float-right.${i}").show();
+    					if(data == 1){
+    						alert("업데이트 성공");
+    					}else{
+    						alert("업데이트 실패")
+    					}
+    				},
+    				error:function(request,status,error){
+    				    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+    				}
+    				
+    			});
+			});
+			
+			
+			// console.log(state);
+			// 봄 버튼
+			var state1 = $(".bstate${i}").val();
+			var vRBcode${i} = $(".rbcode${i}").val();
+
+			if(state1 == '1'){
+				$(".btn.btn-primary.float-right.${i}").hide();
+			}else if(state1 == '2'){
+				$(".btn.btn-danger.float-right.${i}").hide();
+			}
+	    	$(".btn.btn-danger.float-right.${i}").click(function(){
+				//alert("차단 누름")
+		 		$(this).hide();
+				$(".btn.btn-primary.float-right.${i}").show();
+		 	});
+			﻿﻿﻿﻿﻿
+			$(".btn.btn-primary.float-right.${i}").click(function(){
 				//alert("복원 누름")
 		 		$(this).hide();
-				$(".btn.btn-danger.float-right.${num}").show();
+				$(".btn.btn-danger.float-right.${i}").show();
 			});
-			<c:set var="num" value="${num+1}"></c:set>
+			
+			//회원 버튼
+			var state2 = $(".ustate${i}").val();
+			var vRUcode${i} = $(".rucode${i}").val();
+			//console.log(state2);
+			if(state2 == '1'){
+				$(".btn.btn-primary.float-right.${i}").hide();
+			}else if(state2 == '2'){
+				$(".btn.btn-danger.float-right.${i}").hide();
+			}
+	    	$(".btn.btn-danger.float-right.${i}").click(function(){
+				//alert("차단 누름")
+		 		$(this).hide();
+				$(".btn.btn-primary.float-right.${i}").show();
+		 	});
+			﻿﻿﻿﻿﻿
+			$(".btn.btn-primary.float-right.${i}").click(function(){
+				//alert("복원 누름")
+		 		$(this).hide();
+				$(".btn.btn-danger.float-right.${i}").show();
+			});
 		</c:forEach>
 		
 	})
@@ -152,11 +230,18 @@
 					</form>
 				</div>
 				<!--글 정렬-->
-				<c:forEach var="list" items="${ReportUser_infoBoardList }">
+				<c:forEach var="list" items="${ReportUser_infoBoardList }" varStatus="status">
+					<input type="hidden" class="raction${status.index }"      value="${list.raction}">
+					<input type="hidden" class="rcode${status.index }"      value="${list.rcode}">
+					<input type="hidden" class="ustate${status.index }"      value="${list.ustate}">
+					<input type="hidden" class="rucode${status.index }"      value="${list.rucode}">
+					<input type="hidden" class="bstate${status.index }"      value="${list.bstate}">
+					<input type="hidden" class="rbcode${status.index }"      value="${list.rbcode}">
+					<%-- <input type="hidden" class="unickname${status.index }"  value="${list.unickname }"> --%>
 					<div class="card">
 						<div class="card-body">
-							<span><button type="button" class="btn btn-outline-dark float-right">취소</button></span>
-							<span><button type="button" class="btn btn-dark float-right">처리</button></span>
+							<span><button type="button" class="btn btn-outline-dark float-right ${status.index }">취소</button></span>
+							<span><button type="button" class="btn btn-dark float-right ${status.index }">처리</button></span>
 							<a class="card-title text-dark">${list.unickname_1}</a> <a
 								class="card-subtitle mb-2 text-muted">${list.uatid_1 }</a> <a
 								class="card-subtitle mb-2 text-muted">${list.rdatetime}</a> <a href="#"
@@ -165,8 +250,8 @@
 								<div class="card-body">
 									<c:choose>
 										<c:when test="${list.rtype == 1}">
-											<span><button type="button" class="btn btn-danger float-right">차단</button></span>
-											<span><button type="button" class="btn btn-primary float-right">복원</button></span>
+											<span><button type="button" class="btn btn-danger float-right ${status.index }">차단</button></span>
+											<span><button type="button" class="btn btn-primary float-right ${status.index }">복원</button></span>
 											<c:choose>
 												 <c:when test="${not empty list.uimage }">
 													<img alt="회원 이미지" src="/img/profiles/${list.uimage }" class="rounded-circle" width="50"
@@ -206,8 +291,8 @@
 												<div align="center"><img src="/img/coffee/news_img_02_m.jpg" style="width: auto;
 				    							height: 200px; object-fit:contain;">
 												</div>
-											<span class="ban"><button type="button" class="btn btn-danger float-right">탈퇴</button></span>
-											<span class="unban"><button type="button" class="btn btn-primary float-right">복원</button></span>
+											<span class="ban"><button type="button" class="btn btn-danger float-right ${status.index }">탈퇴</button></span>
+											<span class="unban"><button type="button" class="btn btn-primary float-right ${status.index }">복원</button></span>
 											
 											<c:choose>
 												<c:when test="${not empty list.uimage }">
@@ -229,7 +314,7 @@
 											<c:if test="${not empty list.uprofilelink }"><img src="/img/coffee/link.svg" width="15" height="15"><a href="#">${list.uprofilelink }</a></c:if>
 											<img src="/img/coffee/calendar-interface-symbol-tool.svg" width="15" height="15">${list.uregdate }
 											</div>
-											<div>팔로잉수 Following 팔로워수 Follower</div>
+											<div>${list.ufollowing } Following ${list.ufollower } Follower</div>
 											<span class="bg-danger p-1 text-light"><img src="/img/coffee/accusation.svg" width="15" height="15">${list.ureportcount }</span>
 											</div>
 										</c:otherwise>
