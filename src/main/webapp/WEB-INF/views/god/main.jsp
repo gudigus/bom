@@ -552,14 +552,14 @@ window.onload = function(){
 		}
 		
 		/*글 내용 있으면 버튼 활성화*/
-		$("#writeTextarea").on("propertychange change keyup paste input", function(event) {
+		/* $("#writeTextarea").on("propertychange change keyup paste input", function(event) {
 			$('#writeSubmit').attr('disabled', false);
 			
 			var write=$("#writeTextarea").html();
-			if(write=='' ||a.trin()==''){
+			if(write=='' ||a.trim()==''){
 				$('#writeSubmit').attr('disabled', true);
 			}
-		});
+		}); */
 		
 		/* 글쓰기 버튼 누르면 임시저장 글 수(저장, 예약) 가져오기 */
 		function clickWriteBtn(){
@@ -768,6 +768,7 @@ window.onload = function(){
 		<!--해시태그 처리 -->
 		$("#writeTextarea").on("propertychange change keyup paste input",
 				function(event) {
+					$('#writeSubmit').attr('disabled', false);
 					if (event.keyCode == 32 || event.keyCode == 13) {
 						var currentVal = $(this).html();
 						if(currentVal.includes('#')){
@@ -796,6 +797,10 @@ window.onload = function(){
 							}
 							document.getElementById('writeTextarea').innerHTML = linkedContent; */
 						}
+					var write=$("#writeTextarea").html();
+					if(write=='' ||a.trim()==''){
+						$('#writeSubmit').attr('disabled', true);
+					}
 					});
 		$.fn.selectRange=function(start, end) {
 		    return this.each(function() {
