@@ -74,11 +74,11 @@
     				success:function(data){
     					$(".btn.btn-danger.float-right.${i}").hide();
     					$(".btn.btn-primary.float-right.${i}").show();
-    					if(data == 1){
+    					/* if(data == 1){
     						alert("업데이트 성공");
     					}else{
     						alert("업데이트 실패")
-    					}
+    					} */
     						
     				},
     				error:function(request,status,error){
@@ -97,11 +97,11 @@
     				success:function(data){
     					$(".btn.btn-primary.float-right.${i}").hide();
     					$(".btn.btn-danger.float-right.${i}").show();
-    					if(data == 1){
+    					/* if(data == 1){
     						alert("업데이트 성공");
     					}else{
     						alert("업데이트 실패")
-    					}
+    					} */
     				},
     				error:function(request,status,error){
     				    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);

@@ -65,17 +65,17 @@
     				success:function(data){
     					$(".btn.btn-dark.float-right.${i}").hide();
     					$(".btn.btn-outline-dark.float-right.${i}").show();
-    					if(data == 1){
+    					/* if(data == 1){
     						alert("업데이트 성공");
     					}else{
     						alert("업데이트 실패")
-    					}
+    					} */
     				},
     				error:function(request,status,error){
     				    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
     				}
     				
-    			});	 
+    			});
 		 		
 		 	});
 			﻿﻿﻿﻿﻿
@@ -88,11 +88,11 @@
     				success:function(data){
     					$(".btn.btn-outline-dark.float-right.${i}").hide();
     					$(".btn.btn-dark.float-right.${i}").show();
-    					if(data == 1){
+    					/* if(data == 1){
     						alert("업데이트 성공");
     					}else{
     						alert("업데이트 실패")
-    					}
+    					} */
     				},
     				error:function(request,status,error){
     				    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -102,26 +102,95 @@
 			});
 			
 			
-			// console.log(state);
 			// 봄 버튼
 			var state1 = $(".bstate${i}").val();
 			var vRBcode${i} = $(".rbcode${i}").val();
 
 			if(state1 == '1'){
-				$(".btn.btn-primary.float-right.${i}").hide();
+				$(".btn.btn-primary.float-right.b${i}").hide();
 			}else if(state1 == '2'){
-				$(".btn.btn-danger.float-right.${i}").hide();
+				$(".btn.btn-danger.float-right.b${i}").hide();
 			}
-	    	$(".btn.btn-danger.float-right.${i}").click(function(){
-				//alert("차단 누름")
-		 		$(this).hide();
-				$(".btn.btn-primary.float-right.${i}").show();
+			$(".btn.btn-danger.float-right.b${i}").click(function(){
+				
+				/* alert("차단 누름")
+				alert("vUcode->"+vUcode);
+				alert("vUnickname->"+vUnickname); */
+				$.ajax({
+    				url:"<%=context%>/coffee/coffeeUpdateBstate",  
+    				data:{updateValue : 2, bcode : vRBcode${i} },
+    				dataType:'text',
+    				success:function(data){
+    					$(".btn.btn-danger.float-right.b${i}").hide();
+    					$(".btn.btn-primary.float-right.b${i}").show();
+    					/* if(data == 1){
+    						alert("업데이트 성공");
+    					}else{
+    						alert("업데이트 실패")
+    					} */
+    					$.ajax({
+    	    				url:"<%=context%>/coffee/coffeeUpdateRaction",  
+    	    				data:{updateValue : 1, rcode : vRcode${i} },
+    	    				dataType:'text',
+    	    				success:function(data){
+    	    					$(".btn.btn-dark.float-right.${i}").hide();
+    	    					$(".btn.btn-outline-dark.float-right.${i}").show();
+    	    					/* if(data == 1){
+    	    						alert("처리 성공");
+    	    					}else{
+    	    						alert("처리 실패")
+    	    					} */
+    	    				},
+    	    				error:function(request,status,error){
+    	    				    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+    	    				}
+    	    				
+    	    			});
+    				},
+    				error:function(request,status,error){
+    				    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+    				}
+    				
+    			});	 		
 		 	});
 			﻿﻿﻿﻿﻿
-			$(".btn.btn-primary.float-right.${i}").click(function(){
+			$(".btn.btn-primary.float-right.b${i}").click(function(){
 				//alert("복원 누름")
-		 		$(this).hide();
-				$(".btn.btn-danger.float-right.${i}").show();
+				$.ajax({
+    				url:"<%=context%>/coffee/coffeeUpdateBstate",  
+    				data:{updateValue : 1, bcode : vRBcode${i} },
+    				dataType:'text',
+    				success:function(data){
+    					$(".btn.btn-primary.float-right.b${i}").hide();
+    					$(".btn.btn-danger.float-right.b${i}").show();
+    					/* if(data == 1){
+    						alert("업데이트 성공");
+    					}else{
+    						alert("업데이트 실패")
+    					} */
+    					$.ajax({
+    	    				url:"<%=context%>/coffee/coffeeUpdateRaction",  
+    	    				data:{updateValue : 1, rcode : vRcode${i} },
+    	    				dataType:'text',
+    	    				success:function(data){
+    	    					$(".btn.btn-dark.float-right.${i}").hide();
+    	    					$(".btn.btn-outline-dark.float-right.${i}").show();
+    	    					/* if(data == 1){
+    	    						alert("처리 성공");
+    	    					}else{
+    	    						alert("처리 실패")
+    	    					} */
+    	    				},
+    	    				error:function(request,status,error){
+    	    				    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+    	    				}
+    	    				
+    	    			});
+    				},
+    				error:function(request,status,error){
+    				    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+    				}
+    			});	 
 			});
 			
 			//회원 버튼
@@ -129,20 +198,90 @@
 			var vRUcode${i} = $(".rucode${i}").val();
 			//console.log(state2);
 			if(state2 == '1'){
-				$(".btn.btn-primary.float-right.${i}").hide();
+				$(".btn.btn-primary.float-right.u${i}").hide();
 			}else if(state2 == '2'){
-				$(".btn.btn-danger.float-right.${i}").hide();
+				$(".btn.btn-danger.float-right.u${i}").hide();
 			}
-	    	$(".btn.btn-danger.float-right.${i}").click(function(){
-				//alert("차단 누름")
-		 		$(this).hide();
-				$(".btn.btn-primary.float-right.${i}").show();
+			$(".btn.btn-danger.float-right.u${i}").click(function(){
+				/* alert("차단 누름")
+				alert("vUcode->"+vUcode);
+				alert("vUnickname->"+vUnickname); */
+				$.ajax({
+    				url:"<%=context%>/coffee/coffeeUpdateUstate",  
+    				data:{updateValue : 2, ucode : vRUcode${i} },
+    				dataType:'text',
+    				success:function(data){
+    					$(".btn.btn-danger.float-right.u${i}").hide();
+    					$(".btn.btn-primary.float-right.u${i}").show();
+    					/* if(data == 1){
+    						alert("업데이트 성공");
+    					}else{
+    						alert("업데이트 실패")
+    					} */
+    					$.ajax({
+    	    				url:"<%=context%>/coffee/coffeeUpdateRaction",  
+    	    				data:{updateValue : 1, rcode : vRcode${i} },
+    	    				dataType:'text',
+    	    				success:function(data){
+    	    					$(".btn.btn-dark.float-right.${i}").hide();
+    	    					$(".btn.btn-outline-dark.float-right.${i}").show();
+    	    					/* if(data == 1){
+    	    						alert("처리 성공");
+    	    					}else{
+    	    						alert("처리 실패")
+    	    					} */
+    	    				},
+    	    				error:function(request,status,error){
+    	    				    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+    	    				}
+    	    				
+    	    			});
+    						
+    				},
+    				error:function(request,status,error){
+    				    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+    				}
+    				
+    			});	 		
 		 	});
 			﻿﻿﻿﻿﻿
-			$(".btn.btn-primary.float-right.${i}").click(function(){
+			$(".btn.btn-primary.float-right.u${i}").click(function(){
 				//alert("복원 누름")
-		 		$(this).hide();
-				$(".btn.btn-danger.float-right.${i}").show();
+				$.ajax({
+    				url:"<%=context%>/coffee/coffeeUpdateUstate",  
+    				data:{updateValue : 1, ucode : vRUcode${i} },
+    				dataType:'text',
+    				success:function(data){
+    					$(".btn.btn-primary.float-right.u${i}").hide();
+    					$(".btn.btn-danger.float-right.u${i}").show();
+    					/* if(data == 1){
+    						alert("업데이트 성공");
+    					}else{
+    						alert("업데이트 실패")
+    					} */
+    					$.ajax({
+    	    				url:"<%=context%>/coffee/coffeeUpdateRaction",  
+    	    				data:{updateValue : 1, rcode : vRcode${i} },
+    	    				dataType:'text',
+    	    				success:function(data){
+    	    					$(".btn.btn-dark.float-right.${i}").hide();
+    	    					$(".btn.btn-outline-dark.float-right.${i}").show();
+    	    					/* if(data == 1){
+    	    						alert("처리 성공");
+    	    					}else{
+    	    						alert("처리 실패")
+    	    					} */
+    	    				},
+    	    				error:function(request,status,error){
+    	    				    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+    	    				}
+    	    				
+    	    			});
+    				},
+    				error:function(request,status,error){
+    				    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+    				}
+    			});	 
 			});
 		</c:forEach>
 		
@@ -250,8 +389,8 @@
 								<div class="card-body">
 									<c:choose>
 										<c:when test="${list.rtype == 1}">
-											<span><button type="button" class="btn btn-danger float-right ${status.index }">차단</button></span>
-											<span><button type="button" class="btn btn-primary float-right ${status.index }">복원</button></span>
+											<span><button type="button" class="btn btn-danger float-right b${status.index }">차단</button></span>
+											<span><button type="button" class="btn btn-primary float-right b${status.index }">복원</button></span>
 											<c:choose>
 												 <c:when test="${not empty list.uimage }">
 													<img alt="회원 이미지" src="/img/profiles/${list.uimage }" class="rounded-circle" width="50"
@@ -291,8 +430,8 @@
 												<div align="center"><img src="/img/coffee/news_img_02_m.jpg" style="width: auto;
 				    							height: 200px; object-fit:contain;">
 												</div>
-											<span class="ban"><button type="button" class="btn btn-danger float-right ${status.index }">탈퇴</button></span>
-											<span class="unban"><button type="button" class="btn btn-primary float-right ${status.index }">복원</button></span>
+											<span><button type="button" class="btn btn-danger float-right u${status.index }">탈퇴</button></span>
+											<span><button type="button" class="btn btn-primary float-right u${status.index }">복원</button></span>
 											
 											<c:choose>
 												<c:when test="${not empty list.uimage }">
