@@ -60,3 +60,17 @@ bom_springProject 주혜 - 글쓰기 기능
 > 
 > produces="application/json;charset=UTF-8" 이거중요했다 리얼
 > 예약목록은 왜 못가져오는지,, 내일 
+
+**2021-03-05**
+> 예약 목록 가져오고 저장, 예약 수를 badge로 표현
+> 
+> bcontent 내용 controller로 보내기 test
+> 
+> html 내용 다 보낼 수 있음
+>
+```
+남은과제
+- div 입력할때 커서 맨앞으로 가는 거
+- form 태그로 값 전송
+- atid 
+```
