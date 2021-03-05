@@ -34,6 +34,13 @@ public class JuhyeController {
 		return us.getReserveNum(ucode);
 	}
 	
+	@RequestMapping(value="god/getSaveNum", produces="application/text;charset=UTF-8")
+	@ResponseBody
+	public String getSaveNum(int ucode, Model model) {
+		System.out.println("start getSaveNum");
+		return us.getSaveNum(ucode);
+	}
+	
 	@RequestMapping(value="god/getReserveList", produces="application/json;charset=UTF-8")
 	@ResponseBody
 	public List<Board> getReserveList(int ucode, Model model){
@@ -42,7 +49,7 @@ public class JuhyeController {
 		return us.getReserveList(ucode);
 	}
 	
-	@RequestMapping(value="god/getSaveList")
+	@RequestMapping(value="god/getSaveList", produces="application/json;charset=UTF-8")
 	@ResponseBody
 	public List<Board> getSaveList(int ucode){
 		System.out.println("getSaveList ucode -> "+ucode);
@@ -50,4 +57,13 @@ public class JuhyeController {
 		System.out.println("list length -> "+list.size());
 		return list;
 	} 
+	
+	@PostMapping(value="god/write")
+	public String write(Board board, Model model) {
+		System.out.println("bcontent : "+board.getBcontent());
+		
+		return "redirect:main";
+	}
+	//낼해바
+	/*https://stackoverflow.com/questions/29251099/making-a-input-type-file-hidden-with-button*/
 }

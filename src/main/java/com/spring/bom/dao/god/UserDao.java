@@ -11,4 +11,6 @@ public interface UserDao {
 	List<Board> getReserveList(int ucode);
 
 	List<Board> getSaveList(int ucode);
+
+	String getSaveNum(int ucode);
 }

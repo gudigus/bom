@@ -19,6 +19,12 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
+	public String getSaveNum(int ucode) {
+		// TODO Auto-generated method stub
+		return ud.getSaveNum(ucode);
+	}
+	
+	@Override
 	public List<Board> getReserveList(int ucode) {
 		// TODO Auto-generated method stub
 		return ud.getReserveList(ucode);
@@ -30,4 +36,5 @@ public class UserServiceImpl implements UserService{
 		System.out.println("UserServiceImpl getSaveList()");
 		return ud.getSaveList(ucode);
 	}
+
 }

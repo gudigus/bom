@@ -20,6 +20,12 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
+	public String getSaveNum(int ucode) {
+		// TODO Auto-generated method stub
+		return session.selectOne("JHgetSaveNum",ucode);
+	}
+	
+	@Override
 	public List<Board> getReserveList(int ucode) {
 		// TODO Auto-generated method stub
 		return session.selectList("JHgetReserveList",ucode);
@@ -31,4 +37,5 @@ public class UserDaoImpl implements UserDao {
 		System.out.println("UserDaoImpl getSaveList");
 		return session.selectList("JHgetSaveList",ucode);
 	}
+
 }

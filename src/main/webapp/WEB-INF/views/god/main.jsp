@@ -86,6 +86,11 @@ input[type="file"] {
 label {
 	margin: 0px;
 }
+
+.nav-tabs .nav-link:not(.active) {
+    border-color: transparent !important;
+    color : #28a745;
+}
 </style>
 <script type="text/javascript">
 window.onload = function(){
@@ -142,6 +147,11 @@ window.onload = function(){
 			</div>
 		</div>
 		<!--글쓰기 팝업-->
+		<form action="../god/write" method="post" enctype="Multipart/form-data" onsubmit="return checkWrite()">
+		<!--실제 값을 보내는곳 -->
+		<input type="hidden" name="ucode" value="${user.getUcode() }">
+		<input type="hidden" name="bcontent">
+		<!--실제 값을 보내는곳 끝 -->
 		<div class="modal fade" id="writeForm" data-backdrop="static"
 			data-keyboard="false" tabindex="-1"
 			aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -157,7 +167,7 @@ window.onload = function(){
 							<a
 								style="float: right; color: black; text-decoration: none;"
 								data-toggle="modal" data-target="#tempForm">임시 저장한 봄 <span
-								class="badge badge-success" id="saveNum"></span>
+								class="badge badge-success" id="sumNum"></span>
 							</a>
 						</fieldset>
 					</div>
@@ -253,7 +263,7 @@ window.onload = function(){
 								<button type="button" class="btn btn-outline-secondary"
 									id="reserveBtn" data-toggle="modal" data-target="#reserveForm">예약하기</button>
 							</span>
-							<button type="button" class="btn btn-success float-right">봄</button>
+							<button type="submit" id="writeSubmit" class="btn btn-success float-right" disabled>봄</button>
 						</fieldset>
 					</div>
 				</div>
@@ -466,18 +476,22 @@ window.onload = function(){
 					<div class="modal-body col-12">
 						<ul class="nav nav-tabs" id="myTab" role="tablist">
 							<li class="nav-item" role="presentation">
-								<a class="nav-link active" id="save-tab" data-toggle="save" href="#save" role="tab" aria-controls="save" aria-selected="true">저장</a>
+								<a class="nav-link active" id="save-tab" data-toggle="tab" href="#save">저장
+								 <span class="badge badge-success" id="saveNum"></span>
+								</a>
 							</li>
 							<li class="nav-item" role="presentation">
-								<a class="nav-link" id="reserve-tab" data-toggle="reserve" href="#reserve" role="tab" aria-controls="reserve" aria-selected="false">예약</a>
+								<a class="nav-link" id="reserve-tab" data-toggle="tab" href="#reserve">예약
+								 <span class="badge badge-success" id="reserveNum"></span>
+								</a>
 							</li>
 						</ul>
 						<div class="tab-content" id="myTabContent">
-							<div class="tab-pane fade show active" id="save" role="tabpanel" aria-labelledby="save-tab">
+							<div class="tab-pane fade show active" id="save">
 								<ul class="list-group" id="saveList">
 								</ul>
 							</div>
-							<div class="tab-pane fade" id="reserve" role="tabpanel" aria-labelledby="reserve-tab">
+							<div class="tab-pane fade" id="reserve">
 								<ul class="list-group" id="reserveList">
 								</ul>
 							</div>
@@ -520,26 +534,60 @@ window.onload = function(){
 			</div>
 		</div>
 		<!--저장 팝업 끝-->
-		
+		</form>
 		
 		<!--(주혜)글쓰기 폼 기능-->
 		<%
 			String context = request.getContextPath();
-		%>
+		%> 
 		
 		<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 		<script type="text/javascript">
-		/* 글쓰기 버튼 누르면 임시저장 글 수 가져오기 */
+		/*글 쓰기전에 값 input에 넣기*/
+		function checkWrite(){
+			var write=$("#writeTextarea").html();
+			$('input[name=bcontent]').attr('value', write);
+			
+			return true;
+		}
+		
+		/*글 내용 있으면 버튼 활성화*/
+		$("#writeTextarea").on("propertychange change keyup paste input", function(event) {
+			$('#writeSubmit').attr('disabled', false);
+			
+			var write=$("#writeTextarea").html();
+			if(write=='' ||a.trin()==''){
+				$('#writeSubmit').attr('disabled', true);
+			}
+		});
+		
+		/* 글쓰기 버튼 누르면 임시저장 글 수(저장, 예약) 가져오기 */
 		function clickWriteBtn(){
+			var sumNum=0;
+			
 			$.ajax({
 				url:"<%=context%>/god/getReserveNum",
+				data:{ucode:${user.getUcode()}}, 
+				dataType:'text',
+				async:false,
+				success:function(data){
+					$('#reserveNum').html(data);
+					sumNum=parseInt(data);
+				}
+			});
+			
+			$.ajax({
+				url:"<%=context%>/god/getSaveNum",
 				data:{ucode:${user.getUcode()}},
 				dataType:'text',
 				async:false,
 				success:function(data){
 					$('#saveNum').html(data);
+					sumNum+=parseInt(data);
 				}
 			});
+			
+			$('#sumNum').html(sumNum);
 		}
 		
 		/*저장,예약 글 불러오기*/
