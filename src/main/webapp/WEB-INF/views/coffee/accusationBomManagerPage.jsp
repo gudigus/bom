@@ -216,24 +216,19 @@
 							<div align="center">
 								<div class="btn-group col-md-12" role="group"
 									aria-label="Button group with nested dropdown">
-									<button type="button" class="btn btn-secondary mr-3 btn-light"
+									<button type="button" class="btn btn-secondary btn-light mr-3"
 										data-toggle="tooltip" data-placement="top" title="답글">
-										<img src="/img/speech-bubble.svg" width="20" height="20">
+										<img src="/img/speech-bubble.svg" width="20" height="20">${list.breplycount }
 									</button>
 									<button type="button" class="btn btn-secondary btn-light mr-3"
 										data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
-										<img src="/img/bring.svg" width="20" height="20">
+										<img src="/img/bring.svg" width="20" height="20">${list.bquotecount }
 									</button>
 									<button type="button" class="btn btn-secondary btn-light mr-3"
 										data-toggle="tooltip" data-placement="top" title="좋아요">
 										<img src="/img/heart.svg" width="20" height="20">${list.blikecount }
 									</button>
-									<button type="button"
-										class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
-										data-toggle="dropdown" aria-haspopup="true"
-										aria-expanded="false">
-										<img src="/img/share.svg" width="20" height="20">
-									</button>
+									
 								</div>
 							</div>
 							<div>

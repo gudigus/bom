@@ -17,12 +17,21 @@
 		WHERE    r.ropcode = ru.ucode   
 		and      u.ucode = r.rucode(+)
  		and		 r.rucode != 0
+ 		and 	 u.ustate != 0
 		UNION 
 		SELECT  r.rcode, r.rucode, r.rbcode, r.ropcode, r.rcontent, r.rdatetime, r.rtype, r.raction,
         <!-- '' ucode, --> '' uemail, '' upassword, '' uatid, '' unickname, '' ubirth, '' ugender, '' unation, -1 uidentify, -1 uchat,
         -1 ualarm, -1 uprivate, '' uregdate, '' uintro, '' uloc, '' uimage, '' ubg, '' uprofilelink, -1 ustate, -1 ureportcount,
         -1 uonline, -1 ulogincount,
-        <!-- b.bcode, --> b.ucode, b.bcontent, b.bregdate, b.btype, b.banchor, b.bpermission, b.bbcode, b.battach, b.bvotecode,
+        <!-- b.bcode, --> b.ucode, b.bcontent,
+			case when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
+	    	  end as bregdate 
+			, b.btype, b.banchor, b.bpermission, b.bbcode, b.battach, b.bvotecode,
         b.btmpsav, b.btmpsavtime, b.blikecount, b.bexpcount, b.bjoincount, b.bstate, b.breportcount, b.breplycount, b.bquotecount,
         <!-- ru.ucode, --> ru.uemail uemail_1, ru.upassword upassword_1, ru.uatid uatid_1, ru.unickname unickname_1, ru.ubirth ubirth_1, ru.ugender ugender_1, ru.unation unation_1, ru.uidentify uidentify_1, ru.uchat uchat_1,
         ru.ualarm ualarm_1, ru.uprivate uprivate_1, ru.uregdate uregdate_1, ru.uintro uintro_1, ru.uloc uloc_1, ru.uimage uimage_1, ru.ubg ubg_1, ru.uprofilelink uprofilelink_1, ru.ustate ustate_1, ru.ureportcount ureportcount_1,
@@ -32,6 +41,7 @@
 		WHERE    r.ropcode = ru.ucode   
 		and      b.bcode = r.rbcode (+)
 		and		 b.ucode != 0
+		and 	 b.bstate != 0
 		ORDER BY rdatetime desc
  
 	</select>
@@ -57,13 +67,22 @@
 		WHERE    r.ropcode = ru.ucode   
 		and      u.ucode = r.rucode(+)
 		and		 r.rucode != 0
-		and		 r.raction = 0  
+		and		 r.raction = 0
+		and 	 u.ustate != 0  
 		UNION 
 		SELECT  r.rcode, r.rucode, r.rbcode, r.ropcode, r.rcontent, r.rdatetime, r.rtype, r.raction,
         <!-- '' ucode, --> '' uemail, '' upassword, '' uatid, '' unickname, '' ubirth, '' ugender, '' unation, -1 uidentify, -1 uchat,
         -1 ualarm, -1 uprivate, '' uregdate, '' uintro, '' uloc, '' uimage, '' ubg, '' uprofilelink, -1 ustate, -1 ureportcount,
         -1 uonline, -1 ulogincount,
-        <!-- b.bcode, --> b.ucode, b.bcontent, b.bregdate, b.btype, b.banchor, b.bpermission, b.bbcode, b.battach, b.bvotecode,
+        <!-- b.bcode, --> b.ucode, b.bcontent,
+			case when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
+	    	  end as bregdate 
+			, b.btype, b.banchor, b.bpermission, b.bbcode, b.battach, b.bvotecode,
         b.btmpsav, b.btmpsavtime, b.blikecount, b.bexpcount, b.bjoincount, b.bstate, b.breportcount, b.breplycount, b.bquotecount,
         <!-- ru.ucode, --> ru.uemail uemail_1, ru.upassword upassword_1, ru.uatid uatid_1, ru.unickname unickname_1, ru.ubirth ubirth_1, ru.ugender ugender_1, ru.unation unation_1, ru.uidentify uidentify_1, ru.uchat uchat_1,
         ru.ualarm ualarm_1, ru.uprivate uprivate_1, ru.uregdate uregdate_1, ru.uintro uintro_1, ru.uloc uloc_1, ru.uimage uimage_1, ru.ubg ubg_1, ru.uprofilelink uprofilelink_1, ru.ustate ustate_1, ru.ureportcount ureportcount_1,
@@ -74,6 +93,7 @@
 		and      b.bcode = r.rbcode (+)
 		and		 r.raction = 0
 		and		 b.ucode != 0
+		and 	 b.bstate != 0
 		ORDER BY rdatetime desc
  
 	</select>
