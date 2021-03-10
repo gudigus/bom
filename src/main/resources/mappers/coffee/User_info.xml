@@ -20,6 +20,9 @@
    	<update id="coffeeUpdateUstate" parameterType="CoffeeUser_info">
    		UPDATE user_info SET ustate = #{ustate} WHERE ucode = #{ucode}
    	</update>
+   	<select id="coffeeSelectManager" parameterType="int" resultType="int">
+   		SELECT COUNT(*) FROM user_info WHERE ucode = 0 AND ucode = #{ucode}
+   	</select>
    
    
    

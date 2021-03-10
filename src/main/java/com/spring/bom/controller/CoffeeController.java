@@ -2,6 +2,9 @@ package com.spring.bom.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.spring.bom.model.bro.user_info;
 import com.spring.bom.model.coffee.BoardUser_info;
 import com.spring.bom.model.coffee.ReportUser_infoBoard;
 import com.spring.bom.model.coffee.User_info;
@@ -31,29 +35,80 @@ public class CoffeeController {
 	private ReportService rs;
 	
 	
-//	@GetMapping(value = "/coffee/example")
-//	public String example() {
-//		System.out.println("CoffeeController example start..");
-//		return "coffee/example";
-//	}
-	
-	
-	// 회원 매니저
-	@GetMapping(value = "/coffee/censorMemberManagerPage")
-	public String censorMemberManagerPage(Model model) {
-		System.out.println("CoffeeController censorMemberManagerPage start..");
-		List<User_info> list = uis.user_infoSensorList();
-//		System.out.println("list.get(0).getUcode()->"+list.get(0).getUcode());
-//		System.out.println("list.get(0).getUnickname()->"+list.get(0).getUnickname());
-//		System.out.println("list.get(1).getUcode()->"+list.get(1).getUcode());
-//		System.out.println("list.get(1).getUnickname()->"+list.get(1).getUnickname());
-//		System.out.println("list.get(2).getUcode()->"+list.get(2).getUcode());
-//		System.out.println("list.get(2).getUnickname()->"+list.get(2).getUnickname());
-		model.addAttribute("user_infoList", list);
-		return "coffee/censorMemberManagerPage";
+	@GetMapping(value = "/coffee/example")
+	public String example() {
+		System.out.println("CoffeeController example start..");
+		return "coffee/example";
 	}
 	
-		// Ajax  List Test String
+	
+	// Interceptors
+	// 회원 매니저
+	// interCepter 진행 Test  --> 2번째 수행 
+	@GetMapping(value = "/coffee/interceptor/censorMemberManagerPage")
+	public String censorMemberManagerPageI(HttpServletRequest req, Model model) {
+		System.out.println("CoffeeController censorMemberManagerPage start..");
+		// 관리자 검증
+		HttpSession session = req.getSession();
+		int uCode = -1;
+		String url = "/coffee/censorMemberManagerPage";
+		try {
+			uCode = (int) session.getAttribute("uCode");
+
+		}catch (Exception e) {
+			System.out.println("CoffeeController censorMemberManagerPageI ->"+e.getMessage());
+		}
+		System.out.println("session uCode->"+uCode);
+		int memCnt = uis.memConfirmManager(uCode);
+		// model.addAttribute("id",id);
+		model.addAttribute("memCnt",memCnt);
+		model.addAttribute("url", url);
+		System.out.println("session memCnt->"+memCnt);
+		System.out.println("censorMemberManagerPageI  Test End");
+		return url;
+	}
+	// Interceptors
+	 // interCepter 진행 Test
+	@GetMapping(value = "/coffee/censorMemberManagerPage")
+	public String censorMemberManagerPage(HttpServletRequest req, Model model) {
+		System.out.println("CoffeeController censorMemberManagerPage start..");
+		// 관리자 검증
+		HttpSession session = req.getSession();
+		String manager = (String) session.getAttribute("manager");
+		String returnPage = "";
+		if (manager == null) manager = "9";
+		System.out.println("/coffee/censorMemberManagerPage manager->"+ manager );
+		// 관리자면 
+		if (manager == "0") {
+			List<User_info> list = uis.user_infoSensorList();
+//			System.out.println("list.get(0).getUcode()->"+list.get(0).getUcode());
+//			System.out.println("list.get(0).getUnickname()->"+list.get(0).getUnickname());
+//			System.out.println("list.get(1).getUcode()->"+list.get(1).getUcode());
+//			System.out.println("list.get(1).getUnickname()->"+list.get(1).getUnickname());
+//			System.out.println("list.get(2).getUcode()->"+list.get(2).getUcode());
+//			System.out.println("list.get(2).getUnickname()->"+list.get(2).getUnickname());
+			model.addAttribute("user_infoList", list);
+			returnPage = "/coffee/censorMemberManagerPage";
+		} else {
+			// returnPage = "/coffee/kkk";
+			returnPage = "redirect:/bro/index";
+			
+		}
+
+		return returnPage;
+	}
+	
+	// Interceptors
+	 // interCepter 진행 Test
+	@GetMapping(value = "/coffee/kkk")
+	public String censorMemberKKKPage(HttpServletRequest req, Model model) {
+		System.out.println("CoffeeController censorMemberKKKPage start..");
+		String returnPage = "coffee/kkk";
+	
+		return returnPage;
+	}
+
+	// Ajax  List Test String
 	@GetMapping(value = "/coffee/coffeeUpdateUstate", produces = "application/text;charset=UTF-8")
 	@ResponseBody
 	public String coffeeUpdateUstate(int ucode, int updateValue) {

@@ -23,31 +23,36 @@ public class BroController {
 	
 	
 		
-	@RequestMapping(value = "bro/login" , method=RequestMethod.POST)
+	@RequestMapping(value = "/bro/login" , method=RequestMethod.POST)
 	public String login(user_info ui, HttpServletRequest req) throws Exception{
 		HttpSession session = req.getSession();
 		user_info login = bs.loginCheck(ui);
+		
 		if(login == null) {
-			session.setAttribute("login", null);
+			session.setAttribute("uCode", "-1");
 			System.out.println("login off");
-			return "bro/login";
+			return "/bro/login";
+		}else if(login.getuCode() == 0){
+			session.setAttribute("uCode", login.getuCode());
+			System.out.println("관리자 login on");
+			return "/coffee/censorMemberManagerPage";
 		}else {
-			session.setAttribute("login", login);
 			System.out.println("login on");
-			return "bro/main";
+			session.setAttribute("uCode", login.getuCode());
+			return "/coffee/example";
 		}
 	}
 	
-	@RequestMapping(value = "bro/logout", method = RequestMethod.GET)
+	@RequestMapping(value = "/bro/logout", method = RequestMethod.GET)
 	public String logout(HttpSession session) throws Exception{
 		
 		session.invalidate();
 		
-		return "redirect:/";
+		return "redirect:/bro/index";
 	}
-	@RequestMapping(value = "bro/index")
+	@RequestMapping(value = "/bro/index")
      public String index() {
-	 return "bro/login";
+	 return "/bro/login";
 	}
 
 }

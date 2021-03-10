@@ -9,4 +9,5 @@ public interface User_infoDao {
 	List<User_info> user_infoRestoreList();
 	List<User_info> user_infoAccusationList();
 	int updateUstate(int ucode, int updateValue);
+	int memConfirmManager(int getuCode);
 }

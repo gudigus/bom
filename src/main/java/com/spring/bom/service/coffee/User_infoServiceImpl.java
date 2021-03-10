@@ -35,5 +35,10 @@ public class User_infoServiceImpl implements User_infoService {
 		int result = uid.updateUstate(ucode, updateValue);
 		return result;
 	}
+	@Override
+	public int memConfirmManager(int getuCode) {
+		int result = uid.memConfirmManager(getuCode);
+		return result;
+	}
 
 }

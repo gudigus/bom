@@ -118,11 +118,11 @@
 
 		<!-- Sidebar -->
 		<div class="border-right min-vh-100" id="sidebar-wrapper">
-			<!-- <div class="sidebar-heading" align="center">
+			<div class="sidebar-heading" align="center">
 				<img src="/img/logo2.jpg" width="150" height="150">
-			</div> -->
+			</div>
 			<div class="list-group list-group-flush overflow-auto vh-100">
-				<a href="#" class="list-group-item list-group-item-action"> <img
+				<!-- <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/home.svg" width="15" height="15"> 타임라인
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
@@ -136,18 +136,18 @@
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/user.svg" width="15" height="15"> 프로필
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/more.svg" width="15" height="15"> 더보기
-				</a> <a href="censorBomManagerPage" class="list-group-item list-group-item-action"> <img
+					src="/img/more.svg" width="15" height="15"> 더보기 -->
+				</a> <a href="/coffee/censorBomManagerPage" class="list-group-item list-group-item-action"> <img
 					src="/img/coffee/censorBom.svg" width="15" height="15"> 봄 검열
-				</a> <a href="censorMemberManagerPage" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/coffee/censorMemberManagerPage" class="list-group-item list-group-item-action"> <img
 					src="/img/coffee/censorMember.svg" width="15" height="15"> 회원 검열
-				</a> <a href="censorAccusationManagerPage" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/coffee/censorAccusationManagerPage" class="list-group-item list-group-item-action"> <img
 					src="/img/coffee/accusation.svg" width="15" height="15"> 신고 게시판
-				</a> <a href="#" class="list-group-item list-group-item-action">
+				</a> <!-- <a href="#" class="list-group-item list-group-item-action">
 					<button type="button" class="btn btn-outline-success">
 						<img src="/img/write.svg" width="15" height="15"> 글 쓰기
 					</button>
-				</a>
+				</a> -->
 				<div class="card">
 					<div class="card-body">
 						<img src="/img/teemo.jpg" class="rounded-circle" width="50"

@@ -60,5 +60,15 @@ public class User_infoDaoImpl implements User_infoDao {
 		}
 		return result;
 	}
+	@Override
+	public int memConfirmManager(int getuCode) {
+		int result = 0;
+		try {
+			result = session.selectOne("coffeeSelectManager", getuCode);
+		}catch (Exception e) {
+			System.out.println("User_infoDaoImpl memConfirmManager"+e.getMessage());
+		}
+		return result;
+	}
 
 }

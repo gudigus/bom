@@ -117,11 +117,11 @@
 
 		<!-- Sidebar -->
 		<div class="border-right min-vh-100" id="sidebar-wrapper">
-			<!-- <div class="sidebar-heading" align="center">
+			<div class="sidebar-heading" align="center">
 				<img src="/img/logo2.jpg" width="150" height="150">
-			</div> -->
+			</div>
 			<div class="list-group list-group-flush overflow-auto vh-100">
-				<a href="#" class="list-group-item list-group-item-action"> <img
+				<!-- <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/home.svg" width="15" height="15"> 타임라인
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
@@ -135,25 +135,25 @@
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/user.svg" width="15" height="15"> 프로필
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/more.svg" width="15" height="15"> 더보기
-				</a> <a href="censorBomManagerPage" class="list-group-item list-group-item-action"> <img
+					src="/img/more.svg" width="15" height="15"> 더보기 -->
+				</a> <a href="/coffee/censorBomManagerPage" class="list-group-item list-group-item-action"> <img
 					src="/img/coffee/censorBom.svg" width="15" height="15"> 봄 검열
-				</a> <a href="censorMemberManagerPage" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/coffee/interceptor/censorMemberManagerPage" class="list-group-item list-group-item-action"> <img
 					src="/img/coffee/censorMember.svg" width="15" height="15"> 회원 검열
-				</a> <a href="censorAccusationManagerPage" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/coffee/censorAccusationManagerPage" class="list-group-item list-group-item-action"> <img
 					src="/img/coffee/accusation.svg" width="15" height="15"> 신고 게시판
-				</a> <a href="#" class="list-group-item list-group-item-action">
+				</a> <!-- <a href="#" class="list-group-item list-group-item-action">
 					<button type="button" class="btn btn-outline-success">
 						<img src="/img/write.svg" width="15" height="15"> 글 쓰기
 					</button>
-				</a>
+				</a> -->
 				<div class="card">
 					<div class="card-body">
 						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
 							width="50"> <a class="card-title text-dark">닉네임</a> <a
 							class="card-subtitle mb-2 text-muted">@atid</a>
 					</div>
-					<button type="button" class="btn btn-success">로그아웃</button>
+					<button type="button" class="btn btn-success"  onclick="location.href='/bro/logout'">로그아웃</button>
 				</div>
 			</div>
 		</div>
@@ -176,7 +176,7 @@
 				<div class="input-group col-auto">
 					<ul class="nav nav-tabs">
 					  <li class="nav-item">
-					    <a class="nav-link active" aria-current="page" href="/coffee/censorMemberManagerPage">탈퇴</a>
+					    <a class="nav-link active" aria-current="page" href="/coffee/interceptor/censorMemberManagerPage">탈퇴</a>
 					  </li>
 					  <li class="nav-item">
 					    <a class="nav-link" href="/coffee/restoreMemberManagerPage">복원</a>
@@ -192,7 +192,7 @@
 					</form>
 				</div>
 				<!--글 정렬-->
-				<c:forEach var="list" items="${user_infoList }" varStatus="status">
+				<c:forEach var="list" items="${user_infoList }" varStatus="status" >
 					
 					<input type="hidden" class="ustate${status.index }"      value="${list.ustate}">
 					<input type="hidden" class="ucode${status.index }"      value="${list.ucode}">
