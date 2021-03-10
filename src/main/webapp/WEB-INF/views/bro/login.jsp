@@ -29,7 +29,8 @@
 			</div>
 			<div>
 				<button type="submit">로그인</button>
-				<button type="button">회원가입</button>
+				<button type="button" onclick="location.href='join'">회원가입</button>
+				<button type="button" onclick="location.href='email'">비밀번호찾기</button>
 			</div>
 	</form>
 </body>

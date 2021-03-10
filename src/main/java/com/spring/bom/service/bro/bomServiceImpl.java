@@ -2,18 +2,20 @@ package com.spring.bom.service.bro;
 
 import javax.servlet.http.HttpSession;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.spring.bom.dao.bro.bomDao;
-import com.spring.bom.model.bro.user_info;
+import com.spring.bom.dao.bro.BomDao;
+import com.spring.bom.model.bro.User_info;
 @Service
-public class bomServiceImpl implements bomService {
+public class BomServiceImpl implements BomService {
 	@Autowired
-	private bomDao bd;
+	private BomDao bd;
+	
 
 	@Override
-	public user_info loginCheck(user_info ui) throws Exception{
+	public User_info loginCheck(User_info ui) throws Exception{
 		System.out.println("service ui      "+ui);
 		return bd.loginCheck(ui);
 	}
@@ -25,10 +27,20 @@ public class bomServiceImpl implements bomService {
 	}
 
 	@Override
-	public void join(user_info ui) {
-		// TODO Auto-generated method stub
+	public int join(User_info ui) {
+		System.out.println("service join start");
+		return bd.join(ui);
 		
 	}
+
+	@Override
+	public int checkEmail(String uEmail) {
+		System.out.println("service uEmail--"+uEmail);
+		int i = bd.checkEmail(uEmail);
+		System.out.println(i + "i는");
+		return i;
+	    }
+
 	
 
 	

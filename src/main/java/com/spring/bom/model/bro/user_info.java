@@ -1,6 +1,8 @@
 package com.spring.bom.model.bro;
 
-public class user_info {
+import java.sql.Date;
+
+public class User_info {
 	int uCode;
 	String uEmail;
 	public int getuCode() {
@@ -33,10 +35,10 @@ public class user_info {
 	public void setuNickname(String uNickname) {
 		this.uNickname = uNickname;
 	}
-	public String getuBirth() {
+	public Date getuBirth() {
 		return uBirth;
 	}
-	public void setuBirth(String uBirth) {
+	public void setuBirth(Date uBirth) {
 		this.uBirth = uBirth;
 	}
 	public String getuGender() {
@@ -138,7 +140,7 @@ public class user_info {
 	String uPassword;
 	String uAtid;
 	String uNickname;
-	String uBirth;
+	Date uBirth;
 	String uGender;
 	String uNation;
 	int uIdentify;

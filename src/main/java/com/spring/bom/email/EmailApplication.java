@@ -1,16 +1,13 @@
-package com.spring.bom;
+package com.spring.bom.email;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
-
-@SpringBootApplication
-public class BomApplication {
-
+@SpringBootApplication	
+public class EmailApplication {
+	
 	public static void main(String[] args) {
-		SpringApplication.run(BomApplication.class, args);
-		
+		SpringApplication.run(EmailApplication.class, args);
 	}
 
 }

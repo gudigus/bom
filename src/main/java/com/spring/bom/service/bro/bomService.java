@@ -2,11 +2,12 @@ package com.spring.bom.service.bro;
 
 import javax.servlet.http.HttpSession;
 
-import com.spring.bom.model.bro.user_info;
+import com.spring.bom.model.bro.User_info;
 
-public interface bomService {
-	public user_info loginCheck(user_info ui) throws Exception;
+public interface BomService {
+	public User_info loginCheck(User_info ui) throws Exception;
 	public void logout(HttpSession session);
-	public void join(user_info ui);
+	public int join(User_info ui);
+	public int checkEmail(String uEmail);
 
 }

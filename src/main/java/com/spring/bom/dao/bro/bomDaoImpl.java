@@ -10,14 +10,15 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.spring.bom.model.bro.user_info;
+import com.spring.bom.model.bro.User_info;
+
 @Repository
-public class bomDaoImpl implements bomDao {
+public class BomDaoImpl implements BomDao {
 	@Autowired
 	private SqlSession session;
 
 	@Override	
-	public user_info loginCheck(user_info ui) throws Exception{
+	public User_info loginCheck(User_info ui) throws Exception{
 		System.out.println("dao ui      "+ui);
 		return session.selectOne("login",ui);
 	}
@@ -29,12 +30,25 @@ public class bomDaoImpl implements bomDao {
 	}
 
 	@Override
-	public void join(user_info ui) {
-		// TODO Auto-generated method stub
+	public int join(User_info ui) {
+		System.out.println("dao join start");
+		int succ = 0;
+		succ = session.insert("join", ui); 
+		
+		return succ;
 		
 	}
-	
+
+	@Override
+	public int checkEmail(String uEmail) {
+		System.out.println("dao uEmail--"+uEmail);
+		int result = session.selectOne("checkEmail",uEmail);
+		System.out.println("dao result-- "+ result );
+		return result;
+	}
 	 
+
+	
 
 	
 		
