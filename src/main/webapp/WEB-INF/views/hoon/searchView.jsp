@@ -26,9 +26,11 @@
 
 
 <!-- Bootstrap core JavaScript -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
 	integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-	crossorigin="anonymous"></script>
+	crossorigin="anonymous"></script> -->
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
 	integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
@@ -47,7 +49,7 @@
 </style>
 </head>
 
-<body class="pt-5">
+<body style="padding-top: 86px;">
 
 	<div class="d-flex" id="wrapper">
 
@@ -100,67 +102,85 @@
 		<div id="page-content-wrapper">
 			<nav
 				class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top"
-				style="left: 241px; right: 241px;">
-				<div class="container">
-					<form class="well form-search" action="searchView" method="get">
-						<div class="input-group flex-nowrap">
-							<div class="input-group-prepend">
-								<span class="input-group-text" id="addon-wrapping"><img
-									src="/img/search.svg" width="15" height="15"> </span>
-							</div>
-							<input type="text" class="form-control" placeholder="봄 검색"
-								aria-label="Username" aria-describedby="addon-wrapping"
-								name="search">
-						</div>
-					</form>
-				</div>
+				style="left: 241px; right: 241px; z-index: 5;">
+				<form class="well form-search" action="searchView" method="get" id="jh_form">
+					<div class="input-group">
+						<input type="text" ID="datebox" Class="form-control" name="search"
+							data-toggle="dropdown"></input>
+				
+						<table id="demolist" class="dropdown-menu" style="z-index: 5;">
+							<tr>
+								<td style="font-weight: normal;">최근</td>
+								<td>
+									<button type="reset" id="del_ajax" style="font-size: 12px;">전체지우기</button>
+								</td>
+							</tr>
+							<c:forEach var="Junghun" items="${searchkeyword }" begin="0"
+								end="10">
+								<tr id="searchkeyword">
+									<td class="dropdown-li" style="padding: 5px;"><c:choose>
+											<c:when test="${Junghun.search.contains('#')}">
+												<a id="row" href="searchView?search=%23${Junghun.search }">${Junghun.search }</a>
+											</c:when>
+											<c:otherwise>
+												<a id="row" href="searchView?search=${Junghun.search }">${Junghun.search }</a>
+											</c:otherwise>
+										</c:choose></td>
+								</tr>
+							</c:forEach>
+						</table>
+					</div>
+				</form>
+			</nav>
+		<script type="text/javascript">
+			<%String context = request.getContextPath();%>
+					$("#del_ajax").click(function(){
+								var ucode = ${login.uCode}
+								console.log('ucode !!: ' + ucode);
+							$.ajax({
+							url:"<%=context%>/deleteRow",
+							data : {ucode : ucode},
+							dataType : 'text',
+							success : function(data) {
+							alret(data);
+							},
+							error:function(request,status,error){
+								alert("code-"+request.status+" mas-"+request.responseText+" error-"+error);
+							}
+						});
+					});
+					
+			</script>
+			<nav
+				class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top"
+				style="left: 241px; right: 241px; margin-top: 50px;  z-index: 3;  padding-bottom: 0px;">
 				<ul class="nav nav-tabs nav-justified col-md-25" id="myTab"
-				role="tablist">
-				<li class="nav-item mr-5" role="presentation"><a
-					class="nav-link active" id="home-tab" data-toggle="tab"
-					href="#fame" role="tab" aria-controls="fame" aria-selected="true">인기</a></li>
+					role="tablist" style="width: 800px;">
+					<li class="nav-item mr-5" role="presentation"><a
+						class="nav-link active" id="home-tab" data-toggle="tab"
+						href="#fame" role="tab" aria-controls="fame" aria-selected="true">인기</a></li>
 
-				<li class="nav-item mr-5" role="presentation"><a
-					class="nav-link" id="profile-tab" data-toggle="tab" href="#user"
-					role="tab" aria-controls="user" aria-selected="false">사용자</a></li>
+					<li class="nav-item mr-5" role="presentation"><a
+						class="nav-link" id="profile-tab" data-toggle="tab" href="#user"
+						role="tab" aria-controls="user" aria-selected="false">사용자</a></li>
 
-				<li class="nav-item mr-5" role="presentation"><a
-					class="nav-link" id="contact-tab" data-toggle="tab" href="#new"
-					role="tab" aria-controls="new" aria-selected="false">최신글</a></li>
+					<li class="nav-item mr-5" role="presentation"><a
+						class="nav-link" id="contact-tab" data-toggle="tab" href="#new"
+						role="tab" aria-controls="new" aria-selected="false">최신글</a></li>
 
-				<li class="nav-item mr-5" role="presentation"><a
-					class="nav-link" id="contact-tab" data-toggle="tab" href="#contact"
-					role="tab" aria-controls="photo" aria-selected="false">사진</a></li>
+					<li class="nav-item mr-5" role="presentation"><a
+						class="nav-link" id="contact-tab" data-toggle="tab"
+						href="#contact" role="tab" aria-controls="photo"
+						aria-selected="false">사진</a></li>
 
-				<li class="nav-item mr-5" role="presentation"><a
-					class="nav-link" id="contact-tab" data-toggle="tab" href="#contact"
-					role="tab" aria-controls="video" aria-selected="false">동영상</a></li>
-			</ul>
+					<li class="nav-item mr-5" role="presentation"><a
+						class="nav-link" id="contact-tab" data-toggle="tab"
+						href="#contact" role="tab" aria-controls="video"
+						aria-selected="false">동영상</a></li>
+				</ul>
 			</nav>
 			<p>
 				<!--글 정렬-->
-			<ul class="nav nav-tabs nav-justified col-md-25" id="myTab"
-				role="tablist">
-				<li class="nav-item mr-5" role="presentation"><a
-					class="nav-link active" id="home-tab" data-toggle="tab"
-					href="#fame" role="tab" aria-controls="fame" aria-selected="true">인기</a></li>
-
-				<li class="nav-item mr-5" role="presentation"><a
-					class="nav-link" id="profile-tab" data-toggle="tab" href="#user"
-					role="tab" aria-controls="user" aria-selected="false">사용자</a></li>
-
-				<li class="nav-item mr-5" role="presentation"><a
-					class="nav-link" id="contact-tab" data-toggle="tab" href="#new"
-					role="tab" aria-controls="new" aria-selected="false">최신글</a></li>
-
-				<li class="nav-item mr-5" role="presentation"><a
-					class="nav-link" id="contact-tab" data-toggle="tab" href="#contact"
-					role="tab" aria-controls="photo" aria-selected="false">사진</a></li>
-
-				<li class="nav-item mr-5" role="presentation"><a
-					class="nav-link" id="contact-tab" data-toggle="tab" href="#contact"
-					role="tab" aria-controls="video" aria-selected="false">동영상</a></li>
-			</ul>
 			<div class="tab-content" id="myTabContent">
 				<!-- 인기  -->
 				<div class="tab-pane fade show active" id="fame" role="tabpanel"
@@ -171,23 +191,33 @@
 								<button type="button" class="btn btn-light float-right">⋯</button>
 								<img src="/img/teemo.jpg" class="rounded-circle" width="50"
 									width="50"> <a class="card-title text-dark">${junghun.uNickName}</a>
-								<a class="card-subtitle mb-2 text-muted">${junghun.uatId}</a> <a
+								<a class="card-subtitle mb-2 text-muted">@${junghun.uatId}</a> <a
 									class="card-subtitle mb-2 text-muted">${junghun.btmpsavtime }</a>
-								<a href="#" class="card-text" style="margin-top: 10px;">${junghun.bcontent }</a>
+								<a href="#" class="card-text" style="margin-top: 10px;">${junghun.bcontent }
+								</a>
+								<a onclick="has()"></a>
+								<script type="text/javascript">
+									function has(){
+										
+									}
+								</script>
 								<div align="center">
 									<div class="btn-group col-md-12" role="group"
 										aria-label="Button group with nested dropdown">
 										<button type="button" class="btn btn-secondary mr-3 btn-light"
-											data-toggle="tooltip" data-placement="top" title="답글">
+											data-toggle="tooltip" data-placement="top" title="답글" style="font-size: 12px;">
 											<img src="/img/speech-bubble.svg" width="20" height="20">
+											&ensp;${junghun.breplycount }
 										</button>
 										<button type="button" class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
+											data-toggle="tooltip" data-placement="top" title="스크랩 or 인용" style="font-size: 12px;" >
 											<img src="/img/bring.svg" width="20" height="20">
+											&ensp;${junghun.bquotecount }
 										</button>
 										<button type="button" class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="좋아요">
+											data-toggle="tooltip" data-placement="top" title="좋아요" style="font-size: 12px;">
 											<img src="/img/heart.svg" width="20" height="20">
+											&ensp;${junghun.blikecount }
 										</button>
 										<button type="button"
 											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"

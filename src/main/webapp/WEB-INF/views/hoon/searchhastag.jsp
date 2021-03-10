@@ -46,9 +46,15 @@
 }
 </style>
 </head>
-
+hoonsScript.js
+<script type="text/javascript">
+	function fn(hashtag){
+		var data = hashtag;
+		location.href="hoon/searchView?linkable_hashtag="+data;
+	}
+</script>
 <body>
-
+	
 	<div class="d-flex" id="wrapper">
 
 		<!-- Sidebar -->

@@ -3,33 +3,41 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.bom.model.Junghun">
 	<!-- 글검색 -->
-	<select id="searchfame" parameterType="String"
+	<select id="searchfame" parameterType="Junghun"
 		resultType="Junghun">
-		select b.bcontent , b.blikecount , u.uatid , u.unickname ,
-		b.btmpsavtime
-		from board b, user_info u
+		select b.bcontent , b.blikecount ,b.breplycount
+		,b.bquotecount , u.uatid , u.unickname ,
+		b.btmpsavtime , b.ucode
+		from board b,
+		user_info u
 		where b.uCode = u.uCode
 		and
 		b.bcontent
-		like '%'||#{search}||'%'
+		like
+		'%'||#{search}||'%' 
+		and b.ucode not in(select bopcode from block where
+		ucode=${loginUcode})
 		ORDER BY b.blikecount DESC
 	</select>
-	
+
 	<!-- 검색시 검색어저장 -->
 	<update id="searchData" parameterType="Junghun">
 		merge into search
 		USING dual
-		on (search='${search}' and UCODE=${loginUcode})
+		on (search='${search}' and
+		UCODE=${loginUcode})
 		when MATCHED THEN
 		UPDATE SET
 		scount = scount+1
-		WHEN NOT MATCHED THEN
+		WHEN
+		NOT MATCHED THEN
 		INSERT (search, UCODE,
-		SAGE, STYPE, STIME, SRECORD,SCOUNT)
-		VALUES ('${search}',${loginUcode},10,
+		SAGE, STYPE, STIME,
+		SRECORD,SCOUNT)
+		VALUES (trim('${search}'),${loginUcode},10,
 		<choose>
 			<when test='search.contains("#")'>'hash'</when>
-			<when test='search.contains("@")'>'user'</when> 
+			<when test='search.contains("@")'>'user'</when>
 			<otherwise>'word'</otherwise>
 		</choose>
 		,to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),1,0)
@@ -60,11 +68,15 @@
 	<!-- explore 검색어순위 -->
 	<select id="searchcount" parameterType="Junghun"
 		resultType="Junghun">
-		select search , scount
+		<![CDATA[
+		SELECT search , count(*)
 		from search
-		ORDER BY scount DESC
+		where stime > to_char(sysdate,'YYYY/MM/DD')
+		GROUP by search
+		ORDER by count(*) desc
+		]]>
 	</select>
-	
+
 	<!-- 해쉬태그 랜덤값 -->
 	<select id="searchHash" parameterType="Junghun"
 		resultType="Junghun">
@@ -74,12 +86,30 @@
 		and scount>3000
 		]]>
 	</select>
-	
+
 	<!-- 해쉬태그 순위 -->
-		<select id="searchTrend" parameterType="Junghun"
+	<select id="searchTrend" parameterType="Junghun"
 		resultType="Junghun">
-		select * from search 
+		select * from search
 		where search like '#'||'%'
-		ORDER BY scount DESC
+		ORDER BY
+		scount DESC
 	</select>
+
+	<!-- 검색기록 -->
+	<select id="searchkeyword" parameterType="int"
+		resultType="Junghun">
+		select search
+		from search
+		where ucode = ${loginUcode}
+		ORDER BY
+		stime DESC
+	</select>
+	<!-- 검색기록삭제 -->
+	<delete id="searchdelete" parameterType="int">
+		delete from search
+		where
+		ucode = #{uCode}
+	</delete>
+
 </mapper>

@@ -9,19 +9,50 @@ public class Junghun {
 	private String stype;
 	private int srecord;
 	private int scount;
+
 	// board
 	private String bcontent;
 	private int blikecount;
 	private String btmpsavtime;
+	private String breplycount;
+	private String bquotecount;
 
 	// user_info
 	private String uNickName;
 	private String uatId;
 	private String uintro;
 	
-	// login된 Ucode
-	static private int loginUcode;	//로그인 확인용
+	//block
+	private int bopcode;
 	
+	// login된 Ucode
+	static private int loginUcode; // 로그인 확인용
+
+	
+	public int getBopcode() {
+		return bopcode;
+	}
+
+	public void setBopcode(int bopcode) {
+		this.bopcode = bopcode;
+	}
+
+	public String getBreplycount() {
+		return breplycount;
+	}
+
+	public void setBreplycount(String breplycount) {
+		this.breplycount = breplycount;
+	}
+
+	public String getBquotecount() {
+		return bquotecount;
+	}
+
+	public void setBquotecount(String bquotecount) {
+		this.bquotecount = bquotecount;
+	}
+
 	public int getLoginUcode() {
 		return loginUcode;
 	}

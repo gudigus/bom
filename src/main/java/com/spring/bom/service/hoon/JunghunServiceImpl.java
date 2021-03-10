@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.bom.dao.hoon.JunghunDao;
 import com.spring.bom.model.hoon.Junghun;
+import com.spring.bom.model.hoon.user_info;
 
 @Service
 public class JunghunServiceImpl implements JunghunService {
@@ -14,9 +15,9 @@ public class JunghunServiceImpl implements JunghunService {
 	private JunghunDao jd;
 	
 	@Override
-	public List<Junghun> listSearch(String search) {
-		System.out.println("Service Search :: "+search);
-		return jd.listSearch(search);
+	public List<Junghun> listSearch(Junghun junghun) {
+		System.out.println("Service Search :: "+junghun);
+		return jd.listSearch(junghun);
 	}
 
 	@Override
@@ -48,5 +49,17 @@ public class JunghunServiceImpl implements JunghunService {
 	public List<Junghun> listTrend(Junghun junghun) {
 		return jd.listTrend(junghun);
 	}
+
+	@Override
+	public List<Junghun> searchkeyword(Junghun junghun) {
+		return jd.searchkeyword(junghun);
+	}
+
+	@Override
+	public int deleterow(int ucode) {
+		System.out.println("del sa::1");
+		return jd.deleterow(ucode);
+	}
+
 
 }

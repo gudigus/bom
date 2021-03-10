@@ -26,13 +26,15 @@
 <link href="/css/junghun.css" rel="stylesheet">
 
 <!-- Bootstrap core JavaScript -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
 	integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-	crossorigin="anonymous"></script>
+	crossorigin="anonymous"></script> -->
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
 	integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
 	crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 	integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
@@ -45,6 +47,7 @@
 	display: none;
 }
 </style>
+
 </head>
 
 <body class="pt-5">
@@ -99,39 +102,77 @@
 		<div id="page-content-wrapper">
 			<nav
 				class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top"
-				style="left: 241px; right: 241px;">
-				<div class="container">
-					<form class="well form-search" action="searchView" method="get">
-						<div class="input-group flex-nowrap">
-							<div class="input-group-prepend">
-								<span class="input-group-text" id="addon-wrapping"><img
-									src="/img/search.svg" width="15" height="15"> </span>
-							</div>
-							<input type="text" class="form-control" placeholder="봄 검색"
-								aria-label="Username" aria-describedby="addon-wrapping"
-								name="search">
-						</div>
-					</form>
-				</div>
+				style="left: 241px; right: 241px; z-index: 5;">
+				<form class="well form-search" action="searchView" method="get" id="jh_form">
+					<div class="input-group">
+						<input type="text" ID="datebox" Class="form-control" name="search"
+							data-toggle="dropdown"></input>
+				
+						<table id="demolist" class="dropdown-menu" style="z-index: 5;">
+							<tr>
+								<td style="font-weight: normal;">최근</td>
+								<td>
+									<button type="reset" id="del_ajax" style="font-size: 12px;" onclick="btn()">전체지우기</button>
+								</td>
+							</tr>
+							<c:forEach var="Junghun" items="${searchkeyword }" begin="0"
+								end="10">
+								<tr id="searchkeyword">
+									<td class="dropdown-li" style="padding: 5px;"><c:choose>
+											<c:when test="${Junghun.search.contains('#')}">
+												<a id="row" href="searchView?search=${Junghun.search }">${Junghun.search }</a>
+											</c:when>
+											<c:otherwise>
+												<a id="row" href="searchView?search=${Junghun.search }">${Junghun.search }</a>
+											</c:otherwise>
+										</c:choose></td>
+								</tr>
+							</c:forEach>
+						</table>
+					</div>
+				</form>
 			</nav>
-
+			<script type="text/javascript">
+			function btn() {
+				alert('경고');
+			}
+			</script>
+			<script type="text/javascript">
+			<%String context = request.getContextPath();%>
+					$("#del_ajax").click(function(){
+								var ucode = ${login.uCode}
+								console.log('ucode !!: ' + ucode);
+							$.ajax({
+							url:"<%=context%>/deleteRow",
+							data : {ucode : ucode},
+							dataType : 'text',
+							success : function(data) {
+							alret(data);
+							},
+							error:function(request,status,error){
+								alert("code-"+request.status+" mas-"+request.responseText+" error-"+error);
+							}
+						});
+					});
+					
+			</script>
 			<div class="container-fluid">
 				<!--글 정렬-->
 				<div class="panel panel-default">
 					<!-- Table -->
 					<table class="table">
 						<tr>
-							<td class="table-title">2월 첫째주 검색순</td>
+							<td class="table-title">오늘의 검색순위</td>
 							<td class="table-title">2월 한달 검색순</td>
 						</tr>
 						<c:forEach var="Junghun" items="${listCount }" varStatus="status"
 							begin="0" end="2">
 							<tr>
-								<td>${status.count }.<a
+								<td>${status.count }. <a
 									href="searchView?search=${Junghun.search }"
 									style="text-align: center;">${Junghun.search }</a>
 								</td>
-								<td>${status.count }.<a
+								<td>${status.count }. <a
 									href="searchView?search=${Junghun.search }"
 									style="text-align: center;">${Junghun.search }</a>
 								</td>

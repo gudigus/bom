@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.spring.bom.model.hoon.Junghun;
+import com.spring.bom.model.hoon.user_info;
 
 @Repository
 public class JunghunDaoImpl implements JunghunDao{
@@ -14,9 +15,8 @@ public class JunghunDaoImpl implements JunghunDao{
 	private SqlSession session;
 
 	@Override
-	public List<Junghun> listSearch(String search) {
-		System.out.println("Dao Search :: "+search);
-		return session.selectList("searchfame",search);
+	public List<Junghun> listSearch(Junghun junghun) {
+		return session.selectList("searchfame",junghun);
 	}
 
 	@Override
@@ -49,4 +49,17 @@ public class JunghunDaoImpl implements JunghunDao{
 		return session.selectList("searchTrend",junghun);
 	}
 
+	@Override
+	public List<Junghun> searchkeyword(Junghun junghun) {
+		return session.selectList("searchkeyword",junghun);
+	}
+
+	@Override
+	public int deleterow(int ucode) {
+		System.out.println("del dao::1");
+		System.out.println("ucode ::"+ucode);
+		return session.delete("searchdelete",ucode);
+	}
+
 }
+
