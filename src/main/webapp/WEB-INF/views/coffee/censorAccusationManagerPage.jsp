@@ -315,11 +315,11 @@
 					src="/img/user.svg" width="15" height="15"> 프로필
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/more.svg" width="15" height="15"> 더보기 -->
-				</a> <a href="censorBomManagerPage" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/coffee/interceptor/censorBomManagerPage" class="list-group-item list-group-item-action"> <img
 					src="/img/coffee/censorBom.svg" width="15" height="15"> 봄 검열
-				</a> <a href="censorMemberManagerPage" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/coffee/interceptor/censorMemberManagerPage" class="list-group-item list-group-item-action"> <img
 					src="/img/coffee/censorMember.svg" width="15" height="15"> 회원 검열
-				</a> <a href="censorAccusationManagerPage" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/coffee/interceptor/censorAccusationManagerPage" class="list-group-item list-group-item-action"> <img
 					src="/img/coffee/accusation.svg" width="15" height="15"> 신고 게시판
 				</a> <!-- <a href="#" class="list-group-item list-group-item-action">
 					<button type="button" class="btn btn-outline-success">
@@ -346,19 +346,19 @@
 				<button class="btn btn-success" id="menu-toggle">←</button>
 			</nav>
 			<h2>신고 확인 페이지</h2>
-			<div class="alert alert-success" role="alert">
+			<!-- <div class="alert alert-success" role="alert">
 				신고가 처리 되었습니다.
-			</div>
+			</div> -->
 			
 			<div class="container-fluid">
 				<p>
 				<div class="input-group col-auto">
 					<ul class="nav nav-tabs">
 					  <li class="nav-item">
-					    <a class="nav-link active" aria-current="page" href="censorAccusationManagerPage">전체</a>
+					    <a class="nav-link active" aria-current="page" href="/coffee/interceptor/censorAccusationManagerPage">전체</a>
 					  </li>
 					  <li class="nav-item">
-					    <a class="nav-link" href="uncensoredAccusationManagerPage">미처리</a>
+					    <a class="nav-link" href="/coffee/interceptor/uncensoredAccusationManagerPage">미처리</a>
 					  </li>
 					  
 					  
@@ -403,6 +403,18 @@
 												class="card-subtitle mb-2 text-muted">@${list.uatid }</a> <a
 												class="card-subtitle mb-2 text-muted">${list.bregdate }</a> <a href="#"
 												class="card-text" style="margin-top: 10px;">${list.bcontent }</a>
+												<c:if test="${list.battach!=null }">
+												 	<c:if test="${list.battachType=='image'}">
+												 		<img class="img-thumnail" width="300" src="/img/media/${list.battachSrc}"/>
+												 	</c:if>
+												 	<c:if test="${list.battachType=='video'}">
+												 		<video controls width="300">
+												 			<source  src="/img/media/${list.battachSrc}" type="video/mp4">
+												 			<source  src="/img/media/${list.battachSrc}" type="video/webm">
+												 			해당 브라우저에는 지원하지 않는 비디오입니다.
+												 		</video>
+												 	</c:if>
+												 </c:if>
 											<div align="center">
 												<div class="btn-group col-md-12" role="group"
 													aria-label="Button group with nested dropdown">

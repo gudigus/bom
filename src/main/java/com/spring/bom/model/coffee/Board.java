@@ -21,6 +21,10 @@ public class Board {
 	private int breplycount;
 	private int bquotecount;
 	
+		//Not DTO
+	private String battachType;
+	private String battachSrc;
+	
 	public int getBcode() {
 		return bcode;
 	}
@@ -134,5 +138,17 @@ public class Board {
 	}
 	public void setBquotecount(int bquotecount) {
 		this.bquotecount = bquotecount;
+	}
+	public String getBattachType() {
+		return battachType;
+	}
+	public void setBattachType(String battachType) {
+		this.battachType = battachType;
+	}
+	public String getBattachSrc() {
+		return battachSrc;
+	}
+	public void setBattachSrc(String battachSrc) {
+		this.battachSrc = battachSrc;
 	}
 }

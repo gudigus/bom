@@ -61,6 +61,9 @@ public class ReportUser_infoBoard {
 	private int breportcount;
 	private int breplycount;
 	private int bquotecount;
+		//Not DTO
+	private String battachType;
+	private String battachSrc;
 	
 	//신고한 User_info
 	
@@ -382,6 +385,19 @@ public class ReportUser_infoBoard {
 	public void setBquotecount(int bquotecount) {
 		this.bquotecount = bquotecount;
 	}
+	public String getBattachType() {
+		return battachType;
+	}
+	public void setBattachType(String battachType) {
+		this.battachType = battachType;
+	}
+	public String getBattachSrc() {
+		return battachSrc;
+	}
+	public void setBattachSrc(String battachSrc) {
+		this.battachSrc = battachSrc;
+	}
+	
 	public String getUemail_1() {
 		return uemail_1;
 	}

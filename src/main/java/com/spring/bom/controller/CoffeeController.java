@@ -47,26 +47,32 @@ public class CoffeeController {
 	// interCepter 진행 Test  --> 2번째 수행 
 	@GetMapping(value = "/coffee/interceptor/censorMemberManagerPage")
 	public String censorMemberManagerPageI(HttpServletRequest req, Model model) {
-		System.out.println("CoffeeController censorMemberManagerPage start..");
+		String url = "/coffee/censorMemberManagerPage";
+		System.out.println("CoffeeController "+url+" interceptor  start..");
 		// 관리자 검증
+		managerVerification(req, model, url);
+		return url;
+	}
+	
+	public void managerVerification(HttpServletRequest req, Model model, String url) {
 		HttpSession session = req.getSession();
 		int uCode = -1;
-		String url = "/coffee/censorMemberManagerPage";
+		
 		try {
 			uCode = (int) session.getAttribute("uCode");
 
 		}catch (Exception e) {
-			System.out.println("CoffeeController censorMemberManagerPageI ->"+e.getMessage());
+			System.out.println("CoffeeController "+url+" Interceptor ->"+e.getMessage());
 		}
-		System.out.println("session uCode->"+uCode);
+		System.out.println("CoffeeController session uCode->"+uCode);
 		int memCnt = uis.memConfirmManager(uCode);
 		// model.addAttribute("id",id);
 		model.addAttribute("memCnt",memCnt);
 		model.addAttribute("url", url);
-		System.out.println("session memCnt->"+memCnt);
-		System.out.println("censorMemberManagerPageI  Test End");
-		return url;
+		System.out.println("CoffeeController session memCnt->"+memCnt);
 	}
+	
+	
 	// Interceptors
 	 // interCepter 진행 Test
 	@GetMapping(value = "/coffee/censorMemberManagerPage")
@@ -98,15 +104,15 @@ public class CoffeeController {
 		return returnPage;
 	}
 	
-	// Interceptors
-	 // interCepter 진행 Test
-	@GetMapping(value = "/coffee/kkk")
-	public String censorMemberKKKPage(HttpServletRequest req, Model model) {
-		System.out.println("CoffeeController censorMemberKKKPage start..");
-		String returnPage = "coffee/kkk";
-	
-		return returnPage;
-	}
+//	// Interceptors
+//	 // interCepter 진행 Test
+//	@GetMapping(value = "/coffee/kkk")
+//	public String censorMemberKKKPage(HttpServletRequest req, Model model) {
+//		System.out.println("CoffeeController censorMemberKKKPage start..");
+//		String returnPage = "coffee/kkk";
+//	
+//		return returnPage;
+//	}
 
 	// Ajax  List Test String
 	@GetMapping(value = "/coffee/coffeeUpdateUstate", produces = "application/text;charset=UTF-8")
@@ -123,46 +129,119 @@ public class CoffeeController {
 		
 	}
 
-		// Ajax  List Test JSON
-	@GetMapping(value = "/coffee/coffeeUpdateUstate3")
-	@ResponseBody
-	public User_info coffeeUpdateUstate3(int ucode, int updateValue) {
-		System.out.println("Ajax  coffeeUpdateUstate  Start");
-		System.out.println("Ajax  coffeeUpdateUstate updateValue->"+updateValue);
-		System.out.println("Ajax  coffeeUpdateUstate ucode->"+ucode);
-		
-		// Business Logic 구현
-		User_info ui = null;
-		// Return 받는 값이 객체라는 전제하에 
-		// result = uis.updateUstate(ucode, updateValue);
-		
-		
-		return ui;
-		
+//		// Ajax  List Test JSON
+//	@GetMapping(value = "/coffee/coffeeUpdateUstate3")
+//	@ResponseBody
+//	public User_info coffeeUpdateUstate3(int ucode, int updateValue) {
+//		System.out.println("Ajax  coffeeUpdateUstate  Start");
+//		System.out.println("Ajax  coffeeUpdateUstate updateValue->"+updateValue);
+//		System.out.println("Ajax  coffeeUpdateUstate ucode->"+ucode);
+//		
+//		// Business Logic 구현
+//		User_info ui = null;
+//		// Return 받는 값이 객체라는 전제하에 
+//		// result = uis.updateUstate(ucode, updateValue);
+//		
+//		
+//		return ui;
+//		
+//	}
+	
+	// Interceptors
+	// interCepter 진행 Test  --> 2번째 수행 
+	@GetMapping(value = "/coffee/interceptor/restoreMemberManagerPage")
+	public String restoreMemberManagerPageI(HttpServletRequest req, Model model) {
+		String url = "/coffee/restoreMemberManagerPage";
+		System.out.println("CoffeeController "+url+" interceptor  start..");
+		// 관리자 검증
+		managerVerification(req, model, url);
+		return url;
 	}
-
+	
 	@GetMapping(value = "/coffee/restoreMemberManagerPage")
-	public String restoreMemberManagerPage(Model model) {
+	public String restoreMemberManagerPage(HttpServletRequest req, Model model) {
 		System.out.println("CoffeeController restoreMemberManagerPage start..");
-		List<User_info> list = uis.user_infoRestoreList();
-		model.addAttribute("user_infoList", list);
-		return "coffee/restoreMemberManagerPage";
+		// 관리자 검증
+		HttpSession session = req.getSession();
+		String manager = (String) session.getAttribute("manager");
+		String returnPage = "";
+		if (manager == null) manager = "9";
+		System.out.println("/coffee/restoreMemberManagerPage manager->"+ manager );
+		if(manager == "0") {
+			List<User_info> list = uis.user_infoRestoreList();
+			model.addAttribute("user_infoList", list);
+			returnPage = "/coffee/restoreMemberManagerPage";
+		}else {
+			returnPage = "redirect:/bro/index";
+		}
+		return returnPage;
+	}
+	
+	// Interceptors
+	// interCepter 진행 Test  --> 2번째 수행 
+	@GetMapping(value = "/coffee/interceptor/accusationMemberManagerPage")
+	public String accusationMemberManagerPageI(HttpServletRequest req, Model model) {
+		String url = "/coffee/accusationMemberManagerPage";
+		System.out.println("CoffeeController "+url+" interceptor  start..");
+		// 관리자 검증
+		managerVerification(req, model, url);
+		return url;
 	}
 	@GetMapping(value = "/coffee/accusationMemberManagerPage")
-	public String accusationMemberManagerPage(Model model) {
+	public String accusationMemberManagerPage(HttpServletRequest req, Model model) {
 		System.out.println("CoffeeController accusationMemberManagerPage start..");
-		List<User_info> list = uis.user_infoAccusationList();
-		model.addAttribute("user_infoList", list);
-		return "coffee/accusationMemberManagerPage";
+		// 관리자 검증
+		HttpSession session = req.getSession();
+		String manager = (String) session.getAttribute("manager");
+		String returnPage = "";
+		if (manager == null) manager = "9";
+		System.out.println("/coffee/accusationMemberManagerPage manager->"+ manager );
+		if(manager == "0") {
+			List<User_info> list = uis.user_infoAccusationList();
+			model.addAttribute("user_infoList", list);
+			returnPage = "/coffee/accusationMemberManagerPage";
+		}else {
+			returnPage = "redirect:/bro/index";
+		}
+		return returnPage;
 	}
 	
 	// 봄 매니저
+	
+	// Interceptors
+	// interCepter 진행 Test  --> 2번째 수행 
+	@GetMapping(value = "/coffee/interceptor/censorBomManagerPage")
+	public String censorBomManagerPageI(HttpServletRequest req, Model model) {
+		String url = "/coffee/censorBomManagerPage";
+		System.out.println("CoffeeController "+url+" interceptor  start..");
+		// 관리자 검증
+		managerVerification(req, model, url);
+		return url;
+	}
 	@GetMapping(value = "/coffee/censorBomManagerPage")
-	public String censorBomManagerPage(Model model) {
-		System.out.println("CoffeeController censorBomManagerPage start..");
-		List<BoardUser_info> list = bs.sensorList();
-		model.addAttribute("boardUser_infoList", list);
-		return "coffee/censorBomManagerPage";
+	public String censorBomManagerPage(HttpServletRequest req, Model model) {
+		String returnPage = "/coffee/censorBomManagerPage";
+		System.out.println("CoffeeController" +returnPage+ "start..");
+		// 관리자 검증
+		HttpSession session = req.getSession();
+		String manager = (String) session.getAttribute("manager");
+		if (manager == null) manager = "9";
+		System.out.println(returnPage+" manager->"+ manager );
+		if(manager == "0") {
+			List<BoardUser_info> list = bs.sensorList();
+			for (int i=0; i<list.size(); i++) {
+				if(list.get(i).getBattach()!= null) {
+					list.get(i).setBattachType(list.get(i).getBattach().substring(0, 5));
+					list.get(i).setBattachSrc(list.get(i).getBattach().substring(6));
+				}
+			}
+//			System.out.println("CoffeeController" +returnPage+ list.get(1).getBattach());
+//			System.out.println("CoffeeController" +returnPage+ list.get(1).getBattachSrc());
+			model.addAttribute("boardUser_infoList", list);
+		}else {
+			returnPage = "redirect:/bro/index";
+		}
+		return returnPage;
 	}
 
 		// Ajax  List Test String
@@ -179,33 +258,115 @@ public class CoffeeController {
 		return result;
 		
 	}
+	
+	// Interceptors
+	// interCepter 진행 Test  --> 2번째 수행 
+	@GetMapping(value = "/coffee/interceptor/restoreBomManagerPage")
+	public String restoreBomManagerPageI(HttpServletRequest req, Model model) {
+		String url = "/coffee/restoreBomManagerPage";
+		System.out.println("CoffeeController "+url+" interceptor  start..");
+		// 관리자 검증
+		managerVerification(req, model, url);
+		return url;
+	}
 	@GetMapping(value = "/coffee/restoreBomManagerPage")
-	public String restoreBomManagerPage(Model model) {
-		System.out.println("CoffeeController restoreBomManagerPage start..");
-		List<BoardUser_info> list = bs.restoreList();
-		model.addAttribute("boardUser_infoList", list);
-		return "coffee/restoreBomManagerPage";
+	public String restoreBomManagerPage(HttpServletRequest req, Model model) {
+		String returnPage = "/coffee/restoreBomManagerPage";
+		System.out.println("CoffeeController" +returnPage+ "start..");
+		// 관리자 검증
+		HttpSession session = req.getSession();
+		String manager = (String) session.getAttribute("manager");
+		if (manager == null) manager = "9";
+		System.out.println(returnPage+" manager->"+ manager );
+		if(manager == "0") {
+			List<BoardUser_info> list = bs.restoreList();
+			for (int i=0; i<list.size(); i++) {
+				if(list.get(i).getBattach()!= null) {
+					list.get(i).setBattachType(list.get(i).getBattach().substring(0, 5));
+					list.get(i).setBattachSrc(list.get(i).getBattach().substring(6));
+				}
+			}
+			model.addAttribute("boardUser_infoList", list);
+		}else {
+			returnPage = "redirect:/bro/index";
+		}
+		return returnPage;
+	}
+	
+	
+	// Interceptors
+	// interCepter 진행 Test  --> 2번째 수행 
+	@GetMapping(value = "/coffee/interceptor/accusationBomManagerPage")
+	public String accusationBomManagerPageI(HttpServletRequest req, Model model) {
+		String url = "/coffee/accusationBomManagerPage";
+		System.out.println("CoffeeController "+url+" interceptor  start..");
+		// 관리자 검증
+		managerVerification(req, model, url);
+		return url;
 	}
 	@GetMapping(value = "/coffee/accusationBomManagerPage")
-	public String accusationBomManagerPage(Model model) {
-		System.out.println("CoffeeController accusationBomManagerPage start..");
-		List<BoardUser_info> list = bs.accusationList();
-//		System.out.println(list.get(0).getBcode());
-		model.addAttribute("boardUser_infoList", list);
-		return "coffee/accusationBomManagerPage";
+	public String accusationBomManagerPage(HttpServletRequest req, Model model) {
+		String returnPage = "/coffee/accusationBomManagerPage";
+		System.out.println("CoffeeController" +returnPage+ "start..");
+		// 관리자 검증
+		HttpSession session = req.getSession();
+		String manager = (String) session.getAttribute("manager");
+		if (manager == null) manager = "9";
+		System.out.println(returnPage+" manager->"+ manager );
+		if(manager == "0") {
+			List<BoardUser_info> list = bs.accusationList();
+			for (int i=0; i<list.size(); i++) {
+				if(list.get(i).getBattach()!= null) {
+					list.get(i).setBattachType(list.get(i).getBattach().substring(0, 5));
+					list.get(i).setBattachSrc(list.get(i).getBattach().substring(6));
+				}
+			}
+//			System.out.println(list.get(0).getBcode());
+			model.addAttribute("boardUser_infoList", list);
+		}else {
+			returnPage = "redirect:/bro/index";
+		}
+		return returnPage;
 	}
 	
 	//신고 매니저
+	
+	// Interceptors
+	// interCepter 진행 Test  --> 2번째 수행 
+	@GetMapping(value = "/coffee/interceptor/censorAccusationManagerPage")
+	public String censorAccusationManagerPageI(HttpServletRequest req, Model model) {
+		String url = "/coffee/censorAccusationManagerPage";
+		System.out.println("CoffeeController "+url+" interceptor  start..");
+		// 관리자 검증
+		managerVerification(req, model, url);
+		return url;
+	}
+	
+	
 	@GetMapping(value = "/coffee/censorAccusationManagerPage")
-	public String censorAccusationManagerPage(Model model) {
-		System.out.println("CoffeeController censorAccusationManagerPage start..");
-		List<ReportUser_infoBoard> list = rs.accusationList();
-//		System.out.println("list.get(0).getUnickname_1()->"+list.get(0).getUnickname_1());
-//		System.out.println("list.get(0).getUnickname()->"+list.get(0).getUnickname());
-		
-		
-		model.addAttribute("ReportUser_infoBoardList", list);
-		return "coffee/censorAccusationManagerPage";
+	public String censorAccusationManagerPage(HttpServletRequest req, Model model) {
+		String returnPage = "/coffee/censorAccusationManagerPage";
+		System.out.println("CoffeeController" +returnPage+ "start..");
+		// 관리자 검증
+		HttpSession session = req.getSession();
+		String manager = (String) session.getAttribute("manager");
+		if (manager == null) manager = "9";
+		System.out.println(returnPage+" manager->"+ manager );
+		if(manager == "0") {
+			List<ReportUser_infoBoard> list = rs.accusationList();
+			for (int i=0; i<list.size(); i++) {
+				if(list.get(i).getBattach()!= null) {
+					list.get(i).setBattachType(list.get(i).getBattach().substring(0, 5));
+					list.get(i).setBattachSrc(list.get(i).getBattach().substring(6));
+				}
+			}
+//			System.out.println("list.get(0).getUnickname_1()->"+list.get(0).getUnickname_1());
+//			System.out.println("list.get(0).getUnickname()->"+list.get(0).getUnickname());
+			model.addAttribute("ReportUser_infoBoardList", list);
+		}else {
+			returnPage = "redirect:/bro/index";
+		}
+		return returnPage;
 	}
 	
 	// Ajax  List Test String
@@ -222,15 +383,40 @@ public class CoffeeController {
 		return result;
 		
 	}
+	// Interceptors
+	// interCepter 진행 Test  --> 2번째 수행 
+	@GetMapping(value = "/coffee/interceptor/uncensoredAccusationManagerPage")
+	public String uncensoredAccusationManagerPageI(HttpServletRequest req, Model model) {
+		String url = "/coffee/uncensoredAccusationManagerPage";
+		System.out.println("CoffeeController "+url+" interceptor  start..");
+		// 관리자 검증
+		managerVerification(req, model, url);
+		return url;
+	}
+	
 	@GetMapping(value = "/coffee/uncensoredAccusationManagerPage")
-	public String uncensoredAccusationManagerPage(Model model) {
-		System.out.println("CoffeeController uncensoredAccusationManagerPage start..");
-		List<ReportUser_infoBoard> list = rs.uncensoredList();
-//		System.out.println("list.get(0).getUnickname_1()->"+list.get(0).getUnickname_1());
-//		System.out.println("list.get(0).getUnickname()->"+list.get(0).getUnickname());
-		
-		
-		model.addAttribute("ReportUser_infoBoardList", list);
-		return "coffee/uncensoredAccusationManagerPage";
+	public String uncensoredAccusationManagerPage(HttpServletRequest req, Model model) {
+		String returnPage = "/coffee/uncensoredAccusationManagerPage";
+		System.out.println("CoffeeController" +returnPage+ "start..");
+		// 관리자 검증
+		HttpSession session = req.getSession();
+		String manager = (String) session.getAttribute("manager");
+		if (manager == null) manager = "9";
+		System.out.println(returnPage+" manager->"+ manager );
+		if(manager == "0") {
+			List<ReportUser_infoBoard> list = rs.uncensoredList();
+			for (int i=0; i<list.size(); i++) {
+				if(list.get(i).getBattach()!= null) {
+					list.get(i).setBattachType(list.get(i).getBattach().substring(0, 5));
+					list.get(i).setBattachSrc(list.get(i).getBattach().substring(6));
+				}
+			}
+//			System.out.println("list.get(0).getUnickname_1()->"+list.get(0).getUnickname_1());
+//			System.out.println("list.get(0).getUnickname()->"+list.get(0).getUnickname());
+			model.addAttribute("ReportUser_infoBoardList", list);
+		}else {
+			returnPage = "redirect:/bro/index";
+		}
+		return returnPage;
 	}
 }

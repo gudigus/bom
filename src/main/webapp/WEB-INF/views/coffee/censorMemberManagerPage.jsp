@@ -136,11 +136,11 @@
 					src="/img/user.svg" width="15" height="15"> 프로필
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/more.svg" width="15" height="15"> 더보기 -->
-				</a> <a href="/coffee/censorBomManagerPage" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/coffee/interceptor/censorBomManagerPage" class="list-group-item list-group-item-action"> <img
 					src="/img/coffee/censorBom.svg" width="15" height="15"> 봄 검열
 				</a> <a href="/coffee/interceptor/censorMemberManagerPage" class="list-group-item list-group-item-action"> <img
 					src="/img/coffee/censorMember.svg" width="15" height="15"> 회원 검열
-				</a> <a href="/coffee/censorAccusationManagerPage" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/coffee/interceptor/censorAccusationManagerPage" class="list-group-item list-group-item-action"> <img
 					src="/img/coffee/accusation.svg" width="15" height="15"> 신고 게시판
 				</a> <!-- <a href="#" class="list-group-item list-group-item-action">
 					<button type="button" class="btn btn-outline-success">
@@ -179,10 +179,10 @@
 					    <a class="nav-link active" aria-current="page" href="/coffee/interceptor/censorMemberManagerPage">탈퇴</a>
 					  </li>
 					  <li class="nav-item">
-					    <a class="nav-link" href="/coffee/restoreMemberManagerPage">복원</a>
+					    <a class="nav-link" href="/coffee/interceptor/restoreMemberManagerPage">복원</a>
 					  </li>
 					  <li class="nav-item">
-					    <a class="nav-link" href="/coffee/accusationMemberManagerPage">피신고자</a>
+					    <a class="nav-link" href="/coffee/interceptor/accusationMemberManagerPage">피신고자</a>
 					  </li>
 					  
 					</ul>
