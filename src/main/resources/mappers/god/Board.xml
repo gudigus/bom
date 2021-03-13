@@ -1,0 +1,15 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="GodBoard">
+	<select id="JHgetReserveNum" parameterType="int" resultType="java.lang.String">
+		select count(*) from board where btmpsav=1 and bregdate is not null and ucode=#{ucode}
+	</select>
+	<select id="JHgetSaveNum" parameterType="int" resultType="java.lang.String">
+		select count(*) from board where btmpsav=1 and bregdate is null and ucode=#{ucode}
+	</select>
+	<select id="JHgetReserveList" parameterType="GodBoard" resultType="GodBoard">
+		select * from board where btmpsav=1 and bregdate is not null and ucode=#{ucode}
+	</select>
+	<select id="JHgetSaveList" parameterType="GodBoard" resultType="GodBoard">
+		select * from board where btmpsav=1 and bregdate is null and ucode=#{ucode}
+	</select>
+</mapper>

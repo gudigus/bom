@@ -1,0 +1,8 @@
+ <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+ <configuration>
+ 	<typeAliases>
+ 		<typeAlias alias="User_info" type="com.spring.bom.model.bro.User_info"/>
+ 		<typeAlias alias="GodBoard" type="com.spring.bom.model.god.Board"/>
+ 		<typeAlias alias="GodVote" type="com.spring.bom.model.god.Vote"/>
+	</typeAliases>
+ </configuration>
