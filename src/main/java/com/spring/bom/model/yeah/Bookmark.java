@@ -3,8 +3,10 @@ package com.spring.bom.model.yeah;
 public class Bookmark {
 	int ucode;
 	int bcode;
-	String Ibtype;
-	String Ibtime;
+	String ltype;
+	String bbtype;
+	String ldate;
+	String bdate;
 
 	public int getUcode() {
 		return ucode;
@@ -22,20 +24,37 @@ public class Bookmark {
 		this.bcode = bcode;
 	}
 
-	public String getIbtype() {
-		return Ibtype;
+	public String getLtype() {
+		return ltype;
 	}
 
-	public void setIbtype(String ibtype) {
-		Ibtype = ibtype;
+	public void setLtype(String ltype) {
+		this.ltype = ltype;
 	}
 
-	public String getIbtime() {
-		return Ibtime;
+	public String getBbtype() {
+		return bbtype;
 	}
 
-	public void setIbtime(String ibtime) {
-		Ibtime = ibtime;
+	public void setBbtype(String bbtype) {
+		this.bbtype = bbtype;
 	}
+
+	public String getLdate() {
+		return ldate;
+	}
+
+	public void setLdate(String ldate) {
+		this.ldate = ldate;
+	}
+
+	public String getBdate() {
+		return bdate;
+	}
+
+	public void setBdate(String bdate) {
+		this.bdate = bdate;
+	}
+
 
 }

@@ -11,11 +11,28 @@ public class Board {
 	int bbcode; // 스크랩,인용,댓글 글코드
 	String battach; // 첨부파일
 	int bvotecode; // 투표코드
-	int btmpsav; // 임시저장
-	String btmpsavtime; // 임시저장기간
+	int bsaveorrsvd;
 	int blikecount; // 좋아요 횟수
 	int bexpcount; // 글 노출수
 	int bjoincount; // 글 참여수
+	int breplycount; // 댓글 갯수
+	int bquotecount; // 스크랩 / 인용 갯수
+
+	public int getBreplycount() {
+		return breplycount;
+	}
+
+	public void setBreplycount(int breplycount) {
+		this.breplycount = breplycount;
+	}
+
+	public int getBquotecount() {
+		return bquotecount;
+	}
+
+	public void setBquotecount(int bquotecount) {
+		this.bquotecount = bquotecount;
+	}
 
 	public int getBcode() {
 		return bcode;
@@ -97,20 +114,12 @@ public class Board {
 		this.bvotecode = bvotecode;
 	}
 
-	public int getBtmpsav() {
-		return btmpsav;
+	public int getBsaveorrsvd() {
+		return bsaveorrsvd;
 	}
 
-	public void setBtmpsav(int btmpsav) {
-		this.btmpsav = btmpsav;
-	}
-
-	public String getBtmpsavtime() {
-		return btmpsavtime;
-	}
-
-	public void setBtmpsavtime(String btmpsavtime) {
-		this.btmpsavtime = btmpsavtime;
+	public void setBsaveorrsvd(int bsaveorrsvd) {
+		this.bsaveorrsvd = bsaveorrsvd;
 	}
 
 	public int getBlikecount() {

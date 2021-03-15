@@ -18,8 +18,9 @@ public class bomDaoImpl implements bomDao {
 
 	@Override	
 	public user_info loginCheck(user_info ui) throws Exception{
-		System.out.println("dao ui      "+ui);
+		System.out.println("dao ui "+ui);
 		user_info userinfo = session.selectOne("login",ui);
+		System.out.println("dao userinfo.getUcode, userinfo.getUatid"+ userinfo.getuCode()+", "+ userinfo.getuAtid());
 		return userinfo;
 	}
 
