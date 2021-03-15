@@ -1,3 +1,4 @@
+  
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -7,8 +8,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>test
-
-123123123</h1>
+<h1>main</h1>
+uEmail = ${login.uEmail }
+uPassword = "${login.uPassword }"
 </body>
 </html>

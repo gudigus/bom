@@ -2,9 +2,9 @@ package com.spring.bom.model.bear;
 
 public class Chat {
 	//ucode : 회원코드 , ccode: 쪽지방코드 , uopcode : 상대방코드 , udelstate : 삭제여부
-	private int ucode,ccode,udelstate;
-	// cdmessage : 대화 메세지 , 톡 시간
-	private String cdmessage , cdtime,uopcode ;
+	private int ucode,ccode,udelstate,uopcode ;
+	// cdmessage : 대화 메세지 , 톡 시간 , 유저이미지, 유저아이디 
+	private String cdmessage , cdtime , uimage, uatid;
 	public int getUcode() {
 		return ucode;
 	}
@@ -17,10 +17,10 @@ public class Chat {
 	public void setCcode(int ccode) {
 		this.ccode = ccode;
 	}
-	public String getUopcode() {
+	public int getUopcode() {
 		return uopcode;
 	}
-	public void setUopcode(String uopcode) {
+	public void setUopcode(int uopcode) {
 		this.uopcode = uopcode;
 	}
 	public int getUdelstate() {
@@ -40,12 +40,22 @@ public class Chat {
 	}
 	public void setCdtime(String cdtime) {
 		this.cdtime = cdtime;
-	} 
-	@Override
-	public String toString() {
-		return "[ccode =\" + ccode  + \", uopcode =\" + uopcode  + \"]";
-		
 	}
+	public String getUimage() {
+		return uimage;
+	}
+	public void setUimage(String uimage) {
+		this.uimage = uimage;
+	}
+	public String getUatid() {
+		return uatid;
+	}
+	public void setUatid(String uatid) {
+		this.uatid = uatid;
+	} 
+	
+	
+	
 	
 
 }

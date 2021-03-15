@@ -8,4 +8,55 @@
 					TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'))
 
 </insert>
+
+<select id="listId" parameterType="int" resultType="Chat">
+	select c.ccode,c.ucode,c.UOPCODE, d.CDMESSAGE, d.cdtime, ui.uimage, ui.uatid
+	from chat c , chat_detail d, user_info ui
+	where c.ccode= d.ccode 
+      and ui.ucode = c.uopcode
+			and c.ucode= #{sessionId}  
+			and (d.ccode ,d.ucode,d.cdmessage,d.cdtime) in( select ccode,ucode,cdmessage,cdtime
+															from chat_detail
+															where (ccode, cdtime) in (
+																						select ccode, max(cdtime) as cdtime
+																						from chat_detail 
+																						group by ccode)
+																						
+																						
+																						)order by d.cdtime desc
+														
+
+
+</select>
+
+<select id="chainglist"	resultType="Chat" parameterType="Chat">
+	select *
+	from chat_detail
+	where ccode = #{ccode}
+	order by cdtime asc
+</select>
+
+<insert id="mycreate" parameterType="Chat">
+
+	     insert all
+				into chat  VALUES(ccode_seq.nextval ,#{ucode} ,#{uopcode} , null , null)
+				into chat_detail values(ccode_seq.currval, #{ucode}, '채팅방생성되었습니다.',TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'))
+  				into chat_detail values(ccode_seq.currval, #{uopcode} , '채팅방생성되었습니다.',TO_CHAR(SYSDATE-1/24/60/60, 'YYYY-MM-DD HH24:MI:SS'))
+  		select *
+  		from dual
+	
+
+</insert>
+
+<insert id="youcreate" parameterType="Chat">
+insert into chat
+values(ccode_seq.currval ,  #{uopcode}, #{ucode}, null , null )
+
+
+</insert>
+
+
+
+
+
 </mapper>

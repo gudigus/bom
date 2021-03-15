@@ -3,5 +3,10 @@
      <typeAliases>
 		<typeAlias alias="Chat"          type="com.spring.bom.model.bear.Chat"   />
 		<typeAlias alias="User"         type="com.spring.bom.model.bear.User"   />
+		<typeAlias alias="User_info"         type="com.spring.bom.model.bro.User_info"   />
      </typeAliases>
+     
+     
 </configuration>
+
+

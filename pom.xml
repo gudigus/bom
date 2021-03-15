@@ -71,6 +71,12 @@
 		<version>1.1.1</version>
 	</dependency>
 	<!-- json simple -->
+	<!-- cos.jar https://mvnrepository.com/artifact/com.servlets/cos -->
+      <dependency>
+         <groupId>com.servlets</groupId>
+         <artifactId>cos</artifactId>
+         <version>09May2002</version>
+      </dependency>
 		
 		
 	</dependencies>

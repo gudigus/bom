@@ -18,9 +18,9 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	public List<User> uonline(User user){
 		List<User> userlist = null;
-		System.out.println("ChatServiceImpl uonline userlist => " + userlist);
+		
 		userlist = cd.uonline(user);
-		System.out.println("ChatServiceImpl uonline userlist => " + userlist);
+		System.out.println("ChatServiceImpl uonline userlist 오른쪽 실시간들어온유저 확인  =>  " + userlist);
 		
 		return userlist;
 	}
@@ -30,5 +30,39 @@ public class ChatServiceImpl implements ChatService {
 		System.out.println("ChatServiceImpl chatmsg - > " );
 		
 		return cd.chatmsg(chat);
+	}
+
+	@Override
+	public List<Chat> roomId(int sessionId) {
+		List<Chat> listId =cd.roomId(sessionId);
+		System.out.println("ChatServiceImpl roomId listId => " + listId);
+		return listId;
+	}
+
+	@Override
+	public List<Chat> chatinglist(Chat chat) {
+		List<Chat> chatinglist = null;
+		 chatinglist = cd.chatinglist(chat);
+		System.out.println("ChatServiceImpl chatinglist  -> " +chatinglist);
+		return chatinglist;
+	}
+
+	@Override
+	public int mycreate(Chat chat) {
+		System.out.println("ChatServiceImpl mycreate 진행  chat.getUopcode() - > " + chat.getUopcode());
+		return cd.mycreate(chat);
+		}
+
+	@Override
+	public int youcreate(Chat chat) {
+		System.out.println("chatserviceimpl mycreate 진행  -> ");		
+		return cd.youcreate(chat) ;
+		
+	}
+
+	@Override
+	public String selectcode(String uatid) {
+		System.out.println("chatserviceimpl selectcode 진행  -> uatid " + uatid);
+		return cd.selectcode(uatid);
 	}
 }

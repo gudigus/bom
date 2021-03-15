@@ -35,6 +35,49 @@ public class ChatDaoImpl implements ChatDao {
 		
 		return session.insert("insertmsg",chat);
 	}
+
+	@Override
+	public List<Chat> roomId(int sessionId) {
+		List<Chat> roomId = null;
+		System.out.println("chatDaoImple roomId - > "  + sessionId);
+		try {
+			roomId = session.selectList("listId",sessionId); 
+			
+		} catch (Exception e) {
+			System.out.println("ChatDaoImpl chatinglist exception - > " + e.getMessage());
+		}
+		return roomId;
+	}
+
+	@Override
+	public List<Chat> chatinglist(Chat chat) {
+		List<Chat> chatinglist = null;
+		try {
+			chatinglist = session.selectList("chainglist", chat); 
+			
+		} catch (Exception e) {
+			System.out.println("ChatDaoImpl chatinglist exception - > " + e.getMessage());
+		}
+		return chatinglist;
+	}
+
+	@Override
+	public int mycreate(Chat chat) {
+		System.out.println("chatDaoImpl mycreate 진행 - > chat 안에 있는 uopcode -> " + chat.getUopcode());
+		return session.insert("mycreate",chat);
+	}
+
+	@Override
+	public int youcreate(Chat chat) {
+		System.out.println("chatDaoImpl youcreate 진행 ");
+		return session.insert("youcreate",chat);
+	}
+
+	@Override
+	public String selectcode(String atid) {
+		System.out.println("chatDaoImpl selectcode 진행 - > atid " +atid);
+		return session.selectOne("selectcode" ,atid);
+	}
 	
 		
 

@@ -21,7 +21,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 		System.out.println("WebSocketConfig registerWebSocketHandlers start.....");
 		registry.addHandler(socketHandler, "/chating/{roomNumber}");
-
 	}
 
 }

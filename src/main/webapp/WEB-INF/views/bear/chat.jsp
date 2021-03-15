@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+ <%
+    request.setCharacterEncoding("UTF-8");
+    String httpsession = (String)request.getAttribute("kiwoong");
+ 	String context = request.getContextPath();
+  %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,7 +37,7 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 	integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 	crossorigin="anonymous"></script>
-<script src="/js/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
 <style>
@@ -177,8 +182,260 @@ img{ max-width:100%;}
 </style>
 </head>
 
-<body>
+<script type="text/javascript">
+	var ws;
 
+	window.onload = function(){
+		getRoom();
+		//createRoom();
+		
+		
+		
+	}
+	
+	//socket 구간
+	function wsOpen(number){
+		//웹소켓 전송시 현재 방의 번호를 핸들러로 넘겨서 보낸다.
+		ws = new WebSocket("ws://" + location.host + "/chating/"+number);
+		wsEvt(number);
+	}
+	
+	function wsEvt(number) {
+		var roomnumber1 = number;
+		ws.onopen = function(data){
+			//소켓이 열리면 동작
+		
+			console.log("소켓이 열립니다 방번호 ccode -> " + number);
+		}
+		
+		ws.onmessage = function(data) {
+			//메시지를 받으면 동작
+			console.log("메세지를받아서 동작하겠습니다.")
+			var msg = data.data;
+			console.log(msg)
+			if(msg != null && msg.trim() != ''){
+				var d = JSON.parse(msg);
+				console.log(d);
+				if(d.type == "getId"){
+					var si = d.sessionId != null ? d.sessionId : "";
+					if(si != ''){
+						//$("#sessionId").val(si); 
+					}
+				}else if(d.type == "message"){
+					console.log("message뿌립니다")
+					if(d.sessionId == $("#sessionId").val()){
+						
+						$("#messagelist").append("<div class="+"outgoing_msg"+">"+
+				        		  "<div class="+"sent_msg"+">"+
+				         		   "<p>"+d.msg+"</p>"+
+				          			 "</div></div>");	
+					}else{
+					
+						$("#messagelist").append("<div class="+"incoming_msg"+">"+
+ 								 "<div class="+"received_withd_msg"+">"+
+ 									"<p>"+d.msg+ "</p>"+
+    								"</div></div>");	
+					}
+						
+				}else{
+					console.warn("unknown type!");
+				}
+			}
+		}
+
+		document.addEventListener("keypress", function(e){
+			if(e.keyCode == 13){ //enter press
+				send();
+			}
+		});
+	
+		
+	
+	}	
+	function send(number) {
+		var kk='${ucode}';
+		var option ={
+			type: "message",
+			roomNumber: number,
+			sessionId : kk,
+			userName : $("#userName").val(),
+			msg : $("#chatting").val()
+		}
+		console.log(option);
+		ws.send(JSON.stringify(option))
+		$('#chatting').val("");
+	}
+		
+		
+		
+		
+	
+	
+	
+	function getRoom(){
+		//$("#sessionId").val()
+		//var timerID;
+		var msg = {httpsession : $("#sessionId").val() };
+		console.log(msg)
+		$.ajax({
+			url: '<%=context%>/bear/getRoom',
+			data: msg,
+			type: "get",
+
+			success: function (res) {
+				
+				createChatingRoom(res);
+			}
+		
+		
+	
+
+		//timerID = setTimeout("getRoom()", 2000); // 2초 단위로 갱신 처리
+	});
+	}
+	
+	function selectcode(){
+			console.log('createroom 시작 roomname val -> ' + $('#roomName').val())
+			$.ajax({
+				   
+				url: "<%=context%>/bear/selectcode",
+				data: {uatid : $('#roomName').val()},
+				dataType: 'text',
+				success: function (data){
+					console.log('@아이디로 회원 코드값은 : '+ data)
+					var msg = {uopcode :  data};
+					console.log('@아이디로 회원 msg : '+ msg)
+					
+					$.ajax({
+						url : '<%=context%>/bear/createRoom',
+						data : msg,
+						type : "post",
+							success: function (kkk) {
+								
+								alert($('#roomName').val() + "님 과 채팅방이생성되었습니다." )
+								
+							}
+						
+						
+					});$("#roomName").val("Search");
+					
+					
+						
+					
+		
+				}});
+		}
+			
+
+	
+	function clear(){
+		$("#messagelist").empty();
+		$("#messagetest").empty();
+	}
+
+	function goRoom(number){
+		//location.href="moveChating?roomNumber="+number;
+		var msg = {roomnumber : number};
+		console.log(msg)
+		wsOpen(number);
+		clear();
+		
+		var kdsf = "<input type="+"'text'"+" class="+"'write_msg'"+" placeholder="+"'새 쪽지 작성하기'"+" id="+"'chatting'"+" />"+
+	    "<button class="+"'msg_send_btn'"+" type="+"button"+" onclick="+"send("+number+")><i class="+"'fa fa-paper-plane-o'"+" aria-hidden="+"true"+"></i></button>";
+	    
+	    console.log(kdsf);
+	    
+		$.ajax({
+			url: "<%=context%>/bear/moveChating",
+			data: msg,
+			type: "post",
+			success: function (res) {
+				console.log(res)
+				var tag = "";
+				var id = ${ucode};
+				res.forEach(function(d){
+					var ucode = d.ucode;//회원코드
+					var roomNumber = d.ccode;//방번호
+					var msg = d.cdmessage//메세지내용
+					var cdtime = d.cdtime//메세지 보낸시간
+					  //내가보낸 메세지 오른쪽에 붙힘
+				if(ucode == id ){
+				tag += 	"<div class="+"outgoing_msg"+">"+
+		        		  "<div class="+"sent_msg"+">"+
+		         		   "<p>"+msg+"</p>"+
+		          			 "<span class="+"time_date"+">"+ cdtime +"</span> </div></div>";
+				}else{	
+					//상대회원 왼쪽에붙힘
+					tag+=  "<div class="+"incoming_msg"+">"+
+		           			 "<div class="+"received_withd_msg"+">"+
+		           				"<p>"+msg+ "</p>"+
+		              				"<span class="+"time_date"+">"+ cdtime +"</span></div></div>";
+					
+				}
+					
+					 
+			  }); $("#messagelist").append(tag);
+			  $("#messagetest").append(kdsf);
+				
+			}
+			}); 
+	}
+
+	function createChatingRoom(res){
+		console.log(res)
+		if(res != null){
+			var tag = ""; 
+				  
+			res.forEach(function(d){
+				var uopcode = d.uopcode ;
+				var roomNumber = d.ccode;
+				var msg = d.cdmessage;
+				var cdtime = d.cdtime;
+				var uimage = d.uimage;
+				var uatid = d.uatid;
+				tag +=    "<div class=chat_list >" +
+		         		 "<div class=chat_people>" +
+		          			 	 "<div class=chat_ib>"+
+		            			  "<h5>" +uatid+ "<span class=chat_date>" +cdtime+ "</span></h5>"+
+		             				 "<h5>"+ msg+"<span>"+"<button type='button' onclick='goRoom(\""+roomNumber+"\")'>참여</button>"+"</span> </h5>"+
+		           				 "</div>"+
+		        		      "</div>"+
+		                  "</div>";
+						console.log("createChatingroom d 의 값 -> "+ d + " idx 의 값 -> ");
+					
+			});
+			$("#chatingpage").append(tag);
+		}
+
+		
+	}
+
+	function commonAjax(url, parameter, type, calbak, contentType){
+		console.log("commonAjax실행")
+		$.ajax({
+			url: url,
+			data: parameter,
+			type: type,
+
+			success: function (res) {
+				console.log("url: " + url +"data: " + data +"type: " + type )
+				calbak(res);
+			},
+			error : function(err){
+				console.log('error');
+				calbak(err);
+			}
+		});
+	}
+
+
+
+</script>
+
+
+
+<body>
+	<input type="hidden" value="${chainglist.ccode }" id="test1">
 	<div class="d-flex" id="wrapper">
 
 		<!-- Sidebar -->
@@ -211,9 +468,10 @@ img{ max-width:100%;}
 					<div class="card-body">
 						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
 							width="50"> <a class="card-title text-dark">닉네임</a> <a
-							class="card-subtitle mb-2 text-muted">@atid</a>
+							class="card-subtitle mb-2 text-muted">유저코드 : ${ucode } , 닉네임 : ${user.uatid } </a>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
+					<input type="hidden" id="sessionId" value="${ucode }">
 				</div>
 			</div>
 		</div>
@@ -225,139 +483,43 @@ img{ max-width:100%;}
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
 <div class="container">
-<h3 class=" text-center">Messaging</h3>
+<br>
+<h3 class=" text-center">쪽지방</h3>
 <div class="messaging">
   <div class="inbox_msg">
     <div class="inbox_people">
       <div class="headind_srch">
         <div class="recent_heading">
-          <h4>Recent</h4>
+          <h4>방생성</h4>
         </div>
         <div class="srch_bar">
           <div class="stylish-input-group">
-            <input type="text" class="search-bar"  placeholder="Search" >
+            <input type="text" class="search-bar"  placeholder="@빼고 아이디적기"  id="roomName">
             <span class="input-group-addon">
-            <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+            <button type="button" onclick="selectcode()"> <i class="fa fa-search" aria-hidden="true" ></i> </button>
             </span> </div>
         </div>
       </div>
-      <div class="inbox_chat">
-        <div class="chat_list active_chat">
-          <div class="chat_people">
-            <div class="chat_img"> <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="sunil"> </div>
-            <div class="chat_ib">
-              <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-              <p>Test, which is a new approach to have all solutions 
-                astrology under one roof.</p>
-            </div>
-          </div>
-        </div>
-        <div class="chat_list">
-          <div class="chat_people">
-            <div class="chat_img"> <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="sunil"> </div>
-            <div class="chat_ib">
-              <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-              <p>Test, which is a new approach to have all solutions 
-                astrology under one roof.</p>
-            </div>
-          </div>
-        </div>
-        <div class="chat_list">
-          <div class="chat_people">
-            <div class="chat_img"> <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="sunil"> </div>
-            <div class="chat_ib">
-              <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-              <p>Test, which is a new approach to have all solutions 
-                astrology under one roof.</p>
-            </div>
-          </div>
-        </div>
-        <div class="chat_list">
-          <div class="chat_people">
-            <div class="chat_img"> <img src="https://bootdey.com/img/Content/avatar/avatar4.png" alt="sunil"> </div>
-            <div class="chat_ib">
-              <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-              <p>Test, which is a new approach to have all solutions 
-                astrology under one roof.</p>
-            </div>
-          </div>
-        </div>
-        <div class="chat_list">
-          <div class="chat_people">
-            <div class="chat_img"> <img src="https://bootdey.com/img/Content/avatar/avatar5.png" alt="sunil"> </div>
-            <div class="chat_ib">
-              <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-              <p>Test, which is a new approach to have all solutions 
-                astrology under one roof.</p>
-            </div>
-          </div>
-        </div>
-        <div class="chat_list">
-          <div class="chat_people">
-            <div class="chat_img"> <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="sunil"> </div>
-            <div class="chat_ib">
-              <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-              <p>Test, which is a new approach to have all solutions 
-                astrology under one roof.</p>
-            </div>
-          </div>
-        </div>
-        <div class="chat_list">
-          <div class="chat_people">
-            <div class="chat_img"> <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="sunil"> </div>
-            <div class="chat_ib">
-              <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-              <p>Test, which is a new approach to have all solutions 
-                astrology under one roof.</p>
-            </div>
-          </div>
-        </div>
+      
+      
+      <!-- 채팅방 목록 -->
+      <div class="inbox_chat" id="chatingpage">
+        
       </div>
+      <!-- 채팅방 목록 끝 -->     
     </div>
+    
+    	<!-- 메세지보내는페이지 -->
     <div class="mesgs">
-      <div class="msg_history">
-        <div class="incoming_msg">
-          <div class="incoming_msg_img"> <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="sunil"> </div>
-          <div class="received_msg">
-            <div class="received_withd_msg">
-              <p>Test which is a new approach to have all
-                solutions</p>
-              <span class="time_date"> 11:01 AM    |    June 9</span></div>
-          </div>
-        </div>
-        <div class="outgoing_msg">
-          <div class="sent_msg">
-            <p>Test which is a new approach to have all
-              solutions</p>
-            <span class="time_date"> 11:01 AM    |    June 9</span> </div>
-        </div>
-        <div class="incoming_msg">
-          <div class="incoming_msg_img"> <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="sunil"> </div>
-          <div class="received_msg">
-            <div class="received_withd_msg">
-              <p>Test, which is a new approach to have</p>
-              <span class="time_date"> 11:01 AM    |    Yesterday</span></div>
-          </div>
-        </div>
-        <div class="outgoing_msg">
-          <div class="sent_msg">
-            <p>Apollo University, Delhi, India Test</p>
-            <span class="time_date"> 11:01 AM    |    Today</span> </div>
-        </div>
-        <div class="incoming_msg">
-          <div class="incoming_msg_img"> <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="sunil"> </div>
-          <div class="received_msg">
-            <div class="received_withd_msg">
-              <p>We work directly with our designers and suppliers,
-                and sell direct to you, which means quality, exclusive
-                products, at a price anyone can afford.</p>
-              <span class="time_date"> 11:01 AM    |    Today</span></div>
-          </div>
-        </div>
-      </div>
+      <div class="msg_history" id="messagelist">
+  
+        
+          <!-- <div class="incoming_msg_img"> </div> 이미지넣을곳--> 
+
+    </div>     
       <div class="type_msg">
-        <div class="input_msg_write">
-          <input type="text" class="write_msg" placeholder="Type a message" />
+        <div class="input_msg_write" id="messagetest">
+        <input type="text" class="write_msg" placeholder="Type a message" />
           <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
         </div>
       </div>
