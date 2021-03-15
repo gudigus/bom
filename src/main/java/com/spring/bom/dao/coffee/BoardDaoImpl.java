@@ -50,4 +50,26 @@ public class BoardDaoImpl implements BoardDao {
 		return result;
 	}
 
+	@Override
+	public List<BoardUser_info> accusationList(String search) {
+		List<BoardUser_info> list = new ArrayList<BoardUser_info>();
+		list = session.selectList("coffeeAccusationSelectBoardUser_infoSearch", search);
+		return list;
+	}
+
+	@Override
+	public List<BoardUser_info> sensorList(String search) {
+		List<BoardUser_info> list = new ArrayList<BoardUser_info>();
+		list = session.selectList("coffeeSensorSelectBoardUser_infoSearch", search);
+		
+		return list;
+	}
+
+	@Override
+	public List<BoardUser_info> restoreList(String search) {
+		List<BoardUser_info> list = new ArrayList<BoardUser_info>();
+		list = session.selectList("coffeeRestoreSelectBoardUser_infoSearch", search);
+		return list;
+	}
+
 }

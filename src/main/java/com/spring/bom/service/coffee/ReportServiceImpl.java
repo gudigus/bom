@@ -30,6 +30,16 @@ public class ReportServiceImpl implements ReportService {
 		int result = rd.updateRaction(rcode, updateValue);
 		return result;
 	}
+	@Override
+	public List<ReportUser_infoBoard> accusationList(String search) {
+		List<ReportUser_infoBoard> list = rd.accusationList(search);
+		return list;
+	}
+	@Override
+	public List<ReportUser_infoBoard> uncensoredList(String search) {
+		List<ReportUser_infoBoard> list = rd.uncensoredList(search);
+		return list;
+	}
 	
 	
 

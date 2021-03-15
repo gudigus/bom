@@ -40,5 +40,23 @@ public class User_infoServiceImpl implements User_infoService {
 		int result = uid.memConfirmManager(getuCode);
 		return result;
 	}
+	@Override
+	public List<User_info> user_infoAccusationList(String search) {
+		List<User_info> user_infoList = null;
+		user_infoList = uid.user_infoAccusationList(search);
+		return user_infoList;
+	}
+	@Override
+	public List<User_info> user_infoSensorList(String search) {
+		List<User_info> user_infoList = null;
+		user_infoList = uid.user_infoSensorList(search);
+		return user_infoList;
+	}
+	@Override
+	public List<User_info> user_infoRestoreList(String search) {
+		List<User_info> user_infoList = null;
+		user_infoList = uid.user_infoRestoreList(search);
+		return user_infoList;
+	}
 
 }

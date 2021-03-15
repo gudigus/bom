@@ -346,24 +346,24 @@
 				<button class="btn btn-success" id="menu-toggle">←</button>
 			</nav>
 			<h2>신고 확인 페이지</h2>
-			<%-- <div class="alert alert-success" role="alert">
+			<div class="alert alert-success" role="alert">
 				"${search }" 검색 결과 입니다.
-			</div> --%>
+			</div>
 			
 			<div class="container-fluid">
 				<p>
 				<div class="input-group col-auto">
 					<ul class="nav nav-tabs">
 					  <li class="nav-item">
-					    <a class="nav-link active" aria-current="page" href="/coffee/interceptor/censorAccusationManagerPage">전체</a>
+					    <a class="nav-link" href="/coffee/interceptor/censorAccusationManagerPage">전체</a>
 					  </li>
 					  <li class="nav-item">
-					    <a class="nav-link" href="/coffee/interceptor/uncensoredAccusationManagerPage">미처리</a>
+					    <a class="nav-link active" aria-current="page" href="/coffee/interceptor/uncensoredAccusationManagerPage">미처리</a>
 					  </li>
 					  
 					  
 					</ul>
-					<form class="form-inline mt-2 mt-md-0" action="/coffee/censorAccusationManagerSearch">
+					<form class="form-inline mt-2 mt-md-0" action="/coffee/uncensoredAccusationManagerSearch">
 						<input type="text" class="form-control form-control mr-sm-2 float-right" name="search" id="search">
 						<button type="submit" class="btn btn-success float-right">검 색</button>
 					</form>

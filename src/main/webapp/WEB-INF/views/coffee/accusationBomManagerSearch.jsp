@@ -109,7 +109,6 @@
 	})
 
 </script>
-
 </head>
 
 <body>
@@ -168,40 +167,40 @@
 				<button class="btn btn-success" id="menu-toggle">←</button>
 			</nav>
 			<h2>봄 검열 페이지</h2>
-			<!-- <div class="alert alert-success" role="alert">
-				봄이 차단처리 되었습니다.
-			</div> -->
+			<div class="alert alert-success" role="alert">
+				"${search }" 검색 결과 입니다.
+			</div>
 			
 			<div class="container-fluid">
 				<p>
 				<div class="input-group col-auto">
 					<ul class="nav nav-tabs">
 					  <li class="nav-item">
-					    <a class="nav-link active" aria-current="page" href="/coffee/interceptor/censorBomManagerPage">차단</a>
+					    <a class="nav-link" href="/coffee/interceptor/censorBomManagerPage">차단</a>
 					  </li>
 					  <li class="nav-item">
 					    <a class="nav-link" href="/coffee/interceptor/restoreBomManagerPage">복원</a>
 					  </li>
 					  <li class="nav-item">
-					    <a class="nav-link" href="/coffee/interceptor/accusationBomManagerPage">피신고글</a>
+					    <a class="nav-link active" aria-current="page" href="/coffee/interceptor/accusationBomManagerPage">피신고글</a>
 					  </li>
 					  
 					</ul>
-					<form class="form-inline mt-2 mt-md-0" action="/coffee/censorBomManagerSearch">
+					<form class="form-inline mt-2 mt-md-0" action="/coffee/accusationBomManagerSearch">
 						<input type="text" class="form-control form-control mr-sm-2 float-right" name="search" id="search">
 						<button type="submit" class="btn btn-success float-right">검 색</button>
 					</form>
 				</div>
 				<!--글 정렬-->
 				<c:forEach var="list" items="${boardUser_infoList }" varStatus="status">
+					
 					<input type="hidden" class="bstate${status.index }"      value="${list.bstate}">
 					<input type="hidden" class="bcode${status.index }"      value="${list.bcode}">
 					<%-- <input type="hidden" class="unickname${status.index }"  value="${list.unickname }"> --%>
-				
 					<div class="card">
 						<div class="card-body">
-							<span><button type="button" class="btn btn-danger float-right ${status.index }">차단</button></span>
-							<span><button type="button" class="btn btn-primary float-right ${status.index }">복원</button></span>
+							<button type="button" id="btn_ban" class="btn btn-danger float-right ${status.index }">차단</button>
+							<button type="button" id="btn_restore" class="btn btn-primary float-right ${status.index }">복원</button>
 							<c:choose>
 								<c:when test="${not empty list.uimage }">
 									<img alt="회원 이미지" src="/img/profiles/${list.uimage }" class="rounded-circle" width="50"
@@ -249,8 +248,6 @@
 							</div>
 						</div>
 					</div>
-					
-					
 				</c:forEach>
 			</div>
 		</div>

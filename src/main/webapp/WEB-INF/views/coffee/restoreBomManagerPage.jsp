@@ -187,8 +187,8 @@
 					  </li>
 					  
 					</ul>
-					<form class="form-inline mt-2 mt-md-0" action="">
-						<input type="text" class="form-control form-control mr-sm-2 float-right" name="searchMember" id="searchMember">
+					<form class="form-inline mt-2 mt-md-0" action="/coffee/restoreBomManagerSearch">
+						<input type="text" class="form-control form-control mr-sm-2 float-right" name="search" id="search">
 						<button type="submit" class="btn btn-success float-right">검 색</button>
 					</form>
 				</div>
@@ -216,12 +216,12 @@
 								class="card-text" style="margin-top: 10px;">${list.bcontent }</a>
 								<c:if test="${list.battach!=null }">
 								 	<c:if test="${list.battachType=='image'}">
-								 		<img class="img-thumnail" width="300" src="/img/media/${list.battachSrc}"/>
+								 		<img class="img-thumnail" width="300" src="/image/${list.battachSrc}"/>
 								 	</c:if>
 								 	<c:if test="${list.battachType=='video'}">
 								 		<video controls width="300">
-								 			<source  src="/img/media/${list.battachSrc}" type="video/mp4">
-								 			<source  src="/img/media/${list.battachSrc}" type="video/webm">
+								 			<source  src="/video/${list.battachSrc}" type="video/mp4">
+								 			<source  src="/video/${list.battachSrc}" type="video/webm">
 								 			해당 브라우저에는 지원하지 않는 비디오입니다.
 								 		</video>
 								 	</c:if>

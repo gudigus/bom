@@ -168,9 +168,9 @@
 				<button class="btn btn-success" id="menu-toggle">←</button>
 			</nav>
 			<h2>봄 검열 페이지</h2>
-			<!-- <div class="alert alert-success" role="alert">
-				봄이 차단처리 되었습니다.
-			</div> -->
+			<div class="alert alert-success" role="alert">
+				"${search }" 검색 결과 입니다.
+			</div>
 			
 			<div class="container-fluid">
 				<p>

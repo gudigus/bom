@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.ui.Model;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,7 +24,9 @@ public class CoffeeInterceptor implements AsyncHandlerInterceptor {
 		    Method methodObj = method.getMethod();
 		    System.out.println("Bean: " + method.getBean());
 		    System.out.println("Method: " + methodObj);
-		    
+//		    String search = request.getParameter("search");
+//		    System.out.println("CoffeeInterceptor preHandle search->"+search);
+		    		    
 		    return true; 
 	  }
 	  // 2번째 수행
@@ -63,6 +66,7 @@ public class CoffeeInterceptor implements AsyncHandlerInterceptor {
 			  // request.getSession().setAttribute("ID", ID);
 			  // 관리자면  coffee/censorMemberManagerPage2(회원검열페이지)
 			  session.setAttribute("manager", "0"); // 관리자 면 
+			  
 		  }
 		  response.sendRedirect(url);
 	  }

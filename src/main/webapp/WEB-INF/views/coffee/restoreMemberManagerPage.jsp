@@ -191,8 +191,8 @@
 					  </li>
 					  
 					</ul>
-					<form class="form-inline mt-2 mt-md-0">
-						<input type="text" class="form-control form-control mr-sm-2 float-right" name="searchMember" id="searchMember">
+					<form class="form-inline mt-2 mt-md-0" action="/coffee/restoreMemberManagerSearch">
+						<input type="text" class="form-control form-control mr-sm-2 float-right" name="search" id="search">
 						<button type="submit" class="btn btn-success float-right">검 색</button>
 					</form>
 				</div>

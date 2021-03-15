@@ -57,6 +57,8 @@ public class CoffeeController {
 	public void managerVerification(HttpServletRequest req, Model model, String url) {
 		HttpSession session = req.getSession();
 		int uCode = -1;
+//		String search = req.getParameter("String");
+//		System.out.println("CoffeeController managerVerification search->"+search);
 		
 		try {
 			uCode = (int) session.getAttribute("uCode");
@@ -69,6 +71,7 @@ public class CoffeeController {
 		// model.addAttribute("id",id);
 		model.addAttribute("memCnt",memCnt);
 		model.addAttribute("url", url);
+//		model.addAttribute("search", search);
 		System.out.println("CoffeeController session memCnt->"+memCnt);
 	}
 	
@@ -77,13 +80,13 @@ public class CoffeeController {
 	 // interCepter 진행 Test
 	@GetMapping(value = "/coffee/censorMemberManagerPage")
 	public String censorMemberManagerPage(HttpServletRequest req, Model model) {
-		System.out.println("CoffeeController censorMemberManagerPage start..");
+		String returnPage = "/coffee/censorMemberManagerPage";
+		System.out.println("CoffeeController " +returnPage+ " start..");
 		// 관리자 검증
 		HttpSession session = req.getSession();
 		String manager = (String) session.getAttribute("manager");
-		String returnPage = "";
 		if (manager == null) manager = "9";
-		System.out.println("/coffee/censorMemberManagerPage manager->"+ manager );
+		System.out.println(returnPage+" manager->"+ manager );
 		// 관리자면 
 		if (manager == "0") {
 			List<User_info> list = uis.user_infoSensorList();
@@ -94,7 +97,36 @@ public class CoffeeController {
 //			System.out.println("list.get(2).getUcode()->"+list.get(2).getUcode());
 //			System.out.println("list.get(2).getUnickname()->"+list.get(2).getUnickname());
 			model.addAttribute("user_infoList", list);
-			returnPage = "/coffee/censorMemberManagerPage";
+		} else {
+			// returnPage = "/coffee/kkk";
+			returnPage = "redirect:/bro/index";
+			
+		}
+
+		return returnPage;
+	}
+	
+	@GetMapping(value = "/coffee/censorMemberManagerSearch")
+	public String censorMemberManagerSearch(HttpServletRequest req, Model model) {
+		String returnPage = "/coffee/censorMemberManagerSearch";
+		System.out.println("CoffeeController " +returnPage+ " start..");
+		// 관리자 검증
+		HttpSession session = req.getSession();
+		String manager = (String) session.getAttribute("manager");
+		String search = req.getParameter("search");
+		if (manager == null) manager = "9";
+		System.out.println(returnPage+" manager->"+ manager );
+		// 관리자면 
+		if (manager == "0") {
+			List<User_info> list = uis.user_infoSensorList(search);
+//			System.out.println("list.get(0).getUcode()->"+list.get(0).getUcode());
+//			System.out.println("list.get(0).getUnickname()->"+list.get(0).getUnickname());
+//			System.out.println("list.get(1).getUcode()->"+list.get(1).getUcode());
+//			System.out.println("list.get(1).getUnickname()->"+list.get(1).getUnickname());
+//			System.out.println("list.get(2).getUcode()->"+list.get(2).getUcode());
+//			System.out.println("list.get(2).getUnickname()->"+list.get(2).getUnickname());
+			model.addAttribute("user_infoList", list);
+			model.addAttribute("search", search);
 		} else {
 			// returnPage = "/coffee/kkk";
 			returnPage = "redirect:/bro/index";
@@ -160,17 +192,37 @@ public class CoffeeController {
 	
 	@GetMapping(value = "/coffee/restoreMemberManagerPage")
 	public String restoreMemberManagerPage(HttpServletRequest req, Model model) {
-		System.out.println("CoffeeController restoreMemberManagerPage start..");
+		String returnPage = "/coffee/restoreMemberManagerPage";
+		System.out.println("CoffeeController " +returnPage+ " start..");
 		// 관리자 검증
 		HttpSession session = req.getSession();
 		String manager = (String) session.getAttribute("manager");
-		String returnPage = "";
 		if (manager == null) manager = "9";
-		System.out.println("/coffee/restoreMemberManagerPage manager->"+ manager );
+		System.out.println(returnPage+" manager->"+ manager );
 		if(manager == "0") {
 			List<User_info> list = uis.user_infoRestoreList();
 			model.addAttribute("user_infoList", list);
 			returnPage = "/coffee/restoreMemberManagerPage";
+		}else {
+			returnPage = "redirect:/bro/index";
+		}
+		return returnPage;
+	}
+	
+	@GetMapping(value = "/coffee/restoreMemberManagerSearch")
+	public String restoreMemberManagerSearch(HttpServletRequest req, Model model) {
+		String returnPage = "/coffee/restoreMemberManagerSearch";
+		System.out.println("CoffeeController " +returnPage+ " start..");
+		// 관리자 검증
+		HttpSession session = req.getSession();
+		String manager = (String) session.getAttribute("manager");
+		String search = req.getParameter("search");
+		if (manager == null) manager = "9";
+		System.out.println(returnPage+" manager->"+ manager );
+		if(manager == "0") {
+			List<User_info> list = uis.user_infoRestoreList(search);
+			model.addAttribute("user_infoList", list);
+			model.addAttribute("search", search);
 		}else {
 			returnPage = "redirect:/bro/index";
 		}
@@ -195,11 +247,33 @@ public class CoffeeController {
 		String manager = (String) session.getAttribute("manager");
 		String returnPage = "";
 		if (manager == null) manager = "9";
-		System.out.println("/coffee/accusationMemberManagerPage manager->"+ manager );
+		System.out.println(returnPage+" manager->"+ manager );
 		if(manager == "0") {
 			List<User_info> list = uis.user_infoAccusationList();
 			model.addAttribute("user_infoList", list);
 			returnPage = "/coffee/accusationMemberManagerPage";
+		}else {
+			returnPage = "redirect:/bro/index";
+		}
+		return returnPage;
+	}
+	
+	
+	@GetMapping(value = "/coffee/accusationMemberManagerSearch")
+	public String accusationMemberManagerSearch(HttpServletRequest req, Model model) {
+		String returnPage = "/coffee/accusationMemberManagerSearch";
+		System.out.println("CoffeeController " +returnPage+ " start..");
+		// 관리자 검증
+		HttpSession session = req.getSession();
+		String manager = (String) session.getAttribute("manager");
+		String search = req.getParameter("search");
+		System.out.println(returnPage+" manager->"+ manager );
+		if (manager == null) manager = "9";
+		System.out.println("/coffee/accusationMemberManagerSearch manager->"+ manager );
+		if(manager == "0") {
+			List<User_info> list = uis.user_infoAccusationList(search);
+			model.addAttribute("user_infoList", list);
+			model.addAttribute("search", search);
 		}else {
 			returnPage = "redirect:/bro/index";
 		}
@@ -221,7 +295,7 @@ public class CoffeeController {
 	@GetMapping(value = "/coffee/censorBomManagerPage")
 	public String censorBomManagerPage(HttpServletRequest req, Model model) {
 		String returnPage = "/coffee/censorBomManagerPage";
-		System.out.println("CoffeeController" +returnPage+ "start..");
+		System.out.println("CoffeeController " +returnPage+ " start..");
 		// 관리자 검증
 		HttpSession session = req.getSession();
 		String manager = (String) session.getAttribute("manager");
@@ -235,9 +309,38 @@ public class CoffeeController {
 					list.get(i).setBattachSrc(list.get(i).getBattach().substring(6));
 				}
 			}
-//			System.out.println("CoffeeController" +returnPage+ list.get(1).getBattach());
-//			System.out.println("CoffeeController" +returnPage+ list.get(1).getBattachSrc());
+//			System.out.println("CoffeeController " +returnPage+ list.get(1).getBattach());
+//			System.out.println("CoffeeController " +returnPage+ list.get(1).getBattachSrc());
 			model.addAttribute("boardUser_infoList", list);
+			
+		}else {
+			returnPage = "redirect:/bro/index";
+		}
+		return returnPage;
+	}
+	@GetMapping(value = "/coffee/censorBomManagerSearch")
+	public String censorBomManagerSearch(HttpServletRequest req, Model model) {
+		String returnPage = "/coffee/censorBomManagerSearch";
+		System.out.println("CoffeeController " +returnPage+ " start..");
+		// 관리자 검증
+		HttpSession session = req.getSession();
+		String manager = (String) session.getAttribute("manager");
+		String search = req.getParameter("search");
+		if (manager == null) manager = "9";
+		System.out.println(returnPage+" manager->"+ manager );
+		if(manager == "0") {
+			List<BoardUser_info> list = bs.sensorList(search);
+			for (int i=0; i<list.size(); i++) {
+				if(list.get(i).getBattach()!= null) {
+					list.get(i).setBattachType(list.get(i).getBattach().substring(0, 5));
+					list.get(i).setBattachSrc(list.get(i).getBattach().substring(6));
+				}
+			}
+//			System.out.println("CoffeeController " +returnPage+ list.get(1).getBattach());
+//			System.out.println("CoffeeController " +returnPage+ list.get(1).getBattachSrc());
+			model.addAttribute("boardUser_infoList", list);
+			model.addAttribute("search", search);
+
 		}else {
 			returnPage = "redirect:/bro/index";
 		}
@@ -272,7 +375,7 @@ public class CoffeeController {
 	@GetMapping(value = "/coffee/restoreBomManagerPage")
 	public String restoreBomManagerPage(HttpServletRequest req, Model model) {
 		String returnPage = "/coffee/restoreBomManagerPage";
-		System.out.println("CoffeeController" +returnPage+ "start..");
+		System.out.println("CoffeeController " +returnPage+ " start..");
 		// 관리자 검증
 		HttpSession session = req.getSession();
 		String manager = (String) session.getAttribute("manager");
@@ -293,6 +396,32 @@ public class CoffeeController {
 		return returnPage;
 	}
 	
+	@GetMapping(value = "/coffee/restoreBomManagerSearch")
+	public String restoreBomManagerSearch(HttpServletRequest req, Model model) {
+		String returnPage = "/coffee/restoreBomManagerSearch";
+		System.out.println("CoffeeController " +returnPage+ " start..");
+		// 관리자 검증
+		HttpSession session = req.getSession();
+		String manager = (String) session.getAttribute("manager");
+		String search = req.getParameter("search");
+		if (manager == null) manager = "9";
+		System.out.println(returnPage+" manager->"+ manager );
+		if(manager == "0") {
+			List<BoardUser_info> list = bs.restoreList(search);
+			for (int i=0; i<list.size(); i++) {
+				if(list.get(i).getBattach()!= null) {
+					list.get(i).setBattachType(list.get(i).getBattach().substring(0, 5));
+					list.get(i).setBattachSrc(list.get(i).getBattach().substring(6));
+				}
+			}
+			model.addAttribute("boardUser_infoList", list);
+			model.addAttribute("search", search);
+		}else {
+			returnPage = "redirect:/bro/index";
+		}
+		return returnPage;
+	}
+	
 	
 	// Interceptors
 	// interCepter 진행 Test  --> 2번째 수행 
@@ -307,7 +436,7 @@ public class CoffeeController {
 	@GetMapping(value = "/coffee/accusationBomManagerPage")
 	public String accusationBomManagerPage(HttpServletRequest req, Model model) {
 		String returnPage = "/coffee/accusationBomManagerPage";
-		System.out.println("CoffeeController" +returnPage+ "start..");
+		System.out.println("CoffeeController " +returnPage+ " start..");
 		// 관리자 검증
 		HttpSession session = req.getSession();
 		String manager = (String) session.getAttribute("manager");
@@ -329,6 +458,34 @@ public class CoffeeController {
 		return returnPage;
 	}
 	
+	@GetMapping(value = "/coffee/accusationBomManagerSearch")
+	public String accusationBomManagerSearch(HttpServletRequest req, Model model) {
+		String returnPage = "/coffee/accusationBomManagerSearch";
+		System.out.println("CoffeeController " +returnPage+ " start..");
+		// 관리자 검증
+		HttpSession session = req.getSession();
+		String manager = (String) session.getAttribute("manager");
+		String search = req.getParameter("search");
+		if (manager == null) manager = "9";
+		System.out.println(returnPage+" manager->"+ manager );
+		if(manager == "0") {
+			List<BoardUser_info> list = bs.accusationList(search);
+			for (int i=0; i<list.size(); i++) {
+				if(list.get(i).getBattach()!= null) {
+					list.get(i).setBattachType(list.get(i).getBattach().substring(0, 5));
+					list.get(i).setBattachSrc(list.get(i).getBattach().substring(6));
+				}
+			}
+//				System.out.println(list.get(0).getBcode());
+			model.addAttribute("boardUser_infoList", list);
+			model.addAttribute("search", search);
+		}else {
+			returnPage = "redirect:/bro/index";
+		}
+		return returnPage;
+	}
+	
+	
 	//신고 매니저
 	
 	// Interceptors
@@ -346,7 +503,7 @@ public class CoffeeController {
 	@GetMapping(value = "/coffee/censorAccusationManagerPage")
 	public String censorAccusationManagerPage(HttpServletRequest req, Model model) {
 		String returnPage = "/coffee/censorAccusationManagerPage";
-		System.out.println("CoffeeController" +returnPage+ "start..");
+		System.out.println("CoffeeController " +returnPage+ " start..");
 		// 관리자 검증
 		HttpSession session = req.getSession();
 		String manager = (String) session.getAttribute("manager");
@@ -363,11 +520,43 @@ public class CoffeeController {
 //			System.out.println("list.get(0).getUnickname_1()->"+list.get(0).getUnickname_1());
 //			System.out.println("list.get(0).getUnickname()->"+list.get(0).getUnickname());
 			model.addAttribute("ReportUser_infoBoardList", list);
+			
 		}else {
 			returnPage = "redirect:/bro/index";
 		}
 		return returnPage;
 	}
+	
+		
+	@GetMapping(value = "/coffee/censorAccusationManagerSearch")
+	public String censorAccusationManagerSearch(HttpServletRequest req, Model model) {
+		String returnPage = "/coffee/censorAccusationManagerSearch";
+		System.out.println("CoffeeController " +returnPage+ " start..");
+		// 관리자 검증
+		HttpSession session = req.getSession();
+		String manager = (String) session.getAttribute("manager");
+		String search = req.getParameter("search");
+		if (manager == null) manager = "9";
+		System.out.println("CoffeeController " +returnPage+ "search-> "+search);
+		System.out.println(returnPage+" manager->"+ manager );
+		if(manager == "0") {
+			List<ReportUser_infoBoard> list = rs.accusationList(search);
+			for (int i=0; i<list.size(); i++) {
+				if(list.get(i).getBattach()!= null) {
+					list.get(i).setBattachType(list.get(i).getBattach().substring(0, 5));
+					list.get(i).setBattachSrc(list.get(i).getBattach().substring(6));
+				}
+			}
+//				System.out.println("list.get(0).getUnickname_1()->"+list.get(0).getUnickname_1());
+//				System.out.println("list.get(0).getUnickname()->"+list.get(0).getUnickname());
+			model.addAttribute("ReportUser_infoBoardList", list);
+			model.addAttribute("search", search);
+		}else {
+			returnPage = "redirect:/bro/index";
+		}
+		return returnPage;
+	}
+	
 	
 	// Ajax  List Test String
 	@GetMapping(value = "/coffee/coffeeUpdateRaction", produces = "application/text;charset=UTF-8")
@@ -397,7 +586,7 @@ public class CoffeeController {
 	@GetMapping(value = "/coffee/uncensoredAccusationManagerPage")
 	public String uncensoredAccusationManagerPage(HttpServletRequest req, Model model) {
 		String returnPage = "/coffee/uncensoredAccusationManagerPage";
-		System.out.println("CoffeeController" +returnPage+ "start..");
+		System.out.println("CoffeeController " +returnPage+ " start..");
 		// 관리자 검증
 		HttpSession session = req.getSession();
 		String manager = (String) session.getAttribute("manager");
@@ -414,6 +603,32 @@ public class CoffeeController {
 //			System.out.println("list.get(0).getUnickname_1()->"+list.get(0).getUnickname_1());
 //			System.out.println("list.get(0).getUnickname()->"+list.get(0).getUnickname());
 			model.addAttribute("ReportUser_infoBoardList", list);
+		}else {
+			returnPage = "redirect:/bro/index";
+		}
+		return returnPage;
+	}
+	@GetMapping(value = "/coffee/uncensoredAccusationManagerSearch")
+	public String uncensoredAccusationManagerSearch(HttpServletRequest req, Model model) {
+		String returnPage = "/coffee/uncensoredAccusationManagerSearch";
+		System.out.println("CoffeeController " +returnPage+ " start..");
+		// 관리자 검증
+		HttpSession session = req.getSession();
+		String manager = (String) session.getAttribute("manager");
+		String search = req.getParameter("search");
+		if (manager == null) manager = "9";
+		System.out.println("CoffeeController " +returnPage+ "search-> "+search);
+		System.out.println(returnPage+" manager->"+ manager );
+		if(manager == "0") {
+			List<ReportUser_infoBoard> list = rs.uncensoredList(search);
+			for (int i=0; i<list.size(); i++) {
+				if(list.get(i).getBattach()!= null) {
+					list.get(i).setBattachType(list.get(i).getBattach().substring(0, 5));
+					list.get(i).setBattachSrc(list.get(i).getBattach().substring(6));
+				}
+			}
+			model.addAttribute("ReportUser_infoBoardList", list);
+			model.addAttribute("search", search);
 		}else {
 			returnPage = "redirect:/bro/index";
 		}

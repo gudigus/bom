@@ -15,33 +15,47 @@ public class User_infoDaoImpl implements User_infoDao {
 	@Override
 	public List<User_info> user_infoSensorList() {
 		List<User_info> list = null;
-		list = session.selectList("coffeeSensorSelectUser_info");
-		for(int i=0; i<list.size();i++) {
-			list.get(i).setUfollowing(session.selectOne("coffeeSensorFollowing", list.get(i).getUcode()));
-			list.get(i).setUfollower(session.selectOne("coffeeSensorFollower", list.get(i).getUcode()));
+		try {
+			list = session.selectList("coffeeSensorSelectUser_info");
+			for(int i=0; i<list.size();i++) {
+				list.get(i).setUfollowing(session.selectOne("coffeeSensorFollowing", list.get(i).getUcode()));
+				list.get(i).setUfollower(session.selectOne("coffeeSensorFollower", list.get(i).getUcode()));
+			}
 			
+		}catch (Exception e) {
+			System.out.println("User_infoDaoImpl user_infoSensorList Error ->"+e.getMessage());
 		}
 		return list;
 	}
 	@Override
 	public List<User_info> user_infoRestoreList() {
 		List<User_info> list = null;
-		list = session.selectList("coffeeRestoreSelectUser_info");
-		for(int i=0; i<list.size();i++) {
-			list.get(i).setUfollowing(session.selectOne("coffeeSensorFollowing", list.get(i).getUcode()));
-			list.get(i).setUfollower(session.selectOne("coffeeSensorFollower", list.get(i).getUcode()));
+		try {
+			list = session.selectList("coffeeRestoreSelectUser_info");
+			for(int i=0; i<list.size();i++) {
+				list.get(i).setUfollowing(session.selectOne("coffeeSensorFollowing", list.get(i).getUcode()));
+				list.get(i).setUfollower(session.selectOne("coffeeSensorFollower", list.get(i).getUcode()));
+				
+			}
 			
+		}catch (Exception e) {
+			System.out.println("User_infoDaoImpl user_infoRestoreList Error ->"+e.getMessage());
 		}
 		return list;
 	}
 	@Override
 	public List<User_info> user_infoAccusationList() {
 		List<User_info> list = null;
-		list = session.selectList("coffeeAccusationSelectUser_info");
-		for(int i=0; i<list.size();i++) {
-			list.get(i).setUfollowing(session.selectOne("coffeeSensorFollowing", list.get(i).getUcode()));
-			list.get(i).setUfollower(session.selectOne("coffeeSensorFollower", list.get(i).getUcode()));
+		try {
+			list = session.selectList("coffeeAccusationSelectUser_info");
+			for(int i=0; i<list.size();i++) {
+				list.get(i).setUfollowing(session.selectOne("coffeeSensorFollowing", list.get(i).getUcode()));
+				list.get(i).setUfollower(session.selectOne("coffeeSensorFollower", list.get(i).getUcode()));
+				
+			}
 			
+		}catch (Exception e) {
+			System.out.println("User_infoDaoImpl user_infoAccusationList Error ->"+e.getMessage());
 		}
 		return list;
 	}
@@ -56,7 +70,7 @@ public class User_infoDaoImpl implements User_infoDao {
 		try{
 			result = session.update("coffeeUpdateUstate", ui);
 		}catch (Exception e) {
-			System.out.println("User_infoDaoImpl updateUstate"+e.getMessage());
+			System.out.println("User_infoDaoImpl updateUstate Error ->"+e.getMessage());
 		}
 		return result;
 	}
@@ -69,6 +83,54 @@ public class User_infoDaoImpl implements User_infoDao {
 			System.out.println("User_infoDaoImpl memConfirmManager"+e.getMessage());
 		}
 		return result;
+	}
+	@Override
+	public List<User_info> user_infoAccusationList(String search) {
+		List<User_info> list = null;
+		try {
+			list = session.selectList("coffeeAccusationSelectUser_infoSearch", search);
+			for(int i=0; i<list.size();i++) {
+				list.get(i).setUfollowing(session.selectOne("coffeeSensorFollowing", list.get(i).getUcode()));
+				list.get(i).setUfollower(session.selectOne("coffeeSensorFollower", list.get(i).getUcode()));
+				
+			}
+			
+		}catch (Exception e) {
+			System.out.println("User_infoDaoImpl user_infoAccusationList Error ->"+e.getMessage());
+		}
+		return list;
+	}
+	@Override
+	public List<User_info> user_infoSensorList(String search) {
+		List<User_info> list = null;
+		try {
+			list = session.selectList("coffeeSensorSelectUser_infoSearch", search);
+			for(int i=0; i<list.size();i++) {
+				list.get(i).setUfollowing(session.selectOne("coffeeSensorFollowing", list.get(i).getUcode()));
+				list.get(i).setUfollower(session.selectOne("coffeeSensorFollower", list.get(i).getUcode()));
+				
+			}
+			
+		}catch (Exception e) {
+			System.out.println("User_infoDaoImpl user_infoSensorList Error ->"+e.getMessage());
+		}
+		return list;
+	}
+	@Override
+	public List<User_info> user_infoRestoreList(String search) {
+		List<User_info> list = null;
+		try {
+			list = session.selectList("coffeeRestoreSelectUser_infoSearch", search);
+			for(int i=0; i<list.size();i++) {
+				list.get(i).setUfollowing(session.selectOne("coffeeSensorFollowing", list.get(i).getUcode()));
+				list.get(i).setUfollower(session.selectOne("coffeeSensorFollower", list.get(i).getUcode()));
+				
+			}
+			
+		}catch (Exception e) {
+			System.out.println("User_infoDaoImpl user_infoRestoreList Error ->"+e.getMessage());
+		}
+		return list;
 	}
 
 }

@@ -66,5 +66,43 @@ public class ReportDaoImpl implements ReportDao {
 		return result;
 	}
 
+	@Override
+	public List<ReportUser_infoBoard> accusationList(String search) {
+		List<ReportUser_infoBoard> list = null;
+		System.out.println("ReportDaoImpl accusationList start..");
+
+		try {
+			list = session.selectList("accusationSelectReportUser_infoBoardSearch", search);
+			for(int i=0; i<list.size();i++) {
+				list.get(i).setUfollowing(session.selectOne("coffeeSensorFollowingReport", list.get(i).getRucode()));
+				list.get(i).setUfollower(session.selectOne("coffeeSensorFollowerReport", list.get(i).getRucode()));
+				
+			}
+		}catch (Exception e) {
+			System.out.println("ReportDaoImpl accusationList ->"+e.getMessage());
+		}
+		
+		
+		return list;
+	}
+
+	@Override
+	public List<ReportUser_infoBoard> uncensoredList(String search) {
+		List<ReportUser_infoBoard> list = null;
+		System.out.println("ReportDaoImpl uncensoredList start..");
+
+		try {
+			list = session.selectList("accusationSelectUncensoredReportUser_infoBoardSearch", search);
+			for(int i=0; i<list.size();i++) {
+				list.get(i).setUfollowing(session.selectOne("coffeeSensorFollowingReport", list.get(i).getRucode()));
+				list.get(i).setUfollower(session.selectOne("coffeeSensorFollowerReport", list.get(i).getRucode()));
+				
+			}
+		}catch (Exception e) {
+			System.out.println("ReportDaoImpl uncensoredList ->"+e.getMessage());
+		}
+		return list;
+	}
+
 	
 }

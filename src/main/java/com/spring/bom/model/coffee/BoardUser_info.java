@@ -12,8 +12,7 @@ public class BoardUser_info {
 	private int bbcode;
 	private String battach;
 	private int bvotecode;
-	private int btmpsav;
-	private String btmpsavtime;
+	
 	private int blikecount;
 	private int bexpcount;
 	private int bjoincount;
@@ -21,6 +20,7 @@ public class BoardUser_info {
 	private int breportcount;
 	private int breplycount;
 	private int bquotecount;
+	private int bsaveorrsvd;
 		//Not DTO
 	private String battachType;
 	private String battachSrc;
@@ -109,18 +109,7 @@ public class BoardUser_info {
 	public void setBvotecode(int bvotecode) {
 		this.bvotecode = bvotecode;
 	}
-	public int getBtmpsav() {
-		return btmpsav;
-	}
-	public void setBtmpsav(int btmpsav) {
-		this.btmpsav = btmpsav;
-	}
-	public String getBtmpsavtime() {
-		return btmpsavtime;
-	}
-	public void setBtmpsavtime(String btmpsavtime) {
-		this.btmpsavtime = btmpsavtime;
-	}
+
 	public int getBlikecount() {
 		return blikecount;
 	}
@@ -163,6 +152,13 @@ public class BoardUser_info {
 	public void setBquotecount(int bquotecount) {
 		this.bquotecount = bquotecount;
 	}
+	public int getBsaveorrsvd() {
+		return bsaveorrsvd;
+	}
+	public void setBsaveorrsvd(int bsaveorrsvd) {
+		this.bsaveorrsvd = bsaveorrsvd;
+	}
+	
 	public String getBattachType() {
 		return battachType;
 	}

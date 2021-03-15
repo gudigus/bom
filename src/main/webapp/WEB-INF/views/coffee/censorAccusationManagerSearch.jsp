@@ -346,9 +346,9 @@
 				<button class="btn btn-success" id="menu-toggle">←</button>
 			</nav>
 			<h2>신고 확인 페이지</h2>
-			<%-- <div class="alert alert-success" role="alert">
+			<div class="alert alert-success" role="alert">
 				"${search }" 검색 결과 입니다.
-			</div> --%>
+			</div>
 			
 			<div class="container-fluid">
 				<p>

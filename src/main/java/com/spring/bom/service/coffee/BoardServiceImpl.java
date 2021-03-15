@@ -39,4 +39,25 @@ public class BoardServiceImpl implements BoardService {
 		return result;
 	}
 
+	@Override
+	public List<BoardUser_info> accusationList(String search) {
+		List<BoardUser_info> list = null;
+		list = bd.accusationList(search);
+		return list;
+	}
+
+	@Override
+	public List<BoardUser_info> sensorList(String search) {
+		List<BoardUser_info> list = null;
+		list = bd.sensorList(search);
+		return list;
+	}
+
+	@Override
+	public List<BoardUser_info> restoreList(String search) {
+		List<BoardUser_info> list = null;
+		list = bd.restoreList(search);
+		return list;
+	}
+
 }
