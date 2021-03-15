@@ -47,6 +47,9 @@
 	display: none;
 }
 </style>
+<script type="text/javascript">
+	
+</script>
 </head>
 
 <body style="padding-top: 86px;">
@@ -120,7 +123,7 @@
 								<tr id="searchkeyword">
 									<td class="dropdown-li" style="padding: 5px;"><c:choose>
 											<c:when test="${Junghun.search.contains('#')}">
-												<a id="row" href="searchView?search=%23${Junghun.search }">${Junghun.search }</a>
+												<a id="row" href="searchView?search=${Junghun.search }">${Junghun.search }</a>
 											</c:when>
 											<c:otherwise>
 												<a id="row" href="searchView?search=${Junghun.search }">${Junghun.search }</a>
@@ -169,22 +172,24 @@
 						role="tab" aria-controls="new" aria-selected="false">최신글</a></li>
 
 					<li class="nav-item mr-5" role="presentation"><a
-						class="nav-link" id="contact-tab" data-toggle="tab"
-						href="#contact" role="tab" aria-controls="photo"
-						aria-selected="false">사진</a></li>
+						class="nav-link" id="contact-tab" data-toggle="tab"	href="#image" 
+						role="tab" aria-controls="image" aria-selected="false">사진</a></li>
 
 					<li class="nav-item mr-5" role="presentation"><a
-						class="nav-link" id="contact-tab" data-toggle="tab"
-						href="#contact" role="tab" aria-controls="video"
-						aria-selected="false">동영상</a></li>
+						class="nav-link" id="contact-tab" data-toggle="tab"	href="#video" 
+						role="tab" aria-controls="video" aria-selected="false">동영상</a></li>
 				</ul>
 			</nav>
 			<p>
 				<!--글 정렬-->
+				
 			<div class="tab-content" id="myTabContent">
 				<!-- 인기  -->
 				<div class="tab-pane fade show active" id="fame" role="tabpanel"
 					aria-labelledby="home-tab">
+					<c:if test="${listSearch.size() == 0 }">
+						" ${search } " 검색된 글이 없습니다
+					</c:if>
 					<c:forEach var="junghun" items="${listSearch }">
 						<div class="card">
 							<div class="card-body">
@@ -192,15 +197,10 @@
 								<img src="/img/teemo.jpg" class="rounded-circle" width="50"
 									width="50"> <a class="card-title text-dark">${junghun.uNickName}</a>
 								<a class="card-subtitle mb-2 text-muted">@${junghun.uatId}</a> <a
-									class="card-subtitle mb-2 text-muted">${junghun.btmpsavtime }</a>
+									class="card-subtitle mb-2 text-muted" style="font-size: 12px;">${junghun.bregdate }</a>
 								<a href="#" class="card-text" style="margin-top: 10px;">${junghun.bcontent }
 								</a>
-								<a onclick="has()"></a>
-								<script type="text/javascript">
-									function has(){
-										
-									}
-								</script>
+								
 								<div align="center">
 									<div class="btn-group col-md-12" role="group"
 										aria-label="Button group with nested dropdown">
@@ -238,6 +238,9 @@
 				<!-- 사용자 -->
 				<div class="tab-pane fade" id="user" role="tabpanel"
 					aria-labelledby="profile-tab">
+					<c:if test="${listUser.size() == 0 }">
+						" ${search } " 검색된 사용자가 없습니다
+					</c:if>
 					<c:forEach var="junghun" items="${listUser }">
 						<div class="card rounded">
 							<div class="card-hover">
@@ -263,6 +266,9 @@
 				<!-- 최신 -->
 				<div class="tab-pane fade" id="new" role="tabpanel"
 					aria-labelledby="contact-tab">
+					<c:if test="${listNew.size() == 0 }">
+						" ${search } " 검색된 글이 없습니다
+					</c:if>
 					<c:forEach var="junghun" items="${listNew }">
 						<div class="card">
 							<div class="card-body">
@@ -270,22 +276,25 @@
 								<img src="/img/teemo.jpg" class="rounded-circle" width="50"
 									width="50"> <a class="card-title text-dark">${junghun.uNickName}</a>
 								<a class="card-subtitle mb-2 text-muted">${junghun.uatId}</a> <a
-									class="card-subtitle mb-2 text-muted">${junghun.btmpsavtime }</a>
+									class="card-subtitle mb-2 text-muted" style="font-size: 12px;">${junghun.bregdate }</a>
 								<a href="#" class="card-text" style="margin-top: 10px;">${junghun.bcontent }</a>
 								<div align="center">
 									<div class="btn-group col-md-12" role="group"
 										aria-label="Button group with nested dropdown">
 										<button type="button" class="btn btn-secondary mr-3 btn-light"
-											data-toggle="tooltip" data-placement="top" title="답글">
+											data-toggle="tooltip" data-placement="top" title="답글" style="font-size: 12px;">
 											<img src="/img/speech-bubble.svg" width="20" height="20">
+											&ensp;${junghun.breplycount }
 										</button>
 										<button type="button" class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
+											data-toggle="tooltip" data-placement="top" title="스크랩 or 인용" style="font-size: 12px;" >
 											<img src="/img/bring.svg" width="20" height="20">
+											&ensp;${junghun.bquotecount }
 										</button>
 										<button type="button" class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="좋아요">
+											data-toggle="tooltip" data-placement="top" title="좋아요" style="font-size: 12px;">
 											<img src="/img/heart.svg" width="20" height="20">
+											&ensp;${junghun.blikecount }
 										</button>
 										<button type="button"
 											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
@@ -304,14 +313,117 @@
 					</c:forEach>
 				</div>
 				<!-- 사진 -->
-				<div class="tab-pane fade" id="photo" role="tabpanel"
-					aria-labelledby="contact-tab"></div>
+				<div class="tab-pane fade" id="image" role="tabpanel"
+					aria-labelledby="contact-tab">
+					<c:if test="${junghun.battach == null}">
+						" ${search } " 검색된 사진이 없습니다
+					</c:if>
+					<c:forEach var="junghun" items="${listSearch }">
+						<div class="card">
+						<c:if test="${junghun.battachType =='image' && junghun.battach != null}">
+							<div class="card-body">
+								<button type="button" class="btn btn-light float-right">⋯</button>
+								<img src="/img/teemo.jpg" class="rounded-circle" width="50"
+									width="50"> <a class="card-title text-dark">${junghun.uNickName}</a>
+								<a class="card-subtitle mb-2 text-muted">@${junghun.uatId}</a> <a
+									class="card-subtitle mb-2 text-muted" style="font-size: 12px">${junghun.bregdate }</a>
+								<p class="card-text" style="margin-top: 10px;">${junghun.bcontent }</p>
+									<c:if test="${junghun.battachType=='image' }">
+										<img src="/img/media/${junghun.battachSrc }">
+									</c:if>
+								
+								<div align="center">
+									<div class="btn-group col-md-12" role="group"
+										aria-label="Button group with nested dropdown">
+										<button type="button" class="btn btn-secondary mr-3 btn-light"
+											data-toggle="tooltip" data-placement="top" title="답글" style="font-size: 12px;">
+											<img src="/img/speech-bubble.svg" width="20" height="20">
+											&ensp;${junghun.breplycount }
+										</button>
+										<button type="button" class="btn btn-secondary btn-light mr-3"
+											data-toggle="tooltip" data-placement="top" title="스크랩 or 인용" style="font-size: 12px;" >
+											<img src="/img/bring.svg" width="20" height="20">
+											&ensp;${junghun.bquotecount }
+										</button>
+										<button type="button" class="btn btn-secondary btn-light mr-3"
+											data-toggle="tooltip" data-placement="top" title="좋아요" style="font-size: 12px;">
+											<img src="/img/heart.svg" width="20" height="20">
+											&ensp;${junghun.blikecount }
+										</button>
+										<button type="button"
+											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+											data-toggle="dropdown" aria-haspopup="true"
+											aria-expanded="false">
+											<img src="/img/share.svg" width="20" height="20">
+										</button>
+										<div class="dropdown-menu">
+											<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
+												class="dropdown-item" href="#">URL담아가기</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							</c:if>		
+						</div>
+					</c:forEach>
+				</div>
 				<!-- 동영상 -->
 				<div class="tab-pane fade" id="video" role="tabpanel"
-					aria-labelledby="contact-tab">...</div>
+					aria-labelledby="contact-tab">
+					<c:if test="${junghun.battach == null}">
+						" ${search } " 검색된 동영상이 없습니다
+					</c:if>
+					<c:forEach var="junghun" items="${listSearch }">
+						<div class="card">
+						<c:if test="${junghun.battachType =='video' && junghun.battach != null}">
+							<div class="card-body">
+								<button type="button" class="btn btn-light float-right">⋯</button>
+								<img src="/img/teemo.jpg" class="rounded-circle" width="50"
+									width="50"> <a class="card-title text-dark">${junghun.uNickName}</a>
+								<a class="card-subtitle mb-2 text-muted">@${junghun.uatId}</a> <a
+									class="card-subtitle mb-2 text-muted" style="font-size: 12px">${junghun.bregdate }</a>
+								<p class="card-text" style="margin-top: 10px;">${junghun.bcontent }</p>
+									<c:if test="${junghun.battachType=='video' }">
+										<img src="/img/media/${junghun.battachSrc }">
+									</c:if>
+								
+								<div align="center">
+									<div class="btn-group col-md-12" role="group"
+										aria-label="Button group with nested dropdown">
+										<button type="button" class="btn btn-secondary mr-3 btn-light"
+											data-toggle="tooltip" data-placement="top" title="답글" style="font-size: 12px;">
+											<img src="/img/speech-bubble.svg" width="20" height="20">
+											&ensp;${junghun.breplycount }
+										</button>
+										<button type="button" class="btn btn-secondary btn-light mr-3"
+											data-toggle="tooltip" data-placement="top" title="스크랩 or 인용" style="font-size: 12px;" >
+											<img src="/img/bring.svg" width="20" height="20">
+											&ensp;${junghun.bquotecount }
+										</button>
+										<button type="button" class="btn btn-secondary btn-light mr-3"
+											data-toggle="tooltip" data-placement="top" title="좋아요" style="font-size: 12px;">
+											<img src="/img/heart.svg" width="20" height="20">
+											&ensp;${junghun.blikecount }
+										</button>
+										<button type="button"
+											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+											data-toggle="dropdown" aria-haspopup="true"
+											aria-expanded="false">
+											<img src="/img/share.svg" width="20" height="20">
+										</button>
+										<div class="dropdown-menu">
+											<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
+												class="dropdown-item" href="#">URL담아가기</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							</c:if>		
+						</div>
+					</c:forEach>
+				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 	<!-- /#page-content-wrapper -->
 

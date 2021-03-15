@@ -4,10 +4,17 @@
 <mapper namespace="com.spring.bom.model.Junghun">
 	<!-- 글검색 -->
 	<select id="searchfame" parameterType="Junghun"
-		resultType="Junghun">
+		resultType="Junghun">		
 		select b.bcontent , b.blikecount ,b.breplycount
 		,b.bquotecount , u.uatid , u.unickname ,
-		b.btmpsavtime , b.ucode
+		b.ucode , b.battach ,
+		case when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
+    	  end as bregdate
 		from board b,
 		user_info u
 		where b.uCode = u.uCode
@@ -15,9 +22,16 @@
 		b.bcontent
 		like
 		'%'||#{search}||'%' 
-		and b.ucode not in(select bopcode from block where
-		ucode=${loginUcode})
+		and 
+		b.ucode not in(select bopcode from block where
+		ucode=${loginUcode} and bopcode is not null) <!-- 유저코드 -->
 		ORDER BY b.blikecount DESC
+	</select>
+	<select id="searchblock" parameterType="Junghun" resultType="Junghun">
+		select bword
+		from block
+		where ucode = ${loginUcode}
+		and bword is not null
 	</select>
 
 	<!-- 검색시 검색어저장 -->
@@ -27,8 +41,9 @@
 		on (search='${search}' and
 		UCODE=${loginUcode})
 		when MATCHED THEN
-		UPDATE SET
-		scount = scount+1
+		UPDATE SET 
+		scount = scount+1,
+		stime = to_char(sysdate,'yy/mm/dd hh24:mi:ss')
 		WHEN
 		NOT MATCHED THEN
 		INSERT (search, UCODE,
@@ -44,27 +59,43 @@
 	</update>
 
 	<!-- 회원검색 -->
-	<select id="searchuser" parameterType="String"
+	<select id="searchuser" parameterType="Junghun"
 		resultType="Junghun">
 		select uatid , unickname , uintro
 		from user_info
 		where (
 		uatid like
 		'%'||#{search}||'%' or unickname like '%'||#{search}||'%')
+		and ucode not in (select bopcode from block where ucode=${loginUcode} and bopcode is not null)
 	</select>
 
 	<!-- 최신글검색 -->
-	<select id="searchnew" parameterType="String"
+	<select id="searchnew" parameterType="Junghun"
 		resultType="Junghun">
-		select b.bcontent , b.btmpsavtime, u.uatid , u.unickname
-		from board b, user_info u
-		where b.ucode = u.ucode
-		and b.bcontent
+		select b.bcontent , b.blikecount ,b.breplycount
+		,b.bquotecount , u.uatid , u.unickname ,
+		b.ucode , b.battach ,
+		case when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
+    	  end as bregdate
+		from board b,
+		user_info u
+		where b.uCode = u.uCode
+		and
+		b.bcontent
 		like
-		'%'||#{search}||'%'
-		ORDER BY b.BTMPSAVTIME
+		'%'||#{search}||'%' 
+		and 
+		b.ucode not in(select bopcode from block where
+		ucode=${loginUcode} and bopcode is not null) <!-- 유저코드 -->
+		ORDER BY bregdate DESC
 	</select>
-
+	
+	
 	<!-- explore 검색어순위 -->
 	<select id="searchcount" parameterType="Junghun"
 		resultType="Junghun">

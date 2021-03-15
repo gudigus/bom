@@ -21,13 +21,13 @@ public class JunghunServiceImpl implements JunghunService {
 	}
 
 	@Override
-	public List<Junghun> listUser(String search) {
-		return jd.listUser(search);
+	public List<Junghun> listUser(Junghun junghun) {
+		return jd.listUser(junghun);
 	}
 
 	@Override
-	public List<Junghun> listNew(String search) {
-		return jd.listNew(search);
+	public List<Junghun> listNew(Junghun junghun) {
+		return jd.listNew(junghun);
 	}
 
 	@Override
@@ -59,6 +59,12 @@ public class JunghunServiceImpl implements JunghunService {
 	public int deleterow(int ucode) {
 		System.out.println("del sa::1");
 		return jd.deleterow(ucode);
+	}
+
+	@Override
+	public List<Junghun> searchblock(Junghun junghun) {
+		// TODO Auto-generated method stub
+		return jd.searchblock(junghun);
 	}
 
 

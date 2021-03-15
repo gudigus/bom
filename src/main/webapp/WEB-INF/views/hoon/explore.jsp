@@ -112,7 +112,7 @@
 							<tr>
 								<td style="font-weight: normal;">최근</td>
 								<td>
-									<button type="reset" id="del_ajax" style="font-size: 12px;" onclick="btn()">전체지우기</button>
+									<button type="reset" id="del_ajax" style="font-size: 12px;">전체지우기</button>
 								</td>
 							</tr>
 							<c:forEach var="Junghun" items="${searchkeyword }" begin="0"
@@ -132,11 +132,6 @@
 					</div>
 				</form>
 			</nav>
-			<script type="text/javascript">
-			function btn() {
-				alert('경고');
-			}
-			</script>
 			<script type="text/javascript">
 			<%String context = request.getContextPath();%>
 					$("#del_ajax").click(function(){
@@ -162,19 +157,17 @@
 					<!-- Table -->
 					<table class="table">
 						<tr>
-							<td class="table-title">오늘의 검색순위</td>
-							<td class="table-title">2월 한달 검색순</td>
+							<td class="table-title">-</td>
+							<td class="table-title">-</td>
 						</tr>
 						<c:forEach var="Junghun" items="${listCount }" varStatus="status"
 							begin="0" end="2">
 							<tr>
-								<td>${status.count }. <a
-									href="searchView?search=${Junghun.search }"
-									style="text-align: center;">${Junghun.search }</a>
+								<td>${status.count }.
+									${Junghun.search }
 								</td>
-								<td>${status.count }. <a
-									href="searchView?search=${Junghun.search }"
-									style="text-align: center;">${Junghun.search }</a>
+								<td>${status.count }.
+									${Junghun.search }
 								</td>
 							</tr>
 						</c:forEach>

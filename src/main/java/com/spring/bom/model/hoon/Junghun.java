@@ -9,14 +9,15 @@ public class Junghun {
 	private String stype;
 	private int srecord;
 	private int scount;
-
+	
 	// board
 	private String bcontent;
 	private int blikecount;
-	private String btmpsavtime;
 	private String breplycount;
 	private String bquotecount;
-
+	private String battach;
+	private String bregdate;
+	
 	// user_info
 	private String uNickName;
 	private String uatId;
@@ -24,10 +25,57 @@ public class Junghun {
 	
 	//block
 	private int bopcode;
+	private String bword;
 	
+
 	// login된 Ucode
 	static private int loginUcode; // 로그인 확인용
 
+	//첨부파일 데이터
+	private String battachType;
+	private String battachSrc;
+	
+	
+	
+	public String getBattachType() {
+		return battachType;
+	}
+
+	public void setBattachType(String battachType) {
+		this.battachType = battachType;
+	}
+
+	public String getBattachSrc() {
+		return battachSrc;
+	}
+
+	public void setBattachSrc(String battachSrc) {
+		this.battachSrc = battachSrc;
+	}
+
+	public String getBregdate() {
+		return bregdate;
+	}
+
+	public void setBregdate(String bregdate) {
+		this.bregdate = bregdate;
+	}
+
+	public String getBattach() {
+		return battach;
+	}
+
+	public void setBattach(String battach) {
+		this.battach = battach;
+	}
+
+	public String getBword() {
+		return bword;
+	}
+
+	public void setBword(String bword) {
+		this.bword = bword;
+	}
 	
 	public int getBopcode() {
 		return bopcode;
@@ -141,13 +189,6 @@ public class Junghun {
 		this.blikecount = blikecount;
 	}
 
-	public String getBtmpsavtime() {
-		return btmpsavtime;
-	}
-
-	public void setBtmpsavtime(String btmpsavtime) {
-		this.btmpsavtime = btmpsavtime;
-	}
 
 	public String getuNickName() {
 		return uNickName;

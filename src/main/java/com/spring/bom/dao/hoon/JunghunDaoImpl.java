@@ -20,13 +20,13 @@ public class JunghunDaoImpl implements JunghunDao{
 	}
 
 	@Override
-	public List<Junghun> listUser(String search) {
-		return session.selectList("searchuser",search);
+	public List<Junghun> listUser(Junghun junghun) {
+		return session.selectList("searchuser",junghun);
 	}
 
 	@Override
-	public List<Junghun> listNew(String search) {
-		return session.selectList("searchnew",search);
+	public List<Junghun> listNew(Junghun junghun) {
+		return session.selectList("searchnew",junghun);
 	}
 
 	@Override
@@ -59,6 +59,12 @@ public class JunghunDaoImpl implements JunghunDao{
 		System.out.println("del dao::1");
 		System.out.println("ucode ::"+ucode);
 		return session.delete("searchdelete",ucode);
+	}
+
+	@Override
+	public List<Junghun> searchblock(Junghun junghun) {
+		// TODO Auto-generated method stub
+		return session.selectList("searchblock",junghun);
 	}
 
 }
