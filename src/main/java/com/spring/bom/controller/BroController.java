@@ -13,18 +13,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 
 import com.spring.bom.model.bro.user_info;
-import com.spring.bom.model.right.User_Info;
 import com.spring.bom.service.bro.bomService;
-import com.spring.bom.service.right.User_InfoService;
-
 
 @Controller
 public class BroController {
 	@Autowired
 	private bomService bs;
-	@Autowired
-	private User_InfoService us;
-	
+
 		
 	@RequestMapping(value = "bro/login" , method=RequestMethod.POST)
 	public String login(user_info ui, HttpServletRequest req,Model model) throws Exception{
@@ -34,13 +29,22 @@ public class BroController {
 			session.setAttribute("user", null);
 			System.out.println("login off");
 			return "bro/index";
+		}else if(user.getuState() == 0){
+			//탈퇴 회원 로그인시 계정 복구page
+			String uemail = req.getParameter("uemail");
+			model.addAttribute("uemail",uemail);
+			model.addAttribute("user",user);
+			System.out.println("uemail : "+ user.getuEmail());
+			session.setAttribute("ui",user);
+			session.setAttribute("ucode", user.getuCode());
+			System.out.println("탈퇴회원 login");
+			return "/right/UserdisabledPage";
 		}else {
 			String uemail = req.getParameter("uemail");
 			model.addAttribute("uemail",uemail);
-
 			model.addAttribute("user",user);
 			System.out.println("uemail : "+ user.getuEmail());
-			
+			session.setAttribute("ui",user);
 			session.setAttribute("ucode", user.getuCode());
 			System.out.println("login on");
 			return "right/main";

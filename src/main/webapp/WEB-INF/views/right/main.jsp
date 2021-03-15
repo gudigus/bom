@@ -75,10 +75,10 @@
 				<div class="card">
                <div class="card-body">
                   <div class="form-row">
-                     <img src="/img/teemo.jpg" class="rounded-circle" width="50" width="50"> 
+                      <img src="${ui.uimage }" class="rounded-circle" width="50" width="50"> 
                      <div class="form-col ml-2">
-                     <a class="card-title text-dark" style="font-size:0.8em">${user.uNickname }</a><br> 
-                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${user.uAtid }</a>
+                     <a class="card-title text-dark" style="font-size:0.8em">${ui.unickname }</a><br> 
+                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${ui.uatid }</a>
                      </div>
                      </div>
                   </div>

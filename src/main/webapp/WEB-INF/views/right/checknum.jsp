@@ -90,7 +90,7 @@
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
 				<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-					<button class="btn btn-success" id="menu-toggle" onclick="location.href='updateEv'">←</button>
+					<button class="btn btn-success" id="menu-toggle" onclick="location.href='moreSee'">←</button>
 				</nav>
 			<div class="container-fluid">
 				<p>
@@ -98,22 +98,24 @@
 					<div align="center">
 						<script type="text/javascript">
 							function chk(){
-								if(document.editForm.upassword.value != document.editForm.pwd.value){
-									alert("!비밀번호가 맞지않습니다!");
-									document.editForm.pwd.focus();	
+								if(document.checkNum.num.value != document.checkNum.chnum.value){
+									alert("!인증번호가 맞지않습니다!");
+									document.checkNum.chnum.focus();	
 									return false;
+								}else{
+									alert("인증이 되었습니다!");
+									return true;
 								}
 							}
 						</script>
-						<form action="userInfoEditForm" name="editForm" onsubmit="return chk()">
-						<input type="hidden" name="ucode" value="${ui.ucode }">
-						<input type="hidden" name="upassword" value="${ui.upassword }">
+						<form action="updateDouble" name="checkNum" onsubmit="return chk()" method="post">
+						<input type="hidden" name="num" value="${num }">
 						<p>
-						<h2>비밀번호 입력</h2>
-						<table>   <!-- <td> -->
+						<h2>인증번호 입력</h2>
+						<table>
 							<tr></tr>
-							<tr><td style="text-align: center; margin-top:5px;">비밀번호</td><td>></td><td>
-							<input type="password" name="pwd" placeholder="비밀번호를 입력해주세요." required="required"></td></tr>
+							<tr><td style="text-align: center; margin-top:5px;">인증번호</td><td>></td><td>
+							<input type="text" name="chnum" placeholder="인증번호를 입력해주세요." required="required"></td></tr>
 							<tr><td></td><td></td>
 							<td><input type="submit" value="확인" class="btn btn-outline-success">
 							<input type="reset" value="입력취소" class="btn btn-outline-secondary"></td></tr>						

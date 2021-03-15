@@ -40,6 +40,64 @@
 	display: none;
 }
 </style>
+<!-- 기존 비밀번호 check -->
+		<%
+			String context = request.getContextPath();
+			System.out.println("context->"+context);
+		%>
+		<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+		<script type="text/javascript">
+		 var contextPath='${pageContext.request.contextPath}';
+		 
+			// 비밀번호 일치 검사(1 = 일치 / 0 != 일치)
+			$(document).ready(function(){
+			$("#upassword").blur(function(){
+				//function pwCh(){
+					var upassword = $('#upassword').val();
+					console.log(upassword);
+					$.ajax({
+						url : "<%=context%>/right/pwCheck",
+						data: {upassword : upassword},
+						dataType:'text',
+						success : function(data){						
+							
+							if (data==='1'){
+									// 1 : 기존 비밀번호 일치!
+									$('#pw_check').html('비밀번호가 일치합니다!');
+									$('#pw_check').css('color', 'green');
+									$('#pwd').attr('disabled', false);
+									$('#pwd2').attr('disabled', false);
+
+							}else{
+								$('#pw_check').html('비밀번호가 불일치합니다! :p');
+								$('#pw_check').css('color', 'red'); 
+								$('#pwd').attr('disabled', true);
+								$('#pwd2').attr('disabled', true);
+								}
+							}
+						});
+					});
+				});
+			</script>
+			<script type="text/javascript">
+			$(document).ready(function(){
+				$("#pwd2").blur(function(){
+							//function chk(){
+								if($('#pwd').val() != $('#pwd2').val()){
+									$('#pw_doublecheck').text('비밀번호가 맞지않습니다!');
+									$('#pw_doublecheck').css('color', 'red'); 
+									$('#pwd2').focus();	
+									$('#reg_submit').attr('disabled', true);
+								}else{
+									$('#pw_doublecheck').text('비밀번호가 일치합니다!');
+									$('#pw_doublecheck').css('color', 'green'); 
+									$("#reg_submit").attr("disabled", false);
+								}
+								//}
+							//}
+				});
+			});
+			</script>
 </head>
 
 <body>
@@ -74,33 +132,59 @@
 				</a>
 				<div class="card">
 					<div class="card-body">
-						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-							width="50"> <a class="card-title text-dark">닉네임</a> <a
-							class="card-subtitle mb-2 text-muted">@atid</a>
+						 <img src="${ui.uimage }" class="rounded-circle" width="50" width="50"> 
+                     <div class="form-col ml-2">
+                     <a class="card-title text-dark" style="font-size:0.8em">${ui.unickname }</a><br> 
+                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${ui.uatid }</a>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
 				</div>
 			</div>
+		</div>
 		</div>
 
 		<!-- /#sidebar-wrapper -->
 
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
-
+			<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+					<button class="btn btn-success" id="menu-toggle" onclick="location.href='updateEv'">←</button>
+			</nav>
 			<div class="container-fluid">
 				<p>
 				<div class="card">
 					<div align="center">
-						<div class="d-grid gap-2 row-6 mx-auto">
-							<button type="button" class="btn btn-outline-success" onclick="location.href='userInfoEdit'">계정 정보 수정</button><p>
-							<button type="button" class="btn btn-outline-success" onclick="location.href='doubleSecurity'">2단계 인증 보안</button><p>
-							<button type="button" class="btn btn-outline-success" onclick="location.href='changePw'">비밀번호 변경</button><p>
-							<button type="button" class="btn btn-outline-success" onclick="location.href='block'">차단 관리</button><p>
-							<button type="button" class="btn btn-outline-success" onclick="location.href='userDisabled'">탈퇴</button><p>
+					<form action="changePwPro" method="post">
+						<input type="hidden" name="upassword" value="${ui.upassword }">
+						<input type="hidden" name="uemail" value="${ui.uemail }">
+						<input type="hidden" name="uidentify" value="${ui.uidentify }">
+						<input type="hidden" name="pwd" value="${pwd }">
+						<p>
+						<h2>비밀번호 변경</h2>
+						<div class="input-group mb-3">
+							<label for="upassword">기존 비밀번호</label><br>
+									<input type="password" class="form-control" id="upassword" name="upassword" placeholder="기존 비밀번호를 입력해주세요." required="required"><br>
+									<!-- <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="pwCh()">비밀번호확인</button>	 -->						
+							<div id="pw_check"></div>
 						</div>
+						<div class="form-group">
+						<div class="input-group mb-3">
+						<label for="pwd">새로운 비밀번호</label><br>
+	  							<input type="password" class="form-control"  name="pwd" id="pwd" placeholder="새로운 비밀번호를 입력해주세요." aria-label="새로운 비밀번호를 입력해주세요." aria-describedby="button-addon2" required="required"><br>
+	  					<label for="pwd2">새로운 비밀번호 확인</label><br>		
+	  							<input type="password" class="form-control"  name="pwd2" id="pwd2" placeholder="한번 더 입력해주세요." aria-label="한번 더  입력해주세요." aria-describedby="button-addon2" required="required"><br>
+	  							<!--  <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="chk()">비밀번호확인</button>  -->	
+								<div id="pw_doublecheck"></div>
+						</div>
+						</div>
+						<div class="form-group">
+							<input type="reset" value="취소" class="btn btn-outline-secondary" style="margin-right: 0.5%;'"> 
+							<input type="submit" value="완료" class="btn btn-outline-success" id="reg_submit">
+						</div>
+					</form>
 					</div>
 				</div>
+			</div>
 		</div>
 		<!-- /#page-content-wrapper -->
 

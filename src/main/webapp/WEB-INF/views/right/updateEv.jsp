@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -74,55 +73,39 @@
 					</button>
 				</a>
 				<div class="card">
-					<div class="card-body">
-						 <img src="${ui.uimage }" class="rounded-circle" width="50" width="50"> 
+               <div class="card-body">
+                  <div class="form-row">
+                     <img src="${ui.uimage }" class="rounded-circle" width="50" width="50"> 
                      <div class="form-col ml-2">
                      <a class="card-title text-dark" style="font-size:0.8em">${ui.unickname }</a><br> 
                      <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${ui.uatid }</a>
-					</div>
-					<button type="button" class="btn btn-success">로그아웃</button>
+                     </div>
+                     </div>
+                  </div>
+               <button type="button" class="btn btn-success">로그아웃</button>
 				</div>
 			</div>
 		</div>
-		</div>
+
 		<!-- /#sidebar-wrapper -->
 
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
-				<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-					<button class="btn btn-success" id="menu-toggle" onclick="location.href='updateEv'">←</button>
-				</nav>
 			<div class="container-fluid">
+			<div>
+			</div>
 				<p>
-				<div class="card">
 					<div align="center">
-						<script type="text/javascript">
-							function chk(){
-								if(document.editForm.upassword.value != document.editForm.pwd.value){
-									alert("!비밀번호가 맞지않습니다!");
-									document.editForm.pwd.focus();	
-									return false;
-								}
-							}
-						</script>
-						<form action="userInfoEditForm" name="editForm" onsubmit="return chk()">
-						<input type="hidden" name="ucode" value="${ui.ucode }">
-						<input type="hidden" name="upassword" value="${ui.upassword }">
-						<p>
-						<h2>비밀번호 입력</h2>
-						<table>   <!-- <td> -->
-							<tr></tr>
-							<tr><td style="text-align: center; margin-top:5px;">비밀번호</td><td>></td><td>
-							<input type="password" name="pwd" placeholder="비밀번호를 입력해주세요." required="required"></td></tr>
-							<tr><td></td><td></td>
-							<td><input type="submit" value="확인" class="btn btn-outline-success">
-							<input type="reset" value="입력취소" class="btn btn-outline-secondary"></td></tr>						
-						</table>
-						</form>
-						<p>
+						<div class="d-grid gap-2">
+						 <p><button type="button" class="btn btn-outline-success" onclick="location.href='insertpw?ucode=${ui.ucode }'">계정 정보 수정</button><p>
+						 	<button type="button" class="btn btn-outline-success" onclick="location.href='doubleSecurity?ucode=${ui.ucode }'">2단계 인증</button><p>
+							<button type="button" class="btn btn-outline-success" onclick="location.href='changePw?ucode=${ui.ucode }'">비밀번호 변경</button><p>
+							<button type="button" class="btn btn-outline-success" onclick="location.href='likeForm?ucode=${ui.ucode }'">관심사 관리</button><p>
+							<button type="button" class="btn btn-outline-success" onclick="location.href='block?ucode=${ui.ucode }'">차단 관리</button><p>
+							<button type="button" class="btn btn-outline-success" onclick="location.href='userDisabled?ucode=${ui.ucode }'">탈퇴</button><p>
+						</div>
 					</div>
 				</div>
-			</div>
 		</div>
 		<!-- /#page-content-wrapper -->
 

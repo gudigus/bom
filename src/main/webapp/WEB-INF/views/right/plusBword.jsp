@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -75,10 +74,10 @@
 				</a>
 				<div class="card">
 					<div class="card-body">
-						 <img src="${ui.uimage }" class="rounded-circle" width="50" width="50"> 
+						 <img src="${ui.uImage }" class="rounded-circle" width="50" width="50"> 
                      <div class="form-col ml-2">
-                     <a class="card-title text-dark" style="font-size:0.8em">${ui.unickname }</a><br> 
-                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${ui.uatid }</a>
+                     <a class="card-title text-dark" style="font-size:0.8em">${ui.uNickname }</a><br> 
+                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${ui.uAtid }</a>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
 				</div>
@@ -95,34 +94,30 @@
 			<div class="container-fluid">
 				<p>
 				<div class="card">
+				<h2>차단 관리</h2>
+				 <div class="btn-group me-2" role="group" aria-label="Second group">
+				<button type="button" class="btn btn-secondary" onclick="location.href='block'">계정 관리</button>
+				<button type="button" class="btn btn-secondary" onclick="location.href='blockhash'">해시태그 관리</button>
+				<button type="button" class="btn btn-light" onclick="location.href='blockword'">단어 관리</button></div>
 					<div align="center">
-						<script type="text/javascript">
-							function chk(){
-								if(document.editForm.upassword.value != document.editForm.pwd.value){
-									alert("!비밀번호가 맞지않습니다!");
-									document.editForm.pwd.focus();	
-									return false;
-								}
-							}
-						</script>
-						<form action="userInfoEditForm" name="editForm" onsubmit="return chk()">
-						<input type="hidden" name="ucode" value="${ui.ucode }">
-						<input type="hidden" name="upassword" value="${ui.upassword }">
-						<p>
-						<h2>비밀번호 입력</h2>
-						<table>   <!-- <td> -->
-							<tr></tr>
-							<tr><td style="text-align: center; margin-top:5px;">비밀번호</td><td>></td><td>
-							<input type="password" name="pwd" placeholder="비밀번호를 입력해주세요." required="required"></td></tr>
-							<tr><td></td><td></td>
-							<td><input type="submit" value="확인" class="btn btn-outline-success">
-							<input type="reset" value="입력취소" class="btn btn-outline-secondary"></td></tr>						
-						</table>
+						<a href="/right/plusBword" class="list-group-item list-group-item-action"> <img
+							src="/img/plus-circle.svg" width="15" height="15"> 차단 추가
+						</a>
+						<c:forEach var="b" items="${bList}" varStatus="status">
+							<c:if test="${not empty b.bword}">
+								<input id="${b.blcode}" type="hidden" value="${b.blcode}">
+								<label for="${b.blcode}"><span>${b.bword}</span></label>
+							    <input id="${b.blcode}" type="button" class="btn btn-outline-danger" value="차단 취소" onclick="location.href='blockdelete?blcode=${b.blcode}'"><br>	
+							</c:if>
+						</c:forEach>
+						<form action="plusBwordRe" method="post">
+							<input type="text" name="bword" placeholder="차단할 단어를 입력해주세요." required="required">	
+							<input type="submit" class="btn btn-outline-success" value="저장">	
+							<input type="reset" class="btn btn-outline-danger" value="취소">
 						</form>
-						<p>
 					</div>
 				</div>
-			</div>
+		</div>
 		</div>
 		<!-- /#page-content-wrapper -->
 

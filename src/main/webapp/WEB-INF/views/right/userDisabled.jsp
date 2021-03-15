@@ -74,21 +74,22 @@
 				</a>
 				<div class="card">
 					<div class="card-body">
-						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-							width="50"> <a class="card-title text-dark">닉네임</a> <a
-							class="card-subtitle mb-2 text-muted">@atid</a>
+						 <img src="${ui.uimage }" class="rounded-circle" width="50" width="50"> 
+                     <div class="form-col ml-2">
+                     <a class="card-title text-dark" style="font-size:0.8em">${ui.unickname }</a><br> 
+                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${ui.uatid }</a>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
 				</div>
 			</div>
 		</div>
-
+		</div>
 		<!-- /#sidebar-wrapper -->
 
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
 				<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-					<button class="btn btn-success" id="menu-toggle" onclick="location.href='moreSee'">←</button>
+					<button class="btn btn-success" id="menu-toggle" onclick="location.href='updateEv'">←</button>
 				</nav>
 			<div class="container-fluid">
 				<p>
@@ -106,7 +107,7 @@
 								}
 							}
 						</script>
-						<form action="userDisabledPro" name="disabledForm" onsubmit="return chk()">
+						<form action="userDisabledPro" name="disabledForm" onsubmit="return chk()" method="post"> 
 						<input type="hidden" name="ucode" value="${ui.ucode }">
 						<input type="hidden" name="upassword" value="${ui.upassword }">
 						<p>

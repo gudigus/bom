@@ -75,10 +75,10 @@
 				</a>
 				<div class="card">
 					<div class="card-body">
-						 <img src="${ui.uimage }" class="rounded-circle" width="50" width="50"> 
+						 <img src="${ui.uImage }" class="rounded-circle" width="50" width="50"> 
                      <div class="form-col ml-2">
-                     <a class="card-title text-dark" style="font-size:0.8em">${ui.unickname }</a><br> 
-                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${ui.uatid }</a>
+                     <a class="card-title text-dark" style="font-size:0.8em">${ui.uNickname }</a><br> 
+                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${ui.uAtid }</a>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
 				</div>
@@ -97,27 +97,75 @@
 				<div class="card">
 					<div align="center">
 						<script type="text/javascript">
-							function chk(){
-								if(document.editForm.upassword.value != document.editForm.pwd.value){
-									alert("!비밀번호가 맞지않습니다!");
-									document.editForm.pwd.focus();	
-									return false;
-								}
-							}
-						</script>
-						<form action="userInfoEditForm" name="editForm" onsubmit="return chk()">
-						<input type="hidden" name="ucode" value="${ui.ucode }">
-						<input type="hidden" name="upassword" value="${ui.upassword }">
+							$(document).ready(function(){
+								$("input[type='checkbox']").on("click", function(){
+									let count = $("input:checked[type='checkbox']").length;
+									if(count>3){
+										$(this).prop("checked",false);
+										$('#countfrm').text('3개까지만 선택하실수 있습니다!');
+										$('#countfrm').css('color', 'red');
+										$('#reg_submit').attr('disabled', true);
+									}else if(count<3){
+										$(this).prop("checked",false);
+										$('#countfrm').text('3개까지 선택하셔야 합니다!');
+										$('#countfrm').css('color', 'red');
+										$('#reg_submit').attr('disabled', true);
+									}else{
+										$(this).prop("checked",true);
+										$('#countfrm').text('');
+										$('#countfrm').css('color', 'green');
+										$("#reg_submit").attr("disabled", false);
+									}
+								});
+							});
+							
+							function fnGetdata(){
+						        var chkArray = new Array(); // 배열 선언
+						 
+						        $('input:checkbox[name=SEQ_CHK]:checked').each(function() { // 체크된 체크박스의 value 값을 가지고 온다.
+						            chkArray.push(this.value);
+						        });
+						        $('#hiddenValue').val(chkArray);
+						        
+						        alert($('#hiddenValue').val()); // 아래 체크박스가 모두 체크되어 있다면 1,2,3,4 가 출력 된다.
+						        
+						    }
+					</script>
+						<form action="likeResult" name="likeResult" method="post">
 						<p>
-						<h2>비밀번호 입력</h2>
-						<table>   <!-- <td> -->
-							<tr></tr>
-							<tr><td style="text-align: center; margin-top:5px;">비밀번호</td><td>></td><td>
-							<input type="password" name="pwd" placeholder="비밀번호를 입력해주세요." required="required"></td></tr>
-							<tr><td></td><td></td>
-							<td><input type="submit" value="확인" class="btn btn-outline-success">
-							<input type="reset" value="입력취소" class="btn btn-outline-secondary"></td></tr>						
-						</table>
+						<h2>관심사 설정</h2>
+						<div id="countfrm"></div>
+						<!-- 관심사 조회 -->
+							<c:set var="i" value="1" /> <c:set var="j" value="4" />
+							<c:forEach var="it" items="${list}" varStatus="status">
+								<!--<c:set var="str" value="${list_choice[status.index + 1].icode }"/>-->
+										<c:choose>
+											<c:when test="${it.icode eq list_choice[0].icode}">
+												<input id="${it.icode}" type="checkbox" checked="checked" name="SEQ_CHK" value="${it.icode}">	
+							      				<label for="${it.icode}"><span>${it.icontent}</span></label>
+											</c:when>
+											<c:when test="${it.icode eq list_choice[1].icode}">
+												<input id="${it.icode}" type="checkbox" checked="checked" name="SEQ_CHK" value="${it.icode}">	
+							      				<label for="${it.icode}"><span>${it.icontent}</span></label>
+											</c:when>
+											<c:when test="${it.icode eq list_choice[2].icode}">
+												<input id="${it.icode}" type="checkbox" checked="checked" name="SEQ_CHK" value="${it.icode}">	
+							      				<label for="${it.icode}"><span>${it.icontent}</span></label>
+											</c:when>
+											<c:otherwise>
+												<input id="${it.icode}" type="checkbox" name="SEQ_CHK" value="${it.icode}">
+							                    <label for="${it.icode}"><span></span>${it.icontent}</label>
+											</c:otherwise>										
+										</c:choose>
+										<c:if test="${i%j == 0}">
+											<br>
+										</c:if>
+										<c:set var="i" value="${i+1}" />
+							</c:forEach>
+							<br>
+							<input type="hidden" name="hiddenValue" id="hiddenValue" value=""/>
+							<input type="reset" value="입력취소" class="btn btn-outline-secondary">	
+							<input type="submit" value="확인" id="reg_submit" class="btn btn-outline-success" onclick="fnGetdata();">										
 						</form>
 						<p>
 					</div>

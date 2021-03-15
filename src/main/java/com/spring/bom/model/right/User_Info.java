@@ -23,7 +23,15 @@ public class User_Info {
 	private int    ureportcount;
 	private int    uonline;
 	private int	   ulogincount;
+	private String pwd;
 	
+	
+	public String getPwd() {
+		return pwd;
+	}
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
 	public int getUcode() {
 		return ucode;
 	}

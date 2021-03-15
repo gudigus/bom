@@ -46,7 +46,7 @@
 
 	<div class="d-flex" id="wrapper">
 
-		<!-- Sidebar -->
+				<!-- Sidebar -->
 		<div class="border-right sidebar-fixed-top" id="sidebar-wrapper">
 			<div class="sidebar-heading" align="center">
 				<img src="/img/logo2.jpg" width="150" height="150">
@@ -74,33 +74,48 @@
 				</a>
 				<div class="card">
 					<div class="card-body">
-						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-							width="50"> <a class="card-title text-dark">닉네임</a> <a
-							class="card-subtitle mb-2 text-muted">@atid</a>
+						 <img src="${ui.uImage }" class="rounded-circle" width="50" width="50"> 
+                     <div class="form-col ml-2">
+                     <a class="card-title text-dark" style="font-size:0.8em">${ui.uNickname }</a><br> 
+                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${ui.uAtid }</a>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
 				</div>
 			</div>
 		</div>
-
+		</div>
 		<!-- /#sidebar-wrapper -->
 
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
-
+				<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+					<button class="btn btn-success" id="menu-toggle" onclick="location.href='updateEv'">←</button>
+				</nav>
 			<div class="container-fluid">
 				<p>
 				<div class="card">
+				<h2>차단 관리</h2>
+				 <div class="btn-group me-2" role="group" aria-label="Second group">
+				<button type="button" class="btn btn-light" onclick="location.href='block'">계정 관리</button>
+				<button type="button" class="btn btn-secondary" onclick="location.href='blockhash'">해시태그 관리</button>
+				<button type="button" class="btn btn-secondary" onclick="location.href='blockword'">단어 관리</button></div>
 					<div align="center">
-						<div class="d-grid gap-2 row-6 mx-auto">
-							<button type="button" class="btn btn-outline-success" onclick="location.href='userInfoEdit'">계정 정보 수정</button><p>
-							<button type="button" class="btn btn-outline-success" onclick="location.href='doubleSecurity'">2단계 인증 보안</button><p>
-							<button type="button" class="btn btn-outline-success" onclick="location.href='changePw'">비밀번호 변경</button><p>
-							<button type="button" class="btn btn-outline-success" onclick="location.href='block'">차단 관리</button><p>
-							<button type="button" class="btn btn-outline-success" onclick="location.href='userDisabled'">탈퇴</button><p>
-						</div>
+						<c:forEach var="b" items="${bListP}" varStatus="status">
+								<input id="${b.blcode}" type="hidden" value="${b.blcode}">
+								<div class="card-body">
+								 <div class="form-center">
+				                     <img src="${b.uimage}" class="rounded-circle" width="50" width="50"> 
+				                     <div class="form-col ml-2">
+				                     <a class="card-title text-dark" style="font-size:0.8em">${b.unickname }</a><br> 
+				                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${b.uatid }</a>
+				                     </div>
+				                      <input id="${b.blcode}" type="button" class="btn btn-outline-danger" value="차단 취소" onclick="location.href='blockdelete?blcode=${b.blcode}'">	
+			                      </div>
+			                     </div>
+						</c:forEach>
 					</div>
 				</div>
+		</div>
 		</div>
 		<!-- /#page-content-wrapper -->
 

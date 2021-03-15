@@ -8,16 +8,16 @@
 <title>Insert title here</title>
 </head>
 <body>
-<c:if test="${result3 > 0 }">
+<c:if test="${result4 > 0 }">
 	<script type="text/javascript">
 		alert("수정완료");
 		location.href = "/right/updateEv";
 	</script>
 </c:if>
-<c:if test="${result3 ==0 }">
+<c:if test="${result4 ==0 }">
 	<script type="text/javascript">
 		alert("실패");
-		location.href = "/right/userInfoEditForm";
+		location.href = "/right/likeForm";
 	</script>
 </c:if>
 </body>

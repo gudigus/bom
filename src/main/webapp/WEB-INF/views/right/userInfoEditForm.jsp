@@ -14,13 +14,6 @@
 <meta name="author" content="">
 
 <title>BOM</title>
-<!-- 내가 ajax땜에 넣은것 
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/httpRequest.js"></script>
-<script type="text/javascript"
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
- 내가 ajax땜에 넣은것 -->
 
 <!-- Bootstrap core CSS -->
 <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -59,11 +52,11 @@
 		 var contextPath='${pageContext.request.contextPath}';
 		 
 			// 아이디 유효성 검사(1 = 중복 / 0 != 중복)
-			//$("#uatid").blur(function(){
-				function idCh(){
+		$(document).ready(function(){
+			$("#uatid").blur(function(){
+				//function idCh(){
 					var uatid = $('#uatid').val();
 					console.log(uatid);
-					alert('function idCh()');
 					$.ajax({
 						url : "<%=context%>/right/idCheck",
 						data: {uatid : uatid},
@@ -75,13 +68,12 @@
 									$('#id_check').html('사용중인 아이디입니다 :p');
 									$('#id_check').css('color', 'red');
 									$('#reg_submit').attr('disabled', true);
-									alert('function idCh() data 1');
 
 							}else{
 								alert('function idCh() data 2');
 								$('#id_check').html('사용가능한 아이디입니다 :p');
 								$('#id_check').css('color', 'green');
-/* 									if(idJ.test(uatid)){
+ 									if(idJ.test(uatid)){
 										// 0 : 아이디 길이 / 문자열 검사
 										$("#id_check").text("");
 										$("#reg_submit").attr("disabled", false);
@@ -93,17 +85,16 @@
 										$("#reg_submit").attr("disabled", true);				
 										
 									}else{
-										$('#id_check').text("아이디는 소문자와 숫자 4~12자리만 가능합니다 :) :)");
+										$('#id_check').text("아이디는 소문자와 숫자 4~12자리만 가능합니다 :)");
 										$('#id_check').css('color', 'red');
 										$("#reg_submit").attr("disabled", true);
-									} */
+									} 
 								}
 							}
 						});
-					}
+					});
+				});
 			</script>
-
-
 </head>
 
 <body>
@@ -138,20 +129,21 @@
 				</a>
 				<div class="card">
 					<div class="card-body">
-						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-							width="50"> <a class="card-title text-dark">닉네임</a> <a
-							class="card-subtitle mb-2 text-muted">@atid</a>
+						 <img src="${ui.uimage }" class="rounded-circle" width="50" width="50"> 
+                     <div class="form-col ml-2">
+                     <a class="card-title text-dark" style="font-size:0.8em">${ui.unickname }</a><br> 
+                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${ui.uatid }</a>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
 				</div>
 			</div>
 		</div>
-
+		</div>
 		<!-- /#sidebar-wrapper -->
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
 				<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-					<button class="btn btn-success" id="menu-toggle" onclick="location.href='moreSee'">←</button>
+					<button class="btn btn-success" id="menu-toggle" onclick="location.href='updateEv'">←</button>
 				</nav>
 			<div class="container-fluid">
 				<p>
@@ -170,7 +162,7 @@
 						<div class="form-group">
 							<label for="uatid">아이디</label>
 									<input type="text" class="form-control" id="uatid" name="uatid" placeholder="ID" value="${ui.uatid }" required="required">
-									<input type="button" value="중복확인" class="btn btn-outline-success" onclick="idCh()">
+									<!-- <input type="button" value="중복확인" class="btn btn-outline-success" onclick="idCh()"> -->
 									
 							<div id="id_check"></div>
 						</div>
@@ -465,21 +457,6 @@
 							    <option value="0">전체</option>
 							    <option value="1">팔로워만</option>
 							  </select>
-						</div>
-						<!-- 2단계 인증여부 -->
-						<div class="form-group">
-							<label for="uidentify">2단계 인증여부</label>
-								 <c:set var="uidentify" value="${ui.uidentify}"/>
-									<c:choose>
-										<c:when test="${uidentify eq '0' }">
-											미인증	<input type="button"  value="2단계 인증하러 가기 " class="btn btn-outline-warning" 
-												 onclick="location.href='/right/mailTransport'" >
-										</c:when>
-										<c:when test="${uidentify eq '1' }">
-											인증됨
-										</c:when>
-										<c:otherwise></c:otherwise>
-								</c:choose>
 						</div>
 						<!-- 가입 일자 -->
 						<div class="form-group">

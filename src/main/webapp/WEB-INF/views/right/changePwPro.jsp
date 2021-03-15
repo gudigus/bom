@@ -18,19 +18,15 @@
 <title>Insert title here</title>
 </head>
 <body onload="runChecknum();">
- <c:if test="${check==1}">
-	<form action="checknum" method="post" id="frm">
-		<script type="text/javascript">
-			alert("메일이 전송되었습니다. 인증번호를 입력해주세요.");
-		</script>
-		<input type="hidden" name="num" value="${num}">
+ <c:if test="${ui.uidentify==0}">
+	<form action="changePw1" method="post" id="frm">
+		<input type="hidden" name="pwd" value="${pwd}">
 	</form>
 </c:if>
- <c:if test="${check!=1}">
- 	<script type="text/javascript">
-		alert("메일전송이 실패되었습니다..");
-		location.href = "/right/doubleSecurity";
-	</script>
+ <c:if test="${ui.uidentify==1}">
+ 	<form action="changePw2Mail" method="post" id="frm">
+		<input type="hidden" name="pwd" value="${pwd}">
+	</form>
  </c:if>
 
 </body>
