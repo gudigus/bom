@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.bom.model.god.Board;
 import com.spring.bom.model.god.Vote;
+import com.spring.bom.service.god.BoardService;
 import com.spring.bom.service.god.UserService;
 import com.spring.bom.service.god.VoteService;
 
@@ -26,9 +27,13 @@ public class JuhyeController {
 	private UserService us;
 	@Autowired
 	private VoteService vs;
+	@Autowired
+	private BoardService bs;
+	
 	
 	@GetMapping(value = "god/main")
-	public String test() {
+	public String test(Model model, HttpServletRequest request) {
+		model.addAttribute("context", request.getContextPath());
 		return "god/main";
 	}
 
@@ -65,7 +70,7 @@ public class JuhyeController {
 
 	@RequestMapping(value = "god/write", method = RequestMethod.POST)
 	public String write(Board board, Vote vote, Model model, @RequestParam("attach") MultipartFile file,  HttpServletRequest request) {
-		System.out.println("bcontent -> " + board.getBcontent());
+		System.out.println("bcode -> "+board.getSavebcode());
 		if (board.getBregdate().equals("1")) {
 			String regdate = request.getParameter("year").substring(2, 4) + "/"
 					+ request.getParameter("month").substring(0, 2) + "/" + request.getParameter("day").substring(0, 2)
@@ -74,27 +79,28 @@ public class JuhyeController {
 			System.out.println("regdate -> " + regdate);
 			board.setBregdate(regdate);
 		}
-		System.out.println("btype -> " + board.getBtype());
-		System.out.println("banchor -> " + board.getBanchor());
-		System.out.println("bpermission -> " + board.getBpermission());
+		else
+			board.setBregdate(null);
 		if (request.getParameter("image").equals("1")) {
 			try {
 				String filename=System.currentTimeMillis()+file.getOriginalFilename();
 				file.transferTo(new File(request.getServletContext().getRealPath("/image/")+filename));
-				board.setBattach("/image/"+filename);
+				board.setBattach("image/"+filename);
 			} catch (Exception e) {
-				System.out.println("JuhyeController write() -> "+e.getMessage());
+				System.out.println("JuhyeController 글쓰기 이미지 오류 -> "+e.getMessage());
 			}
 		}
 		else if(request.getParameter("video").equals("1")) {
 			try {
 				String filename=System.currentTimeMillis()+file.getOriginalFilename();
 				file.transferTo(new File(request.getServletContext().getRealPath("/video/")+filename));
-				board.setBattach("/video/"+filename);
+				board.setBattach("video/"+filename);
 			} catch (Exception e) {
-				System.out.println("JuhyeController write() -> "+e.getMessage());
+				System.out.println("JuhyeController 글쓰기 비디오 오류 -> "+e.getMessage());
 			}
 		}
+		else
+			board.setBattach(null);
 		if(request.getParameter("vote").equals("1")) {
 			//마감투표설정
 			vote.setVendtime(vs.settingTime(vote));
@@ -107,12 +113,22 @@ public class JuhyeController {
 			//투표 등록
 			int vcode=vs.insertVote(vote);
 			System.out.println("vcode -> "+vcode);
+			board.setBvotecode(vote.getVcode());
+			int result=bs.insertVoteBoard(board);
+		}
+		else {
+			//글등록하자
+			int result=bs.insertBoard(board);
+			System.out.println("result -> "+result);
 		}
 		return "redirect:main";
 	}
-	// 낼해바
-	/*
-	 * https://stackoverflow.com/questions/29251099/making-a-input-type-file-hidden-
-	 * with-button
-	 */
+	
+	@RequestMapping(value="god/callSaveBoard", produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public Board callSaveBoard(int bcode) {
+		Board board=bs.getBoard(bcode);
+		
+		return board;
+	}
 }

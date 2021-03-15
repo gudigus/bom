@@ -152,6 +152,7 @@ label {
 		<form action="../god/write" method="post" enctype="Multipart/form-data" onsubmit="return checkWrite()">
 		<!--실제 값을 보내는곳 -->
 		<input type="hidden" name="ucode" value="${user.getUcode() }">
+		<input type="hidden" name="savebcode">
 		<input type="hidden" name="bcontent">
 		<input type="hidden" name="bregdate">
 		<input type="hidden" name="btype">
@@ -159,6 +160,8 @@ label {
 		<input type="hidden" name="image">
 		<input type="hidden" name="video">
 		<input type="hidden" name="vote">
+		<input type="hidden" name="save">
+		<input type="hidden" name="bsaveorrsvd">
 		<!--실제 값을 보내는곳 끝 -->
 		<div class="modal fade" id="writeForm" data-backdrop="static"
 			data-keyboard="false" tabindex="-1"
@@ -167,6 +170,7 @@ label {
 				<div class="modal-content">
 					<div class="modal-header">
 						<fieldset class="w-100">
+							<button type="button" id="realCloseWrite" class="close" data-dismiss="modal" style="display:none;"></button>
 							<button type="button" id="closeWrite" class="close" style="float: right;"
 								data-toggle="modal" data-target="#saveModal"
 								 aria-label="Close">
@@ -211,7 +215,7 @@ label {
 									<div class="form-check">
       									<input class="form-check-input" type="checkbox" id="multipleChk" name="multipleChk">
       									<label class="form-check-label" for="multipleChk">
-        									복수 선택
+        									중복 투표
       									</label>
     									</div>
 								</li>
@@ -384,6 +388,7 @@ label {
 						<div class="form-row">
 							<select name="hours" id="hours" class="form-control col-md-3 mr-5 ml-2"
 								required="required">
+								<option value="00시">0</option>
 								<option value="01시">1</option>
 								<option value="02시">2</option>
 								<option value="03시">3</option>
@@ -494,7 +499,7 @@ label {
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title">임시 저장한 봄</h5>
-						<button type="button" class="btn btn-success btn-sm float-right">수정</button>
+						<button type="button" id="editSave" class="btn btn-success btn-sm float-right">수정</button>
 					</div>
 					<div class="modal-body col-12">
 						<ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -551,7 +556,7 @@ label {
 					<div class="modal-footer">
 						<button type="button" id="notsaveBtn" class="btn btn-secondary">
 							아뇨 괜찮습니다</button>
-						<button type="button" class="btn btn-success">저장</button>
+						<button type="submit" id="saveBtn" class="btn btn-success">저장</button>
 					</div>
 				</div>
 			</div>
@@ -568,13 +573,19 @@ label {
 		var btype=0; // 0 = noraml, 1=reply, 2=scrap, 3=quote
 		var bvote=0; //0 안함 1 함
 		var imgorvideo=0; //0이면 없는거 1이면 image 2이면 video
-		<!--글 쓰기전에 값 input에 넣기-->
+		var save=0; //0이면 save x, 1이면 save
+		<!--글 쓰기전에 값 input에 넣기--> 
 		function checkWrite(){
 			//bcontent 넣기
 			var write=$("#writeTextarea").html();
+			if(write.includes("<div>")){
+				write=write.replaceAll("<div>","<br>");
+				write=write.replaceAll("</div>","");
+			}
 			if(write.includes('#')){
-				write = write.replace(/^#([^\s]+)/g, '<a href="#">#$1</a>'); //맨앞에 해시태그 쓴거
-				write = write.replace(/\s#([^\s]+)/g, '<a href="#">#$1</a>'); //앞에공백 해시태그
+				write = write.replace(/^#([^\s]+)/g, '<a href="../hoon/searchView?search=%23$1">#$1</a>'); //맨앞에 해시태그 쓴거
+				write = write.replace(/\s#([^\s]+)/g, ' <a href="../hoon/searchView?search=%23$1">#$1</a>'); //앞에공백 해시태그
+				//write = write.replace(/>#([^\s]+)/g, '><a href="../hoon/searchView?search=%23$1">#$1</a>'); 
 			}
 			$('input[name=bcontent]').attr('value', write);
 			//bregdate 넣기
@@ -582,7 +593,17 @@ label {
 				$('input[name=bregdate]').attr('value','0');
 			else{
 				$('input[name=bregdate]').attr('value','1');
+				$('input[name=bsaveorrsvd]').attr('value','1')
 			}
+			//저장글인지
+			if(save==1){
+				$('input[name=bregdate]').attr('value','0');
+				$('input[name=bsaveorrsvd]').attr('value','0')
+			}
+			//일반글이면(예약,저장아니면)
+			if(reserve==0 && save==0)
+				$('input[name=bsaveorrsvd]').attr('value','2')
+			
 			//btype 넣기
 			if(btype==0)
 				$('input[name=btype]').attr('value','normal');
@@ -605,6 +626,8 @@ label {
 			else if(bvote==1)
 				$('input[name=vote]').attr('value','1');
 			
+			
+			
 			return true;
 		}
 		
@@ -616,6 +639,11 @@ label {
 					if(write=='' ||write.trim()==''){
 						$('#writeSubmit').attr('disabled', true);
 					}
+		});
+		
+		/*저장, 예약 목록창에서 수정창 누르면 checkbox띄우기*/
+		$("#editSave").click(function(){
+			$("input[name=checkedbcode]").css("display","block");
 		});
 		
 		/* 글쓰기 버튼 누르면 임시저장 글 수(저장, 예약) 가져오기 */
@@ -657,8 +685,12 @@ label {
 			async:false,
 			success:function(list){
 				for(var i=0; i<list.length; i++){
-					str+="<li class='list-group-item'>"+list[i].bcontent+"</li>";
-					/* alert(board.getBcontent()); */
+					str+="<li class='list-group-item list-group-item-action'>"
+					+"<input type='checkbox' name='checkedbcode' id='"+list[i].bcode+"' style='display:none;''>"
+					+"<a href='javascript:callSave("+list[i].bcode+")'>"
+					+list[i].bcontent
+					+"</a>"
+					+"</li>";
 				}
 					
 				$("#saveList").append(str);
@@ -676,8 +708,9 @@ label {
 				async:false,
 				success:function(list){
 					for(var i=0; i<list.length; i++){
-						str+="<li class='list-group-item'>"+list[i].bcontent+"</li>";
-						/* alert(board.getBcontent()); */
+						str+="<input type='checkbox' name='checkedbcode' id='"+list[i].bcode+"' style='display:none;''>"
+						+"<li class='list-group-item list-group-item-action' onclick='callSave("+list[i].bcode+")'>"
+						+list[i].bcontent+"</li>";
 					} 
 					$("#reserveList").append(str);
 				}, 
@@ -687,12 +720,108 @@ label {
 			});
 		}
 		
-		/*마지막 저장창에서 저장안해 클릭*/
-		jQuery("#notsaveBtn").click(function(){
-			$("#saveModal .close").click();
-			$("#writeForm .close").click(); 
+		/*저장글 writeForm에 적용*/
+		function callSave(code){
+			//writeForm 초기화부터
+			reserve=0;
+			btype=0;
+		 	bvote=0;
+			imgorvideo=0;
+			save=0;
+			$("#writeTextarea").html(""); //글내용 초기화
+			$(".img-fluid").attr("src",""); //이미지 초기화
+			$(".embed-responsive video").attr("src",""); //동영상 초기화
+			$('.embed-responsive').css("display","none"); //동영상 none
+			jQuery("#media").css("display","block"); //미디어선택 버튼 활성화
+			jQuery("#mediaDelete").css("display","none"); //미디어 삭제 버튼 안보이게
+			//예약창 닫고
+			$("#tempForm .close").click();
+			//아작스로 글불러오기
+			$.ajax({
+				url:"<%=context%>/god/callSaveBoard",
+				data:{bcode: code},
+				dataType:'json',
+				async:false,
+				success:function(data){
+					$("input[name=ucode]").attr('value', data.ucode);
+					$("input[name=savebcode]").attr('value', data.bcode);
+					$("#writeTextarea").html(data.bcontent);	
+					//예약글일경우
+					if(data.bregdate!=null){
+						reserve=1;
+						var str="";
+						var rsvdyear=(data.bregdate).substring(0,2);
+						var rsvdmonth=(data.bregdate).substring(3,5);
+						var rsvdday=(data.bregdate).substring(6,8);
+						var rsvdhour=(data.bregdate).substring(9,11);
+						var rsvdmin=(data.bregdate).substring(12,14);
+						str="20"+rsvdyear+"년  "+
+							rsvdmonth+"월 "+
+							rsvdday+"일 "+
+							rsvdhour+"시 "+
+							rsvdmin+"분에 글 예약";
+						$('#setTime').text(str);
+						//예약창 selected 시켜놓기
+						$("#year").val("20"+rsvdyear+"년").attr("selected",true);
+						$("#month").val(rsvdmonth+"월").attr("selected",true);
+						$("#day2").val(rsvdday+"일").attr("selected",true);
+						$("#hours").val(rsvdhour+"시").attr("selected",true);
+						$("#minute").val(rsvdmin+"분").attr("selected",true);
+					}
+					//저장글일경우
+					else{
+						$('#setTime').text("");
+					}
+					//attach가 이미지일때
+					if((data.battach).substring(0,5) == "image"){
+						$('.img-fluid').css("display","");
+						$('.embed-responsive').css("display","none");
+						$(".select_file img").attr("src", "${context}/"+data.battach);
+						imgorvideo=1;
+						jQuery("#mediaDelete").css("display","block");
+						jQuery("#media").css("display","none");
+					}
+					//attach가 동영상일때
+					else if((data.battach).substring(0,5) == "video"){
+						$('.img-fluid').css("display","none");
+						$('.embed-responsive').css("display","");
+						var video = document.getElementById("video");
+						video.setAttribute("src", "${context}/"+data.battach); 
+						video.play(); 
+						imgorvideo=2;
+						jQuery("#mediaDelete").css("display","block");
+						jQuery("#media").css("display","none");
+					}
+				},
+			error : function(request,status,error) {
+			    alert("message:"+request.responseText+"\n"+"Error -> "+error);
+			}});
+		}
+		
+		/*글쓰기에서 닫기눌렀을때 글이없으면 저장창 안띄우고 닫기*/
+		jQuery("#closeWrite").click(function(){
+			var write=$("#writeTextarea").html();
+			if(write=='' ||write.trim()==''){
+				$("#saveModal .close").click();
+				$("#realCloseWrite").click();
+				//그리고 메인글로 돌아가
+				location.href="../god/main";
+			}
 		});
 		
+		/*마지막 저장창에서 저장안해 클릭*/
+		jQuery("#notsaveBtn").click(function(){
+			//$("#writeForm .close").click();
+			$("#saveModal .close").click();
+			$("#realCloseWrite").click();
+			//그리고 메인글로 돌아가
+			location.href="../god/main";
+		});
+		
+		/*마지막 저장창에서 저장해 클릭*/
+		jQuery("#saveBtn").click(function(){
+			save=1;
+		});
 		
 		<!--예약하기 버튼(월-일맞춰서 경고창띄우기)-->
 		jQuery("#reserveChk").click(function(){

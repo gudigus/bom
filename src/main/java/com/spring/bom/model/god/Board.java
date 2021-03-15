@@ -11,8 +11,7 @@ public class Board {
 	private int bbcode;
 	private String battach;
 	private int bvotecode;
-	private int btmpsav;
-	private String btmpsavtime;
+	private int bsaveorrsvd;
 	private int blikecount;
 	private int bexpcount;
 	private int bjoincount;
@@ -20,6 +19,22 @@ public class Board {
 	private int breportcount;
 	private int breplycount;
 	private int bquotecount;
+	
+	//조회용
+	private String savebcode;
+	
+	public String getSavebcode() {
+		return savebcode;
+	}
+	public void setSavebcode(String savebcode) {
+		this.savebcode = savebcode;
+	}
+	public int getBsaveorrsvd() {
+		return bsaveorrsvd;
+	}
+	public void setBsaveorrsvd(int bsaveorrsvd) {
+		this.bsaveorrsvd = bsaveorrsvd;
+	}
 	public int getBcode() {
 		return bcode;
 	}
@@ -79,18 +94,6 @@ public class Board {
 	}
 	public void setBvotecode(int bvotecode) {
 		this.bvotecode = bvotecode;
-	}
-	public int getBtmpsav() {
-		return btmpsav;
-	}
-	public void setBtmpsav(int btmpsav) {
-		this.btmpsav = btmpsav;
-	}
-	public String getBtmpsavtime() {
-		return btmpsavtime;
-	}
-	public void setBtmpsavtime(String btmpsavtime) {
-		this.btmpsavtime = btmpsavtime;
 	}
 	public int getBlikecount() {
 		return blikecount;

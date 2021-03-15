@@ -19,8 +19,7 @@ public class VoteDaoImpl implements VoteDao {
 	@Override
 	public int insertVote(Vote vote) {
 		//vote.setVcode(session.selectOne("JHselectMaxVcode", vote));
-		int vcode=session.insert("JHinsertVote", vote);
-		vote.setVcode(vcode);
+		session.insert("JHinsertVote", vote);
 		return vote.getVcode();
 	}
 }

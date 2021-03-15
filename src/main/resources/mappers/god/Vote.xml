@@ -8,13 +8,15 @@
 		from dual
 	</select>
 	<insert id="JHinsertVote" parameterType="GodVote">
-		insert into vote values 
-		(vote_vcode.nextval, 
-		#{vselect1}, #{vselect2}, #{vselect3}, #{vselect4}, 
-		#{vendtime}, #{vmulti})
-		<selectKey keyProperty="myvcode" resultType="java.lang.Integer" order="AFTER">
-			select vote_vcode.currval from vote
+		<selectKey keyProperty="vcode" resultType="java.lang.Integer" order="BEFORE">
+			select vote_vcode.nextval from dual
 		</selectKey>
+		insert into vote 
+			(vcode, vselect1, vselect2, vselect3, vselect4, vendtime, vmulti)
+		values 
+			(#{vcode}, 
+			#{vselect1}, #{vselect2}, #{vselect3}, #{vselect4}, 
+			#{vendtime}, #{vmulti})
 	</insert>
 </mapper>
 
