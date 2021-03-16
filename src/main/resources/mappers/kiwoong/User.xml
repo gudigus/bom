@@ -5,7 +5,7 @@
 	<select id="listOnline" parameterType="User" resultType="User">
 		select unickname,uatid
 		from user_info
-		where uonline = 1
+		where uonline = 2
 	</select>
 
 <select id="selectcode" parameterType="String" resultType="String">

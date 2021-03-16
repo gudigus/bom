@@ -32,10 +32,9 @@ public class SocketHandler extends TextWebSocketHandler{
 	@Autowired
 	private ChatService cs; 
 	
-	//HashMap<String , WebSocketSession> sessionMap = new HashMap<>(); //웹소켓 세션 담아놓을곳
 	List<HashMap<String, Object>> rls = new ArrayList<>(); // 웹소켓 세션을 담아둘 리스트 --- rommlistsessions\
 	//파일전송
-	private static final String FILE_UPLOAD_PATH = "C:/spring/springSrc3914/bom/src/main/webapp";
+	private static final String FILE_UPLOAD_PATH = "C:/spring/springSrc3914/bom/src/main/webapp/image";
 	static int fileUploadIdx = 0;
 	static String fileUploadSession = "";
 	
@@ -115,12 +114,7 @@ public class SocketHandler extends TextWebSocketHandler{
 		}
 		System.out.println("socket 핸들러 메세지 끝");
 	}
-	//httpsession 접근
-	/*
-	 * private String getId(WebSocketSession session) { Map<String, Object>
-	 * httpsession = session.getAttributes(); User user =
-	 * (User)httpsession.get("LOGIN"); return user. ; }
-	 */
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception{
@@ -188,60 +182,7 @@ public class SocketHandler extends TextWebSocketHandler{
 		}
 		return obj;
 	}
-	// ---------------------- 파일 전송 -------------------------
-	@Override
-	public void handleBinaryMessage(WebSocketSession session, BinaryMessage message) {
-		//바이너리 메시지 발송
-		ByteBuffer byteBuffer = message.getPayload();
-		String fileName = "temp.jpg";
-		File dir = new File(FILE_UPLOAD_PATH);
-		if(!dir.exists()) {
-			dir.mkdirs();
-		}
-		
-		File file = new File(FILE_UPLOAD_PATH, fileName);
-		FileOutputStream out = null;
-		FileChannel outChannel = null;
-		try {
-			byteBuffer.flip(); //byteBuffer를 읽기 위해 세팅
-			out = new FileOutputStream(file, true); //생성을 위해 OutputStream을 연다.
-			outChannel = out.getChannel(); //채널을 열고
-			byteBuffer.compact(); //파일을 복사한다.
-			outChannel.write(byteBuffer); //파일을 쓴다.
-		}catch(Exception e) {
-			e.printStackTrace();
-		}finally {
-			try {
-				if(out != null) {
-					out.close();
-				}
-				if(outChannel != null) {
-					outChannel.close();
-				}
-			}catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		byteBuffer.position(0); //파일을 저장하면서 position값이 변경되었으므로 0으로 초기화한다.
-		//파일쓰기가 끝나면 이미지를 발송한다.
-		HashMap<String, Object> temp = rls.get(fileUploadIdx);
-		for(String k : temp.keySet()) {
-			if(k.equals("roomNumber")) {
-				continue;
-			}
-			WebSocketSession wss = (WebSocketSession) temp.get(k);
-			try {
-				wss.sendMessage(new BinaryMessage(byteBuffer)); //초기화된 버퍼를 발송한다.
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	
-	
-	
+
 	
 	
 	

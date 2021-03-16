@@ -47,7 +47,6 @@ public class Bear_Controller {
 	@RequestMapping(value = "bear/chat")
 	public String uonline(User user, Model model,HttpSession session ,HttpServletRequest request) {
 		session= request.getSession();
-		//int kiwoong = 2;
 		int kiwoong =(int) session.getAttribute("ucode");
 		System.out.println("세션에 저장되어있는 ucode = "+kiwoong);
 		
@@ -58,12 +57,7 @@ public class Bear_Controller {
 		 return "bear/chat";
 	}
 
-	@RequestMapping(value = "bear/chat2")
-	public ModelAndView chat() {
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("bear/chat2");
-		return mv;
-	}
+	
 	//방 페이지
 	@RequestMapping(value = "bear/room")
 	public ModelAndView room(HttpServletRequest request,HttpSession session) {
@@ -80,7 +74,6 @@ public class Bear_Controller {
 	
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("bear/room");
-	//	mv.setViewName("bear/chat");
 		System.out.println("룸페이지 mv -> " +mv);
 		return mv;
 	}
@@ -105,7 +98,7 @@ public class Bear_Controller {
 	
 	//방생성
 	@RequestMapping(value = "bear/createRoom")
-	public @ResponseBody List<Chat> createRoom(@RequestParam HashMap<Object, Object> params, HttpSession session,Chat chat ){
+	public @ResponseBody int createRoom(@RequestParam HashMap<Object, Object> params, HttpSession session,Chat chat ){
 	
 		//ajax 의 msg 에있는 것을 가지고 옴 
 		
@@ -126,34 +119,17 @@ public class Bear_Controller {
 		System.out.println("createRoom chat1 안에  getUcode() ->" +chat1.getUcode());
 		System.out.println("createRoom chat1 안에  getUopcode() ->" +chat1.getUopcode());
 		int mycreate = cs.mycreate(chat1);
+		System.out.println("mycreate 값 "+mycreate);
 		if(mycreate >0 ) {
-			System.out.println("방생성되었습니다 ucode = sessionId  " );}
+			System.out.println("방생성되었습니다 ucode = sessionId  " );
+			
+		}
 			else {
-				System.out.println("ccode = sessionId 방이 생성되지않았습니다 .");
+				System.out.println("방이 존재하여 생성되지않았습니다.");
 			}
-		int youcreate = cs.youcreate(chat1);
-		if(youcreate >0 ) {
-			System.out.println("방생성되었습니다 ucode = uopcode - > " );}
-			else {
-				System.out.println("ccode = uopcode 방이 생성되지않았습니다 . ");
-			}
+			
 		
-		
-		
-		
-		/*
-		 * System.out.println(" createRoom start1 .... uopcode -> " + uopcode );
-		
-		 * if(uopcode != null && !uopcode.trim().equals("")) { Chat room = new Chat();
-		 * room.setCcode(++ccode);
-		 * System.out.println(" createRoom start4  ccode .... + "+ ccode );
-		 * room.setUopcode(uopcode); System.out.println(" createRoom start5 ...." +
-		 * room); roomList.add(room);
-		 * 
-		 * System.out.println("createRoom roomList -> " + roomList); } else {
-		 * System.out.println("createRoom error  "); }
-		 */
-		return roomlist;
+		return mycreate;
 	}
 	/**
 	 * 방 정보가져오기
@@ -188,10 +164,6 @@ public class Bear_Controller {
 		System.out.println("채팅방에 세션의있는 아이디값 -> " +sessionId);
 		
 		
-		
-		//ModelAndView mv = new ModelAndView();
-		//int roomNumber = Integer.parseInt((String) params.get("roomNumber"));
-		
 		System.out.println("bear_controller chating start roomNumber -> " +roomnumber);
 		Chat chat = new Chat();
 		chat.setCcode(roomnumber);
@@ -201,9 +173,7 @@ public class Bear_Controller {
 		System.out.println("new_list - > " + new_list);
 		if(new_list != null && new_list.size() > 0) {
 			
-		//	mv.addObject("roomNumber", params.get("roomNumber"));
-		//	mv.addObject("sessionId", sessionId);
-			
+		
 			//메세지불러오기
 			
 		//	mv.addObject(chainglist);
@@ -215,7 +185,6 @@ public class Bear_Controller {
 		}else {
 			System.out.println("chating else -> ");
 			
-		//	mv.setViewName("room");
 		}
 		//쪽지방 코드로 방목록 뽑아오고 ccode는 로그인한 session 아이디로 뽑아와 상대와 내자신 메세지 구별하기
 		return new_list;

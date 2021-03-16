@@ -179,6 +179,14 @@ img{ max-width:100%;}
   height: 516px;
   overflow-y: auto;
 }
+#msgsize {	 width:340px;
+		 overflow:hidden; 
+		 text-overflow:ellipsis; 
+		 white-space:nowrap;
+		 text-align:left;}
+		 
+#k123 {float: right;}
+
 </style>
 </head>
 
@@ -312,12 +320,19 @@ img{ max-width:100%;}
 						type : "post",
 							success: function (kkk) {
 								
-								alert($('#roomName').val() + "님 과 채팅방이생성되었습니다." )
+								if(kkk == 0 ){
+									alert("방이 존재합니다")
+									}
+								else{
+									alert($('#roomName').val() + "님 과 채팅방이생성되었습니다." )
+								}
+								
 								
 							}
 						
 						
-					});$("#roomName").val("Search");
+					});$("#roomName").empty();
+					$("#roomName").attr("placeholder","Search1");
 					
 					
 						
@@ -396,13 +411,13 @@ img{ max-width:100%;}
 				tag +=    "<div class=chat_list >" +
 		         		 "<div class=chat_people>" +
 		          			 	 "<div class=chat_ib>"+
-		            			  "<h5>" +uatid+ "<span class=chat_date>" +cdtime+ "</span></h5>"+
-		             				 "<h5>"+ msg+"<span>"+"<button type='button' onclick='goRoom(\""+roomNumber+"\")'>참여</button>"+"</span> </h5>"+
+		            			  "<h5><b>" +uatid+ "</b><span class=chat_date><b>" +cdtime+ "</b></span></h5>"+
+		             				 "<h5"+" id='msgsize'>"+ msg+"</h5><span id = 'k123'>"+"<button type='button' class="+"'btn btn-success'"+" onclick='goRoom(\""+roomNumber+"\")'>참여</button>"+"</span> "+
 		           				 "</div>"+
 		        		      "</div>"+
 		                  "</div>";
 						console.log("createChatingroom d 의 값 -> "+ d + " idx 의 값 -> ");
-					
+					//<div class="chat_img"> <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="sunil"> </div> 프로필사진 넣을때 people 다음으로넣기
 			});
 			$("#chatingpage").append(tag);
 		}
@@ -427,7 +442,7 @@ img{ max-width:100%;}
 			}
 		});
 	}
-
+	
 
 
 </script>
@@ -526,6 +541,7 @@ img{ max-width:100%;}
     </div>
   </div>
 </div>
+	
 </div>
 		<!-- /#page-content-wrapper -->
 

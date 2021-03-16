@@ -53,7 +53,8 @@ public class ChatDaoImpl implements ChatDao {
 	public List<Chat> chatinglist(Chat chat) {
 		List<Chat> chatinglist = null;
 		try {
-			chatinglist = session.selectList("chainglist", chat); 
+			chatinglist = session.selectList("chainglist", chat);
+			
 			
 		} catch (Exception e) {
 			System.out.println("ChatDaoImpl chatinglist exception - > " + e.getMessage());
@@ -63,15 +64,25 @@ public class ChatDaoImpl implements ChatDao {
 
 	@Override
 	public int mycreate(Chat chat) {
-		System.out.println("chatDaoImpl mycreate 진행 - > chat 안에 있는 uopcode -> " + chat.getUopcode());
-		return session.insert("mycreate",chat);
+		
+		List<Chat> selectck =  session.selectList("selectck" , chat);
+		System.out.println("방 존재여부 리스트 - > " + selectck);
+		//방생성되어있는지 체크 
+		if(selectck.isEmpty()) {
+			System.out.println("ucode 와 uopcode 체크결과 방이 생성되어있지않습니다 ");
+			return session.insert("mycreate",chat);
+		}else {
+			System.out.println("체크결과 방이 생성되어있습니다 .");
+			return 0 ;
+		}
+		
+		//System.out.println("chatDaoImpl mycreate 진행 - > chat 안에 있는 uopcode -> " + chat.getUopcode());
+		//return session.insert("mycreate",chat);
 	}
-
-	@Override
-	public int youcreate(Chat chat) {
-		System.out.println("chatDaoImpl youcreate 진행 ");
-		return session.insert("youcreate",chat);
-	}
+	
+	
+	
+	
 
 	@Override
 	public String selectcode(String atid) {

@@ -22,7 +22,7 @@ public interface ChatService {
 	List<Chat> chatinglist	(Chat chat);
 	//채팅방 생성 세션아이디와 상대회원아이디 
 	int mycreate(Chat chat);
-	int youcreate(Chat chat);
+	
 	
 	//@아이디로 회원ucode값 가져오기
 	String selectcode(String uatid);

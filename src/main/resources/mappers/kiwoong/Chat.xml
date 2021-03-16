@@ -40,6 +40,7 @@
 
 	     insert all
 				into chat  VALUES(ccode_seq.nextval ,#{ucode} ,#{uopcode} , null , null)
+				into chat  VALUES(ccode_seq.currval ,  #{uopcode}, #{ucode}, null , null )
 				into chat_detail values(ccode_seq.currval, #{ucode}, '채팅방생성되었습니다.',TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'))
   				into chat_detail values(ccode_seq.currval, #{uopcode} , '채팅방생성되었습니다.',TO_CHAR(SYSDATE-1/24/60/60, 'YYYY-MM-DD HH24:MI:SS'))
   		select *
@@ -48,12 +49,13 @@
 
 </insert>
 
-<insert id="youcreate" parameterType="Chat">
-insert into chat
-values(ccode_seq.currval ,  #{uopcode}, #{ucode}, null , null )
+<select id="selectck" resultType="Chat" parameterType="Chat">
 
+select ccode
+from chat
+where ucode = #{ucode} and uopcode = #{uopcode}
 
-</insert>
+</select>
 
 
 

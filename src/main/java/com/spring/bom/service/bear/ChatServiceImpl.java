@@ -54,13 +54,6 @@ public class ChatServiceImpl implements ChatService {
 		}
 
 	@Override
-	public int youcreate(Chat chat) {
-		System.out.println("chatserviceimpl mycreate 진행  -> ");		
-		return cd.youcreate(chat) ;
-		
-	}
-
-	@Override
 	public String selectcode(String uatid) {
 		System.out.println("chatserviceimpl selectcode 진행  -> uatid " + uatid);
 		return cd.selectcode(uatid);
