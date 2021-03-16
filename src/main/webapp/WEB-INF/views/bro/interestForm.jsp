@@ -24,6 +24,21 @@ function CountChecked(field) {
     }
     
 }
+function fchk() {
+    var chk_obj = document.getElementsByName("iCode");
+    var chk_leng = chk_obj.length;
+    var checked = 0;
+    for (i=0; i < chk_leng; i++) {
+        if (chk_obj[i].checked == true) {
+            checked += 1;
+        }
+    }
+    if (checked < 3 ) {
+        alert("항목을 3개 선택해주세요");
+        return false;
+    }
+}
+
 
 
 
@@ -39,7 +54,7 @@ function CountChecked(field) {
  <h1>관심사 설정</h1>
  <div class = agree>
   <div class = all_agree>
- <form action="interestAction" method="get">
+ <form action="interestAction" method="get" onsubmit="return fchk();">
  <input type="checkbox" name="iCode"  onclick="CountChecked(this)" value ="1">게임
  <input type="checkbox" name="iCode" onclick="CountChecked(this)" value="2">스포츠
  <input type="checkbox" name="iCode" onclick="CountChecked(this)" value="3">정치

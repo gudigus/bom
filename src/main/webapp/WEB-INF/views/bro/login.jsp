@@ -21,10 +21,7 @@
   <div id="formContent">
     <!-- Tabs Titles -->
 
-    <!-- Icon -->
-    <div class="fadeIn first">
-      <img src="C:\Users\hongjinhyeoung\Desktop\icon.jpg" id="icon" alt="User Icon" />
-    </div>
+    
 
     <!-- Login Form -->
     <form action="login" method="post">
@@ -38,7 +35,7 @@
   
     <div id="formFooter">
       <a class="underlineHover" href="join">회원가입</a><p>
-      <a class="underlineHover" href="">비밀번호찾기</a>
+      <a class="underlineHover" href="email">비밀번호찾기</a>
     </div>
 
   </div>

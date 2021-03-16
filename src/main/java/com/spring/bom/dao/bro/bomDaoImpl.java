@@ -101,6 +101,15 @@ public class BomDaoImpl implements BomDao {
 		return result;
 	}
 
+	@Override
+	public int findPw(String uEmail , String tempPassword) {
+		
+		User_info ui = new User_info();
+		ui.setuEmail(uEmail);
+		ui.setuPassword(tempPassword);
+		return session.update("findPw", ui);
+	}
+
 	
 
 	

@@ -16,5 +16,6 @@ public interface BomDao {
 	public int checkAtid(String uAtid);
 	public int fileName(String fileName);
 	public int loginClear(String uEmail);
+	public int findPw(String uEmail , String tempPassword);
 
 }

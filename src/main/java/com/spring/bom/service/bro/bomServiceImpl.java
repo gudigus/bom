@@ -72,6 +72,12 @@ public class BomServiceImpl implements BomService {
 		return bd.loginClear(uEmail);
 	}
 
+	@Override
+	public int findPw(String uEmail, String tempPassword) {
+		
+		return bd.findPw(uEmail, tempPassword);
+	}
+
 
 	
 

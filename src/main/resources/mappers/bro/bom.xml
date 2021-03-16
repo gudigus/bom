@@ -48,6 +48,11 @@ update user_info set uLoginCount = 0
 where uEmail = #{uEmail}
 
 </update>
+<update id="findPw" parameterType="User_info" >
+update user_info set uPassword = #{uPassword}
+where uEmail = #{uEmail}
+
+</update>
 	</mapper>
 
 

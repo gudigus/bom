@@ -20,21 +20,22 @@
 <script
 	src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <body>
-   
+   <c:set var="tempPassword" value="${tempPassword}"></c:set>
     <c:if test="${check==1}">
+    
     <div  align="center">
      <h2>이메일로전송된 인증번호를 입력해주세요 </h2><p>
      <div class="form-group" id="divId">
 				<label for="inputId" class="col-lg-2 control-label"></label>
 				<div class="col-lg-10">
-					<input type="text" class="form-control onlyAlphabetAndNumber"
-						name="uEmail" id="temp" maxlength="30" align="center" style="width=30px;">
+					<input type="text" class="form-control"
+						id="temp" maxlength="30">
 					 <div id="temp_check"></div>
 				</div>
 			</div>
 			
     
-     <c:set var="tempPassword" value="${tempPassword}"></c:set>
+     
      
    <%--   <c:if test="${tempPassword==temp }"></c:if> --%>
     
