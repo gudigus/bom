@@ -591,6 +591,10 @@ label {
 				write = write.replace(/\s#([^\s]+)/g, ' <a href="../hoon/searchView?search=%23$1">#$1</a>'); //앞에공백 해시태그
 				//write = write.replace(/>#([^\s]+)/g, '><a href="../hoon/searchView?search=%23$1">#$1</a>'); 
 			}
+			if(write.includes('@')){
+				write=write.replace(/^@([^\s]+)/g, '<a href="../iron/profile?uatid=$1">@$1</a>');
+				write=write.replace(/\s@([^\s]+)/g, ' <a href="../iron/profile?uatid=$1">@$1</a>');
+			}
 			$('input[name=bcontent]').attr('value', write);
 			//bregdate 넣기
 			if(reserve==0)
