@@ -8,18 +8,38 @@
 <title>Insert title here</title>
 </head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	rel="stylesheet" type="text/css" />
+<!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요한) -->
+<script src="http://code.jquery.com/jquery.js"></script>
+<!-- 모든 합쳐진 플러그인을 포함하거나 (아래) 필요한 각각의 파일들을 포함하세요 -->
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- Respond.js 으로 IE8 에서 반응형 기능을 활성화하세요 (https://github.com/scottjehl/Respond) -->
+<script
+	src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <body>
-
+   
     <c:if test="${check==1}">
-     <h1>이메일로전송된 인증번호를 입력해주세요 </h1><p>
-     <input type="text" id="temp" />
+    <div  align="center">
+     <h2>이메일로전송된 인증번호를 입력해주세요 </h2><p>
+     <div class="form-group" id="divId">
+				<label for="inputId" class="col-lg-2 control-label"></label>
+				<div class="col-lg-10">
+					<input type="text" class="form-control onlyAlphabetAndNumber"
+						name="uEmail" id="temp" maxlength="30" align="center" style="width=30px;">
+					 <div id="temp_check"></div>
+				</div>
+			</div>
+			
+    
      <c:set var="tempPassword" value="${tempPassword}"></c:set>
      
    <%--   <c:if test="${tempPassword==temp }"></c:if> --%>
-     <div id="temp_check"></div>
-         
     
+     <button type="button" id="email_btn" disabled="true" onclick="location.href='upLoadFormStart'">다음</button>    
+    </div>
     
     
     
@@ -42,12 +62,13 @@ $("#temp").blur(function() {
 					$("#temp_check").text("인증번호가 일치합니다.");
 					$("#temp_check").css("color", "red");
 					$("#reg_submit").attr("disabled", true);
+					$("#email_btn").attr("disabled", false);
 				}
 			else{
 					$("#temp_check").text("인증번호가 다릅니다.");
 					$("#temp_check").css("color", "red");
 					$("#reg_submit").attr("disabled", true);
-					
+					$("#email_btn").attr("disabled", true);
 				} 
 		}
 			

@@ -11,13 +11,44 @@
 	</select>
 	
 	<insert id="join" parameterType="User_info">
-	    INSERT INTO user_info(   uCode, uEmail, uPassword, uNickname, uBirth, uGender, uNation )
-	                 values (uCode_SEQ.NEXTVAL, #{uEmail}, #{uPassword}, #{uNickname}, TO_CHAR(#{uBirth},'yyyymmdd'), #{uGender}, #{uNation} )
+	    INSERT INTO user_info(   uCode, uEmail, uPassword, uNickname,uAtid, uBirth, uGender, uNation, uRegDate )
+	                 values (uCode_SEQ.NEXTVAL, #{uEmail}, #{uPassword}, #{uNickname},#{uAtid} , TO_CHAR(#{uBirth},'yyyymmdd'), #{uGender}, #{uNation}, TO_CHAR(sysdate,'yyyy-mm-dd') )
    
     </insert>
+    
     <select id="checkEmail" parameterType="String" resultType="int">
          SELECT count(*)
          FROM USER_INFO
          WHERE UEMAIL=#{UEMAIL}
 </select>
+  <select id="checkAtid" parameterType="String" resultType="int">
+         SELECT count(*)
+         FROM USER_INFO
+         WHERE UAtid=#{UAtid}
+</select>
+<select id="uCode1" parameterType="User_info" resultType="int">
+select uCode
+ from ( select uCode from user_info order by rownum desc)
+ where ROWNUM=1
+
+</select>
+
+<update id="fileName" parameterType="User_info">
+update user_info set uImage = #{uImage}
+where uCode = #{uCode}
+
+</update>
+<update id="uLoginCount" parameterType="User_info" >
+update user_info set uLoginCount = uLoginCount+1
+where uEmail = #{uEmail}
+
+</update>
+<update id="uLoginClear" parameterType="User_info" >
+update user_info set uLoginCount = 0
+where uEmail = #{uEmail}
+
+</update>
 	</mapper>
+
+
+	

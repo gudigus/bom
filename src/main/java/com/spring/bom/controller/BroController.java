@@ -6,6 +6,12 @@ package com.spring.bom.controller;
 
 
 
+import java.io.File;
+
+import java.util.List;
+
+import java.util.UUID;
+
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.internet.MimeMessage;
@@ -18,12 +24,16 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.bom.model.bro.Interest;
 import com.spring.bom.model.bro.User_info;
 
 import com.spring.bom.service.bro.BomService;
@@ -43,36 +53,34 @@ public class BroController {
 	}
 	
 	
+	
 		
 	@RequestMapping(value = "bro/login" , method=RequestMethod.POST)
-	public String login(User_info ui, HttpServletRequest req) throws Exception{
+	public String login(User_info ui, HttpServletRequest req, String uEmail) throws Exception{
 		HttpSession session = req.getSession();
 		User_info login = bs.loginCheck(ui);
 		if(login == null) {
 			session.setAttribute("login", null);
 			System.out.println("login off");
-			return "bro/index";
+			System.out.println("controller uEamil-->"+uEmail);
+			bs.logout(uEmail);
+			return "bro/loginFail";
 		}else {
 		
-			;
+			
 			session.setAttribute("login", login);
 			System.out.println("login on");
+			bs.loginClear(uEmail);
 			return "bro/main";
 		}
 	}
 	
-	@RequestMapping(value = "bro/logout", method = RequestMethod.GET)
-	public String logout(HttpSession session) throws Exception{
-		
-		session.invalidate();
-		
-		return "redirect:/";
-	}
+	
 	@RequestMapping(value = "bro/index")
      public String index() {
 	 return "bro/login";
 	}
-	@RequestMapping(value ="bro/joinForm", method = RequestMethod.GET)
+	@RequestMapping(value ="bro/joinForm", method = RequestMethod.POST)
 	public String joinForm(User_info ui, Model model, HttpServletRequest request, String uEmail) {
 		System.out.println("controller join start");
 		bs.join(ui);
@@ -116,9 +124,62 @@ public class BroController {
 		 int j = bs.checkEmail(uEmail);
 		 return j;
 	 }
-	
-	
-	
-	
+	 @RequestMapping(value = "/checkAtid", method= RequestMethod.GET)
+     @ResponseBody	
+	 public int checkId(@RequestParam("uAtid") String uAtid) {
+		 System.out.println("checkEmail uEmail--"+uAtid);
+		 int j = bs.checkAtid(uAtid);
+		 return j;
+	 }
+	 @GetMapping(value = "bro/upLoadFormStart")
+	  public String upLoadFormStart(Model model) {
+			System.out.println("upLoadFormStart Start");
+		    return "bro/upLoadFormStart";
+	  }
+	 @PostMapping(value = "bro/uploadForm")
+	  public String uploadForm( HttpServletRequest request, MultipartFile uImage, Model model ) 
+			  throws Exception {
+			String uploadPath = request.getSession().getServletContext().getRealPath("/profile_image/");
+			System.out.println("uploadForm POST Start");
+		    String savedName = uploadFile(uImage.getOriginalFilename(), uImage.getBytes(), uploadPath);
+		    model.addAttribute("savedName", savedName);
+	        return "uploadResult";
+	  }
+	 private String uploadFile(String originalName, byte[] fileData , String uploadPath) 
+			  throws Exception {
+		     UUID uid = UUID.randomUUID();
+		    // requestPath = requestPath + "/resources/image";
+		     System.out.println("uploadPath->"+uploadPath);
+		     // Directory 생성 
+		 	File fileDirectory = new File(uploadPath);
+		 	if (!fileDirectory.exists()) {
+		 		fileDirectory.mkdirs();
+		 		System.out.println("업로드용 폴더 생성 : " + uploadPath);
+		 	}
+		     String savedName = uid.toString() + "_" + originalName;
+		 
+//		     String path1 = "C:\\spring\\springSrc39\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\sMybatis\\resources\\image";
+		     File target = new File(uploadPath, savedName);
+//		     File target = new File(requestPath, savedName);
+		     FileCopyUtils.copy(fileData, target);   // org.springframework.util.FileCopyUtils
+		     bs.fileName(savedName);
+		     return savedName;		  
+	  }
+	 @RequestMapping(value = "bro/interestForm")
+	  public String interestForm(Model model) {
+			System.out.println("interestForm Start");
+		    return "bro/interestForm";
+	  }
+	 @GetMapping(value = "bro/interestAction")
+	 public String interestAction(Interest in ,HttpServletRequest request, Model model, @RequestParam(value="iCode", required = true) List<String> iCode ) {
+		
+		 for(String value : iCode)
+			 System.out.println(value);
+		 bs.interestAction(iCode);
+		 
+		 //interests.add(in);
+		// bs.interestAction(interests);
+		 return "bro/success";
+	 }
 
 }
