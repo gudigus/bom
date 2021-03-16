@@ -75,11 +75,7 @@
 				<div class="card">
                <div class="card-body">
                   <div class="form-row">
-                      <img src="${ui.uimage }" class="rounded-circle" width="50" width="50"> 
-                     <div class="form-col ml-2">
-                     <a class="card-title text-dark" style="font-size:0.8em">${ui.unickname }</a><br> 
-                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${ui.uatid }</a>
-                     </div>
+                    
                      </div>
                   </div>
                <button type="button" class="btn btn-success">로그아웃</button>

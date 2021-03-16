@@ -74,12 +74,12 @@ public class Right_Controller {
 		return "/right/main";
 	}*/
 	@RequestMapping(value = "/right/main")
-	public String main(HttpServletRequest request, Model model) {
-		String uemail = request.getParameter("uemail");
-		model.addAttribute("uemail", uemail);
-		User_Info ui = us.select(uemail);
+	public String main(HttpSession session, Model model) {
+		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
+		model.addAttribute("ucode", ucode);
+		User_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
-		System.out.println("uemail : " + uemail);
+		System.out.println("ucode : " + ucode);
 
 		return "/right/main";
 	}

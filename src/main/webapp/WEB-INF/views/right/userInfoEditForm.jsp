@@ -43,7 +43,8 @@
 </style>
 
 <!-- id 중복 check -->
-		<%
+		<%  
+			request.setCharacterEncoding("UTF-8");
 			String context = request.getContextPath();
 			System.out.println("context->"+context);
 		%>

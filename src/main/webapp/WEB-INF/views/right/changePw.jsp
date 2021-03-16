@@ -42,6 +42,7 @@
 </style>
 <!-- 기존 비밀번호 check -->
 		<%
+		 	request.setCharacterEncoding("UTF-8");
 			String context = request.getContextPath();
 			System.out.println("context->"+context);
 		%>
