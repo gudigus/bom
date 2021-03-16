@@ -569,7 +569,6 @@ label {
 		</form>
 		<!--(주혜)글쓰기 폼 기능-->
 		<%
-			request.setCharacterEncoding("UTF-8");
 			String context = request.getContextPath();
 		%> 
 		<script type="text/javascript">
@@ -678,7 +677,7 @@ label {
 					data:{bcodes:valueArr},
 					dataType:'json',
 					success:function(data){
-						if(data==1){
+						if(data>=1){
 							clickWriteBtn();
 							clickSaveBtn();
 						}
