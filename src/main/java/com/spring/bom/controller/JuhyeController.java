@@ -131,4 +131,12 @@ public class JuhyeController {
 		
 		return board;
 	}
+
+	@RequestMapping(value="god/deleteSaveWrite", produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public int deleteSaveWrite(int[] bcodes) {
+		int result=bs.deleteSaveWrite(bcodes);
+		
+		return result;
+	}
 }

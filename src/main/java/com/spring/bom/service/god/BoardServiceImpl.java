@@ -30,4 +30,10 @@ public class BoardServiceImpl implements BoardService {
 		return bd.getBoard(bcode);
 	}
 
+	@Override
+	public int deleteSaveWrite(int[] bcodes) {
+		// TODO Auto-generated method stub
+		return bd.deleteSaveWrite(bcodes);
+	}
+
 }

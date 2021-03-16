@@ -1,5 +1,7 @@
 package com.spring.bom.service.god;
 
+import java.util.ArrayList;
+
 import org.springframework.stereotype.Service;
 
 import com.spring.bom.model.god.Board;
@@ -12,5 +14,7 @@ public interface BoardService {
 	int insertVoteBoard(Board board);
 
 	Board getBoard(int bcode);
+
+	int deleteSaveWrite(int[] bcodes);
 
 }

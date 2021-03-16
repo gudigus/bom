@@ -526,6 +526,10 @@ label {
 						</div>
 					</div>
 					<div class="modal-footer">
+						<div id="editBtnGroup" class="mr-auto" style="display:none;">
+						<button type="button" id="cancelEditSave" class="btn btn-secondary btn-sm">취소</button>
+						<button type="button" id="deleteEditSave" class="btn btn-danger btn-sm">삭제</button>
+						</div>
 						<button type="button" class="close" id="saveClose"
 							data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
@@ -565,6 +569,7 @@ label {
 		</form>
 		<!--(주혜)글쓰기 폼 기능-->
 		<%
+			request.setCharacterEncoding("UTF-8");
 			String context = request.getContextPath();
 		%> 
 		<script type="text/javascript">
@@ -626,8 +631,6 @@ label {
 			else if(bvote==1)
 				$('input[name=vote]').attr('value','1');
 			
-			
-			
 			return true;
 		}
 		
@@ -641,9 +644,55 @@ label {
 					}
 		});
 		
-		/*저장, 예약 목록창에서 수정창 누르면 checkbox띄우기*/
+		/*저장 목록창에서 수정창 누르면 checkbox띄우기*/
 		$("#editSave").click(function(){
 			$("input[name=checkedbcode]").css("display","block");
+			$("#editBtnGroup").css("display","block");
+			$("#editSave").css("display","none");
+		});
+		
+		/*저장 창에서 수정->취소 누를시*/
+		$("#cancelEditSave").click(function(){
+			$("input[name=checkedbcode]").css("display","none");
+			$("#editBtnGroup").css("display","none");
+			$("#editSave").css("display","block");
+		});
+		
+		/*저장 창에서 수정->삭제 누를 시*/
+		$("#deleteEditSave").click(function(){
+			var valueArr=new Array();
+			var list=$("input[name=checkedbcode]");
+			for(var i=0; i<list.length; i++){
+				if(list[i].checked){
+					valueArr.push(list[i].value);
+				}
+			}
+			if(valueArr.length==0){
+				alert("선택된 글이 없습니다.");
+			}
+			else{
+				$.ajax({
+					url:"<%=context%>/god/deleteSaveWrite",
+					type:'POST',
+					traditional : true,
+					data:{bcodes:valueArr},
+					dataType:'json',
+					success:function(data){
+						if(data==1){
+							clickWriteBtn();
+							clickSaveBtn();
+						}
+					},
+					error:function(request, status, error){
+						alert("code = " + request.status + " message = "
+								+ request.responseText + " error = "
+								+ error);
+					}
+				});
+			}
+			$("input[name=checkedbcode]").css("display","none");
+			$("#editBtnGroup").css("display","none");
+			$("#editSave").css("display","block");
 		});
 		
 		/* 글쓰기 버튼 누르면 임시저장 글 수(저장, 예약) 가져오기 */
@@ -677,6 +726,7 @@ label {
 		
 		/*저장,예약 글 불러오기*/
 		function clickSaveBtn(){
+			$("#saveList").html("");
 			var str="";
 			$.ajax({
 				url:"<%=context%>/god/getSaveList",
@@ -685,11 +735,11 @@ label {
 			async:false,
 			success:function(list){
 				for(var i=0; i<list.length; i++){
-					str+="<li class='list-group-item list-group-item-action'>"
-					+"<input type='checkbox' name='checkedbcode' id='"+list[i].bcode+"' style='display:none;''>"
-					+"<a href='javascript:callSave("+list[i].bcode+")'>"
+					str+="<li class='list-group-item list-group-item-action'><div class='form-row'>"
+					+"<input type='checkbox' class='mr-1 mt-1' name='checkedbcode' value='"+list[i].bcode+"' style='display:none;''>"
+					+"<a href='javascript:callSave("+list[i].bcode+")' style='color:black;'>"
 					+list[i].bcontent
-					+"</a>"
+					+"</a></div>"
 					+"</li>";
 				}
 					
@@ -700,6 +750,7 @@ label {
 			}
 		});
 		
+		$("#reserveList").html("");
 		str="";
 		$.ajax({
 			url:"<%=context%>/god/getReserveList", 
@@ -708,9 +759,12 @@ label {
 				async:false,
 				success:function(list){
 					for(var i=0; i<list.length; i++){
-						str+="<input type='checkbox' name='checkedbcode' id='"+list[i].bcode+"' style='display:none;''>"
-						+"<li class='list-group-item list-group-item-action' onclick='callSave("+list[i].bcode+")'>"
-						+list[i].bcontent+"</li>";
+						str+="<li class='list-group-item list-group-item-action'><div class='form-row'>"
+							+"<input type='checkbox' class='mr-1 mt-1' name='checkedbcode' value='"+list[i].bcode+"' style='display:none;''>"
+							+"<a href='javascript:callSave("+list[i].bcode+")' style='color:black;'>"
+							+list[i].bcontent
+							+"</a></div>"
+							+"</li>";
 					} 
 					$("#reserveList").append(str);
 				}, 
@@ -800,12 +854,17 @@ label {
 		
 		/*글쓰기에서 닫기눌렀을때 글이없으면 저장창 안띄우고 닫기*/
 		jQuery("#closeWrite").click(function(){
-			var write=$("#writeTextarea").html();
-			if(write=='' ||write.trim()==''){
-				$("#saveModal .close").click();
-				$("#realCloseWrite").click();
-				//그리고 메인글로 돌아가
+			if(bvote==1){
 				location.href="../god/main";
+			}
+			else{
+				var write=$("#writeTextarea").html();
+				if(write=='' ||write.trim()==''){
+					$("#saveModal .close").click();
+					$("#realCloseWrite").click();
+					//그리고 메인글로 돌아가
+					location.href="../god/main";
+				}
 			}
 		});
 		

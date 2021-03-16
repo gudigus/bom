@@ -1,5 +1,10 @@
 package com.spring.bom.dao.god;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -56,21 +61,8 @@ public class BoardDaoImpl implements BoardDao {
 	public int insertVoteBoard(Board board) {
 		int result=0;
 		try {
-			//저장글이면
-			if(board.getBsaveorrsvd()==0)
-				result=session.insert("JHinsertSaveVoteBoard", board); //저장글이면 bregdate=null, bsaveorrsvd=0
-			//예약글이면
-			else if(board.getBsaveorrsvd()==1)
-				result=session.insert("JHinsertRsvdVoteBoard", board); //예약글이면 bregdate 있고, bsaveorrsvd=1
-			//일반글이면
-			else {
-				//저장글 or 예약글을 등록할경우
-				if(board.getSavebcode()!=null) {
-					result=session.update("JHinsertSaveRsvdVoteBoard", board);
-				}
-				else
-					result=session.insert("JHinsertVoteBoard", board); //일반글이면 bregdate 있고, bsaveorrsvd=null
-			}
+			System.out.println("일반글 등록");
+			result=session.insert("JHinsertVoteBoard", board); //일반글이면 bregdate 있고, bsaveorrsvd=null
 		} catch (Exception e) {
 			System.out.println("GOD BoardDaoImpl insertVoteBoard -> "+e.getMessage());
 		}
@@ -86,6 +78,24 @@ public class BoardDaoImpl implements BoardDao {
 			System.out.println("GOD BoardDaoImpl getBoard -> "+e.getMessage());
 		}
 		return board;
+	}
+
+	@Override
+	public int deleteSaveWrite(int[] bcodes) {
+		int result=0;
+		Map<String, Object> param=new HashMap<String, Object>();
+		List<Integer> arrayList=new ArrayList<Integer>();
+		for(int temp:bcodes) {
+			arrayList.add(temp);
+		}
+		param.put("arraylist", arrayList);
+		try {
+			result=session.update("JHdeleteSaveWrite", param);
+		} catch (Exception e) {
+			System.out.println("GOD BoardDaoImpl deleteSaveWrite -> "+e.getMessage());
+		}
+		
+		return result;
 	}
 
 }
