@@ -186,7 +186,11 @@ img{ max-width:100%;}
 		 text-align:left;}
 		 
 #k123 {float: right;}
-
+.chat_list:hover{
+				background: #CBEBAD;
+}
+.inbox_chat{
+background: white;}
 </style>
 </head>
 
@@ -251,11 +255,11 @@ img{ max-width:100%;}
 			}
 		}
 
-		document.addEventListener("keypress", function(e){
+		/* document.addEventListener("keypress", function(e){
 			if(e.keyCode == 13){ //enter press
 				send();
 			}
-		});
+		}); */
 	
 		
 	
@@ -304,10 +308,15 @@ img{ max-width:100%;}
 	
 	function selectcode(){
 			console.log('createroom 시작 roomname val -> ' + $('#roomName').val())
+			var str = $('#roomName').val();
+			console.log("상대방id - > " + str)
+			var stt = str.substring(1);
+			console.log("@ 자른 상대방 id2 - > " + stt)
+			
 			$.ajax({
 				   
 				url: "<%=context%>/bear/selectcode",
-				data: {uatid : $('#roomName').val()},
+				data: {uatid : stt},
 				dataType: 'text',
 				success: function (data){
 					console.log('@아이디로 회원 코드값은 : '+ data)
@@ -342,6 +351,18 @@ img{ max-width:100%;}
 		}
 			
 
+	function enterkey(number) {
+        if (window.event.keyCode == 13) {
+ 
+             // 엔터키가 눌렸을 때 실행할 내용
+             console.log("number - > " + number)
+             send(number);
+        }
+}
+ 
+
+
+
 	
 	function clear(){
 		$("#messagelist").empty();
@@ -355,7 +376,7 @@ img{ max-width:100%;}
 		wsOpen(number);
 		clear();
 		
-		var kdsf = "<input type="+"'text'"+" class="+"'write_msg'"+" placeholder="+"'새 쪽지 작성하기'"+" id="+"'chatting'"+" />"+
+		var kdsf = "<input onkeyup="+"enterkey("+number+")"+" type="+"'text'"+" class="+"'write_msg'"+" placeholder="+"'새 쪽지 작성하기'"+" id="+"'chatting'"+" />"+
 	    "<button class="+"'msg_send_btn'"+" type="+"button"+" onclick="+"send("+number+")><i class="+"'fa fa-paper-plane-o'"+" aria-hidden="+"true"+"></i></button>";
 	    
 	    console.log(kdsf);
@@ -410,13 +431,15 @@ img{ max-width:100%;}
 				var uatid = d.uatid;
 				tag +=    "<div class=chat_list >" +
 		         		 "<div class=chat_people>" +
+		         		"<div class="+"chat_img"+"><img src="+"/img/teemo.jpg"+" class="+"rounded-circle"+" width="+"100"+" height="+"50"+"></div>"+
 		          			 	 "<div class=chat_ib>"+
 		            			  "<h5><b>" +uatid+ "</b><span class=chat_date><b>" +cdtime+ "</b></span></h5>"+
-		             				 "<h5"+" id='msgsize'>"+ msg+"</h5><span id = 'k123'>"+"<button type='button' class="+"'btn btn-success'"+" onclick='goRoom(\""+roomNumber+"\")'>참여</button>"+"</span> "+
+		             				 "<h5"+" id='msgsize'>"+ msg+"<span id = 'k123'>"+"<button type='button' class="+"'btn btn-success'"+" onclick='goRoom(\""+roomNumber+"\")'>참여</button>"+"</span></h5> "+
 		           				 "</div>"+
 		        		      "</div>"+
 		                  "</div>";
 						console.log("createChatingroom d 의 값 -> "+ d + " idx 의 값 -> ");
+						
 					//<div class="chat_img"> <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="sunil"> </div> 프로필사진 넣을때 people 다음으로넣기
 			});
 			$("#chatingpage").append(tag);
@@ -482,8 +505,12 @@ img{ max-width:100%;}
 				<div class="card">
 					<div class="card-body">
 						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-							width="50"> <a class="card-title text-dark">닉네임</a> <a
-							class="card-subtitle mb-2 text-muted">유저코드 : ${ucode } , 닉네임 : ${user.uatid } </a>
+							width="50"> <a class="card-title text-dark">닉네임</a> 
+							<a class="card-subtitle mb-2 text-muted">
+													<c:forEach var="info" items="${userinfo}">
+								@<c:out value="${info.uatid }" /> 
+							</c:forEach>
+						</a>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
 					<input type="hidden" id="sessionId" value="${ucode }">

@@ -89,6 +89,12 @@ public class ChatDaoImpl implements ChatDao {
 		System.out.println("chatDaoImpl selectcode 진행 - > atid " +atid);
 		return session.selectOne("selectcode" ,atid);
 	}
+
+	@Override
+	public List<User> userinfo(int kiwoong) {
+		System.out.println("chatDaoImpl userinfo 진행 - > ucode " +kiwoong);
+		return session.selectList("userinfo", kiwoong);
+	}
 	
 		
 

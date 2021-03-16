@@ -58,4 +58,10 @@ public class ChatServiceImpl implements ChatService {
 		System.out.println("chatserviceimpl selectcode 진행  -> uatid " + uatid);
 		return cd.selectcode(uatid);
 	}
+
+	@Override
+	public List<User> userinfo(int kiwoong) {
+		System.out.println("chatserviceimpl userinfo 진행  -> ucode " + kiwoong);
+		return cd.userinfo(kiwoong);
+	}
 }

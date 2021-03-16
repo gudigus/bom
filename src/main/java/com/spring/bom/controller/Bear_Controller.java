@@ -52,8 +52,13 @@ public class Bear_Controller {
 		
 		
 		 List<User> useronline =cs.uonline(user);
+		 
+		 List<User> userinfo = cs.userinfo(kiwoong);
+		 System.out.println("bear_controller userinfo - > " +userinfo);
+		 
 		 System.out.println("Bear_controller uonline.size -> " + useronline.size());
 		 model.addAttribute("useronline",useronline);
+		 model.addAttribute("userinfo",userinfo);
 		 return "bear/chat";
 	}
 

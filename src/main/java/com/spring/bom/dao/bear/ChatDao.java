@@ -27,6 +27,9 @@ public interface ChatDao {
 	
 	//회원아이디로 ucode값 가져오기
 	String selectcode(String atid);
+	//세션아이디로 회원정보 가져오기
+	
+	List<User> userinfo(int kiwoong);
 
 	
 

@@ -26,5 +26,8 @@ public interface ChatService {
 	
 	//@아이디로 회원ucode값 가져오기
 	String selectcode(String uatid);
+	// 세션아이디로 회원정보가져오기
+	
+	List<User> userinfo(int kiwoong);
 	
 }
