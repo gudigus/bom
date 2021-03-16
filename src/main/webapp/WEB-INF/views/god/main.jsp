@@ -148,7 +148,7 @@ label {
 				</div>
 			</div>
 		</div>
-		<!--글쓰기 팝업-->
+		<!--GOD 글쓰기 팝업 시작-->
 		<form action="../god/write" method="post" enctype="Multipart/form-data" onsubmit="return checkWrite()">
 		<!--실제 값을 보내는곳 -->
 		<input type="hidden" name="ucode" value="${user.getUcode() }">
@@ -291,8 +291,8 @@ label {
 				</div>
 			</div>
 		</div>
-		<!--글쓰기 팝업 끝-->
-		<!--예약 창 시작-->
+		<!--GOD 글쓰기 팝업 끝-->
+		<!--GOD 예약 창 시작-->
 		<div class="modal" id="reserveForm" data-backdrop="static"
 			data-keyboard="false" tabindex="-1"
 			aria-labelledby="exampleModalLabel2" aria-hidden="true"
@@ -488,9 +488,8 @@ label {
 				</div>
 			</div>
 		</div>
-		<!--예약 창 끝-->
-
-		<!--임시저장 창 시작-->
+		<!--GOD 예약 창 끝-->
+		<!--GOD 임시저장 창 시작-->
 		<div class="modal" id="tempForm" data-backdrop="static"
 			data-keyboard="false" tabindex="-1"
 			aria-labelledby="exampleModalLabel2" aria-hidden="true"
@@ -538,10 +537,8 @@ label {
 				</div>
 			</div>
 		</div>
-		<!--임시저장 창 끝-->
-		
-		<!--종료 전 저장 묻는 팝업 -->
-		<!-- Modal -->
+		<!--GOD 임시저장 창 끝-->
+		<!--GOD 종료 전 저장 묻는 팝업 -->
 		<div class="modal fade" id="saveModal" tabindex="-1"
 			aria-labelledby="saveModal" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered modal-sm">
@@ -565,9 +562,10 @@ label {
 				</div>
 			</div>
 		</div>
-		<!--저장 팝업 끝-->
+		<!--GOD 저장 팝업 끝-->
 		</form>
-		<!--(주혜)글쓰기 폼 기능-->
+		
+		<!--GOD 글쓰기 폼 기능-->
 		<%
 			String context = request.getContextPath();
 		%> 
@@ -1042,7 +1040,7 @@ label {
 			imgorvideo=0;
 		});
 		</script>
-	<!--글쓰기 폼 끝-->
+		<!--GOD 글쓰기 기능 끝-->
 
 		<!-- Page Content -->
 		<div id="page-content-wrapper">

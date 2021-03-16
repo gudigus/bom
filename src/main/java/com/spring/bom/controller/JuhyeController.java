@@ -40,21 +40,21 @@ public class JuhyeController {
 	@RequestMapping(value = "god/getReserveNum", produces = "application/text;charset=UTF-8")
 	@ResponseBody
 	public String getReserveNum(int ucode, Model model) {
-		System.out.println("start getReserveNum");
+		System.out.println("start JuhyeController getReserveNum");
 		return us.getReserveNum(ucode);
 	}
 
 	@RequestMapping(value = "god/getSaveNum", produces = "application/text;charset=UTF-8")
 	@ResponseBody
 	public String getSaveNum(int ucode, Model model) {
-		System.out.println("start getSaveNum");
+		System.out.println("start JuhyeController getSaveNum");
 		return us.getSaveNum(ucode);
 	}
 
 	@RequestMapping(value = "god/getReserveList", produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public List<Board> getReserveList(int ucode, Model model) {
-		System.out.println("getReserveList start");
+		System.out.println("start JuhyeController getReserveList");
 		System.out.println("ucode -> " + ucode);
 		return us.getReserveList(ucode);
 	}
@@ -62,7 +62,7 @@ public class JuhyeController {
 	@RequestMapping(value = "god/getSaveList", produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public List<Board> getSaveList(int ucode) {
-		System.out.println("getSaveList ucode -> " + ucode);
+		System.out.println("start JuhyeController getSaveList ucode -> " + ucode);
 		List<Board> list = us.getSaveList(ucode);
 		System.out.println("list length -> " + list.size());
 		return list;
@@ -70,7 +70,7 @@ public class JuhyeController {
 
 	@RequestMapping(value = "god/write", method = RequestMethod.POST)
 	public String write(Board board, Vote vote, Model model, @RequestParam("attach") MultipartFile file,  HttpServletRequest request) {
-		System.out.println("bcode -> "+board.getSavebcode());
+		System.out.println("start JuhyeController write bcode -> "+board.getSavebcode());
 		if (board.getBregdate().equals("1")) {
 			String regdate = request.getParameter("year").substring(2, 4) + "/"
 					+ request.getParameter("month").substring(0, 2) + "/" + request.getParameter("day").substring(0, 2)
@@ -127,6 +127,7 @@ public class JuhyeController {
 	@RequestMapping(value="god/callSaveBoard", produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public Board callSaveBoard(int bcode) {
+		System.out.println("start JuhyeController callSaveBoard");
 		Board board=bs.getBoard(bcode);
 		
 		return board;
@@ -135,6 +136,7 @@ public class JuhyeController {
 	@RequestMapping(value="god/deleteSaveWrite", produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public int deleteSaveWrite(int[] bcodes) {
+		System.out.println("start JuhyeController deleteSaveWrite");
 		int result=bs.deleteSaveWrite(bcodes);
 		
 		return result;
