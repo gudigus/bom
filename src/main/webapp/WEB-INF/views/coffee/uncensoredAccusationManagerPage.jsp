@@ -393,7 +393,7 @@
 											<span><button type="button" class="btn btn-primary float-right b${status.index }">복원</button></span>
 											<c:choose>
 												 <c:when test="${not empty list.uimage }">
-													<img alt="회원 이미지" src="/img/profiles/${list.uimage }" class="rounded-circle" width="50"
+													<img alt="회원 이미지" src="<%=context %>/profile_image/${list.uimage }" class="rounded-circle" width="50"
 													height="50"></c:when>
 												<c:otherwise>
 													<img src="/img/coffee/user_basic.svg" class="rounded-circle" width="50" height="50">
@@ -405,12 +405,12 @@
 												class="card-text" style="margin-top: 10px;">${list.bcontent }</a>
 												<c:if test="${list.battach!=null }">
 												 	<c:if test="${list.battachType=='image'}">
-												 		<img class="img-thumnail" width="300" src="/image/${list.battachSrc}"/>
+												 		<img class="img-thumnail" width="300" src="<%=context %>/image/${list.battachSrc}"/>
 												 	</c:if>
 												 	<c:if test="${list.battachType=='video'}">
 												 		<video controls width="300">
-												 			<source  src="/video/${list.battachSrc}" type="video/mp4">
-												 			<source  src="/video/${list.battachSrc}" type="video/webm">
+												 			<source  src="<%=context %>/video/${list.battachSrc}" type="video/mp4">
+												 			<source  src="<%=context %>/video/${list.battachSrc}" type="video/webm">
 												 			해당 브라우저에는 지원하지 않는 비디오입니다.
 												 		</video>
 												 	</c:if>
@@ -439,34 +439,41 @@
 										</c:when>
 										<c:otherwise>
 											<div class="card-body">
-												<div align="center"><img src="/img/coffee/news_img_02_m.jpg" style="width: auto;
-				    							height: 200px; object-fit:contain;">
+												<div align="center"><c:choose>
+													<c:when test="${not empty list.ubg }">
+														<img src="<%=context %>/profile_image/${list.ubg }" style="width: auto;
+					    							height: 200px; object-fit:contain;">
+													</c:when>
+													<c:otherwise>
+														<img src="/img/coffee/news_img_02_m.jpg" style="width: auto;
+					    								height: 200px; object-fit:contain;">
+					    							</c:otherwise>
+					    							</c:choose>
 												</div>
-											<span><button type="button" class="btn btn-danger float-right u${status.index }">탈퇴</button></span>
-											<span><button type="button" class="btn btn-primary float-right u${status.index }">복원</button></span>
-											
-											<c:choose>
-												<c:when test="${not empty list.uimage }">
-													<img alt="회원 이미지" src="/img/profiles/${list.uimage }" class="rounded-circle" width="100"
-													height="100">
-												</c:when>
-												<c:otherwise>
+												<span><button type="button" class="btn btn-danger float-right ${status.index }">탈퇴</button></span>
+												<span><button type="button" class="btn btn-primary float-right ${status.index }">복원</button></span>
+												
+												<c:choose>
+													<c:when test="${not empty list.uimage }">
+													<img alt="회원 이미지" src="<%=context %>/profile_image/${list.uimage }" class="rounded-circle" width="100"
+													height="100"></c:when>
+													<c:otherwise>
 													<img src="/img/coffee/user_basic.svg" class="rounded-circle" width="100" height="100">
-												</c:otherwise>
-											</c:choose>
-											<span class="card-title text-dark">${list.unickname }</span> <a
-												class="card-subtitle mb-2 text-muted">@${list.uatid }</a> 
-												<a class="card-text" style="margin-top: 10px;">${list.uintro } 
-												</a>
-											<div><c:if test="${not empty list.unation }"><img alt="국적" src="/img/coffee/flags.svg" width="15" height="15">${list.unation }</c:if> 
-											<c:if test="${not empty list.uloc }"><img alt="위치" src="/img/coffee/placeholder.svg" width="15" height="15">${list.uloc }</c:if>
-											</div>
-											<div> 
-											<c:if test="${not empty list.uprofilelink }"><img src="/img/coffee/link.svg" width="15" height="15"><a href="#">${list.uprofilelink }</a></c:if>
-											<img src="/img/coffee/calendar-interface-symbol-tool.svg" width="15" height="15">${list.uregdate }
-											</div>
-											<div>${list.ufollowing } Following ${list.ufollower } Follower</div>
-											<span class="bg-danger p-1 text-light"><img src="/img/coffee/accusation.svg" width="15" height="15">${list.ureportcount }</span>
+													</c:otherwise>
+												</c:choose>
+												<span class="card-title text-dark">${list.unickname }</span> <a
+													class="card-subtitle mb-2 text-muted">@${list.uatid }</a> 
+													<a class="card-text" style="margin-top: 10px;">${list.uintro } 
+													</a>
+												<div><c:if test="${not empty list.unation }"><img alt="국적" src="/img/coffee/flags.svg" width="15" height="15">${list.unation }</c:if> 
+												<c:if test="${not empty list.uloc }"><img alt="위치" src="/img/coffee/placeholder.svg" width="15" height="15">${list.uloc }</c:if>
+												</div>
+												<div> 
+												<c:if test="${not empty list.uprofilelink }"><img src="/img/coffee/link.svg" width="15" height="15"><a href="#">${list.uprofilelink }</a></c:if>
+												<img src="/img/coffee/calendar-interface-symbol-tool.svg" width="15" height="15">${list.uregdate }
+												</div>
+												<div>${list.ufollowing } Following ${list.ufollower } Follower</div>
+												<span class="bg-danger p-1 text-light"><img src="/img/coffee/accusation.svg" width="15" height="15">${list.ureportcount }</span>
 											</div>
 										</c:otherwise>
 									</c:choose>

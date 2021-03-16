@@ -204,7 +204,7 @@
 							<button type="button" id="btn_restore" class="btn btn-primary float-right ${status.index }">복원</button>
 							<c:choose>
 								<c:when test="${not empty list.uimage }">
-									<img alt="회원 이미지" src="/img/profiles/${list.uimage }" class="rounded-circle" width="50"
+									<img alt="회원 이미지" src="<%=context %>/profile_image/${list.uimage }" class="rounded-circle" width="50"
 									height="50"></c:when>
 								<c:otherwise>
 									<img src="/img/coffee/user_basic.svg" class="rounded-circle" width="50" height="50">
@@ -216,12 +216,12 @@
 								class="card-text" style="margin-top: 10px;">${list.bcontent }</a>
 								<c:if test="${list.battach!=null }">
 								 	<c:if test="${list.battachType=='image'}">
-								 		<img class="img-thumnail" width="300" src="/image/${list.battachSrc}"/>
+								 		<img class="img-thumnail" width="300" src="<%=context %>/image/${list.battachSrc}"/>
 								 	</c:if>
 								 	<c:if test="${list.battachType=='video'}">
 								 		<video controls width="300">
-								 			<source  src="/video/${list.battachSrc}" type="video/mp4">
-								 			<source  src="/video/${list.battachSrc}" type="video/webm">
+								 			<source  src="<%=context %>/video/${list.battachSrc}" type="video/mp4">
+								 			<source  src="<%=context %>/video/${list.battachSrc}" type="video/webm">
 								 			해당 브라우저에는 지원하지 않는 비디오입니다.
 								 		</video>
 								 	</c:if>

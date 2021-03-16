@@ -206,7 +206,7 @@
 						<div class="card-body">
 							<div align="center"><c:choose>
 								<c:when test="${not empty list.ubg }">
-									<img src="/img/coffee/${list.ubg }" style="width: auto;
+									<img src="<%=context %>/profile_image/${list.ubg }" style="width: auto;
     							height: 200px; object-fit:contain;">
 								</c:when>
 								<c:otherwise>
@@ -220,7 +220,7 @@
 							
 							<c:choose>
 								<c:when test="${not empty list.uimage }">
-								<img alt="회원 이미지" src="/img/profiles/${list.uimage }" class="rounded-circle" width="100"
+								<img alt="회원 이미지" src="<%=context %>/profile_image/${list.uimage }" class="rounded-circle" width="100"
 								height="100"></c:when>
 								<c:otherwise>
 								<img src="/img/coffee/user_basic.svg" class="rounded-circle" width="100" height="100">
