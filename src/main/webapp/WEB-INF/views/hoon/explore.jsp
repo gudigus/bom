@@ -106,24 +106,25 @@
 				<form class="well form-search" action="searchView" method="get" id="jh_form">
 					<div class="input-group">
 						<input type="text" ID="datebox" Class="form-control" name="search"
-							data-toggle="dropdown"></input>
+							data-toggle="dropdown" required="required" placeholder="봄 검색" style="width: 475px;"></input>
 				
-						<table id="demolist" class="dropdown-menu" style="z-index: 5;">
+						<table id="demolist" class="dropdown-menu" style="z-index: 5; width: 475px;">
 							<tr>
-								<td style="font-weight: normal;">최근</td>
-								<td>
-									<button type="reset" id="del_ajax" style="font-size: 12px;">전체지우기</button>
+								<td style="font-weight: normal; padding-bottom: 15px;">최근
+									<button type="reset" id="del_ajax" style="font-size: 12px; float: right">전체지우기</button>
 								</td>
 							</tr>
 							<c:forEach var="Junghun" items="${searchkeyword }" begin="0"
 								end="10">
 								<tr id="searchkeyword">
-									<td class="dropdown-li" style="padding: 5px;"><c:choose>
+									<td class="dropdown-li" style="padding: 5px;
+									border: 1px solid; border-collapse:collapse ; width: 470px;"><c:choose>
 											<c:when test="${Junghun.search.contains('#')}">
-												<a id="row" href="searchView?search=${Junghun.search }">${Junghun.search }</a>
+												${Junghun.search }
 											</c:when>
 											<c:otherwise>
 												<a id="row" href="searchView?search=${Junghun.search }">${Junghun.search }</a>
+												<button  style="float: right;">x</button>
 											</c:otherwise>
 										</c:choose></td>
 								</tr>
@@ -256,7 +257,7 @@
 										style="font-size: 0.8rem; padding: 10px;">
 										${status.count }위
 										<div>
-											<a href="searchView?search=${Junghun.search }">${Junghun.search }</a>
+											${Junghun.search }
 											<span class="float-right"><fmt:formatNumber
 													value="${Junghun.scount }" groupingUsed="true"></fmt:formatNumber>
 												봄</span>

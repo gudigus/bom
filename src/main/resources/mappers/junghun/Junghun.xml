@@ -55,7 +55,7 @@
 			<when test='search.contains("@")'>'user'</when>
 			<otherwise>'word'</otherwise>
 		</choose>
-		,to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),1,0)
+		,to_char(sysdate,'yy/mm/dd hh24:mi:ss'),1,0)
 	</update>
 
 	<!-- 회원검색 -->
@@ -112,7 +112,7 @@
 	<select id="searchHash" parameterType="Junghun"
 		resultType="Junghun">
 		<![CDATA[
-		select * from ( select * from search where search like '#'||'%' order by DBMS_RANDOM.RANDOM)
+		select * from ( select * from search where search like '<'||'%' order by DBMS_RANDOM.RANDOM)
 		where rownum <10
 		and scount>3000
 		]]>
@@ -121,10 +121,12 @@
 	<!-- 해쉬태그 순위 -->
 	<select id="searchTrend" parameterType="Junghun"
 		resultType="Junghun">
+		<![CDATA[
 		select * from search
-		where search like '#'||'%'
+		where search like '<'||'%'
 		ORDER BY
 		scount DESC
+		]]>
 	</select>
 
 	<!-- 검색기록 -->

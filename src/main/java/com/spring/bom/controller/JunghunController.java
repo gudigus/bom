@@ -68,7 +68,16 @@ public class JunghunController {
 		List<Junghun> listSearch = js.listSearch(junghun);
 		List<Junghun> listUser = js.listUser(junghun);
 		List<Junghun> listNew = js.listNew(junghun);
+		
+		String Hashtag = junghun.getSearch();
+		
+			if (Hashtag.charAt(0) == '#') {
+				Hashtag = String.format("<a href=\"searchView?search=%%23%s\">%s</a>", Hashtag.substring(1),Hashtag);
+				System.out.println("SearchData에 저장될 Hashtag 명::"+Hashtag);
+				junghun.setSearch(Hashtag);
+			}
 		int searchData = js.searchData(junghun);
+		
 		List<Junghun> listTrend = js.listTrend(junghun);
 		List<Junghun> searchkeyword = js.searchkeyword(junghun);
 		List<Junghun> searchblock = js.searchblock(junghun);

@@ -106,10 +106,10 @@
 			<nav
 				class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top"
 				style="left: 241px; right: 241px; z-index: 5;">
-				<form class="well form-search" action="searchView" method="get" id="jh_form">
+				<form class="well form-search" action="searchView" method="get" id="jh_form" >
 					<div class="input-group">
 						<input type="text" ID="datebox" Class="form-control" name="search"
-							data-toggle="dropdown"></input>
+							data-toggle="dropdown" required="required" placeholder="봄 검색"></input>
 				
 						<table id="demolist" class="dropdown-menu" style="z-index: 5;">
 							<tr>
@@ -123,7 +123,7 @@
 								<tr id="searchkeyword">
 									<td class="dropdown-li" style="padding: 5px;"><c:choose>
 											<c:when test="${Junghun.search.contains('#')}">
-												<a id="row" href="searchView?search=${Junghun.search }">${Junghun.search }</a>
+												${Junghun.search }
 											</c:when>
 											<c:otherwise>
 												<a id="row" href="searchView?search=${Junghun.search }">${Junghun.search }</a>
@@ -152,7 +152,6 @@
 							}
 						});
 					});
-					
 			</script>
 			<nav
 				class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top"
@@ -433,8 +432,10 @@
 			<div class="list-group-item list-group-item-action bg-light">
 				<div id="drop_the_text">
 					<!-- 엔터치면 searchData() 실행 -->
-					<input class="form-control" id="search" placeholder="봄 검색"
+					<form  action="searchView" method="get" id="jh_form" >
+					<input class="form-control" id="search" placeholder="봄 검색" name="search"
 						onkeypress="if( event.keyCode == 13 ){searchData();}">
+						</form>
 				</div>
 			</div>
 			<div class="list-group-item list-group-item-action bg-light"
@@ -486,7 +487,7 @@
 								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
 									${status.count }위
 									<div>
-										<a href="searchhastag?search=${Junghun.search }">${Junghun.search }</a>
+										${Junghun.search }
 										<span class="float-right"><fmt:formatNumber
 												value="${Junghun.scount }" groupingUsed="true"></fmt:formatNumber>
 											봄</span>
