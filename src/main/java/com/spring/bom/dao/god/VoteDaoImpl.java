@@ -13,13 +13,22 @@ public class VoteDaoImpl implements VoteDao {
 
 	@Override
 	public String settingTime(Vote vote) {
-		return session.selectOne("JHsetVoteTime",vote);
+		String votetime=null;
+		try {
+			votetime=session.selectOne("JHsetVoteTime",vote);
+		} catch (Exception e) {
+			System.out.println("GOD VoteDaoImpl settingTime -> "+e.getMessage());
+		}
+		return votetime;
 	}
 
 	@Override
 	public int insertVote(Vote vote) {
-		//vote.setVcode(session.selectOne("JHselectMaxVcode", vote));
-		session.insert("JHinsertVote", vote);
+		try {
+			session.insert("JHinsertVote", vote);
+		} catch (Exception e) {
+			System.out.println("GOD VoteDaoImpl insertVote -> "+e.getMessage());
+		}
 		return vote.getVcode();
 	}
 }

@@ -15,27 +15,46 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public String getReserveNum(int ucode) {
-		// TODO Auto-generated method stub
-		return session.selectOne("JHgetReserveNum",ucode);
+		String reserveNum=null;
+		try {
+			reserveNum=session.selectOne("JHgetReserveNum",ucode);
+		} catch (Exception e) {
+			System.out.println("GOD UserDaoImpl getReserveNum-> "+e.getMessage());
+		}
+		return reserveNum;
 	}
 
 	@Override
 	public String getSaveNum(int ucode) {
-		// TODO Auto-generated method stub
-		return session.selectOne("JHgetSaveNum",ucode);
+		String saveNum=null;
+		try {
+			saveNum=session.selectOne("JHgetSaveNum",ucode);
+		} catch (Exception e) {
+			System.out.println("GOD UserDaoImpl getSaveNum -> "+e.getMessage());
+		}
+		return saveNum;
 	}
 	
 	@Override
 	public List<Board> getReserveList(int ucode) {
-		// TODO Auto-generated method stub
-		return session.selectList("JHgetReserveList",ucode);
+		List<Board> list = null;
+		try {
+			list=session.selectList("JHgetReserveList",ucode);
+		} catch (Exception e) {
+			System.out.println("GOD UserDaoImpl getReserveList ->"+e.getMessage());
+		}
+		return list;
 	}
 
 	@Override
 	public List<Board> getSaveList(int ucode) {
-		// TODO Auto-generated method stub
-		System.out.println("UserDaoImpl getSaveList");
-		return session.selectList("JHgetSaveList",ucode);
+		List<Board> list = null;
+		try {
+			list=session.selectList("JHgetSaveList",ucode);
+		} catch (Exception e) {
+			System.out.println("GOD UserDaoImpl getSaveList -> "+e.getMessage());
+		}
+		return list;
 	}
 
 }
