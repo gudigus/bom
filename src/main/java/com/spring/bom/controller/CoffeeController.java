@@ -56,12 +56,14 @@ public class CoffeeController {
 	
 	public void managerVerification(HttpServletRequest req, Model model, String url) {
 		HttpSession session = req.getSession();
+		user_info ui = null;
 		int uCode = -1;
 //		String search = req.getParameter("String");
 //		System.out.println("CoffeeController managerVerification search->"+search);
 		
 		try {
-			uCode = (int) session.getAttribute("uCode");
+			ui = (user_info)session.getAttribute("login");
+			uCode = ui.getuCode();
 
 		}catch (Exception e) {
 			System.out.println("CoffeeController "+url+" Interceptor ->"+e.getMessage());

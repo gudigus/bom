@@ -29,16 +29,16 @@ public class BroController {
 		user_info login = bs.loginCheck(ui);
 		
 		if(login == null) {
-			session.setAttribute("uCode", "-1");
+			session.setAttribute("login", null);
 			System.out.println("login off");
 			return "/bro/login";
 		}else if(login.getuCode() == 0){
-			session.setAttribute("uCode", login.getuCode());
+			session.setAttribute("login", login);
 			System.out.println("관리자 login on");
 			return "/coffee/censorMemberManagerPage";
 		}else {
 			System.out.println("login on");
-			session.setAttribute("uCode", login.getuCode());
+			session.setAttribute("login", login);
 			return "/coffee/example";
 		}
 	}
