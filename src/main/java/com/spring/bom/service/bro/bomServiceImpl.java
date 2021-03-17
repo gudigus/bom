@@ -78,6 +78,18 @@ public class BomServiceImpl implements BomService {
 		return bd.findPw(uEmail, tempPassword);
 	}
 
+	@Override
+	public int online(String uEmail) {
+	
+		return bd.online(uEmail);
+	}
+
+	@Override
+	public int state(String uEmail) {
+		
+		return bd.state(uEmail);
+	}
+
 
 	
 

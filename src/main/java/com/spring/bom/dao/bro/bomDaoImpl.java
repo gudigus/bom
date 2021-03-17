@@ -110,6 +110,18 @@ public class BomDaoImpl implements BomDao {
 		return session.update("findPw", ui);
 	}
 
+	@Override
+	public int online(String uEmail) {
+		
+		return session.update("online",uEmail);
+	}
+
+	@Override
+	public int state(String uEmail) {
+		int a = session.selectOne("state",uEmail);
+		return a;
+	}
+
 	
 
 	

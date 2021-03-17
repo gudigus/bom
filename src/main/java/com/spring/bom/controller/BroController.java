@@ -56,20 +56,30 @@ public class BroController {
 	
 		
 	@RequestMapping(value = "bro/login" , method=RequestMethod.POST)
-	public String login(User_info ui, HttpServletRequest req, String uEmail) throws Exception{
+	public String login(User_info ui, HttpServletRequest req, String uEmail, Model model) throws Exception{
 		HttpSession session = req.getSession();
 		User_info login = bs.loginCheck(ui);
+		
 		if(login == null) {
 			session.setAttribute("login", null);
 			System.out.println("login off");
 			System.out.println("controller uEamil-->"+uEmail);
 			bs.logout(uEmail);
+			model.addAttribute("uState", 1);
 			return "bro/loginFail";
 		}else {
-		
-			
 			session.setAttribute("login", login);
 			System.out.println("login on");
+			int a = bs.state(uEmail);
+			System.out.println("controller ustate number-->"+ a);
+			if(a == 0) {
+				model.addAttribute("uState", 0);
+				return "bro/loginFail";
+			}else if(a == 2) {
+				model.addAttribute("uState", 2);
+				return "bro/loginFail";
+			}
+			bs.online(uEmail);
 			bs.loginClear(uEmail);
 			return "bro/main";
 		}
@@ -78,6 +88,8 @@ public class BroController {
 	
 	@RequestMapping(value = "bro/index")
      public String index() {
+		System.out.println("start controller login page");
+		
 	 return "bro/login";
 	}
 	@RequestMapping(value ="bro/joinForm", method = RequestMethod.POST)

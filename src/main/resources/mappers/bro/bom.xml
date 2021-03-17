@@ -53,6 +53,18 @@ update user_info set uPassword = #{uPassword}
 where uEmail = #{uEmail}
 
 </update>
+
+<update id="online" parameterType="User_info" >
+update user_info set uonline = 1
+where uEmail = #{uEmail}
+
+</update>
+<select id="state" parameterType="User_info" resultType="int">
+select uState from user_info
+where uEmail = #{uEmail}
+
+
+</select>
 	</mapper>
 
 

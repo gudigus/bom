@@ -50,7 +50,9 @@
     <c:if test="${check!=1}">메일전송이 실패되었습니다</c:if>
     <c:if test="${check==null}">              </c:if>
 </body>
+   <c:set var="tempPassword" value="${tempPassword}"></c:set>
 <script type="text/javascript">
+
 $("#temp").blur(function() {
 
 	// id = "id_reg" / name = "userId"

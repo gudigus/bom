@@ -89,7 +89,7 @@
 				<div class="col-lg-10">
 					<input type="text" class="form-control onlyAlphabetAndNumber"
 						name="uEmail" id="uEmail" data-rule-required="true"
-						placeholder="30자이내의 알파벳, 언더스코어(_), 숫자만 입력 가능합니다." maxlength="30">
+						placeholder="@을 포함한 정확한 이메일주소를 입력하여주세요" maxlength="30">
 					<div id="Email_check"></div>
 				</div>
 			</div>
@@ -115,7 +115,7 @@
 				<label for="inputName" class="col-lg-2 control-label">아이디</label>
 				<div class="col-lg-10">
 					<input type="text" class="form-control onlyHangul" name="uAtid"
-						id="uAtid" data-rule-required="true" placeholder="한글만 입력 가능합니다."
+						id="uAtid" data-rule-required="true" placeholder="영문만 입력 가능합니다."
 						maxlength="15">
 					<div id="id_check"></div>
 					
@@ -135,7 +135,7 @@
 				<label for="inputEmail" class="col-lg-2 control-label">생년월일</label>
 				<div class="col-lg-10">
 					<input type="Date"  name="uBirth" class="form-control" 
-						data-rule-required="true" placeholder="이메일" maxlength="40">
+						data-rule-required="true" placeholder="생년월일" maxlength="40">
 				</div>
 			</div>
 			<div class="form-group" id="divPhoneNumber">
@@ -219,7 +219,7 @@
                 						$("#Email_check").text("");
                 						$("#reg_submit").attr("disabled", false);
                 			
-                					} else if(uEmail == ""){
+                					} else if(uEmail == " "){
                 						
                 						$('#Email_check').text('아이디를 입력해주세요 :)');
                 						$('#Email_check').css('color', 'red');
@@ -271,7 +271,7 @@
                 							$("#id_check").text("");
                 							$("#reg_submit").attr("disabled", false);
                 				
-                						} else if(uAtid == ""){
+                						} else if(uAtid == " "){
                 							
                 							$('#id_check').text('아이디를 입력해주세요 :)');
                 							$('#id_check').css('color', 'red');
