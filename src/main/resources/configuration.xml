@@ -6,5 +6,6 @@
 		<typeAlias alias="Interest"     type="com.spring.bom.model.right.Interest"/>
 		<typeAlias alias="Interest_d"     type="com.spring.bom.model.right.InterestDetail"/>
 		<typeAlias alias="Block"     type="com.spring.bom.model.right.Block"/>
+		<typeAlias alias="Statis"     type="com.spring.bom.model.right.Statis"/>
      </typeAliases>
 </configuration>

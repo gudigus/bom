@@ -25,7 +25,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.spring.bom.model.right.Block;
 import com.spring.bom.model.right.Interest;
 import com.spring.bom.model.right.InterestDetail;
+import com.spring.bom.model.right.Statis;
 import com.spring.bom.model.right.User_Info;
+import com.spring.bom.service.right.StatisService;
 import com.spring.bom.service.right.User_InfoService;
 
 @Controller
@@ -36,6 +38,9 @@ public class Right_Controller {
 	private User_InfoService us;
 	@Autowired
 	private JavaMailSender mailSender;
+	@Autowired
+	private StatisService ss;
+	
 	
 	//탈퇴회원 로그인시
 	@RequestMapping(value = "/right/UserdisabledPage")
@@ -514,5 +519,43 @@ public class Right_Controller {
 		model.addAttribute("result3", result3);
 
 		return "/bro/login";
+	}
+	//봄 통계 Statis
+	@RequestMapping(value = "right/bomStatis")
+	public String bomStatis(HttpSession session, Model model) {
+		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
+		model.addAttribute("ucode", ucode);
+		session.setAttribute("ucode", ucode);
+		User_Info ui = us.detail(ucode);
+		model.addAttribute("ui", ui);
+		
+		List<Statis> aList1 = ss.getSearchRank1();
+		for (int i = 0; i < aList1.size(); i++)
+			aList1.get(i).setRank(i + 1);
+		
+		List<Statis> aList2 = ss.getSearchRank2();
+		for (int i = 0; i < aList2.size(); i++)
+			aList2.get(i).setRank(i + 1);
+		
+		List<Statis> aList3 = ss.getSearchRank3();
+		for (int i = 0; i < aList3.size(); i++)
+			aList3.get(i).setRank(i + 1);
+		
+		List<Statis> gListm = ss.getSearchRankm();
+		for (int i = 0; i < gListm.size(); i++)
+			gListm.get(i).setRank(i + 1);
+		
+		List<Statis> gListw = ss.getSearchRankw();
+		for (int i = 0; i < gListw.size(); i++)
+			gListw.get(i).setRank(i + 1);
+		
+		model.addAttribute("aList1", aList1);
+		model.addAttribute("aList2", aList2);
+		model.addAttribute("aList3", aList3);
+		model.addAttribute("gListm", gListm);
+		model.addAttribute("gListw", gListw);
+		
+
+		return "/right/bomStatis";
 	}
 }
