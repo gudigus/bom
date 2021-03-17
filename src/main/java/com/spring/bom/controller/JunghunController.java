@@ -69,8 +69,8 @@ public class JunghunController {
 		List<Junghun> listUser = js.listUser(junghun);
 		List<Junghun> listNew = js.listNew(junghun);
 		
+		//input search text데이터 db에 저장값 설정
 		String Hashtag = junghun.getSearch();
-		
 			if (Hashtag.charAt(0) == '#') {
 				Hashtag = String.format("<a href=\"searchView?search=%%23%s\">%s</a>", Hashtag.substring(1),Hashtag);
 				System.out.println("SearchData에 저장될 Hashtag 명::"+Hashtag);
@@ -93,6 +93,7 @@ public class JunghunController {
 						+ listSearch.get(i).getBattachSrc());
 			}
 		}
+		
 		System.out.println("Junghun Controller Type Src fail");
 		
 		System.out.println("searchblock ::"+searchblock.size());
@@ -115,9 +116,16 @@ public class JunghunController {
 		return "hoon/searchView";
 	}
 
-	@RequestMapping(value = "like")
-	public String like() {
-		return "hoon/like";
+	@RequestMapping(value = "searchlike")
+	@ResponseBody
+	public String searchlike(Model model ,Junghun junghun, HttpSession session) {
+		System.out.println("searchlike ::1");
+		user_info loginUser = (user_info) session.getAttribute("login");
+		System.out.println("searchlike ::2");
+		int jh =js.searchlike(junghun);
+		System.out.println("searchlike 실행::" +jh);
+		System.out.println("searchlike ::3");
+		return "redirect:";
 	}
 	
 	@RequestMapping(value = "deleteRow")

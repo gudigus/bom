@@ -67,5 +67,11 @@ public class JunghunDaoImpl implements JunghunDao{
 		return session.selectList("searchblock",junghun);
 	}
 
+	@Override
+	public int searchlike(Junghun junghun) {
+		return session.update("searchlike",junghun);
+	}
+
+
 }
 

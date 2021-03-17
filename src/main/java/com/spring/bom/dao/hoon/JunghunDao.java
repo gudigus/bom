@@ -15,4 +15,5 @@ public interface JunghunDao {
 	List<Junghun> searchkeyword(Junghun junghun);
 	int 		  deleterow(int ucode);
 	List<Junghun> searchblock(Junghun junghun);
+	int		 	  searchlike(Junghun junghun);
 }

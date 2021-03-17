@@ -124,7 +124,6 @@
 											</c:when>
 											<c:otherwise>
 												<a id="row" href="searchView?search=${Junghun.search }">${Junghun.search }</a>
-												<button  style="float: right;">x</button>
 											</c:otherwise>
 										</c:choose></td>
 								</tr>

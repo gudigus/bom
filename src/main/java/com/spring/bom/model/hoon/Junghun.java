@@ -17,7 +17,7 @@ public class Junghun {
 	private String bquotecount;
 	private String battach;
 	private String bregdate;
-	
+	private int	   bcode;
 	// user_info
 	private String uNickName;
 	private String uatId;
@@ -26,6 +26,12 @@ public class Junghun {
 	//block
 	private int bopcode;
 	private String bword;
+	
+	//Like_bookmark
+	private String ltype;
+	private String ldate;
+	private String btype;
+	private String bdate;
 	
 
 	// login된 Ucode
@@ -37,6 +43,46 @@ public class Junghun {
 	
 	
 	
+	public int getBcode() {
+		return bcode;
+	}
+
+	public void setBcode(int bcode) {
+		this.bcode = bcode;
+	}
+
+	public String getLtype() {
+		return ltype;
+	}
+
+	public void setLtype(String ltype) {
+		this.ltype = ltype;
+	}
+
+	public String getLdate() {
+		return ldate;
+	}
+
+	public void setLdate(String ldate) {
+		this.ldate = ldate;
+	}
+
+	public String getBtype() {
+		return btype;
+	}
+
+	public void setBtype(String btype) {
+		this.btype = btype;
+	}
+
+	public String getBdate() {
+		return bdate;
+	}
+
+	public void setBdate(String bdate) {
+		this.bdate = bdate;
+	}
+
 	public String getBattachType() {
 		return battachType;
 	}

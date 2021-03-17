@@ -67,5 +67,10 @@ public class JunghunServiceImpl implements JunghunService {
 		return jd.searchblock(junghun);
 	}
 
+	@Override
+	public int searchlike(Junghun junghun) {
+		return jd.searchlike(junghun);
+	}
+
 
 }

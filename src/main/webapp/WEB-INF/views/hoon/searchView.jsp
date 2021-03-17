@@ -26,10 +26,10 @@
 
 
 <!-- Bootstrap core JavaScript -->
-<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+ <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
 	integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-	crossorigin="anonymous"></script> -->
-	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	crossorigin="anonymous"></script> 
+	<!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
 	
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
@@ -399,11 +399,16 @@
 											<img src="/img/bring.svg" width="20" height="20">
 											&ensp;${junghun.bquotecount }
 										</button>
-										<button type="button" class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="좋아요" style="font-size: 12px;">
+										
+										
+										<button type="button" class="btn btn-secondary btn-light mr-3" id="searchLikeBtn${status.index }" 
+										onclick="searchLikeBtn(${junghun.bcode},${status.index }); return false;"
+										data-toggle="tooltip" data-placement="top" title="좋아요" style="font-size: 12px;">
 											<img src="/img/heart.svg" width="20" height="20">
 											&ensp;${junghun.blikecount }
 										</button>
+										
+										
 										<button type="button"
 											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
 											data-toggle="dropdown" aria-haspopup="true"
@@ -425,19 +430,44 @@
 		</div>
 	</div>
 	<!-- /#page-content-wrapper -->
-
+<script type="text/javascript">
+	function searchLikeBtn(bcode,btnIndex){
+		event.stopPropagation();
+		var index = btnIndex;
+		var bcode = bcode;
+		var msg = '게시글['+bcode+']에 좋아요를 눌렀습니다!';
+		alert(msg);
+		$.ajax({
+			url : "<%=context%>/searchlike",
+			data:{ bcode: bcode }, 
+			dataType:'json',
+			success : function(data){
+				var str='';
+				$('#searchLikeBtn'+index).empty();
+				if(data.ltype==0||data.ltype==null)
+					str += "<img src='/img/heart.svg' width='20' height='20'> " + data.likeCount
+				if(data.ltype==1)
+					str+= "<img src='/img/red_heart.svg' width='20' height='20'> "+ data.likeCount
+				$('#searchLikeBtn'+index).append(str);
+				alert(".ajax searchLikeBtn str->"+str);
+			}
+		});
+	}
+</script>
 	<!-- 오른쪽 사이드바 -->
 	<div class="bg-light border-left" id="sidebar-wrapper2">
 		<div class="list-group list-group-flush">
+		<!-- 검색창 -->
 			<div class="list-group-item list-group-item-action bg-light">
 				<div id="drop_the_text">
 					<!-- 엔터치면 searchData() 실행 -->
-					<form  action="searchView" method="get" id="jh_form" >
+					<form class="well form-search" action="searchView" method="get" id="jh_form" >
 					<input class="form-control" id="search" placeholder="봄 검색" name="search"
 						onkeypress="if( event.keyCode == 13 ){searchData();}">
 						</form>
 				</div>
 			</div>
+		
 			<div class="list-group-item list-group-item-action bg-light"
 				style="padding: 5px;">
 				<div class="card bg-light mb-3">
