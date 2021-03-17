@@ -9,17 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.spring.bom.model.bro.user_info;
+import com.spring.bom.model.bro.User_info;
 import com.spring.bom.model.coffee.BoardUser_info;
 import com.spring.bom.model.coffee.ReportUser_infoBoard;
-import com.spring.bom.model.coffee.User_info;
-import com.spring.bom.service.coffee.BoardService;
+import com.spring.bom.model.iron.HashTag;
+import com.spring.bom.model.coffee.CoffeeUser_info;
+import com.spring.bom.service.coffee.CoffeeBoardService;
 import com.spring.bom.service.coffee.ReportService;
 import com.spring.bom.service.coffee.User_infoService;
+import com.spring.bom.service.iron.HashTagService;
 
 
 
@@ -29,10 +29,13 @@ public class CoffeeController {
 	private User_infoService uis;
 	
 	@Autowired
-	private BoardService bs;
+	private CoffeeBoardService bs;
 	
 	@Autowired
 	private ReportService rs;
+	
+	@Autowired
+	private HashTagService hs;
 	
 	
 	@GetMapping(value = "/coffee/example")
@@ -56,13 +59,13 @@ public class CoffeeController {
 	
 	public void managerVerification(HttpServletRequest req, Model model, String url) {
 		HttpSession session = req.getSession();
-		user_info ui = null;
+		User_info ui = null;
 		int uCode = -1;
 //		String search = req.getParameter("String");
 //		System.out.println("CoffeeController managerVerification search->"+search);
 		
 		try {
-			ui = (user_info)session.getAttribute("login");
+			ui = (User_info)session.getAttribute("login");
 			uCode = ui.getuCode();
 
 		}catch (Exception e) {
@@ -75,6 +78,15 @@ public class CoffeeController {
 		model.addAttribute("url", url);
 //		model.addAttribute("search", search);
 		System.out.println("CoffeeController session memCnt->"+memCnt);
+	}
+	
+	public void getHashtagRank(Model model) {
+		// 실시간 해시태그 순위
+		System.out.println("[CoffeeController] Do -> hs.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
 	}
 	
 	
@@ -91,7 +103,7 @@ public class CoffeeController {
 		System.out.println(returnPage+" manager->"+ manager );
 		// 관리자면 
 		if (manager == "0") {
-			List<User_info> list = uis.user_infoSensorList();
+			List<CoffeeUser_info> list = uis.user_infoSensorList();
 //			System.out.println("list.get(0).getUcode()->"+list.get(0).getUcode());
 //			System.out.println("list.get(0).getUnickname()->"+list.get(0).getUnickname());
 //			System.out.println("list.get(1).getUcode()->"+list.get(1).getUcode());
@@ -99,6 +111,9 @@ public class CoffeeController {
 //			System.out.println("list.get(2).getUcode()->"+list.get(2).getUcode());
 //			System.out.println("list.get(2).getUnickname()->"+list.get(2).getUnickname());
 			model.addAttribute("user_infoList", list);
+			
+			// 실시간 해시태그 순위
+			getHashtagRank(model);
 		} else {
 			// returnPage = "/coffee/kkk";
 			returnPage = "redirect:/bro/index";
@@ -120,7 +135,7 @@ public class CoffeeController {
 		System.out.println(returnPage+" manager->"+ manager );
 		// 관리자면 
 		if (manager == "0") {
-			List<User_info> list = uis.user_infoSensorList(search);
+			List<CoffeeUser_info> list = uis.user_infoSensorList(search);
 //			System.out.println("list.get(0).getUcode()->"+list.get(0).getUcode());
 //			System.out.println("list.get(0).getUnickname()->"+list.get(0).getUnickname());
 //			System.out.println("list.get(1).getUcode()->"+list.get(1).getUcode());
@@ -129,6 +144,8 @@ public class CoffeeController {
 //			System.out.println("list.get(2).getUnickname()->"+list.get(2).getUnickname());
 			model.addAttribute("user_infoList", list);
 			model.addAttribute("search", search);
+			// 실시간 해시태그 순위
+			getHashtagRank(model);
 		} else {
 			// returnPage = "/coffee/kkk";
 			returnPage = "redirect:/bro/index";
@@ -202,9 +219,10 @@ public class CoffeeController {
 		if (manager == null) manager = "9";
 		System.out.println(returnPage+" manager->"+ manager );
 		if(manager == "0") {
-			List<User_info> list = uis.user_infoRestoreList();
+			List<CoffeeUser_info> list = uis.user_infoRestoreList();
 			model.addAttribute("user_infoList", list);
-			returnPage = "/coffee/restoreMemberManagerPage";
+			// 실시간 해시태그 순위
+			getHashtagRank(model);
 		}else {
 			returnPage = "redirect:/bro/index";
 		}
@@ -222,9 +240,11 @@ public class CoffeeController {
 		if (manager == null) manager = "9";
 		System.out.println(returnPage+" manager->"+ manager );
 		if(manager == "0") {
-			List<User_info> list = uis.user_infoRestoreList(search);
+			List<CoffeeUser_info> list = uis.user_infoRestoreList(search);
 			model.addAttribute("user_infoList", list);
 			model.addAttribute("search", search);
+			// 실시간 해시태그 순위
+			getHashtagRank(model);
 		}else {
 			returnPage = "redirect:/bro/index";
 		}
@@ -251,9 +271,11 @@ public class CoffeeController {
 		if (manager == null) manager = "9";
 		System.out.println(returnPage+" manager->"+ manager );
 		if(manager == "0") {
-			List<User_info> list = uis.user_infoAccusationList();
+			List<CoffeeUser_info> list = uis.user_infoAccusationList();
 			model.addAttribute("user_infoList", list);
 			returnPage = "/coffee/accusationMemberManagerPage";
+			// 실시간 해시태그 순위
+			getHashtagRank(model);
 		}else {
 			returnPage = "redirect:/bro/index";
 		}
@@ -273,9 +295,11 @@ public class CoffeeController {
 		if (manager == null) manager = "9";
 		System.out.println("/coffee/accusationMemberManagerSearch manager->"+ manager );
 		if(manager == "0") {
-			List<User_info> list = uis.user_infoAccusationList(search);
+			List<CoffeeUser_info> list = uis.user_infoAccusationList(search);
 			model.addAttribute("user_infoList", list);
 			model.addAttribute("search", search);
+			// 실시간 해시태그 순위
+			getHashtagRank(model);
 		}else {
 			returnPage = "redirect:/bro/index";
 		}
@@ -314,6 +338,8 @@ public class CoffeeController {
 //			System.out.println("CoffeeController " +returnPage+ list.get(1).getBattach());
 //			System.out.println("CoffeeController " +returnPage+ list.get(1).getBattachSrc());
 			model.addAttribute("boardUser_infoList", list);
+			// 실시간 해시태그 순위
+			getHashtagRank(model);
 			
 		}else {
 			returnPage = "redirect:/bro/index";
@@ -342,6 +368,8 @@ public class CoffeeController {
 //			System.out.println("CoffeeController " +returnPage+ list.get(1).getBattachSrc());
 			model.addAttribute("boardUser_infoList", list);
 			model.addAttribute("search", search);
+			// 실시간 해시태그 순위
+			getHashtagRank(model);
 
 		}else {
 			returnPage = "redirect:/bro/index";
@@ -392,6 +420,8 @@ public class CoffeeController {
 				}
 			}
 			model.addAttribute("boardUser_infoList", list);
+			// 실시간 해시태그 순위
+			getHashtagRank(model);
 		}else {
 			returnPage = "redirect:/bro/index";
 		}
@@ -418,6 +448,8 @@ public class CoffeeController {
 			}
 			model.addAttribute("boardUser_infoList", list);
 			model.addAttribute("search", search);
+			// 실시간 해시태그 순위
+			getHashtagRank(model);
 		}else {
 			returnPage = "redirect:/bro/index";
 		}
@@ -454,6 +486,8 @@ public class CoffeeController {
 			}
 //			System.out.println(list.get(0).getBcode());
 			model.addAttribute("boardUser_infoList", list);
+			// 실시간 해시태그 순위
+			getHashtagRank(model);
 		}else {
 			returnPage = "redirect:/bro/index";
 		}
@@ -481,6 +515,8 @@ public class CoffeeController {
 //				System.out.println(list.get(0).getBcode());
 			model.addAttribute("boardUser_infoList", list);
 			model.addAttribute("search", search);
+			// 실시간 해시태그 순위
+			getHashtagRank(model);
 		}else {
 			returnPage = "redirect:/bro/index";
 		}
@@ -522,6 +558,8 @@ public class CoffeeController {
 //			System.out.println("list.get(0).getUnickname_1()->"+list.get(0).getUnickname_1());
 //			System.out.println("list.get(0).getUnickname()->"+list.get(0).getUnickname());
 			model.addAttribute("ReportUser_infoBoardList", list);
+			// 실시간 해시태그 순위
+			getHashtagRank(model);
 			
 		}else {
 			returnPage = "redirect:/bro/index";
@@ -553,6 +591,8 @@ public class CoffeeController {
 //				System.out.println("list.get(0).getUnickname()->"+list.get(0).getUnickname());
 			model.addAttribute("ReportUser_infoBoardList", list);
 			model.addAttribute("search", search);
+			// 실시간 해시태그 순위
+			getHashtagRank(model);
 		}else {
 			returnPage = "redirect:/bro/index";
 		}
@@ -605,6 +645,8 @@ public class CoffeeController {
 //			System.out.println("list.get(0).getUnickname_1()->"+list.get(0).getUnickname_1());
 //			System.out.println("list.get(0).getUnickname()->"+list.get(0).getUnickname());
 			model.addAttribute("ReportUser_infoBoardList", list);
+			// 실시간 해시태그 순위
+			getHashtagRank(model);
 		}else {
 			returnPage = "redirect:/bro/index";
 		}
@@ -631,6 +673,8 @@ public class CoffeeController {
 			}
 			model.addAttribute("ReportUser_infoBoardList", list);
 			model.addAttribute("search", search);
+			// 실시간 해시태그 순위
+			getHashtagRank(model);
 		}else {
 			returnPage = "redirect:/bro/index";
 		}

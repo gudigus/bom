@@ -11,7 +11,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.spring.bom.model.bro.user_info;
+import com.spring.bom.model.bro.User_info;
 
 public class CoffeeInterceptor implements AsyncHandlerInterceptor {
 	public CoffeeInterceptor() {

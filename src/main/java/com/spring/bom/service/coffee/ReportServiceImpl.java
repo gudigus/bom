@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.spring.bom.dao.coffee.ReportDao;
 import com.spring.bom.model.coffee.ReportUser_infoBoard;
-import com.spring.bom.model.coffee.User_info;
 
 @Service
 public class ReportServiceImpl implements ReportService {

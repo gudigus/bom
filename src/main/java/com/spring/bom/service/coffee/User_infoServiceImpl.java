@@ -6,27 +6,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.bom.dao.coffee.User_infoDao;
-import com.spring.bom.model.coffee.User_info;
+import com.spring.bom.model.coffee.CoffeeUser_info;
 
 @Service
 public class User_infoServiceImpl implements User_infoService {
 	@Autowired
 	private User_infoDao uid;
 	@Override
-	public List<User_info> user_infoSensorList() {
-		List<User_info> user_infoList = null;
+	public List<CoffeeUser_info> user_infoSensorList() {
+		List<CoffeeUser_info> user_infoList = null;
 		user_infoList = uid.user_infoSensorList();
 		return user_infoList;
 	}
 	@Override
-	public List<User_info> user_infoRestoreList() {
-		List<User_info> user_infoList = null;
+	public List<CoffeeUser_info> user_infoRestoreList() {
+		List<CoffeeUser_info> user_infoList = null;
 		user_infoList = uid.user_infoRestoreList();
 		return user_infoList;
 	}
 	@Override
-	public List<User_info> user_infoAccusationList() {
-		List<User_info> user_infoList = null;
+	public List<CoffeeUser_info> user_infoAccusationList() {
+		List<CoffeeUser_info> user_infoList = null;
 		user_infoList = uid.user_infoAccusationList();
 		return user_infoList;
 	}
@@ -41,20 +41,20 @@ public class User_infoServiceImpl implements User_infoService {
 		return result;
 	}
 	@Override
-	public List<User_info> user_infoAccusationList(String search) {
-		List<User_info> user_infoList = null;
+	public List<CoffeeUser_info> user_infoAccusationList(String search) {
+		List<CoffeeUser_info> user_infoList = null;
 		user_infoList = uid.user_infoAccusationList(search);
 		return user_infoList;
 	}
 	@Override
-	public List<User_info> user_infoSensorList(String search) {
-		List<User_info> user_infoList = null;
+	public List<CoffeeUser_info> user_infoSensorList(String search) {
+		List<CoffeeUser_info> user_infoList = null;
 		user_infoList = uid.user_infoSensorList(search);
 		return user_infoList;
 	}
 	@Override
-	public List<User_info> user_infoRestoreList(String search) {
-		List<User_info> user_infoList = null;
+	public List<CoffeeUser_info> user_infoRestoreList(String search) {
+		List<CoffeeUser_info> user_infoList = null;
 		user_infoList = uid.user_infoRestoreList(search);
 		return user_infoList;
 	}

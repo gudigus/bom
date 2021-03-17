@@ -6,15 +6,15 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.spring.bom.model.coffee.User_info;
+import com.spring.bom.model.coffee.CoffeeUser_info;
 
 @Repository
 public class User_infoDaoImpl implements User_infoDao {
 	@Autowired
 	private  SqlSession  session;
 	@Override
-	public List<User_info> user_infoSensorList() {
-		List<User_info> list = null;
+	public List<CoffeeUser_info> user_infoSensorList() {
+		List<CoffeeUser_info> list = null;
 		try {
 			list = session.selectList("coffeeSensorSelectUser_info");
 			for(int i=0; i<list.size();i++) {
@@ -28,8 +28,8 @@ public class User_infoDaoImpl implements User_infoDao {
 		return list;
 	}
 	@Override
-	public List<User_info> user_infoRestoreList() {
-		List<User_info> list = null;
+	public List<CoffeeUser_info> user_infoRestoreList() {
+		List<CoffeeUser_info> list = null;
 		try {
 			list = session.selectList("coffeeRestoreSelectUser_info");
 			for(int i=0; i<list.size();i++) {
@@ -44,8 +44,8 @@ public class User_infoDaoImpl implements User_infoDao {
 		return list;
 	}
 	@Override
-	public List<User_info> user_infoAccusationList() {
-		List<User_info> list = null;
+	public List<CoffeeUser_info> user_infoAccusationList() {
+		List<CoffeeUser_info> list = null;
 		try {
 			list = session.selectList("coffeeAccusationSelectUser_info");
 			for(int i=0; i<list.size();i++) {
@@ -62,7 +62,7 @@ public class User_infoDaoImpl implements User_infoDao {
 	@Override
 	public int updateUstate(int ucode, int updateValue) {
 		int result = 0;
-		User_info ui = new User_info();
+		CoffeeUser_info ui = new CoffeeUser_info();
 		ui.setUcode(ucode);
 		ui.setUstate(updateValue);
 //		System.out.println(ucode);
@@ -85,8 +85,8 @@ public class User_infoDaoImpl implements User_infoDao {
 		return result;
 	}
 	@Override
-	public List<User_info> user_infoAccusationList(String search) {
-		List<User_info> list = null;
+	public List<CoffeeUser_info> user_infoAccusationList(String search) {
+		List<CoffeeUser_info> list = null;
 		try {
 			list = session.selectList("coffeeAccusationSelectUser_infoSearch", search);
 			for(int i=0; i<list.size();i++) {
@@ -101,8 +101,8 @@ public class User_infoDaoImpl implements User_infoDao {
 		return list;
 	}
 	@Override
-	public List<User_info> user_infoSensorList(String search) {
-		List<User_info> list = null;
+	public List<CoffeeUser_info> user_infoSensorList(String search) {
+		List<CoffeeUser_info> list = null;
 		try {
 			list = session.selectList("coffeeSensorSelectUser_infoSearch", search);
 			for(int i=0; i<list.size();i++) {
@@ -117,8 +117,8 @@ public class User_infoDaoImpl implements User_infoDao {
 		return list;
 	}
 	@Override
-	public List<User_info> user_infoRestoreList(String search) {
-		List<User_info> list = null;
+	public List<CoffeeUser_info> user_infoRestoreList(String search) {
+		List<CoffeeUser_info> list = null;
 		try {
 			list = session.selectList("coffeeRestoreSelectUser_infoSearch", search);
 			for(int i=0; i<list.size();i++) {

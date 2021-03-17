@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.spring.bom.model.coffee.ReportUser_infoBoard;
-import com.spring.bom.model.coffee.User_info;
 
 @Repository
 public class ReportDaoImpl implements ReportDao {
