@@ -43,11 +43,11 @@ public class CoffeeController {
 	private User_InfoService us;
 	
 	
-	@GetMapping(value = "/coffee/example")
-	public String example() {
-		System.out.println("CoffeeController example start..");
-		return "coffee/example";
-	}
+//	@GetMapping(value = "/coffee/example")
+//	public String example() {
+//		System.out.println("CoffeeController example start..");
+//		return "coffee/example";
+//	}
 	
 	@GetMapping(value = "/coffee/logout")
 	public String logout(HttpServletRequest req) {
