@@ -91,7 +91,7 @@ img{ max-width:100%;}
 }
 .chat_ib {
   float: left;
-  padding: 0 0 0 15px;
+  padding: 0 0 0 20px;
   width: 88%;
 }
 
@@ -179,7 +179,9 @@ img{ max-width:100%;}
   height: 516px;
   overflow-y: auto;
 }
-#msgsize {	 width:440px;
+#msgsize {	 
+		height : 20px;
+		width:440px;
 		 overflow:hidden; 
 		 text-overflow:ellipsis; 
 		 white-space:nowrap;
@@ -191,9 +193,8 @@ img{ max-width:100%;}
 }
 .inbox_chat{
 background: white;}
-.boxsize{
-	height: 40px;
-}
+
+
 
 </style>
 </head>
@@ -365,7 +366,7 @@ background: white;}
 						
 						
 					});$("#roomName").empty();
-					$("#roomName").attr("placeholder","@아이디");
+					
 					
 					
 					
@@ -392,26 +393,22 @@ background: white;}
 	function clear(){
 		$("#messagelist").empty();
 		$("#messagetest").empty();
+		$(".chat_list").css({'background-color' : 'white'});
 		
 	}
 
 	function goRoom(number){
-		//location.href="moveChating?roomNumber="+number;
-		
-		
-		
-		 
+		console.log("goRoom 참여 하기 ")
+	
 		
 		var msg = {roomnumber : number};
-		console.log(msg)
 		wsOpen(number);
 		clear();
-		var dom = document.getElementById(number).style.backgroundColor ="blue";
+		
 		
 		var kdsf = "<input onkeyup="+"enterkey("+number+")"+" type="+"'text'"+" class="+"'write_msg'"+" placeholder="+"'새 쪽지 작성하기'"+" id="+"'chatting'"+" />"+
 	    "<button class="+"'msg_send_btn'"+" type="+"button"+" onclick="+"send("+number+")><i class="+"'fa fa-paper-plane-o'"+" aria-hidden="+"true"+"></i></button>";
 	    
-	    console.log(kdsf);
 	    
 		$.ajax({
 			url: "<%=context%>/bear/moveChating",
@@ -451,18 +448,42 @@ background: white;}
 	}
 
 	function createChatingRoom(res){
-		console.log(res)
-		if(res != null){
+		if (res == "") {
+			
+		 	console.log("채팅방 리스트가 비어있습니다 .")
+			var tag = "<h1>텅</h1>";
+			
+			$("#chatingpage").css({
+				"text-align": "center",
+				"padding-top": "100px"	
+			});
+			$("#chatingpage").append(tag);
+			 
+		}
+		else{
+			//비어있다가 새로 방만들면 기존에있는 css와 내용없앨려고 만듬 
+			$("#chatingpage").empty();
+			$("#chatingpage").css({
+				"text-align" : "",
+				"padding-top": ""});
+			// ---------------------------------------
+			console.log("채팅방 리스트 값은 -> " +res)
 			var tag = ""; 
-				  
+			  
 			res.forEach(function(d){
+				
+		
+				
 				var uopcode = d.uopcode ;
 				var roomNumber = d.ccode;
 				var msg = d.cdmessage;
 				var cdtime = d.cdtime;
 				var uimage = d.uimage;
 				var uatid = d.uatid;
-				tag +=    "<div class=chat_list id="+roomNumber+" >" +
+				
+				    
+				    
+				tag +=    "<div class=chat_list  id="+roomNumber+" >" +
 		         		 "<div class=chat_people>" +
 		         		"<div class="+"chat_img"+"><img src="+"/img/teemo.jpg"+" class="+"rounded-circle"+" width="+"100"+" height="+"50"+"></div>"+
 		          			 	 "<div class=chat_ib>"+

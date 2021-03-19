@@ -373,6 +373,7 @@ label {
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
 												style="font-size: 0.8rem;">팔로우</button>
+											
 										</div>
 									</div>
 								</c:forEach>
@@ -394,6 +395,9 @@ label {
 								</c:forEach>
 							</c:if>
 						</div>
+						    <button type="button" class="btn btn-outline-success" id="writeBtn"
+           	       data-toggle="modal" data-target="#morebtn">더보기
+            	   </button>
 					</div>
 				</div>
 				<div class="list-group-item list-group-item-action bg-light"
@@ -846,6 +850,46 @@ label {
 			</div>
 		</div>
 		<!--GOD 저장 팝업 끝-->
+		
+		<!--BEAR 더보기 창  -->
+		<div class="modal fade" id="morebtn" data-backdrop="static"
+			data-keyboard="false" tabindex="-1"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg" >
+				<div class="modal-content">
+					<div class="modal-header" style="text-align: center" >
+						<div class="modal-body col-12">
+							<div class="card-header">팔로우 추천
+								<div class="card-body" style="padding: 5px;">
+									<div class="card">
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+										<c:forEach var="justFollowMe" items="${suggestFlist2 }">
+									<div class="card">
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											<img src="<%=context %>/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
+												height="20">
+												<a class="card-title text-dark">${justFollowMe.unickName}</a>
+												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+											<button type="button"
+												class="btn btn-outline-success btn-sm float-right"
+												style="font-size: 0.8rem;">팔로우</button>
+											
+										</div>
+									</div>
+								</c:forEach>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		
+		
 		</form>
 		
 		<!--GOD 글쓰기 폼 기능-->
