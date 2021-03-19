@@ -104,6 +104,15 @@ label {
     border-color: transparent !important;
     color : #28a745;
 }
+
+#bearsize{
+
+		width:550px;
+		 overflow:hidden; 
+		 text-overflow:ellipsis; 
+		 white-space:nowrap;
+		 text-align:left;}
+
 </style>
 <!-- Like Ajax Fuction -->
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
@@ -164,6 +173,33 @@ label {
 			}
 		});
 	}
+	
+	//팔로우 하는 로직
+	function followchk(number){
+		
+		console.log("팔로우눌렀을데 작동 id = " + "k"+number)
+		var element = document.getElementById("k"+number);
+		var msg = { uopcode :number};
+		$.ajax({
+			url: '<%=context%>/bear/followchk',
+			data: msg,
+			type: "post",
+
+			success: function (res) {
+				console.log("저장성공 - > " +res)
+				
+				if(res == "1"){
+					console.log("저장성공")
+				element.innerText = "팔로잉";
+				}else 
+					{console.log("저장실패")}
+					
+				 
+			}
+	});	 
+	}
+	
+	
 </script>
 </head>
 
@@ -372,7 +408,8 @@ label {
 												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
-												style="font-size: 0.8rem;">팔로우</button>
+												style="font-size: 0.8rem;" onclick="followchk(${justFollowMe.uucode})" id=k${justFollowMe.uucode}>팔로우</button>
+												
 											
 										</div>
 									</div>
@@ -857,22 +894,29 @@ label {
 			aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-lg" >
 				<div class="modal-content">
-					<div class="modal-header" style="text-align: center" >
+					<div class="modal-header" >
 						<div class="modal-body col-12">
-							<div class="card-header">팔로우 추천
+							<div class="card-header" ><h4 style="text-align: center;">팔로우 추천</h4>	
 								<div class="card-body" style="padding: 5px;">
 									<div class="card">
 										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-										<c:forEach var="justFollowMe" items="${suggestFlist2 }">
+										<c:forEach var="justFollowMe" items="${suggestFlist2 }" >
 									<div class="card">
 										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-											<img src="<%=context %>/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
-												height="20">
+											<img src="<%=context %>/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="40"
+												height="40">
 												<a class="card-title text-dark">${justFollowMe.unickName}</a>
 												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+												<c:if test="${justFollowMe.uonline eq 1 }">
+												<img src = "<%=context %>/image/online.png"  width="20" height="20">
+												</c:if>
+											<div>	
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
-												style="font-size: 0.8rem;">팔로우</button>
+												style="font-size: 1.2rem;" onclick="followchk(${justFollowMe.uucode})" id="k${justFollowMe.uucode}">팔로우</button>
+												
+												</div>
+												<h3 id = "bearsize" style="padding-left: 40px">&nbsp&nbsp${justFollowMe.uintro}</h3>
 											
 										</div>
 									</div>

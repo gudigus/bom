@@ -26,4 +26,14 @@
       			, user_info ui
 		where ui.ucode = f.ucode
 	</select>
+	
+	 <insert id="fwInsert" parameterType="Iron_Follow">
+	insert into follow (ucode , fopcode, ftime, FBLOCKSTATE)
+		   VALUES (#{ucode},#{fopcode},TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'),
+					0)
+	
+
+
+</insert>  
+	
 </mapper>

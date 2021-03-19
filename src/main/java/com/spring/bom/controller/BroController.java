@@ -84,6 +84,7 @@ public class BroController {
 	
 	@RequestMapping(value = "bro/index")
      public String index() {
+		
 	 return "bro/login";
 	}
 	@RequestMapping(value ="bro/joinForm", method = RequestMethod.POST)

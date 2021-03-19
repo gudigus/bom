@@ -66,6 +66,4 @@ where ucode = #{ucode} and uopcode = #{uopcode}
 
 
 
-
-
 </mapper>

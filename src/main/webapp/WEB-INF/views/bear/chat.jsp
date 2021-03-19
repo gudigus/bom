@@ -642,7 +642,7 @@ background: white;}
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
-						<div class="card-header">팔로우 추천</div>
+						<div class="card-header">팔로우 추천${suggestFlist2 }</div>
 						<div class="card-body" style="padding: 5px;">
 							<div class="card">
 								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">

@@ -29,4 +29,11 @@ public class FollowServiceImpl implements FollowService {
 		return suggestFlist;
 	}
 
+	@Override
+	public int fwInsert(Follow follow) {
+		System.out.println("[kiwoong] FollowServiceImpl FwInsert");
+		
+		return fd.fwInsert(follow);
+	}
+
 }

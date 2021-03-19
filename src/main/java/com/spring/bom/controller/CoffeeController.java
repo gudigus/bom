@@ -18,6 +18,7 @@ import com.spring.bom.model.coffee.CoffeeUser_info;
 import com.spring.bom.service.coffee.CoffeeBoardService;
 import com.spring.bom.service.coffee.ReportService;
 import com.spring.bom.service.coffee.User_infoService;
+import com.spring.bom.service.iron.FollowService;
 
 
 
@@ -36,6 +37,7 @@ public class CoffeeController {
 	@GetMapping(value = "/coffee/example")
 	public String example() {
 		System.out.println("CoffeeController example start..");
+		
 		return "coffee/example";
 	}
 	
