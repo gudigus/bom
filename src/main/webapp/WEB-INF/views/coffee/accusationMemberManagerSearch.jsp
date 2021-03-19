@@ -154,9 +154,15 @@
 				</a> -->
 				<div class="card">
 					<div class="card-body">
-						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-							width="50"> <a class="card-title text-dark">닉네임</a> <a
-							class="card-subtitle mb-2 text-muted">@atid</a>
+						<c:choose>
+							<c:when test="${not empty user.uimage }">
+								<img alt="회원 이미지" src="<%=context %>/profile_image/${user.uimage }" class="rounded-circle" width="50"
+								height="50"></c:when>
+							<c:otherwise>
+								<img src="/img/coffee/user_basic.svg" class="rounded-circle" width="50" height="50">
+							</c:otherwise>
+						</c:choose> <a class="card-title text-dark">${user.unickName }</a> <a
+						class="card-subtitle mb-2 text-muted">@${user.uatid }</a>
 					</div>
 					<button type="button" class="btn btn-success" onclick = "alert('로그아웃 되었습니다'); location.href = '/coffee/logout'; ">로그아웃</button>
 				</div>

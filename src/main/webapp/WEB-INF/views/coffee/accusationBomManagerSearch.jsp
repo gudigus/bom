@@ -149,9 +149,15 @@
 				</a> -->
 				<div class="card">
 					<div class="card-body">
-						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-							width="50"> <a class="card-title text-dark">닉네임</a> <a
-							class="card-subtitle mb-2 text-muted">@atid</a>
+						<c:choose>
+							<c:when test="${not empty user.uimage }">
+								<img alt="회원 이미지" src="<%=context %>/profile_image/${user.uimage }" class="rounded-circle" width="50"
+								height="50"></c:when>
+							<c:otherwise>
+								<img src="/img/coffee/user_basic.svg" class="rounded-circle" width="50" height="50">
+							</c:otherwise>
+						</c:choose> <a class="card-title text-dark">${user.unickName }</a> <a
+						class="card-subtitle mb-2 text-muted">@${user.uatid }</a>
 					</div>
 					<button type="button" class="btn btn-success" onclick = "alert('로그아웃 되었습니다'); location.href = '/coffee/logout'; ">로그아웃</button>
 				</div>
@@ -214,31 +220,43 @@
 								class="card-subtitle mb-2 text-muted">${list.bregdate }</a> <a href="#"
 								class="card-text" style="margin-top: 10px;">${list.bcontent }</a>
 								<c:if test="${list.battach!=null }">
-								 	<c:if test="${list.battachType=='image'}">
-								 		<img class="img-thumnail" width="300" src="<%=context %>/image/${list.battachSrc}"/>
-								 	</c:if>
-								 	<c:if test="${list.battachType=='video'}">
-								 		<video controls width="300">
-								 			<source  src="<%=context %>/video/${list.battachSrc}" type="video/mp4">
-								 			<source  src="<%=context %>/video/${list.battachSrc}" type="video/webm">
-								 			해당 브라우저에는 지원하지 않는 비디오입니다.
-								 		</video>
-								 	</c:if>
-								 </c:if>
+			                        <c:if test="${list.battachType=='image'}">
+			                           <img class="img-fluid" 
+			                              src="<%=context %>/image/${list.battachSrc}" />
+			                        </c:if>
+			                        <c:if test="${list.battachType=='video'}">
+			                           <div class="embed-responsive embed-responsive-16by9">
+			                           <video controls>
+			                              <source src="<%=context %>/video/${list.battachSrc}"
+			                                 type="video/mp4">
+			                              <source src="<%=context %>/video/${list.battachSrc}"
+			                                 type="video/webm">
+			                              	해당 브라우저에는 지원하지 않는 비디오입니다.
+			                           </video>
+			                           </div>
+			                        </c:if>
+			          			</c:if>
 							<div align="center">
 								<div class="btn-group col-md-12" role="group"
 									aria-label="Button group with nested dropdown">
 									<button type="button" class="btn btn-secondary btn-light mr-3"
 										data-toggle="tooltip" data-placement="top" title="답글">
-										<img src="/img/speech-bubble.svg" width="20" height="20">${list.breplycount }
+										<img src="/img/speech-bubble.svg" width="20" height="20"><c:if test="${list.breplycount ne 0}">
+                                   			${list.breplycount }
+                                 		</c:if>
+										
 									</button>
 									<button type="button" class="btn btn-secondary btn-light mr-3"
 										data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
-										<img src="/img/bring.svg" width="20" height="20">${list.bquotecount }
+										<img src="/img/bring.svg" width="20" height="20"><c:if test="${list.bquotecount ne 0}">
+                                  			${list.bquotecount }
+                                 		</c:if>
 									</button>
 									<button type="button" class="btn btn-secondary btn-light mr-3"
 										data-toggle="tooltip" data-placement="top" title="좋아요">
-										<img src="/img/heart.svg" width="20" height="20">${list.blikecount }
+										<img src="/img/heart.svg" width="20" height="20"><c:if test="${list.blikecount ne 0}">
+                                 			${list.blikecount }
+                                 		</c:if>
 									</button>
 									
 								</div>
