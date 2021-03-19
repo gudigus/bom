@@ -65,6 +65,13 @@ where uEmail = #{uEmail}
 
 
 </select>
+<select id="loginCount" parameterType="User_info" resultType="int">
+select uLoginCount from user_info
+where uEmail =  #{uEmail}
+
+
+
+</select>
 	</mapper>
 
 

@@ -45,7 +45,7 @@ var uStateNum = "${uState}";
 
     <!-- Login Form -->
     <form action="login" method="post">
-      <input type="text" id="uEmail" class="fadeIn second" name="uEmail" placeholder="login">
+      <input type="email" id="uEmail" class="fadeIn second" name="uEmail" placeholder="login">
       <input type="password" id="uPassword" class="fadeIn third" name="uPassword" placeholder="password">
       <input type="submit" class="fadeIn fourth" value="Log In">
       

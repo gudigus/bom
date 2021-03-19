@@ -71,12 +71,17 @@ public class BroController {
 			session.setAttribute("login", login);
 			System.out.println("login on");
 			int a = bs.state(uEmail);
+			int b = bs.loginCount(uEmail);
 			System.out.println("controller ustate number-->"+ a);
+			System.out.println("controller uLoginCount number-->"+ b);
 			if(a == 0) {
 				model.addAttribute("uState", 0);
 				return "bro/loginFail";
 			}else if(a == 2) {
 				model.addAttribute("uState", 2);
+				return "bro/loginFail";
+			}else if(b >= 5) {
+				model.addAttribute("uLoginCount", b);
 				return "bro/loginFail";
 			}
 			bs.online(uEmail);
@@ -191,7 +196,7 @@ public class BroController {
 		 
 		 //interests.add(in);
 		// bs.interestAction(interests);
-		 return "bro/success";
+		 return "bro/login";
 	 }
 	 @RequestMapping(value = "bro/email")
 	 public String email() {

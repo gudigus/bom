@@ -122,6 +122,12 @@ public class BomDaoImpl implements BomDao {
 		return a;
 	}
 
+	@Override
+	public int loginCount(String uEmail) {
+		int b = session.selectOne("loginCount",uEmail);
+		return b;
+	}
+
 	
 
 	

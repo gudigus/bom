@@ -90,6 +90,12 @@ public class BomServiceImpl implements BomService {
 		return bd.state(uEmail);
 	}
 
+	@Override
+	public int loginCount(String uEmail) {
+		
+		return bd.loginCount(uEmail);
+	}
+
 
 	
 

@@ -19,5 +19,6 @@ public interface BomService {
 	public int findPw(String uEmail , String tempPassword);
 	public int online(String uEmail);
 	public int state(String uEmail);
+	 public int loginCount(String uEmail);
 
 }

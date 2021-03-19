@@ -32,5 +32,16 @@
 </script>
 
 </c:if>
+
+<c:if test="${uLoginCount == 5 }">
+<script type="text/javascript">
+alert("비밀번호가 5회이상 잘못입력되었습니다 비밀번호를 변갱해주세요");
+location.href="index";
+
+</script>
+
+</c:if>
+
+
 </body>
 </html>
