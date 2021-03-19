@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.spring.bom.model.hoon.Junghun;
-import com.spring.bom.model.hoon.user_info;
+import com.spring.bom.model.iron.Follow;
 
 @Repository
 public class JunghunDaoImpl implements JunghunDao{
@@ -45,8 +45,8 @@ public class JunghunDaoImpl implements JunghunDao{
 	}
 
 	@Override
-	public List<Junghun> listTrend(Junghun junghun) {
-		return session.selectList("searchTrend",junghun);
+	public List<Junghun> listTrend() {
+		return session.selectList("searchTrend");
 	}
 
 	@Override
@@ -70,6 +70,36 @@ public class JunghunDaoImpl implements JunghunDao{
 	@Override
 	public int searchlike(Junghun junghun) {
 		return session.update("searchlike",junghun);
+	}
+
+	@Override
+	public List<Junghun> searchlistall(Junghun junghun) {
+		// TODO Auto-generated method stub
+		return session.selectList("searchlistall",junghun);
+	}
+	
+	@Override
+	public List<Follow> getSuggestFollowList1(int ucode) {
+		List<Follow> suggestFlist = session.selectList("followWhoSameTrend",ucode);
+		return suggestFlist;
+	}
+	
+	@Override
+	public List<Follow> getSuggestFollowList2(int ucode) {
+		List<Follow> suggestFlist = session.selectList("followWhoIknow",ucode);
+		return suggestFlist;
+	}
+
+	@Override
+	public List<Junghun> searchbattach(Junghun junghun) {
+		// TODO Auto-generated method stub
+		return session.selectList("searchbattach",junghun);
+	}
+
+	@Override
+	public List<Junghun> searchbattachvideo(Junghun junghun) {
+		// TODO Auto-generated method stub
+		return session.selectList("searchbattachvideo",junghun);
 	}
 
 

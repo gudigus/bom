@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.bom.model.hoon.Junghun;
-import com.spring.bom.model.hoon.user_info;
+import com.spring.bom.model.iron.Follow;
+import com.spring.bom.model.iron.HashTag;
+import com.spring.bom.model.iron.User_Info;
 import com.spring.bom.service.hoon.JunghunService;
 
 @Controller
@@ -28,24 +30,43 @@ public class JunghunController {
 	@RequestMapping(value = "hoon/explore")
 	public String explore(Model model, Junghun junghun, HttpSession session) throws Exception {
 		System.out.println("hoon Controller explore Start");
-		user_info loginUser = (user_info) session.getAttribute("login");
-		System.out.println("explore -> " + loginUser.getuEmail());
+		User_Info loginUser = (User_Info) session.getAttribute("user");
+		System.out.println("explore -> " + loginUser.getUemail());
 
 		// 로그인 ucode 전역 설정
-		junghun.setLoginUcode(loginUser.getuCode());
+		junghun.setLoginUcode(loginUser.getUcode());
 		System.out.println("junghun.getLoginUcode() -> " + junghun.getLoginUcode());
 		List<Junghun> listCount = js.listCount(junghun);
 		List<Junghun> listHash = js.listHash(junghun);
-		List<Junghun> listTrend = js.listTrend(junghun);
 		List<Junghun> searchkeyword = js.searchkeyword(junghun);
+		
+		// 실시간 해시태그 순위
+				System.out.println("[junghun] Do -> hts.getHashTagRanking()");
+				List<Junghun> hashtagList = js.listTrend();
+				for (int i = 0; i < hashtagList.size(); i++)
+					hashtagList.get(i).setHrank(i + 1);
+				model.addAttribute("tag_list", hashtagList);
+		
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+		System.out.println("[junghun] Do -> fs.getSuggestFollowList()");
+			List<Follow> suggestFlist1 = js.getSuggestFollowList1(loginUser.getUcode());
+			System.out.println("[junghun] Result : listSize is " + suggestFlist1.size());
+			model.addAttribute("suggestFlist2_size", suggestFlist1.size());
+			model.addAttribute("suggestFlist1", suggestFlist1);
 
+			// 팔로우 추천2 나를 팔로우하는 유저 추천
+			System.out.println("[junghun] Do -> fs.getSuggestFollowList()");
+			List<Follow> suggestFlist2 = js.getSuggestFollowList2(loginUser.getUcode());
+			System.out.println("[junghun] Result : listSize is " + suggestFlist2.size());
+			model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+			model.addAttribute("suggestFlist2", suggestFlist2);
+			
+			
 		System.out.println("searchkeyword count::" + searchkeyword.size());
-		System.out.println("listTrend count::" + listTrend.size());
 		System.out.println("listCount count:: " + listCount.size());
 		System.out.println("listHash count:: " + listHash.size());
 
 		model.addAttribute("searchkeyword", searchkeyword);
-		model.addAttribute("listTrend", listTrend);
 		model.addAttribute("listHash", listHash);
 		model.addAttribute("listCount", listCount);
 		return "hoon/explore";
@@ -55,19 +76,26 @@ public class JunghunController {
 	public String searchView(HttpServletRequest request ,Model model, Junghun junghun, String search, HttpSession session) throws Exception {
 		System.out.println("hoon Controller search Start");
 		System.out.println("Controller ::" + search);
-		user_info loginUser = (user_info) session.getAttribute("login");
-		System.out.println("explore -> " + loginUser.getuEmail());
-		
+		User_Info loginUser = (User_Info) session.getAttribute("user");
+		System.out.println("explore -> " + loginUser.getUemail());		
 		if(search.trim().equals("")||search.trim()==null) {
 	         return "hoon/explore";
 	      }
 		
 		// 로그인 ucode 전역 설정
-		junghun.setLoginUcode(loginUser.getuCode());
+		junghun.setLoginUcode(loginUser.getUcode());
 		System.out.println("junghun.getLoginUcode() -> " + junghun.getLoginUcode());
+		String searchkeyword1 = junghun.getSearch();
+		if (searchkeyword1.charAt(0) =='@') {
+			searchkeyword1 = String.format(searchkeyword1.substring(1), searchkeyword1);
+			junghun.setSearch(searchkeyword1);
+		}
+		
 		List<Junghun> listSearch = js.listSearch(junghun);
+		
 		List<Junghun> listUser = js.listUser(junghun);
 		List<Junghun> listNew = js.listNew(junghun);
+		List<Junghun> searchlistall = js.searchlistall(junghun);
 		
 		//input search text데이터 db에 저장값 설정
 		String Hashtag = junghun.getSearch();
@@ -78,7 +106,6 @@ public class JunghunController {
 			}
 		int searchData = js.searchData(junghun);
 		
-		List<Junghun> listTrend = js.listTrend(junghun);
 		List<Junghun> searchkeyword = js.searchkeyword(junghun);
 		List<Junghun> searchblock = js.searchblock(junghun);
 		
@@ -94,20 +121,68 @@ public class JunghunController {
 			}
 		}
 		
-		System.out.println("Junghun Controller Type Src fail");
+			List<Junghun> searchbattach = js.searchbattach(junghun);
+			
+			for (int i = 0; i < searchbattach.size(); i++) {
+				if (searchbattach.get(i).getBattach() !=null) {
+					System.out.println("["+i+"]"+" battach Data : " + searchbattach.get(i).getBattach());
+					searchbattach.get(i).setBattachType(searchbattach.get(i).getBattach().substring(0, 5));
+					searchbattach.get(i).setBattachSrc(searchbattach.get(i).getBattach().substring(6));
+					System.out.println("battach Type : " + searchbattach.get(i).getBattachType() + " / battach Source : "
+							+ searchbattach.get(i).getBattachSrc());
+				}
+			}	
+			model.addAttribute("searchbattach",searchbattach);
+			System.out.println(searchbattach.size() + "::  사진첨부파일 ");
+			
+			
+			List<Junghun> searchbattachvideo = js.searchbattachvideo(junghun);
+			for (int i = 0; i < searchbattachvideo.size(); i++) {
+				if (searchbattachvideo.get(i).getBattach() !=null) {
+					System.out.println("["+i+"]"+" battach Data : " + searchbattachvideo.get(i).getBattach());
+					searchbattachvideo.get(i).setBattachType(searchbattachvideo.get(i).getBattach().substring(0, 5));
+					searchbattachvideo.get(i).setBattachSrc(searchbattachvideo.get(i).getBattach().substring(6));
+					System.out.println("battach Type : " + searchbattachvideo.get(i).getBattachType() + " / battach Source : "
+							+ searchbattachvideo.get(i).getBattachSrc());
+				}
+			}	
+			model.addAttribute("searchbattachvideo",searchbattachvideo);
+			System.out.println(searchbattachvideo.size() + "::  동영상첨부파일 ");
+		
+			// 실시간 해시태그 순위
+			System.out.println("[junghun] Do -> hts.getHashTagRanking()");
+			List<Junghun> hashtagList = js.listTrend();
+			for (int i = 0; i < hashtagList.size(); i++)
+				hashtagList.get(i).setHrank(i + 1);
+			model.addAttribute("tag_list", hashtagList);
+			
+			// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+			System.out.println("[j] Do -> fs.getSuggestFollowList()");
+				List<Follow> suggestFlist1 = js.getSuggestFollowList1(loginUser.getUcode());
+				System.out.println("[j] Result : listSize is " + suggestFlist1.size());
+				model.addAttribute("suggestFlist2_size", suggestFlist1.size());
+				model.addAttribute("suggestFlist1", suggestFlist1);
+
+				// 팔로우 추천2 나를 팔로우하는 유저 추천
+				System.out.println("[j] Do -> fs.getSuggestFollowList()");
+				List<Follow> suggestFlist2 = js.getSuggestFollowList2(loginUser.getUcode());
+				System.out.println("[j] Result : listSize is " + suggestFlist2.size());
+				model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+				model.addAttribute("suggestFlist2", suggestFlist2);
+
+		
 		
 		System.out.println("searchblock ::"+searchblock.size());
 		System.out.println("searchkeyword count::" + searchkeyword.size());
-		System.out.println("listTrend count::" + listTrend.size());
 		System.out.println("검색데이터 저장되면 1 ::" + searchData);
 		System.out.println("content ::" + listSearch.size());
 		System.out.println("user ::" + listUser.size());
 		System.out.println("new Content ::" + listNew.size());
 		
 		
+		model.addAttribute("searchlistall",searchlistall);
 		model.addAttribute("searchblock",searchblock);
 		model.addAttribute("searchkeyword", searchkeyword);
-		model.addAttribute("listTrend", listTrend);
 		model.addAttribute("search", search);
 		model.addAttribute("listSearch_size", listSearch.size());
 		model.addAttribute("listSearch", listSearch);
@@ -120,7 +195,8 @@ public class JunghunController {
 	@ResponseBody
 	public String searchlike(Model model ,Junghun junghun, HttpSession session) {
 		System.out.println("searchlike ::1");
-		user_info loginUser = (user_info) session.getAttribute("login");
+		User_Info loginUser = (User_Info) session.getAttribute("user");
+		System.out.println("explore -> " + loginUser.getUemail());	
 		System.out.println("searchlike ::2");
 		int jh =js.searchlike(junghun);
 		System.out.println("searchlike 실행::" +jh);
@@ -130,14 +206,20 @@ public class JunghunController {
 	
 	@RequestMapping(value = "deleteRow")
 	@ResponseBody
-	public String deleteRow(Model model ,int ucode, HttpSession session) {
+	public String deleteRow(Model model , HttpSession session) {
 		System.out.println("del ::1");
-		user_info loginUser = (user_info) session.getAttribute("login");
+		User_Info loginUser = (User_Info) session.getAttribute("user");
+		System.out.println("Ajax DeleteRow check loginUser.getUcode() -> "+loginUser.getUcode());
+		System.out.println("explore -> " + loginUser.getUemail());	
 		System.out.println("del ::2");
-		int jh =js.deleterow(ucode);
+		int jh =js.deleterow(loginUser.getUcode());
 		System.out.println("deleteRow del - 리턴되면:: "+jh);
 		System.out.println("del ::3");
-		return "redirect:";
+		return "redirect:hoon/explore";
 	}
-
+	/*
+	 * 1. explore.jsp 또는 searchView.jsp 의 '검색창'의 드랍다운 요소 Ajax가 실행됬을 때 1 - 1. Ajax
+	 * 함수실행 1 - 2. deleteRow 수행 1 - 3. 결과 반환 (1 - 3 - 1. explore 페이지가 나오지 않을 까...?)
+	 * 2.
+	 */
 }
