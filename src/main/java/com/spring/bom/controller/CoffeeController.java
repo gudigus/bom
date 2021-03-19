@@ -716,7 +716,7 @@ public class CoffeeController {
 	}
 	
 	@GetMapping(value = "/coffee/logout")
-	public String logout(HttpServletRequest req, Model model) {
+	public String logout(HttpServletRequest req) {
 		String returnPage = "redirect:/bro/index";
 		System.out.println("CoffeeController logout start..");
 		req.getSession().invalidate();
