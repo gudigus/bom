@@ -6,7 +6,7 @@
       <typeAlias alias="userinfo"     type="com.spring.bom.model.bro.user_info"/>
       <typeAlias alias="User_Info"     type="com.spring.bom.model.yeah.User_Info"/>
       <typeAlias alias="Follow"        type="com.spring.bom.model.yeah.Follow"/>
-            
+
       
     </typeAliases>
 

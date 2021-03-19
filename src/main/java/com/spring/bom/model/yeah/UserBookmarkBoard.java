@@ -2,29 +2,157 @@ package com.spring.bom.model.yeah;
 
 public class UserBookmarkBoard {
 	// 북마크
-	int ucode; // 회원코드
-	int bcode; // 글코드
-	String ltype;
-	String bbtype;
-	String ldate;
-	String bdate;
+	private int ucode; // 회원코드
+	private int bcode; // 글코드
+	private String ltype;
+	private String bbtype;
+	private String ldate;
+	private String bdate;
 
 	// user_info
-	String uimage; // 프로필
-	String unickname; // 닉네임
-	String uatid; // 아이디
+	private String uimage; // 프로필
+	private String unickname; // 닉네임
+	private String uatid; // 아이디
 
 	// Board
-	String bregdate; // 작성시간
-	String bcontent; // 글 내용
-	String battach; // 첨부파일
-	int blikecount; // 좋아요 횟수
-	int breplycount; // 댓글 갯수
-	int bquotecount; // 스크랩 / 인용 갯수
+	private String bregdate; // 작성시간
+	private String bcontent; // 글 내용
+	private String battach; // 첨부파일
+	private int blikecount; // 좋아요 횟수
+	private int breplycount; // 댓글 갯수
+	private int bquotecount; // 스크랩 / 인용 갯수
+	private int bbcode; // 스크랩 / 인용시 부여
+	private String btype;
+
+	// 조회용
+	private String q_uimage;
+	private String q_nickname;
+	private String q_atid;
+	private String q_content;
+	private String q_attach;
+	private String q_attachsrc;
+	private String q_attachtype;
+	private String q_regdate;
+	
+	
+	public String getQ_attachsrc() {
+		return q_attachsrc;
+	}
+
+	public void setQ_attachsrc(String q_attachsrc) {
+		this.q_attachsrc = q_attachsrc;
+	}
+
+	public String getQ_attachtype() {
+		return q_attachtype;
+	}
+
+	public void setQ_attachtype(String q_attachtype) {
+		this.q_attachtype = q_attachtype;
+	}
+
+	
+
+	
+	
+	
+	
+	public String getQ_regdate() {
+		return q_regdate;
+	}
+
+	public void setQ_regdate(String q_regdate) {
+		this.q_regdate = q_regdate;
+	}
+
+	public String getBtype() {
+		return btype;
+	}
+
+	public void setBtype(String btype) {
+		this.btype = btype;
+	}
+
+	public String getQ_uimage() {
+		return q_uimage;
+	}
+
+	public void setQ_uimage(String q_uimage) {
+		this.q_uimage = q_uimage;
+	}
+
+	public String getQ_nickname() {
+		return q_nickname;
+	}
+
+	public void setQ_nickname(String q_nickname) {
+		this.q_nickname = q_nickname;
+	}
+
+	public String getQ_atid() {
+		return q_atid;
+	}
+
+	public void setQ_atid(String q_atid) {
+		this.q_atid = q_atid;
+	}
+
+	public String getQ_content() {
+		return q_content;
+	}
+
+	public void setQ_content(String q_content) {
+		this.q_content = q_content;
+	}
+
+	public String getQ_attach() {
+		return q_attach;
+	}
+
+	public void setQ_attach(String q_attach) {
+		this.q_attach = q_attach;
+	}
+
+	public int getBbcode() {
+		return bbcode;
+	}
+
+	public void setBbcode(int bbcode) {
+		this.bbcode = bbcode;
+	}
 
 	// battach Type 조회용
 	String battachType;
 	String battachSrc;
+
+	// 인용 조회용
+	String uimage3;
+	String unickname3;
+	String uatid3;
+
+	public String getUimage3() {
+		return uimage3;
+	}
+
+	public void setUimage3(String uimage3) {
+		this.uimage3 = uimage3;
+	}
+
+	public String getUnickname3() {
+		return unickname3;
+	}
+
+	public void setUnickname3(String unickname3) {
+		this.unickname3 = unickname3;
+	}
+
+	public String getUatid3() {
+		return uatid3;
+	}
+
+	public void setUatid3(String uatid3) {
+		this.uatid3 = uatid3;
+	}
 
 	public int getUcode() {
 		return ucode;

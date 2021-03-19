@@ -1,12 +1,14 @@
 package com.spring.bom.service.yeah;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.bom.dao.yeah.BookmarkDao;
 import com.spring.bom.model.yeah.Board;
+import com.spring.bom.model.yeah.Bookmark;
 import com.spring.bom.model.yeah.UserBookmarkBoard;
 
 
@@ -28,7 +30,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 
 	@Override
 	public int delete(Board board) {
-	    
+		System.out.println("BookmarkServiceImpl board.bcode -> " + board.getBcode());
 		return bmd.delete(board);
 	}
 
@@ -39,6 +41,9 @@ public class BookmarkServiceImpl implements BookmarkService {
 		
 		return bmd.deleteAll(ucode);
 	}
+
+
+
 
 
 

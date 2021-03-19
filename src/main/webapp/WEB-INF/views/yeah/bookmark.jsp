@@ -52,55 +52,8 @@
 </style>
 </head>
 
-<script type="text/javascript">
-<!-- 좋아요  표시 -->
- $('like').click(function(){
-	  var pk = $(this).attr('ucode')
-	  $.ajax({
-	      url: "<%=context%>/getucode", 
-	      data: {'ucode': 'ucode'}, 
-	      dataType: "json", 
-
-	      }
-	  );
-	})
-
-	
-
-	
-	
-	
-	
-	
-	
-	/* function like(ucode, bcode) {
-		 console.log(ucode);
-		 console.log(bcode);
-	   $.ajax({
-		 url:
-		   
-	   }) */
-		  // 별점 증가Controller
-	<%-- 	  $.ajax({
-			  url:"<%=context%>/getDeptName", 
-		      data:{deptno : Vdeptno},  // deptno : 변수명 , Vdeptno 변수 값
-		      dataType:'text',
-		      success:function(data){   // deptno가 data에 들어간다 
-		    	 /*  alert("success ajax Data" +data); */
-		    	  $('#deptName').val(data);   /* input Tag */
-		    	/*  $('#deptName').text(data); */
-		    	/*  $('#deptName').html(data); */
-		    	$('#msg').html(data);      /*  span id Tag */
-		    	/* $('#deptName').val("이미 사용중인 아이디."); */
-		    	  
-		      }
-		  
-		  });	 --%>
-	 }
 
   
-
-</script>
 <body>
 
 	<div class="d-flex" id="wrapper">
@@ -171,12 +124,12 @@
 				<div class="card">
 					<div class="card-header" style="font-weight: bold;">북마크</div>
 					<div class="dropdown">
-					 	<button
+						<button
 							class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off btn btn-light float-left"
 							type="button" id="dropdownMenu2" data-toggle="dropdown"
 							aria-haspopup="true" aria-expanded="false">...</button>
-						
-							
+
+
 						<div class="dropdown-menu" aria-labelledby="dropdownMenu2">
 							<form action="deleteAll">
 								<input type="hidden" name="ucode" value="${ucode }">
@@ -190,11 +143,50 @@
 						<div class="card">
 							<div class="card-body">
 								<!-- <button type="button" class="btn btn-light float-right">⋯</button> -->
-								 <img src="/img/profile/${bookmark.uimage }" class="rounded-circle" width="50">
-								  <a class="card-title text-dark">${bookmark.unickname }</a> 
-								  <a class="card-subtitle mb-2 text-muted">@${bookmark.uatid }</a> 
-								  <a class="card-subtitle mb-2 text-muted">${bookmark.bregdate }</a>
-								  <p class="card-text" style="margin-top: 10px;">${bookmark.bcontent }</p>
+								<img src="/img/profile/${bookmark.uimage }"
+									class="rounded-circle" width="50"> <a
+									class="card-title text-dark">${bookmark.unickname }</a> <a
+									class="card-subtitle mb-2 text-muted">@${bookmark.uatid }</a> <a
+									class="card-subtitle mb-2 text-muted">${bookmark.bdate }</a>
+
+
+								<c:if test="${bookmark.btype == 'quote' }">
+									<div class="col-12 float-left" id="QuoteArea"
+										style="font-size: 0.8em;">
+										<div class='card'>
+											<div class='card-body'>
+												<img id="quote_profile"
+													src="<%=context %>/profile_image/${bookmark.q_uimage}"
+													alt='no_image' class='rounded-circle' width='30'> <a
+													class='card-title text-dark' id="quote_nickname">${bookmark.q_nickname}</a>
+												<a class='card-subtitle mb-2 text-muted' id="quote_atid">${bookmark.q_atid}</a>
+												<a class='card-subtitle mb-2 text-muted' id="quote_regdate">${bookmark.q_regdate}</a>
+												<p class='card-text mt-2 mb-0' style="height: 100%;"
+													id="quote_content">${bookmark.q_content}</p>
+												<c:if test="${bookmark.q_attach != ''}">
+													<div class="quote_file mt-2">
+														<c:if test="${bookmark.q_attachtype eq 'image'}">
+															<img id="quote_img"
+																src="<%=context %>/image/${bookmark.q_attachsrc }"
+																class="img-fluid" />
+														</c:if>
+														<c:if test="${bookmark.q_attachtype eq 'video'}">
+															<div id="show_quote_video"
+																class="embed-responsive embed-responsive-16by9">
+																<video controls id="quote_video"
+																	src="<%=context %>/video/${bookmark.q_attachsrc }">
+																</video>
+															</div>
+														</c:if>
+													</div>
+												</c:if>
+
+											</div>
+										</div>
+									</div>
+								</c:if>
+
+								<p class="card-text" style="margin-top: 10px;">${bookmark.bcontent }</p>
 
 								<c:if test="${bookmark.battachType == 'image' }">
 									<img src="/img/media/${bookmark.battachSrc }" width="200">
@@ -221,17 +213,9 @@
 										data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
 										<img src="/img/bring.svg" width="20" height="20">
 									</button>
-									<button type="button" class="btn btn-secondary btn-light mr-3" data-toggle="tooltip" 
-									        data-placement="top" title="좋아요" onclick="like()"> ${bookmark.blikecount }
-									  <c:if test="${bookmark.ltype == 0 && bookmark.bbtype==1}"> 
-										 <img src="/img/heart.svg" width="20" height="20">
-									  </c:if> 	
-										
-										<c:if test="${bookmark.ltype == 1 && bookmark.bbtype==1}">
-										 <img src="/img/red_heart.svg" width="20" height="20">
-										</c:if>
-									</button>
-									
+
+
+
 									<button type="button"
 										class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
 										data-toggle="dropdown" aria-haspopup="true"
@@ -370,3 +354,4 @@
 </body>
 
 </html>
+

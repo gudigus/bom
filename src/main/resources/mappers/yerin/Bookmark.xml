@@ -5,26 +5,21 @@
 
 <mapper namespace="Bookmark">
    <select id="ubmBoardListMapper" parameterType="int" resultType="UserBookmarkBoard">
-SELECT  ui.ucode ucode, b.bcontent bcontent, b.blikecount blikecount, ui.uatid uatid, ui.unickname unickname, 
-                ui.uimage uimage, b.ucode ucode, b.bcode bcode, b.battach battach,
-                lb.ltype ltype, lb.bbtype bbtype, lb.ldate ldate, lb.bdate bdate, b.breplycount breplycount, b.bquotecount bquotecount,
-                 case when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
-     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
-     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
-     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
-     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
-     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
-    	  end as bregdate, lb.bdate bdate
-       FROM    user_info ui, like_bookmark lb, board b
-       WHERE   lb.ucode = #{ucode}
+		SELECT  lb.ucode ucode, b.bcontent bcontent, b.blikecount blikecount, ui.uatid uatid, ui.unickname unickname, 
+		                ui.uimage uimage, b.ucode ucode, b.bcode bcode, b.battach battach, b.bbcode, b.btype,
+		                lb.ltype ltype, lb.bbtype bbtype, lb.ldate ldate, lb.bdate bdate, b.breplycount breplycount, b.bquotecount bquotecount,
+		         -- 원글(105번글) bbcode(100번글)의 작성자 정보
+		        NVL2(b.bbcode, get_user_info(1,b.ucode), '없음') uimage,
+		        NVL2(b.bbcode, get_user_info(2,b.ucode), '없음') unickname,
+		        NVL2(b.bbcode, get_user_info(3,b.ucode), '없음') uatid,
+		        b.bregdate
+		FROM    user_info ui, like_bookmark lb, board b 
+		WHERE   lb.ucode = #{ucode}
+		AND	 	  lb.bbtype = #{ucode}
+		AND     lb.bcode = b.bcode
+		AND     b.ucode = ui.ucode
+		order by lb.bdate desc
       
-       AND	 (  lb.ltype= '1'       OR	    lb.bbtype = '1' )
-       AND     lb.bcode = b.bcode
-       AND     b.ucode = ui.ucode
-      order by lb.bdate desc 
-
-     
-   
    </select>
    
    
@@ -43,8 +38,19 @@ SELECT  ui.ucode ucode, b.bcontent bcontent, b.blikecount blikecount, ui.uatid u
       where ucode = #{ucode}
       
     </delete> 
-
-
+ 
+ 
+      
+    <select id="ubmQuoteBoard" parameterType="int" resultType="UserBookmarkBoard">
+   select b.bcode, b.bcontent, b.battach, u.unickname, u.uatid, u.uimage,b.bregdate
+       
+       from board b, user_info u
+       where b.bcode = #{bbcode}
+       and   b.ucode = u.ucode
+    </select>
+   
+      
+ 
 
 
 </mapper>
