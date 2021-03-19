@@ -77,6 +77,7 @@ public class CoffeeController {
 		model.addAttribute("memCnt",memCnt);
 		model.addAttribute("url", url);
 //		model.addAttribute("search", search);
+		
 		System.out.println("CoffeeController session memCnt->"+memCnt);
 	}
 	
@@ -101,6 +102,8 @@ public class CoffeeController {
 		String manager = (String) session.getAttribute("manager");
 		if (manager == null) manager = "9";
 		System.out.println(returnPage+" manager->"+ manager );
+		User_info ui = (User_info)session.getAttribute("login");
+		model.addAttribute("user", ui);
 		// 관리자면 
 		if (manager == "0") {
 			List<CoffeeUser_info> list = uis.user_infoSensorList();
@@ -111,9 +114,9 @@ public class CoffeeController {
 //			System.out.println("list.get(2).getUcode()->"+list.get(2).getUcode());
 //			System.out.println("list.get(2).getUnickname()->"+list.get(2).getUnickname());
 			model.addAttribute("user_infoList", list);
-			
 			// 실시간 해시태그 순위
 			getHashtagRank(model);
+			
 		} else {
 			// returnPage = "/coffee/kkk";
 			returnPage = "redirect:/bro/index";
@@ -133,6 +136,8 @@ public class CoffeeController {
 		String search = req.getParameter("search");
 		if (manager == null) manager = "9";
 		System.out.println(returnPage+" manager->"+ manager );
+		User_info ui = (User_info)session.getAttribute("login");
+		model.addAttribute("user", ui);
 		// 관리자면 
 		if (manager == "0") {
 			List<CoffeeUser_info> list = uis.user_infoSensorList(search);
@@ -218,6 +223,8 @@ public class CoffeeController {
 		String manager = (String) session.getAttribute("manager");
 		if (manager == null) manager = "9";
 		System.out.println(returnPage+" manager->"+ manager );
+		User_info ui = (User_info)session.getAttribute("login");
+		model.addAttribute("user", ui);
 		if(manager == "0") {
 			List<CoffeeUser_info> list = uis.user_infoRestoreList();
 			model.addAttribute("user_infoList", list);
@@ -239,6 +246,8 @@ public class CoffeeController {
 		String search = req.getParameter("search");
 		if (manager == null) manager = "9";
 		System.out.println(returnPage+" manager->"+ manager );
+		User_info ui = (User_info)session.getAttribute("login");
+		model.addAttribute("user", ui);
 		if(manager == "0") {
 			List<CoffeeUser_info> list = uis.user_infoRestoreList(search);
 			model.addAttribute("user_infoList", list);
@@ -270,6 +279,9 @@ public class CoffeeController {
 		String returnPage = "";
 		if (manager == null) manager = "9";
 		System.out.println(returnPage+" manager->"+ manager );
+		User_info ui = (User_info)session.getAttribute("login");
+		System.out.println(returnPage+" manager->"+ manager );
+		model.addAttribute("user", ui);
 		if(manager == "0") {
 			List<CoffeeUser_info> list = uis.user_infoAccusationList();
 			model.addAttribute("user_infoList", list);
@@ -292,6 +304,8 @@ public class CoffeeController {
 		String manager = (String) session.getAttribute("manager");
 		String search = req.getParameter("search");
 		System.out.println(returnPage+" manager->"+ manager );
+		User_info ui = (User_info)session.getAttribute("login");
+		model.addAttribute("user", ui);
 		if (manager == null) manager = "9";
 		System.out.println("/coffee/accusationMemberManagerSearch manager->"+ manager );
 		if(manager == "0") {
@@ -327,6 +341,8 @@ public class CoffeeController {
 		String manager = (String) session.getAttribute("manager");
 		if (manager == null) manager = "9";
 		System.out.println(returnPage+" manager->"+ manager );
+		User_info ui = (User_info)session.getAttribute("login");
+		model.addAttribute("user", ui);
 		if(manager == "0") {
 			List<BoardUser_info> list = bs.sensorList();
 			for (int i=0; i<list.size(); i++) {
@@ -356,6 +372,8 @@ public class CoffeeController {
 		String search = req.getParameter("search");
 		if (manager == null) manager = "9";
 		System.out.println(returnPage+" manager->"+ manager );
+		User_info ui = (User_info)session.getAttribute("login");
+		model.addAttribute("user", ui);
 		if(manager == "0") {
 			List<BoardUser_info> list = bs.sensorList(search);
 			for (int i=0; i<list.size(); i++) {
@@ -411,6 +429,8 @@ public class CoffeeController {
 		String manager = (String) session.getAttribute("manager");
 		if (manager == null) manager = "9";
 		System.out.println(returnPage+" manager->"+ manager );
+		User_info ui = (User_info)session.getAttribute("login");
+		model.addAttribute("user", ui);
 		if(manager == "0") {
 			List<BoardUser_info> list = bs.restoreList();
 			for (int i=0; i<list.size(); i++) {
@@ -438,6 +458,8 @@ public class CoffeeController {
 		String search = req.getParameter("search");
 		if (manager == null) manager = "9";
 		System.out.println(returnPage+" manager->"+ manager );
+		User_info ui = (User_info)session.getAttribute("login");
+		model.addAttribute("user", ui);
 		if(manager == "0") {
 			List<BoardUser_info> list = bs.restoreList(search);
 			for (int i=0; i<list.size(); i++) {
@@ -476,6 +498,8 @@ public class CoffeeController {
 		String manager = (String) session.getAttribute("manager");
 		if (manager == null) manager = "9";
 		System.out.println(returnPage+" manager->"+ manager );
+		User_info ui = (User_info)session.getAttribute("login");
+		model.addAttribute("user", ui);
 		if(manager == "0") {
 			List<BoardUser_info> list = bs.accusationList();
 			for (int i=0; i<list.size(); i++) {
@@ -504,6 +528,8 @@ public class CoffeeController {
 		String search = req.getParameter("search");
 		if (manager == null) manager = "9";
 		System.out.println(returnPage+" manager->"+ manager );
+		User_info ui = (User_info)session.getAttribute("login");
+		model.addAttribute("user", ui);
 		if(manager == "0") {
 			List<BoardUser_info> list = bs.accusationList(search);
 			for (int i=0; i<list.size(); i++) {
@@ -547,6 +573,8 @@ public class CoffeeController {
 		String manager = (String) session.getAttribute("manager");
 		if (manager == null) manager = "9";
 		System.out.println(returnPage+" manager->"+ manager );
+		User_info ui = (User_info)session.getAttribute("login");
+		model.addAttribute("user", ui);
 		if(manager == "0") {
 			List<ReportUser_infoBoard> list = rs.accusationList();
 			for (int i=0; i<list.size(); i++) {
@@ -579,6 +607,8 @@ public class CoffeeController {
 		if (manager == null) manager = "9";
 		System.out.println("CoffeeController " +returnPage+ "search-> "+search);
 		System.out.println(returnPage+" manager->"+ manager );
+		User_info ui = (User_info)session.getAttribute("login");
+		model.addAttribute("user", ui);
 		if(manager == "0") {
 			List<ReportUser_infoBoard> list = rs.accusationList(search);
 			for (int i=0; i<list.size(); i++) {
@@ -634,6 +664,8 @@ public class CoffeeController {
 		String manager = (String) session.getAttribute("manager");
 		if (manager == null) manager = "9";
 		System.out.println(returnPage+" manager->"+ manager );
+		User_info ui = (User_info)session.getAttribute("login");
+		model.addAttribute("user", ui);
 		if(manager == "0") {
 			List<ReportUser_infoBoard> list = rs.uncensoredList();
 			for (int i=0; i<list.size(); i++) {
@@ -663,6 +695,8 @@ public class CoffeeController {
 		if (manager == null) manager = "9";
 		System.out.println("CoffeeController " +returnPage+ "search-> "+search);
 		System.out.println(returnPage+" manager->"+ manager );
+		User_info ui = (User_info)session.getAttribute("login");
+		model.addAttribute("user", ui);
 		if(manager == "0") {
 			List<ReportUser_infoBoard> list = rs.uncensoredList(search);
 			for (int i=0; i<list.size(); i++) {
@@ -678,6 +712,14 @@ public class CoffeeController {
 		}else {
 			returnPage = "redirect:/bro/index";
 		}
+		return returnPage;
+	}
+	
+	@GetMapping(value = "/coffee/logout")
+	public String logout(HttpServletRequest req, Model model) {
+		String returnPage = "redirect:/bro/index";
+		System.out.println("CoffeeController logout start..");
+		req.getSession().invalidate();
 		return returnPage;
 	}
 }

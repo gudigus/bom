@@ -141,9 +141,9 @@
 					src="/img/coffee/censorBom.svg" width="15" height="15"> 봄 검열
 				</a> <a href="/coffee/interceptor/censorMemberManagerPage" class="list-group-item list-group-item-action"> <img
 					src="/img/coffee/censorMember.svg" width="15" height="15"> 회원 검열
-				</a> <a href="/coffee/interceptor/censorAccusationManagerPage" class="list-group-item list-group-item-action"> <img
+				</a><!--  <a href="/coffee/interceptor/censorAccusationManagerPage" class="list-group-item list-group-item-action"> <img
 					src="/img/coffee/accusation.svg" width="15" height="15"> 신고 게시판
-				</a> <!-- <a href="#" class="list-group-item list-group-item-action">
+				</a> --> <!-- <a href="#" class="list-group-item list-group-item-action">
 					<button type="button" class="btn btn-outline-success">
 						<img src="/img/write.svg" width="15" height="15"> 글 쓰기
 					</button>
@@ -154,7 +154,7 @@
 							width="50"> <a class="card-title text-dark">닉네임</a> <a
 							class="card-subtitle mb-2 text-muted">@atid</a>
 					</div>
-					<button type="button" class="btn btn-success">로그아웃</button>
+					<button type="button" class="btn btn-success" onclick = "alert('로그아웃 되었습니다'); location.href = '/coffee/logout'; ">로그아웃</button>
 				</div>
 			</div>
 		</div>
@@ -165,7 +165,7 @@
 		<div id="page-content-wrapper">
 			<nav
 				class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-				<button class="btn btn-success" id="menu-toggle">←</button>
+				<button class="btn btn-success" id="menu-toggle" onclick="history.back(); return false;">←</button>
 			</nav>
 			<h2>봄 검열 페이지</h2>
 			<!-- <div class="alert alert-success" role="alert">
@@ -258,11 +258,11 @@
 		<div class="bg-light border-left" id="sidebar-wrapper2">
 			<div class="list-group list-group-flush">
 				<div class="list-group-item list-group-item-action bg-light">
-					<div id="drop_the_text">
-						<!-- 엔터치면 searchData() 실행 -->
+					<!-- <div id="drop_the_text">
+						엔터치면 searchData() 실행
 						<input  class="form-control" id="search" placeholder="봄 검색"
 							onkeypress="if( event.keyCode == 13 ){searchData();}">
-					</div>
+					</div> -->
 				</div>
 				<%-- <div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
