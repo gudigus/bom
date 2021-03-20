@@ -53,20 +53,26 @@
 				<img src="/img/logo2.jpg" width="150" height="150">
 			</div>
 			<div class="list-group list-group-flush">
-				<a href="#" class="list-group-item list-group-item-action"> <img
+				<a href="/iron/timeline"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/home.svg" width="15" height="15"> 타임라인
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/hoon/explore"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/bell.svg" width="15" height="15"> 알림 <span
+				</a> <a href="alarm" class="list-group-item list-group-item-action">
+					<img src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/send.svg" width="15" height="15"> 쪽지
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/bookmark.svg" width="15" height="15"> 북마크
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
+				</a>
+				<!-- bear1 -->
+				<a href="/bear/chat" class="list-group-item list-group-item-action">
+					<img src="/img/send.svg" width="15" height="15"> 쪽지
+				</a> <a href="bookmark" class="list-group-item list-group-item-action">
+					<img src="/img/bookmark.svg" width="15" height="15"> 북마크
+				</a> <a href="/iron/profile/uatid=${user.uatid }"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/user.svg" width="15" height="15"> 프로필
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/right/moreSee"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/more.svg" width="15" height="15"> 더보기
 				</a> <a href="#" class="list-group-item list-group-item-action">
 					<button type="button" class="btn btn-outline-success">
@@ -104,7 +110,7 @@
 						<h5>10대 검색어 순위</h5>
 							<c:forEach var="list1" items="${aList1}" varStatus="status">
 							<c:if test="${status.count <=3 }">
-								<span>${list1.rank}위. </span> <span style="font-weight:bold;">${list1.search}</span><br>
+								<span>${list1.rank}위. </span> <span style="font-weight:bold;">#${list1.search}</span><br>
 							</c:if>
 							</c:forEach>
 						</div>
@@ -112,7 +118,7 @@
 						<h5>20대 검색어 순위</h5>
 							<c:forEach var="list2" items="${aList2}" varStatus="status">
 							<c:if test="${status.count <=3 }">
-								<span>${list2.rank}위. </span> <span style="font-weight:bold;">${list2.search}</span><br>
+								<span>${list2.rank}위. </span> <span style="font-weight:bold;">#${list2.search}</span><br>
 							</c:if>
 							</c:forEach>
 						</div>
@@ -120,7 +126,7 @@
 						<h5>30대 검색어 순위</h5>
 							<c:forEach var="list3" items="${aList3}" varStatus="status">
 							<c:if test="${status.count <=3 }">
-								<span>${list3.rank}위. </span> <span style="font-weight:bold;">${list3.search}</span><br>
+								<span>${list3.rank}위. </span> <span style="font-weight:bold;">#${list3.search}</span><br>
 							</c:if>
 							</c:forEach>
 						</div>
@@ -131,7 +137,7 @@
 						<h5>남성 검색어 순위</h5>
 							<c:forEach var="listm" items="${gListm}" varStatus="status">
 							<c:if test="${status.count <=3 }">
-								<span>${listm.rank}위. </span> <span style="font-weight:bold;">${listm.search}</span><br>
+								<span>${listm.rank}위. </span> <span style="font-weight:bold;">#${listm.search}</span><br>
 							</c:if>
 							</c:forEach>
 						</div>
@@ -139,7 +145,7 @@
 						<h5>여성 검색어 순위</h5>
 							<c:forEach var="listw" items="${gListw}" varStatus="status">
 							<c:if test="${status.count <=3 }">
-								<span>${listw.rank}위. </span> <span style="font-weight:bold;">${listw.search}</span><br>
+								<span>${listw.rank}위. </span> <span style="font-weight:bold;">#${listw.search}</span><br>
 							</c:if>
 							</c:forEach>
 						</div>

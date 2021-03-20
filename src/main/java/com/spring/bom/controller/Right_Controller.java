@@ -22,24 +22,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.spring.bom.model.right.Block;
-import com.spring.bom.model.right.Interest;
-import com.spring.bom.model.right.InterestDetail;
+import com.spring.bom.model.right.RBlock;
+import com.spring.bom.model.right.RFollow;
+import com.spring.bom.model.right.RInterest;
+import com.spring.bom.model.right.RInterestDetail;
 import com.spring.bom.model.right.Statis;
-import com.spring.bom.model.right.User_Info;
+import com.spring.bom.model.right.RUser_Info;
 import com.spring.bom.service.right.StatisService;
-import com.spring.bom.service.right.User_InfoService;
+import com.spring.bom.service.right.RFollowService;
+import com.spring.bom.service.right.RUser_InfoService;
 
 @Controller
 public class Right_Controller {
 	private static final Logger logger = LoggerFactory.getLogger(Right_Controller.class);
 
+	//회원 service
 	@Autowired
-	private User_InfoService us;
+	private RUser_InfoService us;
+	
+	//for mail
 	@Autowired
 	private JavaMailSender mailSender;
+	
+	//통계 service
 	@Autowired
 	private StatisService ss;
+	
+	//팔로우 service
+	@Autowired
+	private RFollowService fs;
 	
 	
 	//탈퇴회원 로그인시
@@ -47,7 +58,7 @@ public class Right_Controller {
 	public String UserdisabledPage(HttpSession session, Model model) {
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
-		User_Info ui = us.detail(ucode);
+		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 
 		return "/right/UserdisabledPage";
@@ -57,7 +68,7 @@ public class Right_Controller {
 	public String userAble(HttpSession session, Model model) {
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
-		User_Info ui = us.detail(ucode);
+		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 		int result1 = us.updateUstate1(ucode);
 		int result2 = us.updateUstate2(ucode);
@@ -82,7 +93,7 @@ public class Right_Controller {
 	public String main(HttpSession session, Model model) {
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
-		User_Info ui = us.detail(ucode);
+		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 		System.out.println("ucode : " + ucode);
 
@@ -94,7 +105,7 @@ public class Right_Controller {
 	public String moreSee(HttpSession session, Model model) {
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
-		User_Info ui = us.detail(ucode);
+		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 
 		return "/right/moreSee";
@@ -104,7 +115,7 @@ public class Right_Controller {
 	public String updateEv(HttpSession session, Model model) {
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
-		User_Info ui = us.detail(ucode);
+		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 
 		return "/right/updateEv";
@@ -125,7 +136,7 @@ public class Right_Controller {
 	public String insertpw(HttpSession session, Model model) {
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
-		User_Info ui = us.detail(ucode);
+		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 		return "/right/insertpw";
 	}
@@ -135,14 +146,14 @@ public class Right_Controller {
 	public String userInfoEditForm(HttpSession session, Model model) {
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
-		User_Info ui = us.detail(ucode);
+		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 
 		return "/right/userInfoEditForm";
 	}
 
 	@PostMapping(value = "right/userInfoEdit")
-	public String userInfoEdit(User_Info ui, Model model) {
+	public String userInfoEdit(RUser_Info ui, Model model) {
 		int result1 = us.changeinsert(ui);
 		System.out.println("ui.ucode "+ ui.getUcode());
 		int result2 = us.changeupdate(ui);
@@ -174,7 +185,7 @@ public class Right_Controller {
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
 
-		User_Info ui = us.detail(ucode);
+		RUser_Info ui = us.detail(ucode);
 
 		model.addAttribute("ui", ui);
 
@@ -222,7 +233,7 @@ public class Right_Controller {
 		model.addAttribute("ucode", ucode);
 		System.out.println("num->"+ num);
 		model.addAttribute("num", num);
-		User_Info ui = us.detail(ucode);
+		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 		
 		return "right/checknum";
@@ -231,7 +242,7 @@ public class Right_Controller {
 	@RequestMapping(value = "right/updateDouble")
 	public String updateDouble(HttpSession session, Model model) {
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
-		User_Info ui = us.detail(ucode);
+		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 		int result = us.updouble(ucode);
 		model.addAttribute("result", result);
@@ -243,7 +254,7 @@ public class Right_Controller {
 	public String changePw(HttpSession session, Model model) {
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
-		User_Info ui = us.detail(ucode);
+		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 
 		return "/right/changePw";
@@ -254,7 +265,7 @@ public class Right_Controller {
 		public String pwCheck(HttpSession session,String upassword, Model model) {
 			int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 			model.addAttribute("ucode", ucode);
-			User_Info ui = us.detail(ucode);
+			RUser_Info ui = us.detail(ucode);
 			model.addAttribute("ui", ui);
 			System.out.println("upassword->" + upassword);
 			int cnt = us.userpwCheck(upassword, ucode);
@@ -268,7 +279,10 @@ public class Right_Controller {
 		public String changePwPro(HttpSession session, Model model,@RequestParam String pwd) {
 			int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 			model.addAttribute("ucode", ucode);
-			User_Info ui = us.detail(ucode);
+			RUser_Info ui = us.detail(ucode);
+			System.out.println("[Right-Controller] changePwPro ui.getuPassword() -> " + ui.getUpassword());
+			System.out.println("[Right-Controller] changePwPro ui.getuPwd() -> " + ui.getPwd());
+			System.out.println("[Right-Controller] changePwPro  pwd => "+pwd);
 			model.addAttribute("pwd", pwd);
 			model.addAttribute("ui", ui);
 			
@@ -295,7 +309,7 @@ public class Right_Controller {
 	public String changePw2Mail(HttpSession session, Model model,@RequestParam String pwd) {
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
-		User_Info ui = us.detail(ucode);
+		RUser_Info ui = us.detail(ucode);
 
 		System.out.println("mailSending...");
 		String tomail = ui.getUemail(); // 받는 사람 이메일
@@ -337,7 +351,7 @@ public class Right_Controller {
 		model.addAttribute("num", num);
 		model.addAttribute("pwd", pwd);
 		System.out.println("pwd => "+ pwd);
-		User_Info ui = us.detail(ucode);
+		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 		
 		return "right/pwchecknum";
@@ -359,11 +373,11 @@ public class Right_Controller {
 	//관심사 변경
 	//조회
 	@RequestMapping(value = "right/likeForm")
-	public String likeForm(HttpSession session, Model model,Interest interest,InterestDetail interestd) {
+	public String likeForm(HttpSession session, Model model,RInterest interest,RInterestDetail interestd) {
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
-		List<Interest> list_choice = us.itdetail(ucode);
-		List<InterestDetail> list = us.select(interestd);
+		List<RInterest> list_choice = us.itdetail(ucode);
+		List<RInterestDetail> list = us.select(interestd);
 		model.addAttribute("interest", interest);
 		model.addAttribute("list_choice", list_choice);
 		model.addAttribute("list", list);
@@ -377,7 +391,7 @@ public class Right_Controller {
 
 	//관심사 변경 결과
 	@PostMapping(value = "right/likeResult")
-	public String likeResult(HttpSession session, Interest interest, Model model, @RequestParam ArrayList<Integer> hiddenValue) {
+	public String likeResult(HttpSession session, RInterest interest, Model model, @RequestParam ArrayList<Integer> hiddenValue) {
 		System.out.println("hiddenValue1 : "+ hiddenValue);
 		System.out.println("hiddenValueindex : "+ hiddenValue.get(0));
 		System.out.println("hiddenValueindex : "+ hiddenValue.get(1));
@@ -410,7 +424,7 @@ public class Right_Controller {
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
 		session.setAttribute("ucode", ucode);
-		List<Block> bListP = us.blockListP(ucode);
+		List<RBlock> bListP = us.blockListP(ucode);
 		model.addAttribute("bListP", bListP);
 
 		return "/right/block";
@@ -421,7 +435,7 @@ public class Right_Controller {
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
 		session.setAttribute("ucode", ucode);
-		List<Block> bList = us.blockList(ucode);
+		List<RBlock> bList = us.blockList(ucode);
 		model.addAttribute("bList", bList);
 
 		return "/right/blockhash";
@@ -432,7 +446,7 @@ public class Right_Controller {
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
 		session.setAttribute("ucode", ucode);
-		List<Block> bList = us.blockList(ucode);
+		List<RBlock> bList = us.blockList(ucode);
 		model.addAttribute("bList", bList);
 				
 		return "/right/plusBhash";
@@ -453,7 +467,7 @@ public class Right_Controller {
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
 		session.setAttribute("ucode", ucode);
-		List<Block> bList = us.blockList(ucode);
+		List<RBlock> bList = us.blockList(ucode);
 		model.addAttribute("bList", bList);
 
 		return "/right/blockword";
@@ -464,7 +478,7 @@ public class Right_Controller {
 			int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 			model.addAttribute("ucode", ucode);
 			session.setAttribute("ucode", ucode);
-			List<Block> bList = us.blockList(ucode);
+			List<RBlock> bList = us.blockList(ucode);
 			model.addAttribute("bList", bList);
 
 			return "/right/plusBword";
@@ -479,13 +493,29 @@ public class Right_Controller {
 
 			return "/right/plusBwordRe";
 		}
-	//차단 해제
+	//차단 해제 - 계정
 	@RequestMapping(value = "right/blockdelete")
 	public String blockdelete(Model model,@RequestParam int blcode) {
 		int result = us.deleteblock(blcode);
 		model.addAttribute("result", result);
 
-		return "right/blockdeleteResult";
+		return "redirect:../right/block";
+	}
+	//차단 해제 - 단어
+	@RequestMapping(value = "right/blockdeleteword")
+	public String blockdeleteword(Model model,@RequestParam int blcode) {
+		int result = us.deleteblock(blcode);
+		model.addAttribute("result", result);
+		
+		return "redirect:../right/blockword";
+	}
+	//차단 해제 - hash
+	@RequestMapping(value = "right/blockdeletehash")
+	public String blockdeletehash(Model model,@RequestParam int blcode) {
+		int result = us.deleteblock(blcode);
+		model.addAttribute("result", result);
+
+		return "redirect:../right/blockhash";
 	}
 	@RequestMapping(value = "right/blockdeleteResult")
 	public String blockdeleteResult(HttpSession session,Model model) {
@@ -501,14 +531,14 @@ public class Right_Controller {
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
 		session.setAttribute("ucode", ucode);
-		User_Info ui = us.detail(ucode);
+		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 
 		return "/right/userDisabled";
 	}
 
 	@PostMapping(value = "right/userDisabledPro")
-	public String userDisabledPro(User_Info ui, Model model) {
+	public String userDisabledPro(RUser_Info ui, Model model) {
 		int result = us.changeinsertstate(ui);
 		int result1 = us.statedDis(ui);
 		int result2 = us.changeInfoState(ui);
@@ -518,7 +548,7 @@ public class Right_Controller {
 		model.addAttribute("result2", result2);
 		model.addAttribute("result3", result3);
 
-		return "/bro/login";
+		return "redirect:../bro/index";
 	}
 	//봄 통계 Statis
 	@RequestMapping(value = "right/bomStatis")
@@ -526,7 +556,7 @@ public class Right_Controller {
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
 		session.setAttribute("ucode", ucode);
-		User_Info ui = us.detail(ucode);
+		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 		
 		List<Statis> aList1 = ss.getSearchRank1();
@@ -557,5 +587,79 @@ public class Right_Controller {
 		
 
 		return "/right/bomStatis";
+	}
+	
+	//팔로잉&팔로워
+	@RequestMapping(value = "/right/follower")
+	public String follower(HttpSession session, Model model) {
+		System.out.println("RightController follower Start");
+		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
+		model.addAttribute("ucode", ucode);
+		RUser_Info ui = us.detail(ucode);
+		model.addAttribute("ui", ui);
+		
+		List<RFollow> followerList = fs.selectFollower(ucode);
+		List<RFollow> followerBlockList = fs.selectBlockFollower(ucode);
+		List<RFollow> followingList = fs.selectFollowing(ucode);
+		List<RFollow> followingBlockList = fs.selectBlockFollowing(ucode);
+		
+		model.addAttribute("followerList", followerList);
+		model.addAttribute("followingList", followingList);
+		model.addAttribute("followerBlockList", followerBlockList);
+		model.addAttribute("followingBlockList", followingBlockList);
+		System.out.println("RightController follower end");
+		return "right/follower";
+	}
+	@RequestMapping(value = "/right/following")
+	public String following(HttpSession session, Model model) {
+		System.out.println("RightController follower Start");
+		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
+		model.addAttribute("ucode", ucode);
+		RUser_Info ui = us.detail(ucode);
+		model.addAttribute("ui", ui);
+		
+		List<RFollow> followerList = fs.selectFollower(ucode);
+		List<RFollow> followerBlockList = fs.selectBlockFollower(ucode);
+		List<RFollow> followingList = fs.selectFollowing(ucode);
+		List<RFollow> followingBlockList = fs.selectBlockFollowing(ucode);
+		
+		model.addAttribute("followerList", followerList);
+		model.addAttribute("followingList", followingList);
+		model.addAttribute("followerBlockList", followerBlockList);
+		model.addAttribute("followingBlockList", followingBlockList);
+		System.out.println("RightController follower end");
+		return "right/following";
+	}
+	//팔로잉 취소
+	@RequestMapping(value = "/right/followerDelete", produces = "application/text;charset=UTF-8")
+	public String followerDelete(HttpSession session, Model model,@RequestParam int fopcode) {
+		System.out.println("RightController followerDelete Start");
+		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
+		model.addAttribute("ucode", ucode);
+		RUser_Info ui = us.detail(ucode);
+		model.addAttribute("ui", ui);
+			
+		int result = fs.deleteFollowing(ucode,fopcode);
+			
+		model.addAttribute("result", result);
+		System.out.println("followerDelete result => "+result);
+		System.out.println("RightController followerDelete end");
+		return "redirect:../right/following";
+	}
+	//팔로우 하는 사람 팔로잉하기
+	@RequestMapping(value = "/right/addfollowing", produces = "application/text;charset=UTF-8")
+	public String addfollowing(HttpSession session, Model model,@RequestParam int fopcode) {
+		System.out.println("RightController addfollowing Start");
+		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
+		model.addAttribute("ucode", ucode);
+		RUser_Info ui = us.detail(ucode);
+		model.addAttribute("ui", ui);
+				
+		int result = fs.addfollowing(ucode,fopcode);
+				
+		model.addAttribute("result", result);
+		System.out.println("addfollowing result => "+result);
+		System.out.println("RightController addfollowing end");
+		return "redirect:../right/follower";
 	}
 }

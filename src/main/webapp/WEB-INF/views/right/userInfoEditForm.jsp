@@ -74,22 +74,8 @@
 								alert('function idCh() data 2');
 								$('#id_check').html('사용가능한 아이디입니다 :p');
 								$('#id_check').css('color', 'green');
- 									if(idJ.test(uatid)){
-										// 0 : 아이디 길이 / 문자열 검사
-										$("#id_check").text("");
-										$("#reg_submit").attr("disabled", false);
-							
-									}else if(uatid == ""){
-										
-										$('#id_check').text('아이디를 입력해주세요 :)');
-										$('#id_check').css('color', 'red');
-										$("#reg_submit").attr("disabled", true);				
-										
-									}else{
-										$('#id_check').text("아이디는 소문자와 숫자 4~12자리만 가능합니다 :)");
-										$('#id_check').css('color', 'red');
-										$("#reg_submit").attr("disabled", true);
-									} 
+								$("#reg_submit").attr("disabled", false);
+ 									
 								}
 							}
 						});
@@ -108,22 +94,28 @@
 				<img src="/img/logo2.jpg" width="150" height="150">
 			</div>
 			<div class="list-group list-group-flush">
-				<a href="#" class="list-group-item list-group-item-action"> <img
+				<a href="/iron/timeline"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/home.svg" width="15" height="15"> 타임라인
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/hoon/explore"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/bell.svg" width="15" height="15"> 알림 <span
+				</a> <a href="alarm" class="list-group-item list-group-item-action">
+					<img src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/send.svg" width="15" height="15"> 쪽지
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/bookmark.svg" width="15" height="15"> 북마크
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
+				</a>
+				<!-- bear1 -->
+				<a href="/bear/chat" class="list-group-item list-group-item-action">
+					<img src="/img/send.svg" width="15" height="15"> 쪽지
+				</a> <a href="bookmark" class="list-group-item list-group-item-action">
+					<img src="/img/bookmark.svg" width="15" height="15"> 북마크
+				</a> <a href="/iron/profile/uatid=${user.uatid }"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/user.svg" width="15" height="15"> 프로필
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/right/moreSee"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/more.svg" width="15" height="15"> 더보기
-				</a> <a href="#" class="list-group-item list-group-item-action">
+				</a><a href="#" class="list-group-item list-group-item-action">
 					<button type="button" class="btn btn-outline-success">
 						<img src="/img/write.svg" width="15" height="15"> 글 쓰기
 					</button>
