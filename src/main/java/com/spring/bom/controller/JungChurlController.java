@@ -1,5 +1,6 @@
 package com.spring.bom.controller;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -105,6 +106,10 @@ public class JungChurlController {
 		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
 		List<Follow> suggestFlist2 = fs.getSuggestFollowList2(user.getUcode());
 		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		
+		//리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림  
+		Collections.shuffle(suggestFlist2);
+		
 		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
 		model.addAttribute("suggestFlist2", suggestFlist2);
 

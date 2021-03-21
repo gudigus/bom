@@ -177,8 +177,10 @@ label {
 	//팔로우 하는 로직
 	function followchk(number){
 		
-		console.log("팔로우눌렀을데 작동 id = " + "k"+number)
-		var element = document.getElementById("k"+number);
+		//name 에 k + number 쓰는 태그를찾아서 text변경
+		var textareaVal = $("button[name=k"+number+"]").text();
+		console.log("textareaVal + textareaVal" + textareaVal)
+		
 		var msg = { uopcode :number};
 		$.ajax({
 			url: '<%=context%>/bear/followchk',
@@ -190,7 +192,9 @@ label {
 				
 				if(res == "1"){
 					console.log("저장성공")
-				element.innerText = "팔로잉";
+					  $("button[name=k"+number+"]").text("팔로잉");
+					  $("button[name=k"+number+"]").attr("class","btn btn-success btn-sm float-right");
+			
 				}else 
 					{console.log("저장실패")}
 					
@@ -335,7 +339,8 @@ label {
 								<div class="btn-group col-md-12" role="group"
 									aria-label="Button group with nested dropdown">
 									<button type="button" class="btn btn-secondary mr-3 btn-light"
-										data-toggle="tooltip" data-placement="top" title="답글 ">
+										
+="tooltip" data-placement="top" title="답글 ">
 										<img src="/img/speech-bubble.svg" width="20" height="20"> ${tl_element.breplyCount }
 									</button>
 									<button type="button" class="btn btn-secondary btn-light mr-3"
@@ -399,7 +404,7 @@ label {
 						<div class="card-header">팔로우 추천</div>
 						<div class="card-body" style="padding: 5px;">
 							<c:if test="${suggestFlist2_size>0 }">
-								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
+								<c:forEach var="justFollowMe" items="${suggestFlist2 }" begin="0" end="2" >
 									<div class="card">
 										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
 											<img src="<%=context %>/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
@@ -408,7 +413,7 @@ label {
 												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
-												style="font-size: 0.8rem;" onclick="followchk(${justFollowMe.uucode})" id=k${justFollowMe.uucode}>팔로우</button>
+												style="font-size: 0.8rem; "  onclick="followchk(${justFollowMe.uucode})" name=k${justFollowMe.uucode}>팔로우</button>
 												
 											
 										</div>
@@ -432,9 +437,10 @@ label {
 								</c:forEach>
 							</c:if>
 						</div>
-						    <button type="button" class="btn btn-outline-success" id="writeBtn"
+						    	<c:if test="${suggestFlist2_size>0 }">
+						 <button type="button" class="btn btn-outline-success" id="writeBtn"
            	       data-toggle="modal" data-target="#morebtn">더보기
-            	   </button>
+            	   </button></c:if>
 					</div>
 				</div>
 				<div class="list-group-item list-group-item-action bg-light"
@@ -896,27 +902,27 @@ label {
 				<div class="modal-content">
 					<div class="modal-header" >
 						<div class="modal-body col-12">
-							<div class="card-header" ><h4 style="text-align: center;">팔로우 추천</h4>	
+							<div class="card-header" ><h4 style="text-align: center;">팔로우 추천<button style="float: right;" onclick="closemodal()">x</button></h4>	
 								<div class="card-body" style="padding: 5px;">
 									<div class="card">
 										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-										<c:forEach var="justFollowMe" items="${suggestFlist2 }" >
+										<c:forEach var="justFollowMe1" items="${suggestFlist2 }" >
 									<div class="card">
 										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-											<img src="<%=context %>/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="40"
+											<img src="<%=context %>/profile_image/${justFollowMe1.uimage}" class="rounded-circle" width="40"
 												height="40">
-												<a class="card-title text-dark">${justFollowMe.unickName}</a>
-												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
-												<c:if test="${justFollowMe.uonline eq 1 }">
+												<a class="card-title text-dark">${justFollowMe1.unickName}</a>
+												<a class="card-subtitle mb-2 text-muted">@${justFollowMe1.uatid}</a>
+												<c:if test="${justFollowMe1.uonline eq 1 }">
 												<img src = "<%=context %>/image/online.png"  width="20" height="20">
 												</c:if>
 											<div>	
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
-												style="font-size: 1.2rem;" onclick="followchk(${justFollowMe.uucode})" id="k${justFollowMe.uucode}">팔로우</button>
+												style="font-size: 1.2rem;" onclick="followchk(${justFollowMe1.uucode})" name="k${justFollowMe1.uucode}">팔로우</button>
 												
 												</div>
-												<h3 id = "bearsize" style="padding-left: 40px">&nbsp&nbsp${justFollowMe.uintro}</h3>
+												<h3 id = "bearsize" style="padding-left: 40px">&nbsp&nbsp${justFollowMe1.uintro}</h3>
 											
 										</div>
 									</div>

@@ -194,6 +194,13 @@ img{ max-width:100%;}
 .inbox_chat{
 background: white;}
 
+#bearsize{
+
+		width:550px;
+		 overflow:hidden; 
+		 text-overflow:ellipsis; 
+		 white-space:nowrap;
+		 text-align:left;}
 
 
 </style>
@@ -424,6 +431,14 @@ background: white;}
 					var msg = d.cdmessage//메세지내용
 					var cdtime = d.cdtime//메세지 보낸시간
 					  //내가보낸 메세지 오른쪽에 붙힘
+					  
+					  
+		if(msg == "채팅방생성되었습니다."){
+			tag = "<div style="+"'text-align : center;'"+">채팅방생성되었습니다.</div><hr>";	
+			
+	  }else{
+		 
+			
 				if(ucode == id ){
 				tag += 	"<div class="+"outgoing_msg"+">"+
 		        		  "<div class="+"sent_msg"+">"+
@@ -436,7 +451,7 @@ background: white;}
 		           				"<p>"+msg+ "</p>"+
 		              				"<span class="+"time_date"+">"+ cdtime +"</span></div></div>";
 					
-				}
+				}}
 					
 					 
 			  }); $("#messagelist").append(tag);
@@ -448,6 +463,8 @@ background: white;}
 	}
 
 	function createChatingRoom(res){
+		var context = "<%=context %>";
+		
 		if (res == "") {
 			
 		 	console.log("채팅방 리스트가 비어있습니다 .")
@@ -485,7 +502,7 @@ background: white;}
 				    
 				tag +=    "<div class=chat_list  id="+roomNumber+" >" +
 		         		 "<div class=chat_people>" +
-		         		"<div class="+"chat_img"+"><img src="+"/img/teemo.jpg"+" class="+"rounded-circle"+" width="+"100"+" height="+"50"+"></div>"+
+		         		"<div class="+"chat_img"+"><img src="+context+"/profile_image/"+uimage+" class="+"rounded-circle"+" width="+"100"+" height="+"50"+"></div>"+
 		          			 	 "<div class=chat_ib>"+
 		            			  "<h5><b>" +uatid+ "</b><span class=chat_date><b>" +cdtime+ "</b></span></h5>"+
 		             				 "<h5"+" id='msgsize'>"+ msg+"<span id = 'k123'>"+"</span></h5><div class="+"'boxsize'"+"  align="+"'right'"+"><button type='button' class="+"'btn btn-success'"+" onclick='goRoom(\""+roomNumber+"\")'>참여</button>"+"</div> "+
@@ -521,8 +538,41 @@ background: white;}
 		});
 	}
 	
+	//팔로우 추천 더보기 닫기 기능
+	function closemodal(){
+		location.href="../bear/chat";
+	}
+	
+	//팔로우 하는 로직
+	function followchk(number){
+		
+		//name 에 k + number 쓰는 태그를찾아서 text변경
+		var textareaVal = $("button[name=k"+number+"]").text();
+		console.log("textareaVal + textareaVal" + textareaVal)
+		
+		var msg = { uopcode :number};
+		$.ajax({
+			url: '<%=context%>/bear/followchk',
+			data: msg,
+			type: "post",
 
-
+			success: function (res) {
+				console.log("저장성공 - > " +res)
+				
+				if(res == "1"){
+					console.log("저장성공")
+					  $("button[name=k"+number+"]").text("팔로잉");
+					  $("button[name=k"+number+"]").attr("class","btn btn-success btn-sm float-right");
+					  
+				
+			
+				}else 
+					{console.log("저장실패")}
+					
+				 
+			}
+	});	 
+	}
 </script>
 
 
@@ -537,7 +587,7 @@ background: white;}
 				<img src="/img/logo2.jpg" width="150" height="150">
 			</div>
 			<div class="list-group list-group-flush">
-				<a href="#" class="list-group-item list-group-item-action"> <img
+				<a href="/iron/timeline" class="list-group-item list-group-item-action"> <img
 					src="/img/home.svg" width="15" height="15"> 타임라인
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
@@ -559,12 +609,9 @@ background: white;}
 				</a>
 				<div class="card">
 					<div class="card-body">
-						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-							width="50"> <a class="card-title text-dark">닉네임</a> 
-							<a class="card-subtitle mb-2 text-muted">
-													<c:forEach var="info" items="${userinfo}">
-								@<c:out value="${info.uatid }" /> 
-							</c:forEach>
+						<img src="<%=context %>/profile_image/${user.uimage}" class="rounded-circle" width="50"
+							width="50"> <a class="card-title text-dark">${user.unickName }</a> 
+							<a class="card-subtitle mb-2 text-muted">	@${user.uatid }
 						</a>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
@@ -611,7 +658,7 @@ background: white;}
     	<!-- 메세지보내는페이지 -->
     <div class="mesgs">
       <div class="msg_history" id="messagelist">
-  
+  		<div id="nullmsg" style="text-align: center;" >상대방과 대화를 해보세요.</div>
         
           <!-- <div class="incoming_msg_img"> </div> 이미지넣을곳--> 
 
@@ -642,39 +689,46 @@ background: white;}
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
-						<div class="card-header">팔로우 추천${suggestFlist2 }</div>
+						<div class="card-header">팔로우 추천</div>
 						<div class="card-body" style="padding: 5px;">
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-										height="20"> <a class="card-title text-dark">닉네임</a> <a
-										class="card-subtitle mb-2 text-muted">@atid</a>
-									<button type="button"
-										class="btn btn-outline-success btn-sm float-right"
-										style="font-size: 0.8rem;">팔로우</button>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-										height="20"> <a class="card-title text-dark">닉네임</a> <a
-										class="card-subtitle mb-2 text-muted">@atid</a>
-									<button type="button"
-										class="btn btn-outline-success btn-sm float-right"
-										style="font-size: 0.8rem;">팔로우</button>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-										height="20"> <a class="card-title text-dark">닉네임</a> <a
-										class="card-subtitle mb-2 text-muted">@atid</a>
-									<button type="button" 
-										class="btn btn-outline-success btn-sm float-right"
-										style="font-size: 0.8rem;">팔로우</button>
-								</div>
-							</div>
+							<c:if test="${suggestFlist2_size>0 }">
+								<c:forEach var="justFollowMe" items="${suggestFlist2 }" begin="0" end="2" >
+									<div class="card">
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											<img src="<%=context %>/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
+												height="20">
+												<a class="card-title text-dark">${justFollowMe.unickName}</a>
+												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+											<button type="button"
+												class="btn btn-outline-success btn-sm float-right"
+												style="font-size: 0.8rem;" onclick="followchk(${justFollowMe.uucode})" name=k${justFollowMe.uucode}>팔로우</button>
+												
+											
+										</div>
+									</div>
+								</c:forEach>
+							</c:if>
+							<!-- 팔로우하는 유저가 없을 경우 관심항목이 비슷한 사람을 추천 -->
+							<c:if test="${suggestFlist2_size<1 }">
+								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
+									<div class="card">
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											<img src="${resourcePath }/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
+												height="20">
+												<a class="card-title text-dark">${justFollowMe.unickName}</a>
+												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+											<button type="button"
+												class="btn btn-outline-success btn-sm float-right"
+												style="font-size: 0.8rem;">팔로우</button>
+										</div>
+									</div>
+								</c:forEach>
+							</c:if>
 						</div>
+						<c:if test="${suggestFlist2_size>0 }">
+						 <button type="button" class="btn btn-outline-success" id="writeBtn"
+           	       data-toggle="modal" data-target="#morebtn">더보기
+            	   </button></c:if>
 					</div>
 				</div>
 				
@@ -747,6 +801,52 @@ background: white;}
 	</div>
 	<!-- 오른쪽 사이드바 끝 -->
 	<!-- /#wrapper -->
+	
+	<!--BEAR 더보기 창  -->
+		<div class="modal fade" id="morebtn" data-backdrop="static"
+			data-keyboard="false" tabindex="-1"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg" >
+				<div class="modal-content">
+					<div class="modal-header" >
+						<div class="modal-body col-12">
+							<div class="card-header" ><h4 style="text-align: center;">팔로우 추천<button style="float: right;" onclick="closemodal()">x</button></h4>	
+								<div class="card-body" style="padding: 5px;">
+									<div class="card">
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+										<c:forEach var="justFollowMe1" items="${suggestFlist2 }" >
+									<div class="card">
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											<img src="<%=context %>/profile_image/${justFollowMe1.uimage}" class="rounded-circle" width="40"
+												height="40">
+												<a class="card-title text-dark">${justFollowMe1.unickName}</a>
+												<a class="card-subtitle mb-2 text-muted">@${justFollowMe1.uatid}</a>
+												<c:if test="${justFollowMe1.uonline eq 1 }">
+												<img src = "<%=context %>/image/online.png"  width="20" height="20">
+												</c:if>
+											<div>	
+											<button type="button"
+												class="btn btn-outline-success btn-sm float-right"
+												style="font-size: 1.2rem;" onclick="followchk(${justFollowMe1.uucode})" name="k${justFollowMe1.uucode}">팔로우</button>
+												
+												</div>
+												<h3 id = "bearsize" style="padding-left: 40px">&nbsp&nbsp${justFollowMe1.uintro}</h3>
+											
+										</div>
+									</div>
+								</c:forEach>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+	
+	
 </body>
 
 </html>
