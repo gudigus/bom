@@ -51,10 +51,20 @@ public class CoffeeController {
 	
 	@GetMapping(value = "/coffee/logout")
 	public String logout(HttpServletRequest req) {
-		String returnPage = "redirect:/bro/index";
+		String url = "redirect:/bro/index";
 		System.out.println("CoffeeController logout start..");
-		req.getSession().invalidate();
-		return returnPage;
+		HttpSession session = req.getSession();
+		User_info ui = null;
+		int uCode = -1;
+		try {
+			ui = (User_info)session.getAttribute("login");
+			uis.logout(ui);
+			session.invalidate();
+		}catch (Exception e) {
+			System.out.println("CoffeeController "+url+" ->"+e.getMessage());
+		}
+		
+		return url;
 	}
 	
 	// Interceptors
