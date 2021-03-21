@@ -55,7 +55,6 @@ public class CoffeeController {
 		System.out.println("CoffeeController logout start..");
 		HttpSession session = req.getSession();
 		User_info ui = null;
-		int uCode = -1;
 		try {
 			ui = (User_info)session.getAttribute("login");
 			uis.logout(ui);
