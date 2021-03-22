@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.spring.bom.model.yeah.Board;
+import com.spring.bom.model.yeah.Bookmark;
 import com.spring.bom.model.yeah.UserBookmarkBoard;
 import com.spring.bom.service.yeah.BookmarkService;
 
@@ -17,12 +17,6 @@ public class Yeah_Controller {
 
 	@Autowired
 	private BookmarkService bms;
-
-	@RequestMapping(value = "yeah/main")
-	public String main() {
-		System.out.println("Yeah_Controller main Start...");
-		return "yeah/main";
-	}
 
 	@RequestMapping(value = "yeah/bookmark")
 	public String bookmark(String ucode, Model model) {
@@ -36,11 +30,9 @@ public class Yeah_Controller {
 		
 		System.out.println("Yeah_Controller ubmBoardList.size()" + ubmBoardList.size());
 		model.addAttribute("ucode", int_ucode);
-		model.addAttribute("ubmBoardList", ubmBoardList);
+		model.addAttribute("ubmBoardList", ubmBoardList); // 주소가 넘어가기 때문에 
 		
 		for (int i = 0; i < ubmBoardList.size(); i++) {
-			// ubmBoardList.set(i,
-			// ubmBoardList.get(i)).setBattachSrc(ubmBoardList.get(i).getBattach().substring(6));
 			if (ubmBoardList.get(i).getBattach() != null) {
 				ubmBoardList.get(i).setBattachSrc(ubmBoardList.get(i).getBattach().substring(6));
 				ubmBoardList.get(i).setBattachType(ubmBoardList.get(i).getBattach().substring(0, 5));
@@ -51,27 +43,27 @@ public class Yeah_Controller {
 
 		return "yeah/bookmark";
 	}
-
-	@RequestMapping(value = "/yeah/delete", method = RequestMethod.GET)
-	public String delete(@RequestParam("ucode") String ucode, @RequestParam("bcode") String bcode, Model model) {
-		Board bd = new Board();
+	
+	@RequestMapping(value = "/yeah/update", method = RequestMethod.GET)
+	public String update(@RequestParam("ucode") String ucode, @RequestParam("bcode") String bcode, Model model) {
+		Bookmark bd = new Bookmark();
 		bd.setUcode(Integer.parseInt(ucode));
 		bd.setBcode(Integer.parseInt(bcode));
-		System.out.println("bd.ucode -> " + bd.getUcode());
-		System.out.println("bd.bcode -> " + bd.getBcode());
-		int result = bms.delete(bd);
-		System.out.println("Yeah_Controller delete result -> " + result);
+		System.out.println("Yeah_Controller update bd.ucode -> " + bd.getUcode());
+		System.out.println("Yeah_Controller update bd.bcode -> " + bd.getBcode());
+		int result = bms.update(bd);
+		
+		System.out.println("Yeah_Controller update result -> " + result);
 		return "forward:bookmark"; // Controller간 data 전달시 활용(Model에 담아서 파라메타 이동)
 	}
 
-	@RequestMapping(value = "/yeah/deleteAll", method = RequestMethod.GET)
+
+	@RequestMapping(value = "/yeah/updateAll", method = RequestMethod.GET)
 	public String deleteAll(@RequestParam("ucode") String ucode, Model model) {
-		bms.deleteAll(ucode);
-
-		return "yeah/bookmark";
-
+		int result = bms.updateAll(ucode);
+		System.out.println("Yeah_Controller update result -> " + result);
+		return "forward:bookmark"; // Controller간 data 전달시 활용(Model에 담아서 파라메타 이동)
 	}
-
 	
 
 }

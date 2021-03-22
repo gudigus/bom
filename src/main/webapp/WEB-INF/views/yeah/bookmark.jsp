@@ -131,7 +131,7 @@
 
 
 						<div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-							<form action="deleteAll">
+							<form action="updateAll">
 								<input type="hidden" name="ucode" value="${ucode }">
 								<button type="submit" class="dropdown-item">모든 북마크 지우기</button>
 							</form>
@@ -143,7 +143,7 @@
 						<div class="card">
 							<div class="card-body">
 								<!-- <button type="button" class="btn btn-light float-right">⋯</button> -->
-								<img src="/img/profile/${bookmark.uimage }"
+								<img src="<%=context %>/profile_image/"${bookmark.uimage }
 									class="rounded-circle" width="50"> <a
 									class="card-title text-dark">${bookmark.unickname }</a> <a
 									class="card-subtitle mb-2 text-muted">@${bookmark.uatid }</a> <a
@@ -173,7 +173,7 @@
 														<c:if test="${bookmark.q_attachtype eq 'video'}">
 															<div id="show_quote_video"
 																class="embed-responsive embed-responsive-16by9">
-																<video controls id="quote_video"
+																<video controls id="quote_video" width="100%"
 																	src="<%=context %>/video/${bookmark.q_attachsrc }">
 																</video>
 															</div>
@@ -225,11 +225,10 @@
 
 									<!-- 북마크 삭제 -->
 									<div class="dropdown-menu">
-										<form action="delete">
+										<form action="update">
 											<input type="hidden" name="ucode" value="${bookmark.ucode }">
 											<input type="hidden" name="bcode" value="${bookmark.bcode }">
-											<button type="submit" class="dropdown-item">${bookmark.ucode }북마크
-												삭제${bookmark.bcode }</button>
+											<button type="submit" class="dropdown-item">북마크 지우기</button>
 										</form>
 
 										<form>
