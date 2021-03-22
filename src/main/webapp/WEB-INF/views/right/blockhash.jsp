@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%
+	String context = request.getContextPath();
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -46,123 +49,84 @@
 
 	<div class="d-flex" id="wrapper">
 
-		<!-- Sidebar -->
+				<!-- Sidebar -->
 		<div class="border-right sidebar-fixed-top" id="sidebar-wrapper">
 			<div class="sidebar-heading" align="center">
 				<img src="/img/logo2.jpg" width="150" height="150">
 			</div>
 			<div class="list-group list-group-flush">
-				<a href="#" class="list-group-item list-group-item-action"> <img
+				<a href="/iron/timeline"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/home.svg" width="15" height="15"> 타임라인
-				</a> <a href="explore" class="list-group-item list-group-item-action">
-					<img src="/img/search.svg" width="15" height="15"> 검색하기
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/bell.svg" width="15" height="15"> 알림 <span
+				</a> <a href="/hoon/explore"
+					class="list-group-item list-group-item-action"> <img
+					src="/img/search.svg" width="15" height="15"> 검색하기
+				</a> <a href="alarm" class="list-group-item list-group-item-action">
+					<img src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/send.svg" width="15" height="15"> 쪽지
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
+				</a>
+				<!-- bear1 -->
+				<a href="/bear/chat" class="list-group-item list-group-item-action">
+					<img src="/img/send.svg" width="15" height="15"> 쪽지
+				</a> <a href="/yeah/bookmark"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/bookmark.svg" width="15" height="15"> 북마크
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/iron/profile/uatid=${user.uatid }"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/user.svg" width="15" height="15"> 프로필
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/right/moreSee"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/more.svg" width="15" height="15"> 더보기
-				</a> <a href="#" class="list-group-item list-group-item-action">
+				</a><a href="#" class="list-group-item list-group-item-action">
 					<button type="button" class="btn btn-outline-success">
 						<img src="/img/write.svg" width="15" height="15"> 글 쓰기
 					</button>
 				</a>
 				<div class="card">
 					<div class="card-body">
-						<div class="form-row">
-							<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-								width="50">
-							<div class="form-col ml-2">
-								<a class="card-title text-dark" style="font-size: 0.8em">${login.uNickname}</a><br>
-								<a class="card-subtitle mb-2 text-muted"
-									style="font-size: 0.8em">@${login.uAtid}</a>
-							</div>
-						</div>
+						<img src="<%=context %>/profile_image/${user.uimage }"
+							class="rounded-circle" width="50" width="50"> <a
+							class="card-title text-dark" style="font-size: 0.8em">${user.unickName }</a><br>
+						<a class="card-subtitle mb-2 text-muted" style="font-size: 0.8em">@${user.uatid }</a>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
 				</div>
-			</div>
 		</div>
+	</div>
 
 		<!-- /#sidebar-wrapper -->
 
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
-			<nav
-				class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-				<button class="btn btn-success" id="menu-toggle">←</button>
-			</nav>
-			<div class="alert alert-success" role="alert">
-				<a href="#" class="alert-link">좋아요</a>를 누르셨습니다.
-			</div>
+				<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+					<button class="btn btn-success" id="menu-toggle" onclick="location.href='updateEv'">←</button>
+				</nav>
 			<div class="container-fluid">
 				<p>
 				<div class="card">
-					<div class="card-header">글쓰기</div>
-					<div class="card-body">
-						<div class="form-group">
-							<textarea class="form-control" id="exampleFormControlTextarea1"
-								rows="3"></textarea>
-						</div>
-						<div class="btn-group" role="group" aria-label="Basic example">
-							<button type="button" class="btn btn-outline-secondary">미디어</button>
-							<button type="button" class="btn btn-outline-secondary">GIF</button>
-							<button type="button" class="btn btn-outline-secondary">투표</button>
-							<button type="button" class="btn btn-outline-secondary">예약하기</button>
-						</div>
-						<button type="submit" class="btn btn-success float-right">등록</button>
-					</div>
-				</div>
-				<!--글 정렬-->
-				<c:forEach begin="1" end="10" step="1">
-					<div class="card">
-						<div class="card-body">
-							<button type="button" class="btn btn-light float-right">⋯</button>
-							<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-								width="50"> <a class="card-title text-dark">닉네임</a> <a
-								class="card-subtitle mb-2 text-muted">@atid</a> <a
-								class="card-subtitle mb-2 text-muted">작성시간</a> <a href="#"
-								class="card-text" style="margin-top: 10px;">글내용 블라블라글내용
-								블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라 글내용 블라블라글내용
-								블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라 글내용 블라블라글내용
-								블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라 글내용 블라블라글내용
-								블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라</a>
-							<div align="center">
-								<div class="btn-group col-md-12" role="group"
-									aria-label="Button group with nested dropdown">
-									<button type="button" class="btn btn-secondary mr-3 btn-light"
-										data-toggle="tooltip" data-placement="top" title="답글">
-										<img src="/img/speech-bubble.svg" width="20" height="20">
-									</button>
-									<button type="button" class="btn btn-secondary btn-light mr-3"
-										data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
-										<img src="/img/bring.svg" width="20" height="20">
-									</button>
-									<button type="button" class="btn btn-secondary btn-light mr-3"
-										data-toggle="tooltip" data-placement="top" title="좋아요">
-										<img src="/img/heart.svg" width="20" height="20">
-									</button>
-									<button type="button"
-										class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
-										data-toggle="dropdown" aria-haspopup="true"
-										aria-expanded="false">
-										<img src="/img/share.svg" width="20" height="20">
-									</button>
-									<div class="dropdown-menu">
-										<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
-											class="dropdown-item" href="#">URL담아가기</a>
-									</div>
-								</div>
+				<h2>차단 관리</h2>
+				 <div class="btn-group me-2" role="group" aria-label="Second group">
+				<button type="button" class="btn btn-secondary" onclick="location.href='block'">계정 관리</button>
+				<button type="button" class="btn btn-light" onclick="location.href='blockhash'">해시태그 관리</button>
+				<button type="button" class="btn btn-secondary" onclick="location.href='blockword'">단어 관리</button></div>
+					<div align="center">
+					<a href="/right/plusBhash" class="list-group-item list-group-item-action"> <img
+						src="/img/plus-circle.svg" width="15" height="15"> 차단 추가
+					</a>
+						<c:forEach var="b" items="${bList}" varStatus="status">
+						<c:if test="${not empty b.bhashtag}">
+						<div class="card">
+							<div class="card-body">
+								<input id="${b.blcode}" type="hidden" value="${b.blcode}">
+								<label for="${b.blcode}"><span>#${b.bhashtag}</span></label>
+							    <input id="${b.blcode}" type="button" class="btn btn-outline-danger btn-sm float-right" value="차단 취소" style="font-size:0.7em;" onclick="location.href='blockdeletehash?blcode=${b.blcode}'"><br>	
 							</div>
 						</div>
+						</c:if>
+						</c:forEach>
 					</div>
-				</c:forEach>
-			</div>
+				</div>
+		</div>
 		</div>
 		<!-- /#page-content-wrapper -->
 

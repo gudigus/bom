@@ -47,69 +47,178 @@
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
 <style>
+#bearsize {
+	width: 550px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	text-align: left;
+}
+
 .dropdown-toggle.caret-off::after {
 	display: none;
 }
- 
-.card-body:hover{
-	background: #CBEBAD;
+
+a:hover {
+	text-decoration: none;
+	cursor: pointer;
 }
 
+.card-text:hover {
+	color: black;
+	text-decoration: none;
+}
 </style>
 <style>
 .dropdown-toggle.caret-off::after {
-   display: none;
-   resize: none;
+	display: none;
+	resize: none;
 }
 
 div#writeTextarea {
-   min-height: 50px;
-   border: none;
-   resize: none;
+	min-height: 50px;
+	border: none;
+	resize: none;
 }
 
 div#writeTextarea:focus {
-   outline: none;
-   box-shadow: none;
-   -webkit-box-shadow: none;
-   */
+	outline: none;
+	box-shadow: none;
+	-webkit-box-shadow: none;
 }
 
 select.custom-select {
-   margin-top: 10px;
+	margin-top: 10px;
 }
 
 select.custom-select:focus {
-   outline: none;
-   box-shadow: none;
-   -webkit-box-shadow: none;
+	outline: none;
+	box-shadow: none;
+	-webkit-box-shadow: none;
 }
 /*placeholder 설정하기*/
 [contenteditable=true]:empty:before {
-   content: attr(placeholder);
-   display: block; /* For Firefox */
+	content: attr(placeholder);
+	display: block; /* For Firefox */
 }
 
 input[type="file"] {
-   position: absolute;
-   width: 1px;
-   height: 1px;
-   padding: 0;
-   margin: -1px;
-   overflow: hidden;
-   clip: rect(0, 0, 0, 0);
-   border: 0;
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
 }
 
 label {
-   margin: 0px;
+	margin: 0px;
 }
 
 .nav-tabs .nav-link:not(.active) {
-    border-color: transparent !important;
-    color : #28a745;
+	border-color: transparent !important;
+	color: #28a745;
 }
 </style>
+
+<script type="text/javascript">
+
+function goProfile(){
+	location.href = "../iron/profile?uatid="+${user.uatid};
+}
+
+window.onload = function(){	//주혜
+	clickWriteBtn();
+	clickSaveBtn();
+	getFollower('<%=context %>');
+}
+
+function goSingleBoard(bbcode,bindex){
+	alert(bbcode+'로 이동합니다.');
+	location.href = 'singleBoard?bcode='+bbcode;
+}
+
+function clickLikeBtn(bbcode,btnIndex){
+	event.stopPropagation();
+	var index = btnIndex;
+	var bcode = bbcode;
+	var msg = '게시글['+bcode+']에 좋아요를 눌렀습니다!';
+	alert(msg);
+	$.ajax({
+		url : "<%=context%>/iron/AjaxLikeAction",
+		data:{ bcode: bcode }, 
+		dataType:'json',
+		success : function(data){
+			var str='';
+			$('#likeBtn'+index).empty();
+			if(data.ltype==0||data.ltype==null)
+				str += "<img src='/img/heart.svg' width='20' height='20'> " + data.likeCount
+			if(data.ltype==1)
+				str+= "<img src='/img/red_heart.svg' width='20' height='20'> "+ data.likeCount
+			$('#likeBtn'+index).append(str);
+			alert(".ajax clickLikeBtn str->"+str);
+		}
+	});
+}
+
+function viewBoardOptions(bbcode,bindex){
+	event.stopPropagation();
+	var index = bindex;
+	var bcode = bbcode;
+	var msg = '게시글['+bcode+']의 옵션을 눌렀습니다!';
+	alert(msg);
+	$.ajax({
+		url : "<%=context%>/iron/AjaxViewBoardOptions",
+		data:{ bcode: bcode }, 
+		dataType:'json',
+		success : function(data){
+			var str='';
+			$('#boardDropdownOption'+index).empty();
+			if(data.bbtype==0||data.bbtype==null)
+				str += "<a class='dropdown-item' onclick=bookmarkAction();> 북마크추가</a>"
+			if(data.bbtype==1)
+				str += "<a class='dropdown-item' onclick=bookmarkAction();> 북마크 삭제</a>"
+			$('#boardDropdownOption'+index).append(str+"<a class='dropdown-item' href='#'>URL담아가기</a>");
+			alert(".ajax viewBoardOptions str->"+str);
+		}
+	});
+}
+
+//팔로우 하는 로직
+function followchk(number){
+	
+	//name 에 k + number 쓰는 태그를찾아서 text변경
+	var textareaVal = $("button[name=k"+number+"]").text();
+	console.log("textareaVal + textareaVal" + textareaVal)
+	
+	var msg = { uopcode :number};
+	$.ajax({
+		url: '<%=context%>/bear/followchk',
+		data: msg,
+		type: "post",
+
+		success: function (res) {
+			console.log("저장성공 - > " +res)
+			
+			if(res == "1"){
+				console.log("저장성공")
+				  $("button[name=k"+number+"]").text("팔로잉");
+				  $("button[name=k"+number+"]").attr("class","btn btn-success btn-sm float-right");
+		
+			}else 
+				{console.log("저장실패")}
+				
+			 
+		}
+});	 
+}
+
+function closemodal(){
+	location.reload();
+}
+</script>
 
 </head>
 
@@ -123,50 +232,51 @@ label {
 				<img src="/img/logo2.jpg" width="150" height="150">
 			</div>
 			<div class="list-group list-group-flush">
-				<a href="/iron/timeline" class="list-group-item list-group-item-action"> <img
+				<a href="/iron/timeline"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/home.svg" width="15" height="15"> 타임라인
-				</a> 
-				
-				<a href="/hoon/explore" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/hoon/explore"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
-				</a> 
-				
-				<a href="alarm" class="list-group-item list-group-item-action"> <img
-					src="/img/bell.svg" width="15" height="15"> 알림 <span
+				</a> <!-- <a href="alarm" class="list-group-item list-group-item-action">
+					<img src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
-				</a>
+				</a> -->
 				<!-- bear1 -->
-				<a href="/bear/chat" class="list-group-item list-group-item-action"> <img
-					src="/img/send.svg" width="15" height="15"> 쪽지
-				</a>
-				
-				<a href="bookmark" class="list-group-item list-group-item-action"> <img
+				<a href="/bear/chat" class="list-group-item list-group-item-action">
+					<img src="/img/send.svg" width="15" height="15"> 쪽지
+				</a> <a href="/yeah/bookmark"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/bookmark.svg" width="15" height="15"> 북마크
-				</a> 
-				
-				<a href="/iron/profile/uatid=${user.uatid }" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/iron/profile?uatid=${user.uatid }"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/user.svg" width="15" height="15"> 프로필
-				</a> 
-				
-				<a href="more" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/right/moreSee"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/more.svg" width="15" height="15"> 더보기
-				</a> 
-				
+				</a>
+
 				<div class="list-group-item list-group-item-action">
-              		 <!--주혜 -->
-           	    <button type="button" class="btn btn-outline-success" id="writeBtn"
-           	       data-toggle="modal" data-target="#writeForm">
-            	      <img src="/img/write.svg" width="15" height="15"> 글 쓰기
-            	   </button>
-           		 </div>
-				
+					<!--주혜 -->
+					<button type="button" class="btn btn-outline-success" id="writeBtn"
+						data-toggle="modal" data-target="#writeForm">
+						<img src="/img/write.svg" width="15" height="15"> 글 쓰기
+					</button>
+				</div>
+
 				<div class="card">
 					<div class="card-body">
-						<img src="<%=context %>/profile_image/${user.uimage}" alt="no_image" class="rounded-circle" width="50"
-							width="50"> <a class="card-title text-dark">${user.unickName }</a> <a
-							class="card-subtitle mb-2 text-muted">@${user.uatid }</a>
+						<div class="form-row">
+							<img src="<%=context %>/profile_image/${user.uimage}"
+								alt="no_image" class="rounded-circle" width="50">
+							<div class="form-col ml-2">
+								<a class="card-title text-dark" style="font-size: 0.8em">${user.unickName }</a><br>
+								<a class="card-subtitle mb-2 text-muted"
+									style="font-size: 0.8em">@${user.uatid }</a>
+							</div>
+						</div>
 					</div>
-					<button type="button" class="btn btn-success">로그아웃</button>
+					<button type="button" class="btn btn-success" onclick="location.href='../coffee/logout'">로그아웃</button>
 				</div>
 			</div>
 		</div>
@@ -177,36 +287,42 @@ label {
 			<nav
 				class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top"
 				style="left: 241px; right: 241px; z-index: 5;">
-				<form class="well form-search" action="searchView" method="get" id="jh_form">
+				<form class="well form-search" action="searchView" method="get"
+					id="jh_form">
 					<div class="input-group">
 						<input type="text" ID="datebox" Class="form-control" name="search"
-							data-toggle="dropdown" required="required" placeholder="봄 검색" style="width: 475px;"></input>
-				
-						<table id="demolist" class="dropdown-menu" style="z-index: 5; width: 475px;">
+							data-toggle="dropdown" required="required" placeholder="봄 검색"
+							style="width: 475px;"></input>
+
+						<table id="demolist" class="dropdown-menu"
+							style="z-index: 5; width: 475px;">
 							<tr>
 								<td style="font-weight: normal; padding-bottom: 15px;">최근
-									<button type="reset" id="del_ajax" style="font-size: 12px; float: right" onclick="searchdel()">전체지우기</button>
+									<button type="reset" id="del_ajax"
+										style="font-size: 12px; float: right" onclick="searchdel()">전체지우기</button>
 								</td>
 							</tr>
-							<tr><td>
-								<c:if test="${searchkeyword.size() == 0}">
+							<tr>
+								<td><c:if test="${searchkeyword.size() == 0}">
 										사용자,화제,키워드를 검색해보세요
-								</c:if></td></tr>
+								</c:if></td>
+							</tr>
 							<c:forEach var="Junghun" items="${searchkeyword }" begin="0"
 								end="10">
 								<tr id="searchkeyword">
-									<td class="dropdown-li" style="padding: 5px;
-									 width: 470px;">
-									 
-									 <div class="listdel">
-									 	<c:choose>
-											<c:when test="${Junghun.search.contains('#')}">
+									<td class="dropdown-li" style="padding: 5px; width: 470px;">
+
+										<div class="listdel">
+											<c:choose>
+												<c:when test="${Junghun.search.contains('#')}">
 												${Junghun.search }
 											</c:when>
-											<c:otherwise>
-												<a id="row" href="searchView?search=${Junghun.search }">${Junghun.search }</a>
-											</c:otherwise>
-										</c:choose></div></td>
+												<c:otherwise>
+													<a id="row" href="searchView?search=${Junghun.search }">${Junghun.search }</a>
+												</c:otherwise>
+											</c:choose>
+										</div>
+									</td>
 								</tr>
 							</c:forEach>
 						</table>
@@ -238,13 +354,17 @@ label {
 			<div class="container-fluid">
 				<!--글 정렬-->
 				<div class="panel panel-default">
-				<p><p><p><br>
-					<img src="<%=context%>/image/ti433a10907.jpg" id=mainImage alt="slide" style="width:800px; height:300px;  margin-left: auto; margin-right: auto; display: block;"/>
+					<p>
+					<p>
+					<p>
+						<br> <img src="<%=context%>/image/ti433a10907.jpg"
+							id=mainImage alt="slide"
+							style="width: 800px; height: 300px; margin-left: auto; margin-right: auto; display: block;" />
 
-<script>
+						<script>
 	var myImage = document.getElementById("mainImage");
 	var imageArray = [ "<%=context%>/image/ti433a10907.jpg",
-			"<%=context%>/image/1286850_521880_5046.jpg", "<%=context%>/image/coco.jpg" ];
+			"<%=context%>/image/코로나.png", "<%=context%>/image/중앙.png" ];
 	var imageIndex = 0;
 
 	function changeImage() {
@@ -256,29 +376,30 @@ label {
 	}
 	setInterval(changeImage, 3000);
 </script>
-					
-					
-					
 					<table class="table">
 						<tr>
 							<td class="table-title">나를 위한 해시태그</td>
 						</tr>
-						<tr><td>
-						<div class="card-body" style="padding: 5px;">
-							<c:forEach var="tag" items="${tag_list}" varStatus="status">
-								<c:if test="${status.count <=3 }">
-									<div class="card">
-										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-											<div>
-												<a href="searchView?search=%23${tag.hname}">#${tag.hname}</a>
-												 <span >${tag.hcount }봄</span>
+						<tr>
+							<td>
+								<div class="card-body" style="padding: 5px;">
+									<c:forEach var="tag" items="${tag_list}" varStatus="status">
+										<c:if test="${status.count <=3 }">
+											<div class="card">
+												<div class="card-body"
+													style="font-size: 0.8rem; padding: 10px;">
+													<div>
+														<a href="searchView?search=%23${tag.hname}">#${tag.hname}</a>
+														<p>
+														<span>${tag.hcount }봄</span>
+													</div>
+												</div>
 											</div>
-										</div>
-									</div>
-								</c:if>
-							</c:forEach>
-						</div>
-						</td></tr>
+										</c:if>
+									</c:forEach>
+								</div>
+							</td>
+						</tr>
 					</table>
 				</div>
 			</div>
@@ -289,59 +410,69 @@ label {
 		<div class="bg-light border-left" id="sidebar-wrapper2">
 			<div class="list-group list-group-flush">
 				<!-- 검색창 -->
-			<div class="list-group-item list-group-item-action bg-light">
-				<div id="drop_the_text">
-					<!-- 엔터치면 searchData() 실행 -->
-					<form class="well form-search" action="searchView" method="get"
-						id="jh_form">
-						<input class="form-control" id="search" placeholder="봄 검색"
-							name="search"
-							onkeypress="if( event.keyCode == 13 ){searchData();}">
-					</form>
-				</div>
-			</div>
-				<div class="list-group-item list-group-item-action bg-light"
-				style="padding: 5px;">
-				<div class="card bg-light mb-3">
-					<div class="card-header">팔로우 추천</div>
-					<div class="card-body" style="padding: 5px;">
-						<c:if test="${suggestFlist2_size>0 }">
-							<c:forEach var="justFollowMe" items="${suggestFlist2 }">
-								<div class="card">
-									<div class="card-body"
-										style="font-size: 0.8rem; padding: 10px;">
-										<img src="<%=context %>/profile_image/${justFollowMe.uimage}"
-											class="rounded-circle" width="20" height="20"> 
-											<a class="card-title text-dark">${justFollowMe.unickName}</a>
-											<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatId}</a>
-										<button type="button"
-											class="btn btn-outline-success btn-sm float-right"
-											style="font-size: 0.8rem;">팔로우</button>
-									</div>
-								</div>
-							</c:forEach>
-						</c:if>
-						<!-- 팔로우하는 유저가 없을 경우 관심항목이 비슷한 사람을 추천 -->
-						<c:if test="${suggestFlist2_size<1 }">
-							<c:forEach var="justFollowMe" items="${suggestFlist2 }">
-								<div class="card">
-									<div class="card-body"
-										style="font-size: 0.8rem; padding: 10px;">
-										<img
-											src="${resourcePath }/profile_image/${justFollowMe.uimage}"
-											class="rounded-circle" width="20" height="20"> <a
-											class="card-title text-dark">${justFollowMe.unickName}</a> <a
-											class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
-										<button type="button"
-											class="btn btn-outline-success btn-sm float-right"
-											style="font-size: 0.8rem;">팔로우</button>
-									</div>
-								</div>
-							</c:forEach>
-						</c:if>
+				<div class="list-group-item list-group-item-action bg-light">
+					<div id="drop_the_text">
+						<!-- 엔터치면 searchData() 실행 -->
+						<form class="well form-search" action="searchView" method="get"
+							id="jh_form">
+							<input class="form-control" id="search" placeholder="봄 검색"
+								name="search"
+								onkeypress="if( event.keyCode == 13 ){searchData();}">
+						</form>
 					</div>
 				</div>
-			</div>
+				<div class="list-group-item list-group-item-action bg-light"
+					style="padding: 5px;">
+					<div class="card bg-light mb-3">
+						<div class="card-header">팔로우 추천</div>
+						<div class="card-body" style="padding: 5px;">
+							<c:if test="${suggestFlist2_size>0 }">
+								<c:forEach var="justFollowMe" items="${suggestFlist2 }"
+									begin="0" end="2">
+									<div class="card">
+										<div class="card-body"
+											style="font-size: 0.8rem; padding: 10px;">
+											<img src="<%=context %>/profile_image/${justFollowMe.uimage}"
+												class="rounded-circle" width="20" height="20"> <a
+												class="card-title text-dark">${justFollowMe.unickName}</a> <a
+												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+											<button type="button"
+												class="btn btn-outline-success btn-sm float-right"
+												style="font-size: 0.8rem;"
+												onclick="followchk(${justFollowMe.uucode})"
+												name=k${justFollowMe.uucode}>팔로우</button>
+										</div>
+									</div>
+								</c:forEach>
+							</c:if>
+							<!-- 팔로우하는 유저가 없을 경우 관심항목이 비슷한 사람을 추천 -->
+							<c:if test="${suggestFlist2_size<1 }">
+								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
+									<div class="card">
+										<div class="card-body"
+											style="font-size: 0.8rem; padding: 10px;">
+											<img
+												src="${resourcePath }/profile_image/${justFollowMe.uimage}"
+												class="rounded-circle" width="20" height="20"> <a
+												class="card-title text-dark">${justFollowMe.unickName}</a> <a
+												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+											<button type="button"
+												class="btn btn-outline-success btn-sm float-right"
+												style="font-size: 0.8rem;">팔로우</button>
+										</div>
+									</div>
+								</c:forEach>
+							</c:if>
+						</div>
+						<c:if test="${suggestFlist2_size>0 }">
+							<button type="button" class="btn btn-outline-success"
+								id="writeBtn" data-toggle="modal" data-target="#morebtn">더보기
+							</button>
+						</c:if>
+
+					</div>
+				</div>
+
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
@@ -350,11 +481,12 @@ label {
 							<c:forEach var="tag" items="${tag_list}" varStatus="status">
 								<c:if test="${status.count <=3 }">
 									<div class="card">
-										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+										<div class="card-body"
+											style="font-size: 0.8rem; padding: 10px;">
 											${tag.hrank}위
 											<div>
-												<a href="searchView?search=%23${tag.hname}">#${tag.hname}</a> <span class="float-right">${tag.hcount }
-													봄</span>
+												<a href="searchView?search=%23${tag.hname}">#${tag.hname}</a>
+												<span class="float-right">${tag.hcount } 봄</span>
 											</div>
 										</div>
 									</div>
@@ -377,45 +509,76 @@ label {
 	</div>
 	<!-- 오른쪽 사이드바 끝 -->
 	<!--GOD 글쓰기 팝업 시작-->
-		<form action="../god/write" method="post" enctype="Multipart/form-data" onsubmit="return checkWrite()">
+	<form action="../god/write" method="post" enctype="Multipart/form-data"
+		onsubmit="return checkWrite()">
 		<!--실제 값을 보내는곳 -->
 		<input type="hidden" name="ucode" value="${user.getUcode() }">
-		<input type="hidden" name="savebcode">
-		<input type="hidden" name="bcontent">
-		<input type="hidden" name="bregdate">
-		<input type="hidden" name="btype">
-		<input type="hidden" name="banchor" value="0">
-		<input type="hidden" name="image">
-		<input type="hidden" name="video">
-		<input type="hidden" name="vote">
-		<input type="hidden" name="save">
-		<input type="hidden" name="bsaveorrsvd">
+		<input type="hidden" name="savebcode"> <input type="hidden"
+			name="bcontent"> <input type="hidden" name="bregdate">
+		<input type="hidden" name="btype"> <input type="hidden"
+			name="banchor" value="0"> <input type="hidden" name="image">
+		<input type="hidden" name="video"> <input type="hidden"
+			name="vote"> <input type="hidden" name="save"> <input
+			type="hidden" name="bsaveorrsvd"> <input type="hidden"
+			name="bbcode"> <input type="hidden" name="hashtags">
 		<!--실제 값을 보내는곳 끝 -->
 		<div class="modal fade" id="writeForm" data-backdrop="static"
 			data-keyboard="false" tabindex="-1"
 			aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
+			<div class="modal-dialog modal-dialog-scrollable">
 				<div class="modal-content">
 					<div class="modal-header">
 						<fieldset class="w-100">
-							<button type="button" id="realCloseWrite" class="close" data-dismiss="modal" style="display:none;"></button>
-							<button type="button" id="closeWrite" class="close" style="float: right;"
-								data-toggle="modal" data-target="#saveModal"
-								 aria-label="Close">
+							<button type="button" id="selectToAtid" class="btn btn-light"
+								data-toggle="modal" data-target="#towhom">받는 사람</button>
+							<button type="button" id="realCloseWrite" class="close"
+								data-dismiss="modal" style="display: none;"></button>
+							<button type="button" id="closeWrite" class="close"
+								style="float: right;" data-toggle="modal"
+								data-target="#saveModal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
-							<a
-								style="float: right; color: black; text-decoration: none;"
+							<a style="float: right; color: black; text-decoration: none;"
 								data-toggle="modal" data-target="#tempForm">임시 저장한 봄 <span
 								class="badge badge-success" id="sumNum"></span>
 							</a>
 						</fieldset>
 					</div>
 					<div class="modal-body col-12">
-						<img src="<%=context %>/profile_image/${user.uimage}" class="rounded-circle col-1 float-left"
+						<!-- 인용부분 -->
+						<div class="col-12 float-left" id="QuoteArea"
+							style="display: none; font-size: 0.8em;">
+							<div class='card'>
+								<div class='card-body'>
+									<img id="quote_profile" src="" alt='no_image'
+										class='rounded-circle' width='30'> <a
+										class='card-title text-dark' id="quote_nickname"></a> <a
+										class='card-subtitle mb-2 text-muted' id="quote_atid"></a>
+									<div class='card-text mt-2 mb-0' style="height: 100%;"
+										id="quote_content"></div>
+									<div class="quote_file mt-2" style="display: none;">
+										<img id="quote_img" src="<%=context %>" class="img-fluid" />
+										<div id="show_quote_video"
+											class="embed-responsive embed-responsive-16by9">
+											<video controls id="quote_video" src="<%=context %>">
+											</video>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--인용부분 끝 -->
+						<!--답글 부분-->
+						<div id="ReplyArea" style="display: none; font-size: 0.8em;">
+							<a id="toreply" style="color: #B2B2B2"></a>에게 보내는 답글
+						</div>
+						<!--답글부분 끝-->
+						<img src="<%=context %>/profile_image/${user.uimage}"
+							class="rounded-circle col-1 float-left mt-3"
 							style="padding: 0px;" width="50" width="50">
 						<div contentEditable="true" id="writeTextarea"
-							class="col-11 float-left" placeholder="당신의 이야기를 들려주세요." autofocus></div>
+							class="col-11 float-left mt-3" placeholder="당신의 이야기를 들려주세요."
+							autofocus></div>
 						<!--투표-->
 						<div class="card" id="vote_form" style="display: none;">
 							<ul class="list-group list-group-flush">
@@ -425,7 +588,8 @@ label {
 											placeholder="선택1">
 									</div>
 									<div class="form-group">
-										<input type="text" name="vselect2" class="form-control" placeholder="선택2">
+										<input type="text" name="vselect2" class="form-control"
+											placeholder="선택2">
 									</div>
 									<div class="form-group" id="pick3" style="display: none;">
 										<input type="text" name="vselect3" class="form-control"
@@ -439,13 +603,12 @@ label {
 										class="btn btn-outline-secondary btn-sm">+</button>
 								</li>
 								<li class="list-group-item">
-								<!--복수선택 on / null 로 전달 -->
+									<!--복수선택 on / null 로 전달 -->
 									<div class="form-check">
-      									<input class="form-check-input" type="checkbox" id="multipleChk" name="multipleChk">
-      									<label class="form-check-label" for="multipleChk">
-        									중복 투표
-      									</label>
-    									</div>
+										<input class="form-check-input" type="checkbox"
+											id="multipleChk" name="multipleChk"> <label
+											class="form-check-label" for="multipleChk"> 중복 투표 </label>
+									</div>
 								</li>
 								<li class="list-group-item">
 									<h5 class="card-title">투표 기간</h5>
@@ -455,8 +618,8 @@ label {
 											class="col-md-3">분</label>
 									</div>
 									<div class="form-row">
-										<select id="date" name="date" class="form-control col-md-3 mr-5 ml-2"
-											required="required">
+										<select id="date" name="date"
+											class="form-control col-md-3 mr-5 ml-2" required="required">
 											<c:forEach var="i" begin="0" end="7" step="1">
 												<c:if test="${i eq '1'}">
 													<option selected="selected">${i}</option>
@@ -465,8 +628,8 @@ label {
 													<option>${i}</option>
 												</c:if>
 											</c:forEach>
-										</select> <select name="hour" id="hour" class="form-control col-md-3 mr-5"
-											required="required">
+										</select> <select name="hour" id="hour"
+											class="form-control col-md-3 mr-5" required="required">
 											<c:forEach var="i" begin="0" end="23" step="1">
 												<option>${i}</option>
 											</c:forEach>
@@ -503,17 +666,20 @@ label {
 					<div class="modal-footer">
 						<fieldset class="w-100">
 							<span class="btn-group" role="group" aria-label="Basic example">
-								<button type="button" id="mediaDelete" class="btn btn-danger" style="display:none;">미디어 삭제</button>
-								<label id="media" class="btn btn-outline-secondary rounded-left" for="media_file">미디어</label>
+								<button type="button" id="mediaDelete" class="btn btn-danger"
+									style="display: none;">미디어 삭제</button> <label id="media"
+								class="btn btn-outline-secondary rounded-left" for="media_file">미디어</label>
 								<input name="attach" type="file" class="custom-file-input"
 								accept="video/*, image/*" id="media_file">
 								<button type="button" id="displayVote"
 									class="btn btn-outline-secondary">투표</button>
-								<button type="button" id="voteDelete" class="btn btn-danger" style="display:none;">투표 삭제</button>
+								<button type="button" id="voteDelete" class="btn btn-danger"
+									style="display: none;">투표 삭제</button>
 								<button type="button" class="btn btn-outline-secondary"
 									id="reserveBtn" data-toggle="modal" data-target="#reserveForm">예약하기</button>
 							</span>
-							<button type="submit" id="writeSubmit" class="btn btn-success float-right" disabled>봄</button>
+							<button type="submit" id="writeSubmit"
+								class="btn btn-success float-right" disabled>봄</button>
 						</fieldset>
 					</div>
 				</div>
@@ -530,10 +696,10 @@ label {
 					<div class="modal-header">
 						<h5 class="modal-title">봄 예약하기</h5>
 						<div class="form-row">
-						<button type="button" id="reserveDelete"
-							class="btn btn-light btn-sm mr-1" style="display:none;">지우기</button>
-						<button type="button" id="reserveChk"
-							class="btn btn-success btn-sm float-right">예약</button>
+							<button type="button" id="reserveDelete"
+								class="btn btn-light btn-sm mr-1" style="display: none;">지우기</button>
+							<button type="button" id="reserveChk"
+								class="btn btn-success btn-sm float-right">예약</button>
 						</div>
 					</div>
 					<div id="checkTime" class="alert alert-danger" role="alert">
@@ -555,13 +721,13 @@ label {
 
 								int year = Integer.parseInt(sdf1.format(d));
 							%>
-							<select name="year" id="year" class="form-control col-md-3 mr-5 ml-2"
-								required="required">
+							<select name="year" id="year"
+								class="form-control col-md-3 mr-5 ml-2" required="required">
 								<option value="<%=year%>년" selected="selected"><%=year%></option>
 								<option value="<%=year + 1%>년"><%=year + 1%></option>
 								<option value="<%=year + 2%>년"><%=year + 2%></option>
-							</select> <select name="month" id="month" class="form-control col-md-3 mr-5"
-								required="required">
+							</select> <select name="month" id="month"
+								class="form-control col-md-3 mr-5" required="required">
 								<option value="01월">1</option>
 								<option value="02월">2</option>
 								<option value="03월">3</option>
@@ -614,8 +780,8 @@ label {
 								for="minute" class="col-md-3">분</label>
 						</div>
 						<div class="form-row">
-							<select name="hours" id="hours" class="form-control col-md-3 mr-5 ml-2"
-								required="required">
+							<select name="hours" id="hours"
+								class="form-control col-md-3 mr-5 ml-2" required="required">
 								<option value="00시">0</option>
 								<option value="01시">1</option>
 								<option value="02시">2</option>
@@ -702,12 +868,11 @@ label {
 								<option value="57분">57</option>
 								<option value="58분">58</option>
 								<option value="59분">59</option>
-								<option value="60분">60</option>
 							</select>
 						</div>
 					</div>
 					<div class="modal-footer">
-						
+
 						<button type="button" class="close" id="reserveClose"
 							data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
@@ -726,20 +891,20 @@ label {
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title">임시 저장한 봄</h5>
-						<button type="button" id="editSave" class="btn btn-success btn-sm float-right">수정</button>
+						<button type="button" id="editSave"
+							class="btn btn-success btn-sm float-right">수정</button>
 					</div>
 					<div class="modal-body col-12">
 						<ul class="nav nav-tabs" id="myTab" role="tablist">
-							<li class="nav-item" role="presentation">
-								<a class="nav-link active" id="save-tab" data-toggle="tab" href="#save">저장
-								 <span class="badge badge-success" id="saveNum"></span>
-								</a>
-							</li>
-							<li class="nav-item" role="presentation">
-								<a class="nav-link" id="reserve-tab" data-toggle="tab" href="#reserve">예약
-								 <span class="badge badge-success" id="reserveNum"></span>
-								</a>
-							</li>
+							<li class="nav-item" role="presentation"><a
+								class="nav-link active" id="save-tab" data-toggle="tab"
+								href="#save">저장 <span class="badge badge-success"
+									id="saveNum"></span>
+							</a></li>
+							<li class="nav-item" role="presentation"><a class="nav-link"
+								id="reserve-tab" data-toggle="tab" href="#reserve">예약 <span
+									class="badge badge-success" id="reserveNum"></span>
+							</a></li>
 						</ul>
 						<div class="tab-content" id="myTabContent">
 							<div class="tab-pane fade show active" id="save">
@@ -753,9 +918,11 @@ label {
 						</div>
 					</div>
 					<div class="modal-footer">
-						<div id="editBtnGroup" class="mr-auto" style="display:none;">
-						<button type="button" id="cancelEditSave" class="btn btn-secondary btn-sm">취소</button>
-						<button type="button" id="deleteEditSave" class="btn btn-danger btn-sm">삭제</button>
+						<div id="editBtnGroup" class="mr-auto" style="display: none;">
+							<button type="button" id="cancelEditSave"
+								class="btn btn-secondary btn-sm">취소</button>
+							<button type="button" id="deleteEditSave"
+								class="btn btn-danger btn-sm">삭제</button>
 						</div>
 						<button type="button" class="close" id="saveClose"
 							data-dismiss="modal" aria-label="Close">
@@ -779,8 +946,7 @@ label {
 						</button>
 					</div>
 					<div class="modal-body text-center">
-						이 내용을 저장하시면 <br>
-						다음에 이어서 작성하실 수 있습니다.
+						이 내용을 저장하시면 <br> 다음에 이어서 작성하실 수 있습니다.
 					</div>
 					<div class="modal-footer">
 						<button type="button" id="notsaveBtn" class="btn btn-secondary">
@@ -791,33 +957,79 @@ label {
 			</div>
 		</div>
 		<!--GOD 저장 팝업 끝-->
-		</form>
-		
-		<!--GOD 글쓰기 폼 기능-->
-		<script type="text/javascript">
+	</form>
+	<!--답글보낼 사람 선택하는 MODAL-->
+	<div class="modal fade" id="towhom" tabindex="-1">
+		<div class="modal-dialog modal-sm modal-dialog-scrollable">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-row col-12">
+						<input name="search_user" class="form-control col-8 mr-1 ml-2"
+							type="search" placeholder="사용자 입력">
+						<button onclick="search_user('<%=context %>');"
+							class="btn btn-outline-success col-3 float-right ml-1"
+							type="button">검색</button>
+					</div>
+					<ul id="followlist" class="list-group list-group-flush">
+						<!-- <li class="list-group-item list-group-item-action">Cras justo odio</li> -->
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-sm btn-outline-secondary"
+						data-dismiss="modal">취소</button>
+					<button id="selectSendUser" type="button"
+						class="btn btn-sm btn-outline-success">선택</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--GOD 글쓰기 폼 기능-->
+	<script type="text/javascript">
 		/*예약을 해뒀는지(현재시간으로 안바뀌게)*/
 		var reserve=0; //0 안함 1 함 -> bregdate 설정
-		var btype=0; // 0 = noraml, 1=reply, 2=scrap, 3=quote
+		var btype=0; // 0 = noraml, 1=reply, 2=scrap
 		var bvote=0; //0 안함 1 함
 		var imgorvideo=0; //0이면 없는거 1이면 image 2이면 video
 		var save=0; //0이면 save x, 1이면 save
+		
 		<!--글 쓰기전에 값 input에 넣기--> 
 		function checkWrite(){
 			//bcontent 넣기
-			var write=$("#writeTextarea").html();
-			if(write.includes("<div>")){
-				write=write.replaceAll("<div>","<br>");
-				write=write.replaceAll("</div>","");
+			var write;
+			if(btype==1){
+				write=$("#toreply").text()+" ";
+				write+=$("#writeTextarea").html();
 			}
-			if(write.includes('#')){
-				write = write.replace(/^#([^\s]+)/g, '<a href="../hoon/searchView?search=%23$1">#$1</a>'); //맨앞에 해시태그 쓴거
-				write = write.replace(/\s#([^\s]+)/g, ' <a href="../hoon/searchView?search=%23$1">#$1</a>'); //앞에공백 해시태그
-				//write = write.replace(/>#([^\s]+)/g, '><a href="../hoon/searchView?search=%23$1">#$1</a>'); 
+			else
+				write=$("#writeTextarea").html();
+			
+			write=write.replace("&nbsp;", " ");
+			var splitedWrite=write.split(' ');
+			var linkedContent = '';
+			var hash='';
+			for(var word in splitedWrite){
+				word = splitedWrite[word];
+				//해시태그처리
+				if(word.indexOf('#')==0){
+					hash+=word;
+					word="<a href='../hoon/searchView?search=%23"+word.substring(1, word.length)+"'>"+word+"</a>";
+				}
+				//어노테이션처리
+				if(word.indexOf('@')==0){
+					word="<a href='../iron/profile?uatid="+word.substring(1, word.length)+"'>"+word+"</a>";
+				}
+				linkedContent += word+' ';
 			}
-			if(write.includes('@')){
-				write=write.replace(/^@([^\s]+)/g, '<a href="../iron/profile?uatid=$1">@$1</a>');
-				write=write.replace(/\s@([^\s]+)/g, ' <a href="../iron/profile?uatid=$1">@$1</a>');
-			}
+			$("input[name=hashtags]").attr("value", hash);
+			write=linkedContent;
+			
 			$('input[name=bcontent]').attr('value', write);
 			//bregdate 넣기
 			if(reserve==0)
@@ -841,8 +1053,6 @@ label {
 			else if(btype==1)
 				$('input[name=btype]').attr('value','reply');
 			else if(btype==2)
-				$('input[name=btype]').attr('value','scrap');
-			else if(btype==3)
 				$('input[name=btype]').attr('value','quote');
 			
 			//video인지 image인지 구분
@@ -857,10 +1067,145 @@ label {
 			else if(bvote==1)
 				$('input[name=vote]').attr('value','1');
 			
+			if(!$("input[name=bbcode]").val())
+				$("input[name=bbcode]").attr('value', 0);
 			return true;
 		}
 		
-		<!--글쓰면 글등록 버튼 활성화 -->
+		//사용자 검색 후 bcontent에 값 추가
+		$("#selectSendUser").click(function(){
+			var selectUser=$("input:radio[name=clickuatid]:checked").val();
+			if(!(selectUser==null || selectUser=="")){
+				$("#writeTextarea").append("@"+selectUser+" ");
+			}
+			$("#towhom .close").click();
+		});
+		
+		//사용자 검색 아작스
+		function search_user(ctx){
+			$("#followlist").html("");
+			var search_value=$("input[name=search_user]").val();
+			if(search_value==null || search_value==""){
+				var str="";
+				$.ajax({
+					url:"<%=context%>/god/getFollowerList",
+					data:{ucode:${user.getUcode()}}, 
+					dataType:'json',
+					async:false,
+					success:function(list){
+						for(var i=0; i<list.length; i++){
+							str+="<li class='list-group-item list-group-item-action'>"
+							+"<img alt='no_image' src='"+ctx+"/profile_image/"+list[i].uimage+"' class='rounded-circle' width='30'>"
+							+"<span class='card-title text-dark ml-1' style='font-size:0.8em;'>"+list[i].unickname+"</span>" 
+							+"<span class='card-subtitle mb-2 text-muted ml-1' style='font-size:0.8em;'>@"+list[i].uatid+"</span>"
+							+"<input type='radio' class='float-right mt-2' name='clickuatid' value='"+list[i].uatid+"'>"
+							+"</li>";
+						}
+					
+					$("#followlist").append(str);
+					},
+				 error : function(request,status,error) {
+			        alert("message:"+request.responseText+"\n"+"Error -> "+error);
+				}});
+			}
+			else{
+				var str="";
+				$.ajax({
+					url:"<%=context%>/god/getSearchUser",
+					data:{search_value:search_value},
+					dataType:'json',
+					async:false,
+					success:function(list){
+						for(var i=0; i<list.length; i++){
+							str+="<li class='list-group-item list-group-item-action'>"
+							+"<img alt='no_image' src='"+ctx+"/profile_image/"+list[i].uimage+"' class='rounded-circle' width='30'>"
+							+"<span class='card-title text-dark ml-1' style='font-size:0.8em;'>"+list[i].unickname+"</span>" 
+							+"<span class='card-subtitle mb-2 text-muted ml-1' style='font-size:0.8em;'>@"+list[i].uatid+"</span>"
+							+"<input type='radio' class='float-right mt-2' name='clickuatid' value='"+list[i].uatid+"'>"
+							+"</li>";
+						}
+					$("#followlist").append(str);
+					},
+				 error : function(request,status,error) {
+			        alert("message:"+request.responseText+"\n"+"Error -> "+error);
+				}});
+			}
+		}
+		
+		//페이지 로드 시 팔로워 목록 가져오기
+		function getFollower(ctx){
+				var str="";
+				$.ajax({
+					url:"<%=context%>/god/getFollowerList",
+				data:{ucode:${user.getUcode()}},
+				dataType:'json',
+				async:false,
+				success:function(list){
+					for(var i=0; i<list.length; i++){
+						str+="<li class='list-group-item list-group-item-action'>"
+						+"<img alt='no_image' src='"+ctx+"/profile_image/"+list[i].uimage+"' class='rounded-circle' width='30'>"
+						+"<span class='card-title text-dark ml-1' style='font-size:0.8em;'>"+list[i].unickname+"</span>" 
+						+"<span class='card-subtitle mb-2 text-muted ml-1' style='font-size:0.8em;'>@"+list[i].uatid+"</span>"
+						+"<input type='radio' class='float-right mt-2' name='clickuatid' value='"+list[i].uatid+"'>"
+						+"</li>";
+					}
+						
+					$("#followlist").append(str);
+				},
+				 error : function(request,status,error) {
+				        alert("message:"+request.responseText+"\n"+"Error -> "+error);
+				}
+			});
+		}
+		
+		
+		//클릭시 답글은 반응안하게
+		$('.replySetting').click(function(e){
+			event.stopPropagation();
+			$("#writeBtn").click();
+			btype=1;
+		});
+		
+		//reply시 bbcode 세팅
+		function reply_click(code, atid){
+			$("input[name=bbcode]").attr("value",code);
+			$('#ReplyArea').css("display","block");
+			$('#toreply').text("@"+atid);
+		}
+
+		//클릭시 스크랩 반응안하게
+		$('.scrapSetting').click(function(e){
+			e.stopPropagation();
+			$("#writeBtn").click();
+			btype=2;
+		});
+		  
+		//인용시 bbcode와 인용디스플레이 세팅
+		function scrap_click(code, index,nickname, atid, profile, type, src, context){
+			var str="";
+			$("input[name=bbcode]").attr("value", code);
+			$("#QuoteArea").css("display","block");
+			$("#quote_nickname").text(nickname); 
+			var content = $("input#tagContent"+index).attr('value');
+			$("#quote_content").html(content);
+			$("#quote_atid").text("@"+atid); 
+			$("#quote_profile").attr("src", profile);
+			if(type=='image'){
+				$(".quote_file").css("display","block");
+				$("#show_quote_video").css("display","none");
+				var img=context+"/image/"+src;
+				$("#quote_img").attr("src", img);
+			}
+			else if(type=='video'){
+				$(".quote_file").css("display","block");
+				var video=context+"/video/"+src;
+				$("#quote_video").attr("src", video);
+			}
+			//투표버튼은 비활성화
+			$("#displayVote").attr("disabled","disabled");
+		}  
+		
+		<!--글쓰면 글등록 버튼 활성화 --> 
 		$("#writeTextarea").on("propertychange change keyup paste input",
 				function(event) {
 					$('#writeSubmit').attr('disabled', false);
@@ -1025,7 +1370,37 @@ label {
 				success:function(data){
 					$("input[name=ucode]").attr('value', data.ucode);
 					$("input[name=savebcode]").attr('value', data.bcode);
-					$("#writeTextarea").html(data.bcontent);	
+					$("#writeTextarea").html(data.bcontent);
+					//답글일경우
+					if(data.btype == "reply"){
+						btype=1;
+						$("input[name=bbcode]").attr("value",data.bbcode);
+						$('#ReplyArea').css("display","block");
+						$('#toreply').text("@"+data.touatid);
+					}
+					//인용글일경우
+					if(data.btype == "quote"){
+						btype=2;
+						$("input[name=bbcode]").attr("value",data.bbcode);
+						$("#QuoteArea").css("display","block");
+						$("#quote_nickname").text(data.qnickname); 
+						$("#quote_content").html(data.qcontent);
+						$("#quote_atid").text("@"+data.qatid); 
+						$("#quote_profile").attr("src", data.qprofileimage);
+						if((data.qattach).substring(0,5) == "image"){
+							$(".quote_file").css("display","block");
+							$("#show_quote_video").css("display","none");
+							$("img#quote_img").attr("src", $("img#quote_img").attr('src')+"/"+data.qattach);
+						}
+						else if((data.qattach).substring(0,5) == 'video'){
+							$(".quote_file").css("display","block");
+							$("#show_quote_video").css("display","block");
+							$("video#quote_video").attr("src", $("video#quote_video").attr('src')+"/"+data.qattach);
+						}
+						
+						//투표버튼은 비활성화
+						$("#displayVote").attr("disabled","disabled");
+					}
 					//예약글일경우
 					if(data.bregdate!=null){
 						reserve=1;
@@ -1089,7 +1464,7 @@ label {
 					$("#saveModal .close").click();
 					$("#realCloseWrite").click();
 					//그리고 메인글로 돌아가
-					location.replace="../god/main";
+					location.href="/iron/timeline";
 				}
 			}
 		});
@@ -1100,7 +1475,7 @@ label {
 			$("#saveModal .close").click();
 			$("#realCloseWrite").click();
 			//그리고 메인글로 돌아가
-			location.replace="../god/main";
+			location.href="/iron/timeline";
 		});
 		
 		/*마지막 저장창에서 저장해 클릭*/
@@ -1180,6 +1555,8 @@ label {
 	        $("[name=vselect2]").attr("required" , false);
 	        //예약버튼 활성화
 	        $("#reserveBtn").attr("disabled",false);
+	        //미디어버튼 활성화
+	        $("#media").attr("disabled",false);
 			bvote=0;
 		}); 
 		
@@ -1196,6 +1573,8 @@ label {
 		        $('#setTime').text("");
 		        $("#reserveDelete").css("display","none");
 		        reserve=0;
+		        //미디어 버튼 비활성화
+		        $("#media").attr("disabled","disabled");
 		    } 
 		    bvote=1;
 		});  
@@ -1229,6 +1608,7 @@ label {
 					imgorvideo=1;
 					jQuery("#mediaDelete").css("display","block");
 					jQuery("#media").css("display","none");
+					$("#displayVote").attr("disabled","disabled");
 				}
 			}
 			else if(this.files && this.files[0] && this.files[0].name.match(/\.(avi|mpg|mpeg|mp4)$/)){
@@ -1248,6 +1628,7 @@ label {
 					imgorvideo=2;
 					jQuery("#mediaDelete").css("display","block");
 					jQuery("#media").css("display","none");
+					$("#displayVote").attr("disabled","disabled");
 				}
 			}
 		}); 
@@ -1262,12 +1643,66 @@ label {
 			}
 			jQuery("#media").css("display","block");
 			jQuery("#mediaDelete").css("display","none");
+			$("#displayVote").attr("disabled",false);
 			imgorvideo=0;
 		});
 		</script>
-		<!--GOD 글쓰기 기능 끝-->
-	
-	
+	<!--GOD 글쓰기 기능 끝-->
+
+	<!--BEAR 더보기 창  -->
+	<div class="modal fade" id="morebtn" data-backdrop="static"
+		data-keyboard="false" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class="modal-body col-12">
+						<div class="card-header">
+							<h4 style="text-align: center;">
+								팔로우 추천
+								<button style="float: right;" onclick="closemodal()">x</button>
+							</h4>
+							<div class="card-body" style="padding: 5px;">
+								<div class="card">
+									<div class="card-body"
+										style="font-size: 0.8rem; padding: 10px;">
+										<c:forEach var="justFollowMe1" items="${suggestFlist2 }"
+											begin="0" end="2">
+											<div class="card">
+												<div class="card-body"
+													style="font-size: 0.8rem; padding: 10px;">
+													<img
+														src="<%=context %>/profile_image/${justFollowMe1.uimage}"
+														class="rounded-circle" width="40" height="40"> <a
+														class="card-title text-dark">${justFollowMe1.unickName}</a>
+													<a class="card-subtitle mb-2 text-muted">@${justFollowMe1.uatid}</a>
+													<c:if test="${justFollowMe1.uonline eq 1 }">
+														<img src="<%=context%>/image/online.png" width="20"
+															height="20">
+													</c:if>
+													<div>
+														<button type="button"
+															class="btn btn-outline-success btn-sm float-right"
+															style="font-size: 1.2rem;"
+															onclick="followchk(${justFollowMe1.uucode})"
+															name="k${justFollowMe1.uucode}">팔로우</button>
+
+													</div>
+													<h3 id="bearsize" style="padding-left: 40px">&nbsp&nbsp${justFollowMe1.uintro}</h3>
+
+												</div>
+											</div>
+										</c:forEach>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- /#wrapper -->
 </body>
 

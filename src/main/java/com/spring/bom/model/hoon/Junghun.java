@@ -18,19 +18,20 @@ public class Junghun {
 	private String battach;
 	private String bregdate;
 	private int bcode;
-
+	private int bbcode;
+	private String btype;
+	
 	// hastag
 	private String hname;
 	private String hbcode;
-	
-	//Extra DB column data
+
+	// Extra DB column data
 	private int hcount;
-	//Not DTO
+	// Not DTO
 	private int hrank;
-	
+
 	// user_info
 	private String uNickName;
-	private String uatId;
 	private String uintro;
 	private String uimage;
 
@@ -67,9 +68,25 @@ public class Junghun {
 	private int ustate; // 회원상태 여부 0:탈퇴, 1: 정상, 2:활동정지
 	private int uonline;// 로그인 상태 여부
 
+	// For Quote
+	private String q_uimage;
+	private String q_nickname;
+	private String q_atid;
+	private String q_content;
+	private String q_attach;
+	private String q_attachsrc;
+	private String q_attachtype;
+	private String q_regdate;
+
 	
-	
-	
+	public String getBtype() {
+		return btype;
+	}
+
+	public void setBtype(String btype) {
+		this.btype = btype;
+	}
+
 	public int getHcount() {
 		return hcount;
 	}
@@ -406,12 +423,77 @@ public class Junghun {
 		this.uNickName = uNickName;
 	}
 
-	public String getUatId() {
-		return uatId;
+	public int getBbcode() {
+		return bbcode;
 	}
 
-	public void setUatId(String uatId) {
-		this.uatId = uatId;
+	public void setBbcode(int bbcode) {
+		this.bbcode = bbcode;
+	}
+
+	//For Quote
+	public String getQ_uimage() {
+		return q_uimage;
+	}
+
+	public void setQ_uimage(String q_uimage) {
+		this.q_uimage = q_uimage;
+	}
+
+	public String getQ_nickname() {
+		return q_nickname;
+	}
+
+	public void setQ_nickname(String q_nickname) {
+		this.q_nickname = q_nickname;
+	}
+
+	public String getQ_atid() {
+		return q_atid;
+	}
+
+	public void setQ_atid(String q_atid) {
+		this.q_atid = q_atid;
+	}
+
+	public String getQ_content() {
+		return q_content;
+	}
+
+	public void setQ_content(String q_content) {
+		this.q_content = q_content;
+	}
+
+	public String getQ_attach() {
+		return q_attach;
+	}
+
+	public void setQ_attach(String q_attach) {
+		this.q_attach = q_attach;
+	}
+
+	public String getQ_attachsrc() {
+		return q_attachsrc;
+	}
+
+	public void setQ_attachsrc(String q_attachsrc) {
+		this.q_attachsrc = q_attachsrc;
+	}
+
+	public String getQ_attachtype() {
+		return q_attachtype;
+	}
+
+	public void setQ_attachtype(String q_attachtype) {
+		this.q_attachtype = q_attachtype;
+	}
+
+	public String getQ_regdate() {
+		return q_regdate;
+	}
+
+	public void setQ_regdate(String q_regdate) {
+		this.q_regdate = q_regdate;
 	}
 
 }

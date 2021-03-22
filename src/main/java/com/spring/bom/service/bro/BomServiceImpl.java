@@ -2,9 +2,6 @@ package com.spring.bom.service.bro;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,6 +73,24 @@ public class BomServiceImpl implements BomService {
 	public int findPw(String uEmail, String tempPassword) {
 		
 		return bd.findPw(uEmail, tempPassword);
+	}
+
+	@Override
+	public int online(String uEmail) {
+	
+		return bd.online(uEmail);
+	}
+
+	@Override
+	public int state(String uEmail) {
+		
+		return bd.state(uEmail);
+	}
+
+	@Override
+	public int loginCount(String uEmail) {
+		
+		return bd.loginCount(uEmail);
 	}
 
 

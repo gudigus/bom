@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.spring.bom.model.hoon.Junghun;
+import com.spring.bom.model.iron.Board;
 import com.spring.bom.model.iron.Follow;
 
 @Repository
@@ -16,7 +17,38 @@ public class JunghunDaoImpl implements JunghunDao{
 
 	@Override
 	public List<Junghun> listSearch(Junghun junghun) {
-		return session.selectList("searchfame",junghun);
+		List<Junghun> list = null;
+		try {
+			list = session.selectList("searchfame",junghun);
+			
+			// 인용데이터 처리
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i).getBbtype().equals("quote")) {
+					Board quoteboard = session.selectOne("QuoteBoard", list.get(i).getBbcode());
+					System.out.println("QuoteBoard--bdlist.get(i).getBbcode() --> " + list.get(i).getBbcode());
+					System.out.println("쿼트문 실행");
+					list.get(i).setQ_uimage(quoteboard.getUimage());
+					System.out.println("quoteboard.getUimage() -> " + quoteboard.getUimage());
+					list.get(i).setQ_nickname(quoteboard.getUnickName());
+					list.get(i).setQ_atid(quoteboard.getUatid());
+					list.get(i).setQ_content(quoteboard.getBcontent());
+					list.get(i).setQ_regdate(quoteboard.getBregDate());
+
+					if (quoteboard.getBattach() != null) {
+						System.out.println("quoteboard.getBattach() -> " + quoteboard.getBattach());
+						list.get(i).setQ_attachsrc(quoteboard.getBattach().substring(6));
+						list.get(i).setQ_attachtype(quoteboard.getBattach().substring(0, 5));
+						System.out.println(
+								"quoteboard.getBattach().substring(6) -> " + quoteboard.getBattach().substring(6));
+						System.out.println("quoteboard.getBattach().substring(0, 5) -> "
+								+ quoteboard.getBattach().substring(0, 5));
+					}
+				}
+			}
+		}catch(Exception e) {
+			System.out.println("listSearch -> " + e.getMessage());
+		}
+		return list;
 	}
 
 	@Override
@@ -100,6 +132,18 @@ public class JunghunDaoImpl implements JunghunDao{
 	public List<Junghun> searchbattachvideo(Junghun junghun) {
 		// TODO Auto-generated method stub
 		return session.selectList("searchbattachvideo",junghun);
+	}
+
+	@Override
+	public List<Junghun> searchbattach2(Junghun junghun) {
+		// TODO Auto-generated method stub
+		return session.selectList("searchbattach2",junghun);
+	}
+
+	@Override
+	public List<Junghun> searchbattachvideo2(Junghun junghun) {
+		// TODO Auto-generated method stub
+		return session.selectList("searchbattachvideo2",junghun);
 	}
 
 

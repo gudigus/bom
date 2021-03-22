@@ -1,11 +1,6 @@
 package com.spring.bom.controller;
 
 
-
-
-
-
-
 import java.io.File;
 
 import java.util.List;
@@ -48,30 +43,47 @@ public class BroController {
 	
 		return "bro/email";
 	}
-	
-	
-	
 		
 	@RequestMapping(value = "bro/login" , method=RequestMethod.POST)
-	public String login(User_info ui, HttpServletRequest req, String uEmail) throws Exception{
+	public String login(User_info ui, HttpServletRequest req, String uEmail, Model model) throws Exception{
 		HttpSession session = req.getSession();
 		User_info login = bs.loginCheck(ui);
+		
+		System.out.println("login data check -- login.ucode -> "+login.getuCode());
+		System.out.println("login data check -- login.ustate -> "+login.getuState());
 		if(login == null) {
-			session.setAttribute("login", null);
+			session.setAttribute("login", login);
 			System.out.println("login off");
 			System.out.println("controller uEamil-->"+uEmail);
 			bs.logout(uEmail);
+			model.addAttribute("uState", 1);
 			return "bro/loginFail";
 		}
 		else if(login.getuCode()==0){
 			session.setAttribute("login", login);
 			System.out.println("관리자계정 로그인!!");
-			return "/coffee/censorMemberManagerPage";
+			return "redirect:/coffee/interceptor/censorBomManagerPage";
 		}
 		else {
-			System.out.println(login.getuCode());
-			session.setAttribute("ucode",login.getuCode());
+			session.setAttribute("ucode", login.getuCode());
 			System.out.println("login on");
+			int a = bs.state(uEmail);
+			int b = bs.loginCount(uEmail);
+			System.out.println("controller ustate number-->"+ a);
+			System.out.println("controller uLoginCount number-->"+ b);
+			if(a == 0) {
+				model.addAttribute("uState", 0);
+				return "/right/UserdisabledPage";
+			}else if(a == 2) {
+				model.addAttribute("uState", 2);
+				return "bro/loginFail";
+			}
+			System.out.println("callback");
+			if(b >= 5) {
+				model.addAttribute("uLoginCount", b);
+				return "bro/loginFail";
+			}
+			bs.online(uEmail);
 			bs.loginClear(uEmail);
 			return "redirect:../iron/timeline";
 		}
