@@ -80,7 +80,9 @@ public class BroController {
 			}else if(a == 2) {
 				model.addAttribute("uState", 2);
 				return "bro/loginFail";
-			}else if(b >= 5) {
+			}
+			System.out.println("callback");
+			if(b >= 5) {
 				model.addAttribute("uLoginCount", b);
 				return "bro/loginFail";
 			}
