@@ -617,10 +617,10 @@ background: white;}
 					src="/img/home.svg" width="15" height="15"> 타임라인
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
+				</a><!--  <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success" id="notice" >1</span>
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
+				</a> --> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/send.svg" width="15" height="15"> 쪽지
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/bookmark.svg" width="15" height="15"> 북마크

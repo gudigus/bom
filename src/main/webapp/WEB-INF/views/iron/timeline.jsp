@@ -248,10 +248,10 @@ label {
 					src="/img/search.svg" width="15" height="15"> 검색하기
 				</a> 
 				
-				<a href="alarm" class="list-group-item list-group-item-action"> <img
+				<!-- <a href="alarm" class="list-group-item list-group-item-action"> <img
 					src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
-				</a>
+				</a> -->
 				<!-- bear1 -->
 				<a href="/bear/chat" class="list-group-item list-group-item-action"> <img
 					src="/img/send.svg" width="15" height="15"> 쪽지
