@@ -31,9 +31,13 @@
 	insert into follow (ucode , fopcode, ftime, FBLOCKSTATE)
 		   VALUES (#{ucode},#{fopcode},TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'),
 					0)
+	</insert>  
+	<delete id="unfollow" parameterType="Iron_Follow">
+		delete from follow
+		where ucode = #{ucode} and fopcode = #{fopcode}
+		
+		
 	
-
-
-</insert>  
+	</delete>
 	
 </mapper>

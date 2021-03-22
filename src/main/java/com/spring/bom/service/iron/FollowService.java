@@ -11,5 +11,8 @@ public interface FollowService {
 	
 	int fwInsert(Follow follow); //  팔로우하기
 
+	int unfollow(Follow follow); // 언팔로우하기
+	
+
 	
 }

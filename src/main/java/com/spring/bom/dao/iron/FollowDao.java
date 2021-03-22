@@ -12,4 +12,7 @@ public interface FollowDao {
 
 	int fwInsert(Follow follow); //팔로워하기
 
+	int unfollow(Follow follow); // 언팔로워하기
+	
+
 }

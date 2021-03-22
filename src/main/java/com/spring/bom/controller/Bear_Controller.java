@@ -231,5 +231,28 @@ public class Bear_Controller {
 		  
 		
 	}
+	//언팔로우하는 로직
+	@RequestMapping(value = "bear/unfollow")
+	@ResponseBody
+	public String unfollow(String fopcode, HttpSession session) {
+		
+		int sessionId = (int) session.getAttribute("ucode");
+		int fopcode1 = Integer.parseInt(fopcode);
+		
+		Follow follow = new Follow();
+		follow.setUcode(sessionId);
+		follow.setFopcode(fopcode1);
+		
+		int result = fs.unfollow(follow);
+		System.out.println("언팔로우 결과값  - > " + result );
+		String kkk = Integer.toBinaryString(result);
+		
+		return kkk;
+		
+	}
+	
+	
+	
+	
 
 }

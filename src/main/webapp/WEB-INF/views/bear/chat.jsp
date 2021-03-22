@@ -563,6 +563,7 @@ background: white;}
 					console.log("저장성공")
 					  $("button[name=k"+number+"]").text("팔로잉");
 					  $("button[name=k"+number+"]").attr("class","btn btn-success btn-sm float-right");
+					  $("button[name=k"+number+"]").attr("onclick","unfollow("+number+")");
 					  
 				
 			
@@ -573,6 +574,31 @@ background: white;}
 			}
 	});	 
 	}
+	//언팔로우 
+	function unfollow(number){
+		console.log("언팔로우 시작  number -> " + number);
+		
+		var msg = {fopcode  : number};
+		
+		$.ajax({
+			url: '<%=context%>/bear/unfollow',
+			data: msg,
+			type: "post",
+			success: function (res){
+				
+				if(res == 1 ){
+					console.log("저장성공 - > " +res)
+					 $("button[name=k"+number+"]").text("팔로우");
+					  $("button[name=k"+number+"]").attr("class","btn btn-danger btn-sm float-right");
+					  $("button[name=k"+number+"]").attr("onclick","followchk("+number+")");					
+				}else{					
+					alert("삭제하지못했습니다.")
+				}				
+			}			
+		});
+}
+	
+	
 </script>
 
 
