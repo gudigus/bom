@@ -17,5 +17,8 @@ public interface BomService {
 	public int fileName(String fileName);
 	public int loginClear(String uEmail);
 	public int findPw(String uEmail , String tempPassword);
+	public int online(String uEmail);
+	public int state(String uEmail);
+	 public int loginCount(String uEmail);
 
 }

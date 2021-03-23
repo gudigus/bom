@@ -6,8 +6,6 @@ package com.spring.bom.dao.bro;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -108,6 +106,24 @@ public class BomDaoImpl implements BomDao {
 		ui.setuEmail(uEmail);
 		ui.setuPassword(tempPassword);
 		return session.update("findPw", ui);
+	}
+
+	@Override
+	public int online(String uEmail) {
+		
+		return session.update("online",uEmail);
+	}
+
+	@Override
+	public int state(String uEmail) {
+		int a = session.selectOne("state",uEmail);
+		return a;
+	}
+
+	@Override
+	public int loginCount(String uEmail) {
+		int b = session.selectOne("loginCount",uEmail);
+		return b;
 	}
 
 	

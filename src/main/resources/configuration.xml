@@ -27,21 +27,59 @@
 			alias="GodBoard" />
 		<typeAlias type="com.spring.bom.model.god.JHVote"
 			alias="GodVote" />
+		<typeAlias type="com.spring.bom.model.god.JHHashtag"
+			alias="GodHash" />
+		<typeAlias type="com.spring.bom.model.god.JHUser_info"
+			alias="GodUser" />
 
 		<!-- bear -->
 		<typeAlias type="com.spring.bom.model.bear.Chat"
 			alias="Chat" />
-
 		<typeAlias type="com.spring.bom.model.bear.User"
 			alias="User" />
 
 		<!-- coffee -->
-		<typeAlias type="com.spring.bom.model.coffee.CoffeeUser_info"
+		<typeAlias
+			type="com.spring.bom.model.coffee.CoffeeUser_info"
 			alias="CoffeeUser_info" />
 		<typeAlias type="com.spring.bom.model.coffee.BoardUser_info"
 			alias="CoffeeBoardUser_info" />
 		<typeAlias
 			type="com.spring.bom.model.coffee.ReportUser_infoBoard"
 			alias="CoffeeReportUser_infoBoard" />
+
+		<!-- hoon(warm) -->
+		<typeAlias type="com.spring.bom.model.hoon.Junghun"
+			alias="Junghun" />
+
+		<!-- yoon(right) -->
+		<typeAlias type="com.spring.bom.model.right.RUser_Info"
+			alias="RUser" />
+
+		<typeAlias type="com.spring.bom.model.right.RInterest"
+			alias="RInterest" />
+
+		<typeAlias type="com.spring.bom.model.right.RInterestDetail"
+			alias="RInterest_d" />
+
+		<typeAlias type="com.spring.bom.model.right.RBlock"
+			alias="RBlock" />
+
+		<typeAlias type="com.spring.bom.model.right.Statis"
+			alias="Statis" />
+
+		<typeAlias type="com.spring.bom.model.right.RFollow"
+			alias="RFollow" />
+
+		<!-- yerin -->
+		<typeAlias
+			type="com.spring.bom.model.yeah.UserBookmarkBoard"
+			alias="UserBookmarkBoard" />
+		<typeAlias type="com.spring.bom.model.yeah.YeahBoard"
+			alias="YeahBoard" />
+		<typeAlias type="com.spring.bom.model.yeah.YeahUser_Info"
+			alias="YeahUser_Info" />
+		<typeAlias type="com.spring.bom.model.yeah.YeahFollow"
+			alias="YeahFollow" />
 	</typeAliases>
 </configuration>
