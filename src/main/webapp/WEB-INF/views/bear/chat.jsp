@@ -36,10 +36,16 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 	integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 	crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+ <script src="https://code.jquery.com/jquery-3.4.1.js"></script> 
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
 <style>
+#lineclear {
+border: 0;
+outline: none;
+}
+
+
 .dropdown-toggle.caret-off::after {
 	display: none;
 }
@@ -281,19 +287,16 @@ background: white;}
 					}else{
 					
 						$("#messagelist").append("<div class="+"incoming_msg"+">"+
- 								 "<div class="+"received_withd_msg"+">"+
+ 								 "<br><div class="+"received_withd_msg"+">"+
  									"<p>"+d.msg+ "</p>"+
-    								"</div></div>");	
+    								"</div></div><br>");	
 					}
 						
 				}else{
 					console.warn("unknown type!");
 				}
 			}
-		}
-
-		
-	
+		}	
 	}	
 	function send(number) {
 		var kk='${ucode}';
@@ -307,14 +310,7 @@ background: white;}
 		console.log(option);
 		ws.send(JSON.stringify(option))
 		$('#chatting').val("");
-	}
-		
-		
-		
-		
-	
-	
-	
+	}	
 	function getRoom(){
 		//$("#sessionId").val()
 		//var timerID;
@@ -329,10 +325,6 @@ background: white;}
 				
 				createChatingRoom(res);
 			}
-		
-		
-	
-
 	});
 	}
 	
@@ -343,16 +335,14 @@ background: white;}
 			var stt = str.substring(1);
 			console.log("@ 자른 상대방 id2 - > " + stt)
 			
-			$.ajax({
-				   
+			$.ajax({				   
 				url: "<%=context%>/bear/selectcode",
 				data: {uatid : stt},
 				dataType: 'text',
 				success: function (data){
 					console.log('@아이디로 회원 코드값은 : '+ data)
 					var msg = {uopcode :  data};
-					console.log('@아이디로 회원 msg : '+ msg)
-					
+					console.log('@아이디로 회원 msg : '+ msg)					
 					$.ajax({
 						url : '<%=context%>/bear/createRoom',
 						data : msg,
@@ -366,20 +356,9 @@ background: white;}
 								else{
 									alert($('#roomName').val() + "님 과 채팅방이생성되었습니다." )
 									 location.reload();
-								}
-								
-								
-							}
-						
-						
+								}																
+							}						
 					});$("#roomName").empty();
-					
-					
-					
-					
-						
-					
-		
 				}});
 		}
 			
@@ -504,7 +483,7 @@ background: white;}
 		         		 "<div class=chat_people>" +
 		         		"<div class="+"chat_img"+"><img src="+context+"/profile_image/"+uimage+" class="+"rounded-circle"+" width="+"100"+" height="+"50"+"></div>"+
 		          			 	 "<div class=chat_ib>"+
-		            			  "<h5><b>" +uatid+ "</b><span class=chat_date><b>" +cdtime+ "</b></span></h5>"+
+		            			  "<h5><b>@ "+uatid+ "</b><span class=chat_date><b>" +cdtime+ "</b></span></h5>"+
 		             				 "<h5"+" id='msgsize'>"+ msg+"<span id = 'k123'>"+"</span></h5><div class="+"'boxsize'"+"  align="+"'right'"+"><button type='button' class="+"'btn btn-success'"+" onclick='goRoom(\""+roomNumber+"\")'>참여</button>"+"</div> "+
 		           				 "</div>"+
 		        		      "</div>"+
@@ -597,7 +576,9 @@ background: white;}
 			}			
 		});
 }
-	
+	function followpage(number){
+		location.href = '../iron/profile/'+number;
+	}
 	
 </script>
 
@@ -654,8 +635,8 @@ background: white;}
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
 <div id="page-content-wrapper" style="padding: 10px">
 
-<br>
-<h3 class=" text-center">쪽지방</h3>
+<br><br>
+<h3 class=" text-center">쪽지방</h3><br/>
 <div class="messaging">
   <div class="inbox_msg">
     <div class="inbox_people">
@@ -691,7 +672,7 @@ background: white;}
     </div>     
       <div class="type_msg"  >
         <div class="input_msg_write" id="messagetest">
-        <input type="text" class="write_msg" placeholder="Type a message" />
+        <input type="text" class="write_msg" placeholder="채팅방을 선택해주세요." />
           <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
         </div>
       </div>
@@ -720,7 +701,7 @@ background: white;}
 							<c:if test="${suggestFlist2_size>0 }">
 								<c:forEach var="justFollowMe" items="${suggestFlist2 }" begin="0" end="2" >
 									<div class="card">
-										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+										<div class="card-body" onclick="followpage(${justFollowMe.uucode})" style="font-size: 0.8rem; padding: 10px;">
 											<img src="<%=context %>/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
 												height="20">
 												<a class="card-title text-dark">${justFollowMe.unickName}</a>
@@ -836,7 +817,7 @@ background: white;}
 				<div class="modal-content">
 					<div class="modal-header" >
 						<div class="modal-body col-12">
-							<div class="card-header" ><h4 style="text-align: center;">팔로우 추천<button style="float: right;" onclick="closemodal()">x</button></h4>	
+							<div class="card-header" ><h4 style="text-align: center;">팔로우 추천<button id="lineclear" style="float: right;" onclick="closemodal()"><img src="<%=context %>/image/x.png" width="30" height="30"></button></h4>	
 								<div class="card-body" style="padding: 5px;">
 									<div class="card">
 										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
