@@ -229,7 +229,7 @@ function unfollow(number){
 			<nav
 				class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
 				<button class="btn btn-success" id="menu-toggle"
-					onclick="location.href='../iron/profile?uatid=${atid}'">←</button>
+					onclick="location.href='../iron/profile?uatid=${uatid}'">←</button>
 			</nav>
 			<div class="container-fluid">
 				<p>
@@ -237,7 +237,7 @@ function unfollow(number){
 					<div align="center">
 						<p>
 							<button type="button" class="btn btn-outline-success"
-								onclick="location.href='following?uatid=${atid}'">팔로잉</button>
+								onclick="location.href='following?uatid=${uatid}'">팔로잉</button>
 						<p>
 						<h2>팔로워</h2>
 						${pfollowerList[0].followercnt - pfollowerBlockList[0].bfollowercnt}
@@ -290,13 +290,12 @@ function unfollow(number){
 											<button type="button"
 												class="btn btn-success btn-sm float-right"
 												style="font-size: 0.8rem;"
-												onclick="location.href='addfollowing?fopcode=${fl.ucode}'">팔로우</button>
+												onclick="location.href='addfollowing?fopcode=${fl.ucode}&uatid=${uatid}'">팔로우</button>
 										</c:if>
 										<c:if test="${checkfollowing eq '1' }">
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
-												style="font-size: 0.8rem;" onclick="location.href='followerDelete?fopcode=${fl.ucode}'">팔로잉</button>
-												<input type="hidden" value="${atid}">
+												style="font-size: 0.8rem;" onclick="location.href='followerDelete?fopcode=${fl.ucode}&uatid=${uatid}'">팔로잉</button>
 										</c:if>
 									</div>
 								</div>

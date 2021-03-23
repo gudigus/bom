@@ -227,15 +227,15 @@ function unfollow(number){
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
 				<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-					<button class="btn btn-success" id="menu-toggle" onclick="location.href='../iron/profile?uatid=${atid}'">←</button>
+					<button class="btn btn-success" id="menu-toggle" onclick="location.href='../iron/profile?uatid=${uatid}'">←</button>
 				</nav>
 			<div class="container-fluid">
 				<p>
 				<div class="card">
 					<div align="center">
 						<p>
-						<button type="button" class="btn btn-outline-success" onclick="location.href='follower?uatid=${atid}'">팔로워</button><p>
-						<h2>팔로잉</h2> ${pfollowingList[0].followercnt - pfollowingBlockList[0].bfollowercnt}명 
+						<button type="button" class="btn btn-outline-success" onclick="location.href='follower?uatid=${uatid}'">팔로워</button><p>
+						<h2>팔로잉</h2> ${pfollowingList[0].followingcnt - pfollowingBlockList[0].bfollowingcnt}명 
 						
 							<c:forEach var="fl" items="${pfollowingList}" varStatus="status">
 							<c:set var="blockcount" value="0"/>
@@ -283,14 +283,13 @@ function unfollow(number){
 												<button type="button"
 													class="btn btn-success btn-sm float-right"
 													style="font-size: 0.8rem;"
-													onclick="location.href='addfollowingtofollowing?fopcode=${fl.fopcode}'">팔로우</button>
+													onclick="location.href='addfollowingtofollowing?fopcode=${fl.fopcode}&uatid=${uatid}'">팔로우</button>
 											</c:if>
 											<c:if test="${checkfollowing eq '1' }">
 												<button type="button"
 													class="btn btn-outline-success btn-sm float-right"
 													style="font-size: 0.8rem;" 
-													onclick="location.href='followerDeletetofollowing?fopcode=${fl.fopcode}'">팔로잉</button>
-													<input type="hidden" value="${atid}">
+													onclick="location.href='followerDeletetofollowing?fopcode=${fl.fopcode}&uatid=${uatid }'">팔로잉</button>
 											</c:if>
 										</div>
 									</div>

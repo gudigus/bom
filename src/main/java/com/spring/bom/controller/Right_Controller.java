@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.bom.model.iron.Follow;
 import com.spring.bom.model.iron.HashTag;
@@ -1180,7 +1181,7 @@ public class Right_Controller {
 		model.addAttribute("pfollowerBlockList", pfollowerBlockList);
 		model.addAttribute("pfollowingBlockList", pfollowingBlockList);
 		System.out.println("RightController follower end");
-		model.addAttribute("atid", atid);
+		model.addAttribute("uatid", atid);
 		
 		
 		
@@ -1251,7 +1252,7 @@ public class Right_Controller {
 		model.addAttribute("pfollowerBlockList", pfollowerBlockList);
 		model.addAttribute("pfollowingBlockList", pfollowingBlockList);
 		System.out.println("RightController follower end");
-		model.addAttribute("atid", atid);
+		model.addAttribute("uatid", atid);
 		
 		System.out.println("RightController Following List from profile -> " + pfollowingList);
 		System.out.println("RightController followingList List from session -> " + followingList);
@@ -1289,14 +1290,14 @@ public class Right_Controller {
 
 	// 팔로잉 취소
 	@RequestMapping(value = "/right/followerDelete", produces = "application/text;charset=UTF-8")
-	public String followerDelete(HttpSession session, Model model, @RequestParam int fopcode,@RequestParam String atid) {
+	public String followerDelete(HttpSession session, Model model, @RequestParam int fopcode,@RequestParam String uatid,RedirectAttributes redirect) {
 		User_Info user = (User_Info)session.getAttribute("user");
 		model.addAttribute("user",user);
 		
-		String uatid = atid;
+		String atid = uatid;
 		System.out.println("Right Delete uatid ->"+ uatid);
 		System.out.println("Right Delete atid ->"+ atid);
-		model.addAttribute("uatid", uatid);
+		redirect.addAttribute("uatid", atid);	
 		
 		System.out.println("RightController followerDelete Start");
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
@@ -1313,9 +1314,14 @@ public class Right_Controller {
 	}
 	// 팔로잉 취소 -> following.jsp
 	@RequestMapping(value = "/right/followerDeletetofollowing", produces = "application/text;charset=UTF-8")
-	public String followerDeletetofollowing(HttpSession session, Model model, @RequestParam int fopcode) {
+	public String followerDeletetofollowing(HttpSession session, Model model, @RequestParam int fopcode,@RequestParam String uatid,RedirectAttributes redirect) {
 		User_Info user = (User_Info)session.getAttribute("user");
 		model.addAttribute("user",user);
+		
+		String atid = uatid;
+		System.out.println("Right Delete uatid ->"+ uatid);
+		System.out.println("Right Delete atid ->"+ atid);
+		redirect.addAttribute("uatid", atid);	
 		
 		System.out.println("RightController followerDelete Start");
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
@@ -1333,14 +1339,14 @@ public class Right_Controller {
 
 	// 팔로우 하는 사람 팔로잉하기
 	@RequestMapping(value = "/right/addfollowing", produces = "application/text;charset=UTF-8")
-	public String addfollowing(HttpSession session, Model model, @RequestParam int fopcode,@RequestParam String atid) {
+	public String addfollowing(HttpSession session, Model model, @RequestParam int fopcode,@RequestParam String uatid,RedirectAttributes redirect) {
 		User_Info user = (User_Info)session.getAttribute("user");
 		model.addAttribute("user",user);
 
-		String uatid = atid;
+		String atid = uatid;
 		System.out.println("Right Delete uatid ->"+ uatid);
 		System.out.println("Right Delete atid ->"+ atid);
-		model.addAttribute("uatid", uatid);		
+		redirect.addAttribute("uatid", atid);		
 		
 		System.out.println("RightController addfollowing Start");
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
@@ -1357,9 +1363,14 @@ public class Right_Controller {
 	}
 	// 팔로우 하는 사람 팔로잉하기 -> following.jsp
 	@RequestMapping(value = "/right/addfollowingtofollowing", produces = "application/text;charset=UTF-8")
-	public String addfollowingtofollowing(HttpSession session, Model model, @RequestParam int fopcode) {
+	public String addfollowingtofollowing(HttpSession session, Model model, @RequestParam int fopcode,@RequestParam String uatid,RedirectAttributes redirect) {
 		User_Info user = (User_Info)session.getAttribute("user");
 		model.addAttribute("user",user);
+
+		String atid = uatid;
+		System.out.println("Right Delete uatid ->"+ uatid);
+		System.out.println("Right Delete atid ->"+ atid);
+		redirect.addAttribute("uatid", atid);		
 		
 		System.out.println("RightController addfollowing Start");
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
@@ -1372,6 +1383,7 @@ public class Right_Controller {
 		model.addAttribute("result", result);
 		System.out.println("addfollowing result => " + result);
 		System.out.println("RightController addfollowing end");
+		
 		return "redirect:../right/following";
 	}
 
