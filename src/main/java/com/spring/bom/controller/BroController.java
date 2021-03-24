@@ -61,7 +61,7 @@ public class BroController {
 		User_info login = bs.loginCheck(ui);
 		
 		if(login == null) {
-			session.setAttribute("login", null);
+			session.setAttribute("login", login);
 			System.out.println("login off");
 			System.out.println("controller uEamil-->"+uEmail);
 			bs.logout(uEmail);
