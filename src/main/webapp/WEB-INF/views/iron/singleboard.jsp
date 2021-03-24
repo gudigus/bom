@@ -36,9 +36,10 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 	integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 	crossorigin="anonymous"></script>
-<script src="/js/jquery.min.js"></script>
+<!-- <script src="/js/jquery.min.js"></script> -->
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <style>
 #bearsize {
 	width: 550px;
@@ -131,47 +132,43 @@ function goSingleBoard(bbcode,bindex){
 	alert(bbcode+'로 이동합니다.');
 	location.href = 'singleBoard?bcode='+bbcode;
 }
-function clickLikeBtn1(bbcode){
+
+function clickLikeBtn(bcode, user){
 	event.stopPropagation();
-	var bcode = bbcode;
-	var msg = '게시글['+bcode+']에 좋아요를 눌렀습니다!';
-	alert(msg);
 	$.ajax({
-		url : "<%=context%>/iron/AjaxLikeAction",
-		data:{ bcode: bcode }, 
+		url : "<%=context%>/god/AjaxLikeAction",
+		data:{ bcode: bcode, ucode:user}, 
 		dataType:'json',
 		success : function(data){
-			var str='';
-			$('#likeBtn').empty();
-			if(data.ltype==0||data.ltype==null)
-				str += "<img src='/img/heart.svg' width='20' height='20'> " + data.likeCount
-			if(data.ltype==1)
-				str+= "<img src='/img/red_heart.svg' width='20' height='20'> "+ data.likeCount
-			$('#likeBtn').append(str);
-			alert(".ajax clickLikeBtn str->"+str);
+			if(data.ltype==0){
+				$("#noheart").css("display","none");
+				$("#doheart").css("display","block");
+			}
+			else if(data.ltype==1){
+				$("#noheart").css("display","block");
+				$("#doheart").css("display","none");
+			}
+			$("#likecount").text(data.likeCount);
 		}
 	});
 }
 
-function clickLikeBtn2(bbcode, bindex){
+function clickLikeBtn2(bcode,index, user){
 	event.stopPropagation();
-	var index = bindex;
-	var bcode = bbcode;
-	var msg = '게시글['+bcode+']에 좋아요를 눌렀습니다!';
-	alert(msg);
 	$.ajax({
-		url : "<%=context%>/iron/AjaxLikeAction",
-		data:{ bcode: bcode }, 
+		url : "<%=context%>/god/AjaxLikeAction",
+		data:{ bcode: bcode, ucode:user}, 
 		dataType:'json',
 		success : function(data){
-			var str='';
-			$('#likeBtn2'+index).empty();
-			if(data.ltype==0||data.ltype==null)
-				str += "<img src='/img/heart.svg' width='20' height='20'> " + data.likeCount
-			if(data.ltype==1)
-				str+= "<img src='/img/red_heart.svg' width='20' height='20'> "+ data.likeCount
-			$('#likeBtn2'+index).append(str);
-			alert(".ajax clickLikeBtn2 str->"+str);
+			if(data.ltype==0){
+				$("#noheart"+index).css("display","none");
+				$("#doheart"+index).css("display","block");
+			}
+			else if(data.ltype==1){
+				$("#noheart"+index).css("display","block");
+				$("#doheart"+index).css("display","none");
+			}
+			$("#likecount"+index).text(data.likeCount);
 		}
 	});
 }
@@ -199,37 +196,71 @@ function viewBoardOptions(bbcode,bindex){
 	});
 }
 
+//팔로우 추천 가져가야할 
+//팔로우 추천 더보기 닫기 기능
+function closemodal(){
+	location.reload();
+}
 //팔로우 하는 로직
 function followchk(number){
-	
 	//name 에 k + number 쓰는 태그를찾아서 text변경
 	var textareaVal = $("button[name=k"+number+"]").text();
 	console.log("textareaVal + textareaVal" + textareaVal)
-	
 	var msg = { uopcode :number};
 	$.ajax({
 		url: '<%=context%>/bear/followchk',
 		data: msg,
 		type: "post",
-
 		success: function (res) {
 			console.log("저장성공 - > " +res)
-			
 			if(res == "1"){
 				console.log("저장성공")
 				  $("button[name=k"+number+"]").text("팔로잉");
 				  $("button[name=k"+number+"]").attr("class","btn btn-success btn-sm float-right");
-		
+				  $("button[name=k"+number+"]").attr("onclick","unfollow("+number+")");
 			}else 
 				{console.log("저장실패")}
-				
-			 
 		}
-});	 
+	});	 
+}
+//언팔로우 
+function unfollow(number){
+	console.log("언팔로우 시작  number -> " + number);
+	var msg = {fopcode  : number};
+	$.ajax({
+		url: '<%=context%>/bear/unfollow',
+		data: msg,
+		type: "post",
+		success: function (res){
+			if(res == 1 ){
+				console.log("저장성공 - > " +res)
+				 $("button[name=k"+number+"]").text("언팔함");
+				  $("button[name=k"+number+"]").attr("class","btn btn-danger btn-sm float-right");
+				  $("button[name=k"+number+"]").attr("onclick","followchk("+number+")");					
+			}else{					
+				alert("삭제하지못했습니다.")
+			}				
+		}			
+	});
 }
 
-function closemodal(){
-	location.href="../iron/timeline";
+//경빈
+//글 삭제 하는 로직
+function deleteBom(loginUcode, bUcode, sIndex){
+	event.stopPropagation();
+	/* alert('loginUcode->'+loginUcode);
+	alert('bUcode->'+bUcode);
+	alert('sIndex->'+sIndex); */
+	if(loginUcode == bUcode){
+		if (confirm("정말 삭제하시겠습니까?") == true){    //확인
+			$('.coffeeDeleteBom'+sIndex).submit();
+		}else{   //취소
+		    return;
+		} 
+	}else{
+		alert("타인의 글은 삭제할 수 없습니다.");
+		return;
+	} 
 }
 </script>
 </head>
@@ -250,10 +281,13 @@ function closemodal(){
 				</a> <a href="/hoon/explore"
 					class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
-				</a> <a href="alarm" class="list-group-item list-group-item-action">
+				</a>
+				<!-- 
+				<a href="alarm" class="list-group-item list-group-item-action">
 					<img src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
 				</a>
+				 -->
 				<!-- bear1 -->
 				<a href="/bear/chat" class="list-group-item list-group-item-action">
 					<img src="/img/send.svg" width="15" height="15"> 쪽지
@@ -289,7 +323,8 @@ function closemodal(){
 							</div>
 						</div>
 					</div>
-					<button type="button" class="btn btn-success" onclick="location.href='../coffee/logout'">로그아웃</button>
+					<button type="button" class="btn btn-success"
+						onclick="location.href='../coffee/logout'">로그아웃</button>
 				</div>
 			</div>
 		</div>
@@ -309,8 +344,20 @@ function closemodal(){
 				<!-- 단일 게시글 내용 출력 -->
 				<div class="card">
 					<div class="card-body">
-						<button type="button"
-							class="btn btn-light float-right dropdown-toggle caret-off">⋯</button>
+						<!-- 경빈 part1 -->
+						<form action="/coffee/deleteBom_singleBoard"
+							class="coffeeDeleteBomOrigin" name="coffeeDeleteBomOrigin"
+							method="post">
+							<input type="hidden" name="coffeeBoardBcode"
+								value="${board.bcode }"> <input type="hidden"
+								name="coffeeBoardUatid" value="${board.uatid }"> <input
+								type="hidden" name="coffeeBoardOrigin" value="1">
+							<button type="button" class="btn btn-light float-right"
+								onclick="deleteBom(${user.ucode}, ${board.ucode }, 'Origin')">
+								<img src="/img/coffee/trash.svg" width="15" height="15">
+							</button>
+						</form>
+						<!-- 경빈 part1 끝 -->
 						<div class="dropdown-menu">
 							<%-- <c:if test="${tl_element.loginUcode == user.ucode }">
 											<a class="dropdown-item" href="#">봄 삭제</a>
@@ -366,19 +413,22 @@ function closemodal(){
 
 						<c:if test="${board.battach!=null }">
 							<c:if test="${board.battachType=='image'}">
-								<img class="img-thumnail" width="300"
+								<img class="img-fluid"
 									src="<%=context %>/image/${board.battachSrc}" />
 							</c:if>
 							<c:if test="${board.battachType=='video'}">
-								<video controls width="300">
-									<source src="<%=context %>/video/${board.battachSrc}"
-										type="video/mp4">
-									<source src="<%=context %>/video/${board.battachSrc}"
-										type="video/webm">
-									해당 브라우저에는 지원하지 않는 비디오입니다.
-								</video>
+								<div class="embed-responsive embed-responsive-16by9">
+									<video controls>
+										<source src="<%=context %>/video/${board.battachSrc}"
+											type="video/mp4">
+										<source src="<%=context %>/video/${board.battachSrc}"
+											type="video/webm">
+										해당 브라우저에는 지원하지 않는 비디오입니다.
+									</video>
+								</div>
 							</c:if>
 						</c:if>
+
 						<div align="center">
 							<div class="btn-group col-md-12" role="group"
 								aria-label="Button group with nested dropdown">
@@ -405,16 +455,30 @@ function closemodal(){
 											</c:if>
 								</button>
 
+								<!-- 좋아요 -->
 								<button id="likeBtn" type="button"
 									class="btn btn-secondary btn-light mr-3" data-toggle="tooltip"
 									data-placement="top" title="좋아요"
-									onclick="clickLikeBtn1(${board.bcode});">
-									<c:if test="${board.ltype == 0 || board.ltype == null }">
-										<img src="/img/heart.svg" width="20" height="20"> ${board.blikeCount }
-									</c:if>
-									<c:if test="${board.ltype == 1 }">
-										<img src="/img/red_heart.svg" width="20" height="20"> ${board.blikeCount }
-									</c:if>
+									onclick="clickLikeBtn(${board.bcode}, ${user.ucode});">
+									<div class="form-row justify-content-center text-center">
+										<img src="/img/heart.svg" width="20" height="20" id="noheart"
+											style="display: none;"> <img src="/img/red_heart.svg"
+											width="20" height="20" id="doheart" style="display: none;">
+										<span id="likecount" class="ml-1">${board.blikeCount }</span>
+										<c:if
+											test="${tl_element.ltype == 0 || tl_element.ltype == null }">
+											<script type="text/javascript">
+													$("#noheart").css("display","block");
+													$("#doheart").css("display","none");
+												</script>
+										</c:if>
+										<c:if test="${tl_element.ltype == 1 }">
+											<script type="text/javascript">
+													$("#noheart").css("display","none");
+													$("#doheart").css("display","block"); 
+												</script>
+										</c:if>
+									</div>
 								</button>
 								<button type="button"
 									class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
@@ -435,10 +499,21 @@ function closemodal(){
 				<!-- 단일 게시글 댓글 내용 출력 -->
 				<c:forEach var="reply" items="${replylist }" varStatus="status">
 					<div class="card">
+						<!-- 경빈 part2 -->
 						<div class="card-body" id="singleBoard"
 							onclick="goSingleBoard(${reply.bcode},${status.index });">
-							<button type="button"
-								class="btn btn-light dropdown-toggle caret-off float-right">⋯</button>
+							<form action="/coffee/deleteBom_singleBoard"
+								class="coffeeDeleteBom${status.index }" method="post">
+								<input type="hidden" name="coffeeBoardBcode"
+									value="${reply.bcode }"> <input type="hidden"
+									name="coffeeBoardUatid" value="${reply.uatid }"> <input
+									type="hidden" name="coffeeBoardOrigin" value="0">
+								<button type="button" class="btn btn-light float-right"
+									onclick="deleteBom(${user.ucode}, ${board.ucode }, ${status.index })">
+									<img src="/img/coffee/trash.svg" width="15" height="15">
+								</button>
+							</form>
+							<!-- 경빈 part2 끝 -->
 							<div class="dropdown-menu">
 								<%-- <c:if test="${tl_element.loginUcode == user.ucode }">
 												<a class="dropdown-item" href="#">봄 삭제</a>
@@ -535,32 +610,44 @@ function closemodal(){
 											</c:if>
 									</button>
 
-
+									<!-- 좋아요 -->
 									<button id="likeBtn2${status.index }" type="button"
 										class="btn btn-secondary btn-light mr-3" data-toggle="tooltip"
 										data-placement="top" title="좋아요"
-										onclick="clickLikeBtn2(${reply.bcode},${status.index }); return false;">
-
-										<c:if test="${reply.ltype == 0 || reply.ltype == null }">
-											<img src="/img/heart.svg" width="20" height="20"> ${reply.blikeCount }
-										</c:if>
-										<c:if test="${reply.ltype == 1 }">
-											<img src="/img/red_heart.svg" width="20" height="20"> ${reply.blikeCount }
-										</c:if>
-
+										onclick="clickLikeBtn2(${reply.bcode},${status.index }, ${user.ucode});">
+										<div class="form-row justify-content-center text-center">
+											<img src="/img/heart.svg" width="20" height="20"
+												id="noheart${status.index }" style="display: none;"> <img
+												src="/img/red_heart.svg" width="20" height="20"
+												id="doheart${status.index }" style="display: none;"> <span
+												id="likecount${status.index }" class="ml-1">${reply.blikeCount }</span>
+											<c:if
+												test="${tl_element.ltype == 0 || tl_element.ltype == null }">
+												<script type="text/javascript">
+													$("#noheart"+${status.index }).css("display","block");
+													$("#doheart"+${status.index }).css("display","none");
+												</script>
+											</c:if>
+											<c:if test="${tl_element.ltype == 1 }">
+												<script type="text/javascript">
+													$("#noheart"+${status.index }).css("display","none");
+													$("#doheart"+${status.index }).css("display","block"); 
+												</script>
+											</c:if>
+										</div>
 									</button>
 
-									<button type="button"
-										class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
-										data-toggle="dropdown" aria-haspopup="true"
-										aria-expanded="false" id="boardOption${status.index }"
-										onclick="viewBoardOptions(${bcode},${status.index }); return false;">
-										<img src="/img/share.svg" width="20" height="20">
-									</button>
-									<!-- ajax -->
-									<div class="dropdown-menu"
-										id="boardDropdownOption${status.index }">
-										<%-- 
+										<button type="button"
+											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+											data-toggle="dropdown" aria-haspopup="true"
+											aria-expanded="false" id="boardOption${status.index }"
+											onclick="viewBoardOptions(${bcode},${status.index }); return false;">
+											<img src="/img/share.svg" width="20" height="20">
+										</button>
+										<!-- ajax -->
+										<div class="dropdown-menu"
+											id="boardDropdownOption${status.index }">
+											<%-- 
 										<c:if test="${reply.bbtype==1 }">
 											<a class="dropdown-item" href="#">북마크 삭제</a>
 										</c:if>
@@ -569,7 +656,7 @@ function closemodal(){
 										</c:if>
 											<a class="dropdown-item" href="#">URL담아가기</a>
 										 --%>
-									</div>
+										</div>
 								</div>
 							</div>
 						</div>
@@ -581,6 +668,7 @@ function closemodal(){
 		<!-- /#page-content-wrapper -->
 
 		<!-- 오른쪽 사이드바 -->
+		<!-- 사이드바 팔로우 가져가야할 구간 시작 -->
 		<div class="bg-light border-left" id="sidebar-wrapper2">
 			<div class="list-group list-group-flush">
 				<div class="list-group-item list-group-item-action bg-light">
@@ -604,7 +692,8 @@ function closemodal(){
 											<img src="<%=context %>/profile_image/${justFollowMe.uimage}"
 												class="rounded-circle" width="20" height="20"> <a
 												class="card-title text-dark">${justFollowMe.unickName}</a> <a
-												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+												class="card-subtitle mb-2 text-muted"
+												href="/iron/profile?uatid=${justFollowMe.uatid}">@${justFollowMe.uatid}</a>
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
 												style="font-size: 0.8rem;"
@@ -614,38 +703,37 @@ function closemodal(){
 									</div>
 								</c:forEach>
 							</c:if>
+							<%--
 							<!-- 팔로우하는 유저가 없을 경우 관심항목이 비슷한 사람을 추천 -->
 							<c:if test="${suggestFlist2_size<1 }">
 								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
 									<div class="card">
-										<div class="card-body"
-											style="font-size: 0.8rem; padding: 10px;">
-											<img
-												src="${resourcePath }/profile_image/${justFollowMe.uimage}"
-												class="rounded-circle" width="20" height="20"> <a
-												class="card-title text-dark">${justFollowMe.unickName}</a> <a
-												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											<img src="${resourcePath }/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
+												height="20">
+												<a class="card-title text-dark">${justFollowMe.unickName}</a>
+												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
 												style="font-size: 0.8rem;">팔로우</button>
 										</div>
 									</div>
 								</c:forEach>
-							</c:if>
+							</c:if> --%>
 						</div>
 						<c:if test="${suggestFlist2_size>0 }">
 							<button type="button" class="btn btn-outline-success"
 								id="writeBtn" data-toggle="modal" data-target="#morebtn">더보기
 							</button>
 						</c:if>
-
 					</div>
 				</div>
+				<!-- 사이드바 팔로우 가져가야할 구간 끝 -->
 
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
-						<div class="card-header">실시간 해시태그</div>
+						<div class="card-header">해시태그 순위</div>
 						<div class="card-body" style="padding: 5px;">
 							<c:forEach var="tag" items="${tag_list}" varStatus="status">
 								<c:if test="${status.count <=3 }">
@@ -654,7 +742,7 @@ function closemodal(){
 											style="font-size: 0.8rem; padding: 10px;">
 											${tag.hrank}위
 											<div>
-												<a href="#">#${tag.hname}</a> <span class="float-right">${tag.hcount }
+												<a href="/hoon/searchView?search=%23${tag.hname}">#${tag.hname}</a> <span class="float-right">${tag.hcount }
 													봄</span>
 											</div>
 										</div>
@@ -664,6 +752,7 @@ function closemodal(){
 						</div>
 					</div>
 				</div>
+
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px; font-size: 0.8rem;">
 					<div class="card">
@@ -704,7 +793,7 @@ function closemodal(){
 								data-toggle="modal" data-target="#towhom">받는 사람</button>
 							<button type="button" id="realCloseWrite" class="close"
 								data-dismiss="modal" style="display: none;"></button>
-							<button type="button" id="closeWrite" class="close"
+							<button type="button" id="closeWrite" class="close" onclick="closeWriteModal(${board.bcode});"
 								style="float: right;" data-toggle="modal"
 								data-target="#saveModal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
@@ -1119,7 +1208,7 @@ function closemodal(){
 						이 내용을 저장하시면 <br> 다음에 이어서 작성하실 수 있습니다.
 					</div>
 					<div class="modal-footer">
-						<button type="button" id="notsaveBtn" class="btn btn-secondary">
+						<button type="button" id="notsaveBtn" class="btn btn-secondary" onclick="saveModalClose(${board.bcode});">
 							아뇨 괜찮습니다</button>
 						<button type="submit" id="saveBtn" class="btn btn-success">저장</button>
 					</div>
@@ -1624,9 +1713,9 @@ function closemodal(){
 		}
 		
 		/*글쓰기에서 닫기눌렀을때 글이없으면 저장창 안띄우고 닫기*/
-		jQuery("#closeWrite").click(function(){
+		function closeWriteModal(bcode){
 			if(bvote==1){
-				location.href="../iron/timeline";
+				location.href="../iron/singleBoard?bcode="+bcode;
 			}
 			else{
 				var write=$("#writeTextarea").html();
@@ -1634,19 +1723,17 @@ function closemodal(){
 					$("#saveModal .close").click();
 					$("#realCloseWrite").click();
 					//그리고 메인글로 돌아가
-					location.href="/iron/timeline";
+					location.href="../iron/singleBoard?bcode="+bcode;
 				}
 			}
-		});
+		}
 		
 		/*마지막 저장창에서 저장안해 클릭*/
-		jQuery("#notsaveBtn").click(function(){
-			//$("#writeForm .close").click();
+		function saveModalClose(bcode){
 			$("#saveModal .close").click();
 			$("#realCloseWrite").click();
-			//그리고 메인글로 돌아가
-			location.href="/iron/timeline";
-		});
+			location.href="../iron/singleBoard?bcode="+bcode;
+		}	
 		
 		/*마지막 저장창에서 저장해 클릭*/
 		jQuery("#saveBtn").click(function(){

@@ -79,6 +79,8 @@ public class JunghunController {
 		System.out.println("hoon Controller search Start");
 		System.out.println("Controller ::" + search);
 		User_Info loginUser = (User_Info) session.getAttribute("user");
+		System.out.println("#### [Hoon] searchView -> " + loginUser.getUcode());
+		model.addAttribute("loginUser",loginUser);
 		System.out.println("explore -> " + loginUser.getUemail());
 		if (search.trim().equals("") || search.trim() == null) {
 			return "hoon/explore";
@@ -122,7 +124,15 @@ public class JunghunController {
 						+ listSearch.get(i).getBattachSrc());
 			}
 		}
-
+		for (int i = 0; i < listNew.size(); i++) {
+			if (listNew.get(i).getBattach() != null) {
+				System.out.println("[" + i + "]" + " Nbattach Data : " + listNew.get(i).getBattach());
+				listNew.get(i).setBattachType(listNew.get(i).getBattach().substring(0, 5));
+				listNew.get(i).setBattachSrc(listNew.get(i).getBattach().substring(6));
+				System.out.println("Nbattach Type : " + listNew.get(i).getBattachType() + " / battach Source : "
+						+ listNew.get(i).getBattachSrc());
+			}
+		}
 		List<Junghun> searchbattach = js.searchbattach(junghun);
 
 		for (int i = 0; i < searchbattach.size(); i++) {

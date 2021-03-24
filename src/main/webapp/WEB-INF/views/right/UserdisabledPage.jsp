@@ -43,7 +43,7 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 	integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 	crossorigin="anonymous"></script>
-<script src="/js/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
 <style>
@@ -64,8 +64,8 @@
 			        <p>
 				  </form>
 				  <div id="formFooter">
-			        <input type="hidden" value="${ui.uCode }">
-			        <button type="button" class="btn btn-outline-success" onclick="location.href='/right/userAble?ucode=${ui.uCode }'" id="ok" style="margin-right:0.5%">복구</button> 
+			        <input type="hidden" value="${ui.ucode }">
+			        <button type="button" class="btn btn-outline-success" onclick="location.href='/right/userAble?ucode=${ui.ucode }'" id="ok" style="margin-right:0.5%">복구</button> 
 			        <button type="button" class="btn btn-outline-secondary" onclick="location.href='../bro/index'">취소</button>
 			   </div>
 			</div>

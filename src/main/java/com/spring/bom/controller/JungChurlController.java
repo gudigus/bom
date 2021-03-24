@@ -264,9 +264,9 @@ public class JungChurlController {
 		System.out.println("[JungChurlController] goProfile start...");
 
 		// 로그인유저정보 상시 업데이트
-		User_Info loginUser = (User_Info) session.getAttribute("user");
-		loginUser = us.getLoginUserInfo(loginUser.getUcode());
-		model.addAttribute("loginUser", loginUser);
+		User_Info user = (User_Info) session.getAttribute("user");
+		user = us.getLoginUserInfo(user.getUcode());
+		model.addAttribute("user", user);
 
 		User_Info someone = new User_Info();
 		someone.setUatid(uatid);
@@ -277,7 +277,7 @@ public class JungChurlController {
 		System.out.println("check someone.ucode -> " + someone.getUcode());
 
 		// someone에 팔로우 수 저장
-		someone.setFollowerCount(us.getUserfollowCount(someone));
+		someone.setFollowCount(us.getUserfollowCount(someone));
 		System.out.println("Set someone.followCount -> " + (someone.getFollowCount()));
 
 		// someone에 팔로워 수 저장
@@ -366,7 +366,7 @@ public class JungChurlController {
 
 		// 팔로우 추천2 나를 팔로우하는 유저 추천
 		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
-		List<Follow> suggestFlist2 = fs.getSuggestFollowList2(loginUser.getUcode());
+		List<Follow> suggestFlist2 = fs.getSuggestFollowList2(user.getUcode());
 		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
 		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
 		model.addAttribute("suggestFlist2", suggestFlist2);
