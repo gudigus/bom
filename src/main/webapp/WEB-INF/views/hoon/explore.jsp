@@ -420,7 +420,7 @@ function unfollow(number){
 													<div>
 														<a href="searchView?search=%23${tag.hname}">#${tag.hname}</a>
 														<p>
-														<c:if test="${tag.hcount >10 }">
+														<c:if test="${tag.hcount >0 }">
 															${tag.hcount }봄
 														</c:if>
 													</div>
