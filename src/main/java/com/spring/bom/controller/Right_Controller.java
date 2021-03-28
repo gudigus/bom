@@ -1,6 +1,7 @@
 package com.spring.bom.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.spring.bom.model.bro.User_info;
+import com.spring.bom.model.iron.Follow;
+import com.spring.bom.model.iron.HashTag;
 import com.spring.bom.model.iron.User_Info;
 import com.spring.bom.model.right.RBlock;
 import com.spring.bom.model.right.RFollow;
@@ -30,6 +35,8 @@ import com.spring.bom.model.right.RInterestDetail;
 import com.spring.bom.model.right.Statis;
 import com.spring.bom.model.right.RUser_Info;
 import com.spring.bom.service.right.StatisService;
+import com.spring.bom.service.iron.FollowService;
+import com.spring.bom.service.iron.HashTagService;
 import com.spring.bom.service.right.RFollowService;
 import com.spring.bom.service.right.RUser_InfoService;
 
@@ -44,7 +51,10 @@ public class Right_Controller {
 	// for mail
 	@Autowired
 	private JavaMailSender mailSender;
-
+	
+	@Autowired
+	private HashTagService hs;
+	
 	// 통계 service
 	@Autowired
 	private StatisService ss;
@@ -53,15 +63,21 @@ public class Right_Controller {
 	@Autowired
 	private RFollowService fs;
 
+	// iron 팔로우 service
+	@Autowired
+	private FollowService ironfs;
+
 	// 탈퇴회원 로그인시
 	@RequestMapping(value = "/right/UserdisabledPage")
 	public String UserdisabledPage(HttpSession session, Model model) {
-		User_Info user = (User_Info) session.getAttribute("user");
+		User_info user = (User_info) session.getAttribute("user");
 		model.addAttribute("user", user);
-
-		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
-		model.addAttribute("ucode", ucode);
-		RUser_Info ui = us.detail(ucode);
+		System.out.println("User_info user ucode -> " + user.getuCode());
+		System.out.println("User_info user uEmail -> " + user.getuEmail());
+		System.out.println("User_info user uPassword -> " + user.getuPassword());
+		
+		model.addAttribute("ucode", user.getuCode());
+		RUser_Info ui = us.detail(user.getuCode());
 		model.addAttribute("ui", ui);
 
 		return "/right/UserdisabledPage";
@@ -70,15 +86,14 @@ public class Right_Controller {
 	// 복구버튼 클릭시
 	@RequestMapping(value = "/right/userAble")
 	public String userAble(HttpSession session, Model model) {
-		User_Info user = (User_Info) session.getAttribute("user");
+		User_info user = (User_info) session.getAttribute("user");
 		model.addAttribute("user", user);
-
-		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
-		model.addAttribute("ucode", ucode);
-		RUser_Info ui = us.detail(ucode);
+				
+		model.addAttribute("ucode", user.getuCode());
+		RUser_Info ui = us.detail( user.getuCode());
 		model.addAttribute("ui", ui);
-		int result1 = us.updateUstate1(ucode);
-		int result2 = us.updateUstate2(ucode);
+		int result1 = us.updateUstate1( user.getuCode());
+		int result2 = us.updateUstate2( user.getuCode());
 		model.addAttribute("result1", result1);
 		model.addAttribute("result2", result2);
 
@@ -107,6 +122,33 @@ public class Right_Controller {
 		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist1 = ironfs.getSuggestFollowList1(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist1.size());
+		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
+		model.addAttribute("suggestFlist1", suggestFlist1);
+
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = ironfs.getSuggestFollowList2(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+		
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
+		
 		return "/right/moreSee";
 	}
 
@@ -121,6 +163,33 @@ public class Right_Controller {
 		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist1 = ironfs.getSuggestFollowList1(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist1.size());
+		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
+		model.addAttribute("suggestFlist1", suggestFlist1);
+
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = ironfs.getSuggestFollowList2(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+		
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
+		
 		return "/right/updateEv";
 	}
 	/*
@@ -142,6 +211,35 @@ public class Right_Controller {
 		model.addAttribute("ucode", ucode);
 		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
+
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist1 = ironfs.getSuggestFollowList1(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist1.size());
+		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
+		model.addAttribute("suggestFlist1", suggestFlist1);
+
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = ironfs.getSuggestFollowList2(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
+		
 		return "/right/insertpw";
 	}
 
@@ -156,6 +254,34 @@ public class Right_Controller {
 		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist1 = ironfs.getSuggestFollowList1(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist1.size());
+		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
+		model.addAttribute("suggestFlist1", suggestFlist1);
+
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = ironfs.getSuggestFollowList2(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
+		
 		return "/right/userInfoEditForm";
 	}
 
@@ -199,6 +325,34 @@ public class Right_Controller {
 
 		model.addAttribute("ui", ui);
 
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist1 = ironfs.getSuggestFollowList1(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist1.size());
+		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
+		model.addAttribute("suggestFlist1", suggestFlist1);
+
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = ironfs.getSuggestFollowList2(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
+		
 		return "/right/doubleSecurity";
 	}
 
@@ -250,6 +404,34 @@ public class Right_Controller {
 		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist1 = ironfs.getSuggestFollowList1(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist1.size());
+		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
+		model.addAttribute("suggestFlist1", suggestFlist1);
+
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = ironfs.getSuggestFollowList2(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
+		
 		return "right/checknum";
 	}
 
@@ -279,6 +461,34 @@ public class Right_Controller {
 		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist1 = ironfs.getSuggestFollowList1(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist1.size());
+		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
+		model.addAttribute("suggestFlist1", suggestFlist1);
+
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = ironfs.getSuggestFollowList2(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
+		
 		return "/right/changePw";
 	}
 
@@ -396,6 +606,34 @@ public class Right_Controller {
 		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist1 = ironfs.getSuggestFollowList1(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist1.size());
+		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
+		model.addAttribute("suggestFlist1", suggestFlist1);
+
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = ironfs.getSuggestFollowList2(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
+		
 		return "right/pwchecknum";
 	}
 
@@ -436,6 +674,34 @@ public class Right_Controller {
 		System.out.println("list ->" + list);
 		System.out.println("list_choice ->" + list_choice);
 
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist1 = ironfs.getSuggestFollowList1(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist1.size());
+		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
+		model.addAttribute("suggestFlist1", suggestFlist1);
+
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = ironfs.getSuggestFollowList2(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
+		
 		return "/right/likeForm";
 	}
 
@@ -484,6 +750,33 @@ public class Right_Controller {
 		List<RBlock> bListP = us.blockListP(ucode);
 		model.addAttribute("bListP", bListP);
 
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist1 = ironfs.getSuggestFollowList1(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist1.size());
+		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
+		model.addAttribute("suggestFlist1", suggestFlist1);
+
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = ironfs.getSuggestFollowList2(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
+
 		return "/right/block";
 	}
 
@@ -499,6 +792,34 @@ public class Right_Controller {
 		List<RBlock> bList = us.blockList(ucode);
 		model.addAttribute("bList", bList);
 
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist1 = ironfs.getSuggestFollowList1(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist1.size());
+		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
+		model.addAttribute("suggestFlist1", suggestFlist1);
+
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = ironfs.getSuggestFollowList2(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
+		
 		return "/right/blockhash";
 	}
 
@@ -514,6 +835,34 @@ public class Right_Controller {
 		List<RBlock> bList = us.blockList(ucode);
 		model.addAttribute("bList", bList);
 
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist1 = ironfs.getSuggestFollowList1(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist1.size());
+		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
+		model.addAttribute("suggestFlist1", suggestFlist1);
+
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = ironfs.getSuggestFollowList2(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
+		
 		return "/right/plusBhash";
 	}
 
@@ -543,6 +892,34 @@ public class Right_Controller {
 		List<RBlock> bList = us.blockList(ucode);
 		model.addAttribute("bList", bList);
 
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist1 = ironfs.getSuggestFollowList1(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist1.size());
+		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
+		model.addAttribute("suggestFlist1", suggestFlist1);
+
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = ironfs.getSuggestFollowList2(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
+		
 		return "/right/blockword";
 	}
 
@@ -558,14 +935,42 @@ public class Right_Controller {
 		List<RBlock> bList = us.blockList(ucode);
 		model.addAttribute("bList", bList);
 
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist1 = ironfs.getSuggestFollowList1(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist1.size());
+		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
+		model.addAttribute("suggestFlist1", suggestFlist1);
+
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = ironfs.getSuggestFollowList2(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
+		
 		return "/right/plusBword";
 	}
 
 	@PostMapping(value = "right/plusBwordRe")
 	public String plusBwordRe(HttpSession session, Model model, @RequestParam String bword) {
-		User_Info user = (User_Info)session.getAttribute("user");
-		model.addAttribute("user",user);
-		
+		User_Info user = (User_Info) session.getAttribute("user");
+		model.addAttribute("user", user);
+
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
 		session.setAttribute("ucode", ucode);
@@ -578,7 +983,7 @@ public class Right_Controller {
 	// 차단 해제 - 계정
 	@RequestMapping(value = "right/blockdelete")
 	public String blockdelete(Model model, @RequestParam int blcode) {
-		
+
 		int result = us.deleteblock(blcode);
 		model.addAttribute("result", result);
 
@@ -588,7 +993,7 @@ public class Right_Controller {
 	// 차단 해제 - 단어
 	@RequestMapping(value = "right/blockdeleteword")
 	public String blockdeleteword(Model model, @RequestParam int blcode) {
-		
+
 		int result = us.deleteblock(blcode);
 		model.addAttribute("result", result);
 
@@ -616,15 +1021,43 @@ public class Right_Controller {
 	// 탈퇴
 	@RequestMapping(value = "right/userDisabled")
 	public String userDisabled(HttpSession session, Model model) {
-		User_Info user = (User_Info)session.getAttribute("user");
-		model.addAttribute("user",user);
-		
+		User_Info user = (User_Info) session.getAttribute("user");
+		model.addAttribute("user", user);
+
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
 		session.setAttribute("ucode", ucode);
 		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist1 = ironfs.getSuggestFollowList1(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist1.size());
+		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
+		model.addAttribute("suggestFlist1", suggestFlist1);
+
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = ironfs.getSuggestFollowList2(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
+		
 		return "/right/userDisabled";
 	}
 
@@ -645,9 +1078,9 @@ public class Right_Controller {
 	// 봄 통계 Statis
 	@RequestMapping(value = "right/bomStatis")
 	public String bomStatis(HttpSession session, Model model) {
-		User_Info user = (User_Info)session.getAttribute("user");
-		model.addAttribute("user",user);
-		
+		User_Info user = (User_Info) session.getAttribute("user");
+		model.addAttribute("user", user);
+
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
 		session.setAttribute("ucode", ucode);
@@ -680,36 +1113,113 @@ public class Right_Controller {
 		model.addAttribute("gListm", gListm);
 		model.addAttribute("gListw", gListw);
 
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist1 = ironfs.getSuggestFollowList1(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist1.size());
+		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
+		model.addAttribute("suggestFlist1", suggestFlist1);
+
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = ironfs.getSuggestFollowList2(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
+		
 		return "/right/bomStatis";
 	}
 
 	// 팔로잉&팔로워
 	@RequestMapping(value = "/right/follower")
-	public String follower(HttpSession session, Model model) {
+	public String follower(HttpSession session, Model model,@RequestParam String uatid) {
 		User_Info user = (User_Info)session.getAttribute("user");
 		model.addAttribute("user",user);
 		
 		System.out.println("RightController follower Start");
+		String atid = uatid;
+		System.out.println("Rightuatid ->"+ uatid);
+		System.out.println("Rightatid ->"+ atid);
+		
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
 		model.addAttribute("ucode", ucode);
 		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
-
+		
+		// session ucode 현재 로그인 되어있는 계정의 팔로우/팔로워 List & 차단 List
 		List<RFollow> followerList = fs.selectFollower(ucode);
+		//차단한 리스트
 		List<RFollow> followerBlockList = fs.selectBlockFollower(ucode);
 		List<RFollow> followingList = fs.selectFollowing(ucode);
+		//차단 당한 리스트
 		List<RFollow> followingBlockList = fs.selectBlockFollowing(ucode);
-
+		
+		// 프로필 uatid 계정의 팔로우/팔로워 List & 차단 List
+		List<RFollow> pfollowerList = fs.selectFollower_p(uatid);
+		List<RFollow> pfollowerBlockList = fs.selectBlockFollower_p(uatid);
+		List<RFollow> pfollowingList = fs.selectFollowing_p(uatid);
+		List<RFollow> pfollowingBlockList = fs.selectBlockFollowing_p(uatid);
+		
 		model.addAttribute("followerList", followerList);
 		model.addAttribute("followingList", followingList);
 		model.addAttribute("followerBlockList", followerBlockList);
 		model.addAttribute("followingBlockList", followingBlockList);
+		model.addAttribute("pfollowerList", pfollowerList);
+		model.addAttribute("pfollowingList", pfollowingList);
+		model.addAttribute("pfollowerBlockList", pfollowerBlockList);
+		model.addAttribute("pfollowingBlockList", pfollowingBlockList);
 		System.out.println("RightController follower end");
+		model.addAttribute("uatid", atid);
+		
+		
+		
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist1 = ironfs.getSuggestFollowList1(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist1.size());
+		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
+		model.addAttribute("suggestFlist1", suggestFlist1);
+
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = ironfs.getSuggestFollowList2(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+		
+		
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
+		
 		return "right/follower";
 	}
 
 	@RequestMapping(value = "/right/following")
-	public String following(HttpSession session, Model model) {
+	public String following(HttpSession session, Model model,@RequestParam String uatid) {
 		User_Info user = (User_Info)session.getAttribute("user");
 		model.addAttribute("user",user);
 		
@@ -719,24 +1229,101 @@ public class Right_Controller {
 		RUser_Info ui = us.detail(ucode);
 		model.addAttribute("ui", ui);
 
+		// session ucode 현재 로그인 되어있는 계정의 팔로우/팔로워 List & 차단 List
 		List<RFollow> followerList = fs.selectFollower(ucode);
 		List<RFollow> followerBlockList = fs.selectBlockFollower(ucode);
 		List<RFollow> followingList = fs.selectFollowing(ucode);
 		List<RFollow> followingBlockList = fs.selectBlockFollowing(ucode);
+		
+		String atid = uatid;
+		System.out.println("Rightuatid ->"+ uatid);
+		System.out.println("Rightatid ->"+ atid);
+		
+		// 프로필 uatid 계정의 팔로우/팔로워 List & 차단 List
+		List<RFollow> pfollowerList = fs.selectFollower_p(uatid);
+		List<RFollow> pfollowerBlockList = fs.selectBlockFollower_p(uatid);
+		List<RFollow> pfollowingList = fs.selectFollowing_p(uatid);
+		List<RFollow> pfollowingBlockList = fs.selectBlockFollowing_p(uatid);
 
 		model.addAttribute("followerList", followerList);
 		model.addAttribute("followingList", followingList);
 		model.addAttribute("followerBlockList", followerBlockList);
 		model.addAttribute("followingBlockList", followingBlockList);
+		model.addAttribute("pfollowerList", pfollowerList);
+		model.addAttribute("pfollowingList", pfollowingList);
+		model.addAttribute("pfollowerBlockList", pfollowerBlockList);
+		model.addAttribute("pfollowingBlockList", pfollowingBlockList);
 		System.out.println("RightController follower end");
+		model.addAttribute("uatid", atid);
+		
+		System.out.println("RightController Following List from profile -> " + pfollowingList);
+		System.out.println("RightController followingList List from session -> " + followingList);
+		
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist1 = ironfs.getSuggestFollowList1(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist1.size());
+		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
+		model.addAttribute("suggestFlist1", suggestFlist1);
+
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = ironfs.getSuggestFollowList2(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+		
+		
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
+		
 		return "right/following";
 	}
 
 	// 팔로잉 취소
 	@RequestMapping(value = "/right/followerDelete", produces = "application/text;charset=UTF-8")
-	public String followerDelete(HttpSession session, Model model, @RequestParam int fopcode) {
+	public String followerDelete(HttpSession session, Model model, @RequestParam int fopcode,@RequestParam String uatid,RedirectAttributes redirect) {
 		User_Info user = (User_Info)session.getAttribute("user");
 		model.addAttribute("user",user);
+		
+		String atid = uatid;
+		System.out.println("Right Delete uatid ->"+ uatid);
+		System.out.println("Right Delete atid ->"+ atid);
+		redirect.addAttribute("uatid", atid);	
+		
+		System.out.println("RightController followerDelete Start");
+		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
+		model.addAttribute("ucode", ucode);
+		RUser_Info ui = us.detail(ucode);
+		model.addAttribute("ui", ui);
+
+		int result = fs.deleteFollowing(ucode, fopcode);
+
+		model.addAttribute("result", result);
+		System.out.println("followerDelete result => " + result);
+		System.out.println("RightController followerDelete end");
+		return "redirect:../right/follower";
+	}
+	// 팔로잉 취소 -> following.jsp
+	@RequestMapping(value = "/right/followerDeletetofollowing", produces = "application/text;charset=UTF-8")
+	public String followerDeletetofollowing(HttpSession session, Model model, @RequestParam int fopcode,@RequestParam String uatid,RedirectAttributes redirect) {
+		User_Info user = (User_Info)session.getAttribute("user");
+		model.addAttribute("user",user);
+		
+		String atid = uatid;
+		System.out.println("Right Delete uatid ->"+ uatid);
+		System.out.println("Right Delete atid ->"+ atid);
+		redirect.addAttribute("uatid", atid);	
 		
 		System.out.println("RightController followerDelete Start");
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
@@ -750,13 +1337,18 @@ public class Right_Controller {
 		System.out.println("followerDelete result => " + result);
 		System.out.println("RightController followerDelete end");
 		return "redirect:../right/following";
-	}
+	}	
 
 	// 팔로우 하는 사람 팔로잉하기
 	@RequestMapping(value = "/right/addfollowing", produces = "application/text;charset=UTF-8")
-	public String addfollowing(HttpSession session, Model model, @RequestParam int fopcode) {
+	public String addfollowing(HttpSession session, Model model, @RequestParam int fopcode,@RequestParam String uatid,RedirectAttributes redirect) {
 		User_Info user = (User_Info)session.getAttribute("user");
 		model.addAttribute("user",user);
+
+		String atid = uatid;
+		System.out.println("Right Delete uatid ->"+ uatid);
+		System.out.println("Right Delete atid ->"+ atid);
+		redirect.addAttribute("uatid", atid);		
 		
 		System.out.println("RightController addfollowing Start");
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
@@ -771,4 +1363,30 @@ public class Right_Controller {
 		System.out.println("RightController addfollowing end");
 		return "redirect:../right/follower";
 	}
+	// 팔로우 하는 사람 팔로잉하기 -> following.jsp
+	@RequestMapping(value = "/right/addfollowingtofollowing", produces = "application/text;charset=UTF-8")
+	public String addfollowingtofollowing(HttpSession session, Model model, @RequestParam int fopcode,@RequestParam String uatid,RedirectAttributes redirect) {
+		User_Info user = (User_Info)session.getAttribute("user");
+		model.addAttribute("user",user);
+
+		String atid = uatid;
+		System.out.println("Right Delete uatid ->"+ uatid);
+		System.out.println("Right Delete atid ->"+ atid);
+		redirect.addAttribute("uatid", atid);		
+		
+		System.out.println("RightController addfollowing Start");
+		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
+		model.addAttribute("ucode", ucode);
+		RUser_Info ui = us.detail(ucode);
+		model.addAttribute("ui", ui);
+
+		int result = fs.addfollowing(ucode, fopcode);
+
+		model.addAttribute("result", result);
+		System.out.println("addfollowing result => " + result);
+		System.out.println("RightController addfollowing end");
+		
+		return "redirect:../right/following";
+	}
+
 }

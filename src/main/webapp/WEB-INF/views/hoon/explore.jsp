@@ -47,6 +47,19 @@
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
 <style>
+@font-face {
+	font-family: 'GmarketSansLight';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+body {
+	font-family: GmarketSansLight;
+}
+
 #bearsize {
 	width: 550px;
 	overflow: hidden;
@@ -68,8 +81,7 @@ a:hover {
 	color: black;
 	text-decoration: none;
 }
-</style>
-<style>
+
 .dropdown-toggle.caret-off::after {
 	display: none;
 	resize: none;
@@ -122,24 +134,21 @@ label {
 	color: #28a745;
 }
 </style>
-
+<!-- Like Ajax Fuction -->
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script type="text/javascript">
-
 function goProfile(){
 	location.href = "../iron/profile?uatid="+${user.uatid};
 }
-
 window.onload = function(){	//주혜
 	clickWriteBtn();
 	clickSaveBtn();
 	getFollower('<%=context %>');
 }
-
 function goSingleBoard(bbcode,bindex){
 	alert(bbcode+'로 이동합니다.');
 	location.href = 'singleBoard?bcode='+bbcode;
 }
-
 function clickLikeBtn(bbcode,btnIndex){
 	event.stopPropagation();
 	var index = btnIndex;
@@ -162,7 +171,6 @@ function clickLikeBtn(bbcode,btnIndex){
 		}
 	});
 }
-
 function viewBoardOptions(bbcode,bindex){
 	event.stopPropagation();
 	var index = bindex;
@@ -185,38 +193,52 @@ function viewBoardOptions(bbcode,bindex){
 		}
 	});
 }
-
+//팔로우 추천 가져가야할 
+//팔로우 추천 더보기 닫기 기능
+function closemodal(){
+	location.reload();
+}
 //팔로우 하는 로직
 function followchk(number){
-	
 	//name 에 k + number 쓰는 태그를찾아서 text변경
 	var textareaVal = $("button[name=k"+number+"]").text();
 	console.log("textareaVal + textareaVal" + textareaVal)
-	
 	var msg = { uopcode :number};
 	$.ajax({
 		url: '<%=context%>/bear/followchk',
 		data: msg,
 		type: "post",
-
 		success: function (res) {
 			console.log("저장성공 - > " +res)
-			
 			if(res == "1"){
 				console.log("저장성공")
 				  $("button[name=k"+number+"]").text("팔로잉");
 				  $("button[name=k"+number+"]").attr("class","btn btn-success btn-sm float-right");
-		
+				  $("button[name=k"+number+"]").attr("onclick","unfollow("+number+")");
 			}else 
 				{console.log("저장실패")}
-				
-			 
 		}
-});	 
+	});	 
 }
-
-function closemodal(){
-	location.reload();
+//언팔로우 
+function unfollow(number){
+	console.log("언팔로우 시작  number -> " + number);
+	var msg = {fopcode  : number};
+	$.ajax({
+		url: '<%=context%>/bear/unfollow',
+		data: msg,
+		type: "post",
+		success: function (res){
+			if(res == 1 ){
+				console.log("저장성공 - > " +res)
+				 $("button[name=k"+number+"]").text("언팔함");
+				  $("button[name=k"+number+"]").attr("class","btn btn-danger btn-sm float-right");
+				  $("button[name=k"+number+"]").attr("onclick","followchk("+number+")");					
+			}else{					
+				alert("삭제하지못했습니다.")
+			}				
+		}			
+	});
 }
 </script>
 
@@ -238,10 +260,11 @@ function closemodal(){
 				</a> <a href="/hoon/explore"
 					class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
-				</a> <a href="alarm" class="list-group-item list-group-item-action">
+				</a>
+				<!-- <a href="alarm" class="list-group-item list-group-item-action">
 					<img src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
-				</a>
+				</a> -->
 				<!-- bear1 -->
 				<a href="/bear/chat" class="list-group-item list-group-item-action">
 					<img src="/img/send.svg" width="15" height="15"> 쪽지
@@ -276,7 +299,8 @@ function closemodal(){
 							</div>
 						</div>
 					</div>
-					<button type="button" class="btn btn-success" onclick="location.href='../coffee/logout'">로그아웃</button>
+					<button type="button" class="btn btn-success"
+						onclick="location.href='../coffee/logout'">로그아웃</button>
 				</div>
 			</div>
 		</div>
@@ -364,9 +388,8 @@ function closemodal(){
 						<script>
 	var myImage = document.getElementById("mainImage");
 	var imageArray = [ "<%=context%>/image/ti433a10907.jpg",
-			"<%=context%>/image/1286850_521880_5046.jpg", "<%=context%>/image/coco.jpg" ];
+			"<%=context%>/image/코로나.png", "<%=context%>/image/중앙.png" ];
 	var imageIndex = 0;
-
 	function changeImage() {
 		myImage.setAttribute("src", imageArray[imageIndex]);
 		imageIndex++;
@@ -383,14 +406,17 @@ function closemodal(){
 						<tr>
 							<td>
 								<div class="card-body" style="padding: 5px;">
-									<c:forEach var="tag" items="${tag_list}" varStatus="status">
-										<c:if test="${status.count <=3 }">
+									<c:forEach var="tag" items="${listHash}" varStatus="status">
+										<c:if test="${status.count <=5 }">
 											<div class="card">
 												<div class="card-body"
 													style="font-size: 0.8rem; padding: 10px;">
 													<div>
 														<a href="searchView?search=%23${tag.hname}">#${tag.hname}</a>
-														<span>${tag.hcount }봄</span>
+														<p>
+															<c:if test="${tag.hcount >0 }">
+															${tag.hcount }봄
+														</c:if>
 													</div>
 												</div>
 											</div>
@@ -405,21 +431,25 @@ function closemodal(){
 		</div>
 		<!-- /#page-content-wrapper -->
 
+
+
 		<!-- 오른쪽 사이드바 -->
+		<!-- 사이드바 팔로우 가져가야할 구간 시작 -->
 		<div class="bg-light border-left" id="sidebar-wrapper2">
 			<div class="list-group list-group-flush">
-				<!-- 검색창 -->
+				<!-- 사이드바검색 시작-->
 				<div class="list-group-item list-group-item-action bg-light">
 					<div id="drop_the_text">
 						<!-- 엔터치면 searchData() 실행 -->
-						<form class="well form-search" action="searchView" method="get"
-							id="jh_form">
+						<form class="well form-search" action="/hoon/searchView"
+							method="get" id="jh_form">
 							<input class="form-control" id="search" placeholder="봄 검색"
 								name="search"
 								onkeypress="if( event.keyCode == 13 ){searchData();}">
 						</form>
 					</div>
 				</div>
+				<!-- 사이드바검색 끝-->
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
@@ -434,7 +464,8 @@ function closemodal(){
 											<img src="<%=context %>/profile_image/${justFollowMe.uimage}"
 												class="rounded-circle" width="20" height="20"> <a
 												class="card-title text-dark">${justFollowMe.unickName}</a> <a
-												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+												class="card-subtitle mb-2 text-muted"
+												href="/iron/profile?uatid=${justFollowMe.uatid}">@${justFollowMe.uatid}</a>
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
 												style="font-size: 0.8rem;"
@@ -444,38 +475,37 @@ function closemodal(){
 									</div>
 								</c:forEach>
 							</c:if>
+							<%--
 							<!-- 팔로우하는 유저가 없을 경우 관심항목이 비슷한 사람을 추천 -->
 							<c:if test="${suggestFlist2_size<1 }">
 								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
 									<div class="card">
-										<div class="card-body"
-											style="font-size: 0.8rem; padding: 10px;">
-											<img
-												src="${resourcePath }/profile_image/${justFollowMe.uimage}"
-												class="rounded-circle" width="20" height="20"> <a
-												class="card-title text-dark">${justFollowMe.unickName}</a> <a
-												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											<img src="${resourcePath }/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
+												height="20">
+												<a class="card-title text-dark">${justFollowMe.unickName}</a>
+												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
 												style="font-size: 0.8rem;">팔로우</button>
 										</div>
 									</div>
 								</c:forEach>
-							</c:if>
+							</c:if> --%>
 						</div>
 						<c:if test="${suggestFlist2_size>0 }">
 							<button type="button" class="btn btn-outline-success"
 								id="writeBtn" data-toggle="modal" data-target="#morebtn">더보기
 							</button>
 						</c:if>
-
 					</div>
 				</div>
+				<!-- 사이드바 팔로우 가져가야할 구간 끝 -->
 
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
-						<div class="card-header">실시간 해시태그</div>
+						<div class="card-header">해시태그 순위</div>
 						<div class="card-body" style="padding: 5px;">
 							<c:forEach var="tag" items="${tag_list}" varStatus="status">
 								<c:if test="${status.count <=3 }">
@@ -717,7 +747,6 @@ function closemodal(){
 							<%
 								SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy");
 								Date d = new Date();
-
 								int year = Integer.parseInt(sdf1.format(d));
 							%>
 							<select name="year" id="year"
@@ -1171,7 +1200,6 @@ function closemodal(){
 			$('#ReplyArea').css("display","block");
 			$('#toreply').text("@"+atid);
 		}
-
 		//클릭시 스크랩 반응안하게
 		$('.scrapSetting').click(function(e){
 			e.stopPropagation();
@@ -1455,7 +1483,7 @@ function closemodal(){
 		/*글쓰기에서 닫기눌렀을때 글이없으면 저장창 안띄우고 닫기*/
 		jQuery("#closeWrite").click(function(){
 			if(bvote==1){
-				location.href="../iron/timeline";
+				location.href="../hoon/explore";
 			}
 			else{
 				var write=$("#writeTextarea").html();
@@ -1463,7 +1491,7 @@ function closemodal(){
 					$("#saveModal .close").click();
 					$("#realCloseWrite").click();
 					//그리고 메인글로 돌아가
-					location.href="/iron/timeline";
+					location.href="/hoon/explore";
 				}
 			}
 		});
@@ -1474,7 +1502,7 @@ function closemodal(){
 			$("#saveModal .close").click();
 			$("#realCloseWrite").click();
 			//그리고 메인글로 돌아가
-			location.href="/iron/timeline";
+			location.href="/hoon/explore";
 		});
 		
 		/*마지막 저장창에서 저장해 클릭*/
@@ -1665,8 +1693,7 @@ function closemodal(){
 								<div class="card">
 									<div class="card-body"
 										style="font-size: 0.8rem; padding: 10px;">
-										<c:forEach var="justFollowMe1" items="${suggestFlist2 }"
-											begin="0" end="2">
+										<c:forEach var="justFollowMe1" items="${suggestFlist2 }">
 											<div class="card">
 												<div class="card-body"
 													style="font-size: 0.8rem; padding: 10px;">

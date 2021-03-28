@@ -42,6 +42,19 @@
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
 <style>
+@font-face {
+	font-family: 'GmarketSansLight';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+body {
+	font-family: GmarketSansLight;
+}
+
 #bearsize {
 	width: 550px;
 	overflow: hidden;
@@ -122,6 +135,7 @@ label {
 <script type="text/javascript">
 	
 	function goProfile(){
+		event.stopPropagation();
 		location.href = "../iron/profile?uatid="+${user.uatid};
 	}
 	
@@ -136,88 +150,91 @@ label {
 		location.href = 'singleBoard?bcode='+bbcode;
 	}
 	
-	function clickLikeBtn(bbcode,btnIndex){
+	function clickLikeBtn(bcode,index, user){
 		event.stopPropagation();
-		var index = btnIndex;
-		var bcode = bbcode;
-		var msg = '게시글['+bcode+']에 좋아요를 눌렀습니다!';
-		alert(msg);
 		$.ajax({
-			url : "<%=context%>/iron/AjaxLikeAction",
-			data:{ bcode: bcode }, 
+			url : "<%=context%>/god/AjaxLikeAction",
+			data:{ bcode: bcode, ucode:user}, 
 			dataType:'json',
 			success : function(data){
-				var str='';
-				$('#likeBtn'+index).empty();
-				if(data.ltype==0||data.ltype==null)
-					str += "<img src='/img/heart.svg' width='20' height='20'> " + data.likeCount
-				if(data.ltype==1)
-					str+= "<img src='/img/red_heart.svg' width='20' height='20'> "+ data.likeCount
-				$('#likeBtn'+index).append(str);
-				alert(".ajax clickLikeBtn str->"+str);
+				if(data.ltype==0){
+					$("#noheart"+index).css("display","none");
+					$("#doheart"+index).css("display","block");
+				}
+				else if(data.ltype==1){
+					$("#noheart"+index).css("display","block");
+					$("#doheart"+index).css("display","none");
+				}
+				$("#likecount"+index).text(data.likeCount);
 			}
 		});
 	}
 	
-	function viewBoardOptions(bbcode,bindex){
+	function doBookmark(bbcode,bindex){
 		event.stopPropagation();
 		var index = bindex;
 		var bcode = bbcode;
-		var msg = '게시글['+bcode+']의 옵션을 눌렀습니다!';
-		alert(msg);
-		$.ajax({
-			url : "<%=context%>/iron/AjaxViewBoardOptions",
-			data:{ bcode: bcode }, 
-			dataType:'json',
-			success : function(data){
-				var str='';
-				$('#boardDropdownOption'+index).empty();
-				if(data.bbtype==0||data.bbtype==null)
-					str += "<a class='dropdown-item' onclick=bookmarkAction();> 북마크추가</a>"
-				if(data.bbtype==1)
-					str += "<a class='dropdown-item' onclick=bookmarkAction();> 북마크 삭제</a>"
-				$('#boardDropdownOption'+index).append(str+"<a class='dropdown-item' href='#'>URL담아가기</a>");
-				alert(".ajax viewBoardOptions str->"+str);
-			}
-		});
+		var msg = '북마크를 추가하시겠습니까?';
+		if (confirm(msg) == true){    //확인
+			location.href="doBookmark?bcode="+bcode;
+		}
+		else{   //취소
+		    return;
+		}
 	}
 	
+	//팔로우 추천 가져가야할 
+	//팔로우 추천 더보기 닫기 기능
+	function closemodal(){
+		location.reload();
+	}
 	//팔로우 하는 로직
 	function followchk(number){
-		
 		//name 에 k + number 쓰는 태그를찾아서 text변경
 		var textareaVal = $("button[name=k"+number+"]").text();
 		console.log("textareaVal + textareaVal" + textareaVal)
-		
 		var msg = { uopcode :number};
 		$.ajax({
 			url: '<%=context%>/bear/followchk',
 			data: msg,
 			type: "post",
-
 			success: function (res) {
 				console.log("저장성공 - > " +res)
-				
 				if(res == "1"){
 					console.log("저장성공")
 					  $("button[name=k"+number+"]").text("팔로잉");
 					  $("button[name=k"+number+"]").attr("class","btn btn-success btn-sm float-right");
-			
+					  $("button[name=k"+number+"]").attr("onclick","unfollow("+number+")");
 				}else 
 					{console.log("저장실패")}
-					
-				 
 			}
-	});	 
+		});	 
 	}
-	
-	function closemodal(){
-		location.reload();
+	//언팔로우 
+	function unfollow(number){
+		console.log("언팔로우 시작  number -> " + number);
+		var msg = {fopcode  : number};
+		$.ajax({
+			url: '<%=context%>/bear/unfollow',
+			data: msg,
+			type: "post",
+			success: function (res){
+				if(res == 1 ){
+					console.log("저장성공 - > " +res);
+					 $("button[name=k"+number+"]").text("언팔함");
+					  $("button[name=k"+number+"]").attr("class","btn btn-danger btn-sm float-right");
+					  $("button[name=k"+number+"]").attr("onclick","followchk("+number+")");					
+				}else{					
+					alert("삭제하지못했습니다.");
+				}				
+			}			
+		});
 	}
 	
 	//경빈
 	//글 삭제 하는 로직
 	function deleteBom(loginUcode, bUcode, sIndex){
+		event.stopPropagation();
 		/* alert('loginUcode->'+loginUcode);
 		alert('bUcode->'+bUcode);
 		alert('sIndex->'+sIndex); */
@@ -251,10 +268,13 @@ label {
 				</a> <a href="/hoon/explore"
 					class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
-				</a> <a href="alarm" class="list-group-item list-group-item-action">
+				</a>
+				<!-- 
+				<a href="alarm" class="list-group-item list-group-item-action">
 					<img src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
 				</a>
+				 -->
 				<!-- bear1 -->
 				<a href="/bear/chat" class="list-group-item list-group-item-action">
 					<img src="/img/send.svg" width="15" height="15"> 쪽지
@@ -289,7 +309,8 @@ label {
 							</div>
 						</div>
 					</div>
-					<button type="button" class="btn btn-success" onclick="location.href='../coffee/logout'">로그아웃</button>
+					<button type="button" class="btn btn-success"
+						onclick="location.href='../coffee/logout'">로그아웃</button>
 				</div>
 			</div>
 		</div>
@@ -309,7 +330,6 @@ label {
 				<a href="#" class="alert-link">좋아요</a>를 누르셨습니다.
 			</div>
 			-->
-
 			<div class="container-fluid">
 				<p>
 					<!-- 기본기능 완성 후 업그레이드 후보
@@ -337,12 +357,18 @@ label {
 							<!-- 경빈 part -->
 							<%-- <div class="card-body" id="singleBoard"
 								onclick="goSingleBoard(${tl_element.bcode},${status.index });"> --%>
-								<div class="card-body" id="singleBoard">
-									<form action="/coffee/deleteBom_timeline" class="coffeeDeleteBom${status.index }" method="post"> 
-										<input type="hidden" name="coffeeBoardBcode" value="${tl_element.bcode }">
-										<input type="hidden" name="coffeeBoardUatid" value="${tl_element.uatid }">
-										<button type="button" class="btn btn-light float-right" onclick="deleteBom(${user.ucode}, ${tl_element.ucode }, ${status.index })"><img src="/img/coffee/trash.svg" width = "15" height = "15"></button>
-										<%-- <button type="button"
+							<div class="card-body" id="singleBoard"
+								onclick="goSingleBoard(${reply.bcode},${status.index });">
+								<form action="/coffee/deleteBom_timeline"
+									class="coffeeDeleteBom${status.index }" method="post">
+									<input type="hidden" name="coffeeBoardBcode"
+										value="${tl_element.bcode }"> <input type="hidden"
+										name="coffeeBoardUatid" value="${tl_element.uatid }">
+									<button type="button" class="btn btn-light float-right"
+										onclick="deleteBom(${user.ucode}, ${tl_element.ucode }, ${status.index })">
+										<img src="/img/coffee/trash.svg" width="15" height="15">
+									</button>
+									<%-- <button type="button"
 											class="btn btn-light dropdown-toggle caret-off float-right">⋯</button>
 										
 										<div class="dropdown-menu">
@@ -350,8 +376,8 @@ label {
 												
 											</c:if>
 										</div> --%>
-									</form>
-									<!-- 경빈 part 끝 -->
+								</form>
+								<!-- 경빈 part 끝 -->
 								<img src="<%=context %>/profile_image/${tl_element.uimage }"
 									alt="no_image" class="rounded-circle" width="50" width="50">
 								<a class="card-title text-dark">${tl_element.unickName }</a> <a
@@ -400,17 +426,19 @@ label {
 								</p>
 								<c:if test="${tl_element.battach!=null }">
 									<c:if test="${tl_element.battachType=='image'}">
-										<img class="img-thumnail" width="300"
+										<img class="img-fluid"
 											src="<%=context %>/image/${tl_element.battachSrc}" />
 									</c:if>
 									<c:if test="${tl_element.battachType=='video'}">
-										<video controls width="300">
-											<source src="<%=context %>/video/${tl_element.battachSrc}"
-												type="video/mp4">
-											<source src="<%=context %>/video/${tl_element.battachSrc}"
-												type="video/webm">
-											해당 브라우저에는 지원하지 않는 비디오입니다.
-										</video>
+										<div class="embed-responsive embed-responsive-16by9">
+											<video controls>
+												<source src="<%=context %>/video/${tl_element.battachSrc}"
+													type="video/mp4">
+												<source src="<%=context %>/video/${tl_element.battachSrc}"
+													type="video/webm">
+												해당 브라우저에는 지원하지 않는 비디오입니다.
+											</video>
+										</div>
 									</c:if>
 								</c:if>
 								<div align="center">
@@ -440,27 +468,36 @@ label {
 											</c:if>
 										</button>
 
-
+										<!--좋아요 버튼 -->
 										<button id="likeBtn${status.index }" type="button"
 											class="btn btn-secondary btn-light mr-3"
 											data-toggle="tooltip" data-placement="top" title="좋아요"
-											onclick="clickLikeBtn(${tl_element.bcode},${status.index }); return false;">
-
-											<c:if
-												test="${tl_element.ltype == 0 || tl_element.ltype == null }">
-												<img src="/img/heart.svg" width="20" height="20"> ${tl_element.blikeCount }
-										</c:if>
-											<c:if test="${tl_element.ltype == 1 }">
-												<img src="/img/red_heart.svg" width="20" height="20"> ${tl_element.blikeCount }
-										</c:if>
-
+											onclick="clickLikeBtn(${tl_element.bcode},${status.index }, ${user.ucode});">
+											<div class="form-row justify-content-center text-center">
+												<img src="/img/heart.svg" width="20" height="20"
+													id="noheart${status.index }" style="display: none;">
+												<img src="/img/red_heart.svg" width="20" height="20"
+													id="doheart${status.index }" style="display: none;">
+												<span id="likecount${status.index }" class="ml-1">${tl_element.blikeCount }</span>
+												<c:if
+													test="${tl_element.ltype == 0 || tl_element.ltype == null }">
+													<script type="text/javascript">
+													$("#noheart"+${status.index }).css("display","block");
+													$("#doheart"+${status.index }).css("display","none");
+												</script>
+												</c:if>
+												<c:if test="${tl_element.ltype == 1 }">
+													<script type="text/javascript">
+													$("#noheart"+${status.index }).css("display","none");
+													$("#doheart"+${status.index }).css("display","block"); 
+												</script>
+												</c:if>
+											</div>
 										</button>
 
-										<button type="button"
-											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
-											data-toggle="dropdown" aria-haspopup="true"
+										<button type="button" class="btn btn-secondary btn-light mr-3"
 											aria-expanded="false" id="boardOption${status.index }"
-											onclick="viewBoardOptions(${bcode},${status.index }); return false;">
+											onclick="doBookmark(${tl_element.bcode},${status.index });">
 											<img src="/img/share.svg" width="20" height="20">
 										</button>
 										<!-- ajax -->
@@ -486,15 +523,22 @@ label {
 		<!-- /#page-content-wrapper -->
 
 		<!-- 오른쪽 사이드바 -->
+		<!-- 사이드바 팔로우 가져가야할 구간 시작 -->
 		<div class="bg-light border-left" id="sidebar-wrapper2">
 			<div class="list-group list-group-flush">
+				<!-- 사이드바검색 시작-->
 				<div class="list-group-item list-group-item-action bg-light">
 					<div id="drop_the_text">
 						<!-- 엔터치면 searchData() 실행 -->
-						<input class="form-control" id="search" placeholder="봄 검색"
-							onkeypress="if( event.keyCode == 13 ){searchData();}">
+						<form class="well form-search" action="/hoon/searchView"
+							method="get" id="jh_form">
+							<input class="form-control" id="search" placeholder="봄 검색"
+								name="search"
+								onkeypress="if( event.keyCode == 13 ){searchData();}">
+						</form>
 					</div>
 				</div>
+				<!-- 사이드바검색 끝-->
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
@@ -509,7 +553,8 @@ label {
 											<img src="<%=context %>/profile_image/${justFollowMe.uimage}"
 												class="rounded-circle" width="20" height="20"> <a
 												class="card-title text-dark">${justFollowMe.unickName}</a> <a
-												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+												class="card-subtitle mb-2 text-muted"
+												href="/iron/profile?uatid=${justFollowMe.uatid}">@${justFollowMe.uatid}</a>
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
 												style="font-size: 0.8rem;"
@@ -519,38 +564,36 @@ label {
 									</div>
 								</c:forEach>
 							</c:if>
+							<%--
 							<!-- 팔로우하는 유저가 없을 경우 관심항목이 비슷한 사람을 추천 -->
 							<c:if test="${suggestFlist2_size<1 }">
 								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
 									<div class="card">
-										<div class="card-body"
-											style="font-size: 0.8rem; padding: 10px;">
-											<img
-												src="${resourcePath }/profile_image/${justFollowMe.uimage}"
-												class="rounded-circle" width="20" height="20"> <a
-												class="card-title text-dark">${justFollowMe.unickName}</a> <a
-												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											<img src="${resourcePath }/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
+												height="20">
+												<a class="card-title text-dark">${justFollowMe.unickName}</a>
+												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
 												style="font-size: 0.8rem;">팔로우</button>
 										</div>
 									</div>
 								</c:forEach>
-							</c:if>
+							</c:if> --%>
 						</div>
 						<c:if test="${suggestFlist2_size>0 }">
 							<button type="button" class="btn btn-outline-success"
-								id="writeBtn" data-toggle="modal" data-target="#morebtn">더보기
-							</button>
+								data-toggle="modal" data-target="#morebtn">더보기</button>
 						</c:if>
-
 					</div>
 				</div>
+				<!-- 사이드바 팔로우 가져가야할 구간 끝 -->
 
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
-						<div class="card-header">실시간 해시태그</div>
+						<div class="card-header">해시태그 순위</div>
 						<div class="card-body" style="padding: 5px;">
 							<c:forEach var="tag" items="${tag_list}" varStatus="status">
 								<c:if test="${status.count <=3 }">
@@ -559,8 +602,8 @@ label {
 											style="font-size: 0.8rem; padding: 10px;">
 											${tag.hrank}위
 											<div>
-												<a href="#">#${tag.hname}</a> <span class="float-right">${tag.hcount }
-													봄</span>
+												<a href="/hoon/searchView?search=%23${tag.hname}">#${tag.hname}</a>
+												<span class="float-right">${tag.hcount } 봄</span>
 											</div>
 										</div>
 									</div>
@@ -569,6 +612,7 @@ label {
 						</div>
 					</div>
 				</div>
+
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px; font-size: 0.8rem;">
 					<div class="card">
@@ -621,21 +665,21 @@ label {
 					</div>
 					<div class="modal-body col-12">
 						<!-- 인용부분 -->
-						<div class="col-12 float-left" id="QuoteArea"
+						<div class="col-12 float-left" id="QuoteArea2"
 							style="display: none; font-size: 0.8em;">
 							<div class='card'>
 								<div class='card-body'>
-									<img id="quote_profile" src="" alt='no_image'
+									<img id="quote_profile2" src="" alt='no_image'
 										class='rounded-circle' width='30'> <a
-										class='card-title text-dark' id="quote_nickname"></a> <a
-										class='card-subtitle mb-2 text-muted' id="quote_atid"></a>
+										class='card-title text-dark' id="quote_nickname2"></a> <a
+										class='card-subtitle mb-2 text-muted' id="quote_atid2"></a>
 									<div class='card-text mt-2 mb-0' style="height: 100%;"
-										id="quote_content"></div>
-									<div class="quote_file mt-2" style="display: none;">
-										<img id="quote_img" src="<%=context %>" class="img-fluid" />
-										<div id="show_quote_video"
+										id="quote_content2"></div>
+									<div class="quote_file2 mt-2" style="display: none;">
+										<img id="quote_img2" src="<%=context %>" class="img-fluid" />
+										<div id="show_quote_video2"
 											class="embed-responsive embed-responsive-16by9">
-											<video controls id="quote_video" src="<%=context %>">
+											<video controls id="quote_video2" src="<%=context %>">
 											</video>
 										</div>
 									</div>
@@ -1259,22 +1303,22 @@ label {
 		function scrap_click(code, index,nickname, atid, profile, type, src, context){
 			var str="";
 			$("input[name=bbcode]").attr("value", code);
-			$("#QuoteArea").css("display","block");
-			$("#quote_nickname").text(nickname); 
+			$("#QuoteArea2").css("display","block");
+			$("#quote_nickname2").text(nickname); 
 			var content = $("input#tagContent"+index).attr('value');
-			$("#quote_content").html(content);
-			$("#quote_atid").text("@"+atid); 
-			$("#quote_profile").attr("src", profile);
+			$("#quote_content2").html(content);
+			$("#quote_atid2").text("@"+atid); 
+			$("#quote_profile2").attr("src", profile);
 			if(type=='image'){
-				$(".quote_file").css("display","block");
-				$("#show_quote_video").css("display","none");
+				$(".quote_file2").css("display","block");
+				$("#show_quote_video2").css("display","none");
 				var img=context+"/image/"+src;
-				$("#quote_img").attr("src", img);
+				$("#quote_img2").attr("src", img);
 			}
 			else if(type=='video'){
-				$(".quote_file").css("display","block");
+				$(".quote_file2").css("display","block");
 				var video=context+"/video/"+src;
-				$("#quote_video").attr("src", video);
+				$("#quote_video2").attr("src", video);
 			}
 			//투표버튼은 비활성화
 			$("#displayVote").attr("disabled","disabled");
@@ -1457,20 +1501,20 @@ label {
 					if(data.btype == "quote"){
 						btype=2;
 						$("input[name=bbcode]").attr("value",data.bbcode);
-						$("#QuoteArea").css("display","block");
-						$("#quote_nickname").text(data.qnickname); 
-						$("#quote_content").html(data.qcontent);
-						$("#quote_atid").text("@"+data.qatid); 
-						$("#quote_profile").attr("src", data.qprofileimage);
+						$("#QuoteArea2").css("display","block");
+						$("#quote_nickname2").text(data.qnickname); 
+						$("#quote_content2").html(data.qcontent);
+						$("#quote_atid2").text("@"+data.qatid); 
+						$("#quote_profile2").attr("src", data.qprofileimage);
 						if((data.qattach).substring(0,5) == "image"){
-							$(".quote_file").css("display","block");
-							$("#show_quote_video").css("display","none");
-							$("img#quote_img").attr("src", $("img#quote_img").attr('src')+"/"+data.qattach);
+							$(".quote_file2").css("display","block");
+							$("#show_quote_video2").css("display","none");
+							$("img#quote_img2").attr("src", $("img#quote_img2").attr('src')+"/"+data.qattach);
 						}
 						else if((data.qattach).substring(0,5) == 'video'){
-							$(".quote_file").css("display","block");
-							$("#show_quote_video").css("display","block");
-							$("video#quote_video").attr("src", $("video#quote_video").attr('src')+"/"+data.qattach);
+							$(".quote_file2").css("display","block");
+							$("#show_quote_video2").css("display","block");
+							$("video#quote_video2").attr("src", $("video#quote_video").attr('src')+"/"+data.qattach);
 						}
 						
 						//투표버튼은 비활성화
@@ -1741,7 +1785,7 @@ label {
 								<div class="card">
 									<div class="card-body"
 										style="font-size: 0.8rem; padding: 10px;">
-										<c:forEach var="justFollowMe1" items="${suggestFlist2 }" begin="0" end="2">
+										<c:forEach var="justFollowMe1" items="${suggestFlist2 }">
 											<div class="card">
 												<div class="card-body"
 													style="font-size: 0.8rem; padding: 10px;">
@@ -1776,7 +1820,6 @@ label {
 			</div>
 		</div>
 	</div>
-
 	<!-- /#wrapper -->
 </body>
 

@@ -49,6 +49,19 @@
 <script src="/js/bootstrap.bundle.js"></script>
 
 <style>
+@font-face {
+	font-family: 'GmarketSansLight';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+body {
+	font-family: GmarketSansLight;
+}
+
 #bearsize {
 	width: 550px;
 	overflow: hidden;
@@ -70,8 +83,7 @@ a:hover {
 	color: black;
 	text-decoration: none;
 }
-</style>
-<style>
+
 .dropdown-toggle.caret-off::after {
 	display: none;
 	resize: none;
@@ -130,18 +142,16 @@ label {
 function goProfile(){
 	location.href = "../iron/profile?uatid="+${user.uatid};
 }
-
 window.onload = function(){	//주혜
 	clickWriteBtn();
 	clickSaveBtn();
 	getFollower('<%=context %>');
 }
-
 function goSingleBoard(bbcode,bindex){
+	event.stopPropagation();
 	alert(bbcode+'로 이동합니다.');
 	location.href = '../iron/singleBoard?bcode='+bbcode;
 }
-
 function clickLikeBtn(bbcode,btnIndex){
 	event.stopPropagation();
 	var index = btnIndex;
@@ -164,7 +174,6 @@ function clickLikeBtn(bbcode,btnIndex){
 		}
 	});
 }
-
 function viewBoardOptions(bbcode,bindex){
 	event.stopPropagation();
 	var index = bindex;
@@ -187,37 +196,70 @@ function viewBoardOptions(bbcode,bindex){
 		}
 	});
 }
+//팔로우 추천 가져가야할 
+//팔로우 추천 더보기 닫기 기능
+function closemodal(){
+	location.reload();
+}
 //팔로우 하는 로직
 function followchk(number){
-	
 	//name 에 k + number 쓰는 태그를찾아서 text변경
 	var textareaVal = $("button[name=k"+number+"]").text();
 	console.log("textareaVal + textareaVal" + textareaVal)
-	
 	var msg = { uopcode :number};
 	$.ajax({
 		url: '<%=context%>/bear/followchk',
 		data: msg,
 		type: "post",
-
 		success: function (res) {
 			console.log("저장성공 - > " +res)
-			
 			if(res == "1"){
 				console.log("저장성공")
 				  $("button[name=k"+number+"]").text("팔로잉");
 				  $("button[name=k"+number+"]").attr("class","btn btn-success btn-sm float-right");
-		
+				  $("button[name=k"+number+"]").attr("onclick","unfollow("+number+")");
 			}else 
-				{console.log("저장실패")}
-				
-			 
+				{console.log("저장실패");}
 		}
-});	 
+	});	 
 }
-
-function closemodal(){
-	location.reload();
+//언팔로우 
+function unfollow(number){
+	console.log("언팔로우 시작  number -> " + number);
+	var msg = {fopcode  : number};
+	$.ajax({
+		url: '<%=context%>/bear/unfollow',
+		data: msg,
+		type: "post",
+		success: function (res){
+			if(res == 1 ){
+				console.log("저장성공 - > " +res);
+				 $("button[name=k"+number+"]").text("언팔함");
+				  $("button[name=k"+number+"]").attr("class","btn btn-danger btn-sm float-right");
+				  $("button[name=k"+number+"]").attr("onclick","followchk("+number+")");					
+			}else{					
+				alert("삭제하지못했습니다.");
+			}				
+		}			
+	});
+}
+//경빈
+//글 삭제 하는 로직
+function deleteBom(loginUcode, bUcode, sIndex, class_index){
+	event.stopPropagation();
+	/* alert('loginUcode->'+loginUcode);
+	alert('bUcode->'+bUcode);
+	alert('sIndex->'+sIndex); */
+	if(loginUcode == bUcode){
+		if (confirm("정말 삭제하시겠습니까?") == true){    //확인
+			$('.coffeeDeleteBom'+class_index+'_'+sIndex).submit();
+		}else{   //취소
+		    return;
+		} 
+	}else{
+		alert("타인의 글은 삭제할 수 없습니다.");
+		return;
+	} 
 }
 </script>
 </head>
@@ -238,10 +280,11 @@ function closemodal(){
 				</a> <a href="/hoon/explore"
 					class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
-				</a> <a href="alarm" class="list-group-item list-group-item-action">
+				</a>
+				<!-- <a href="alarm" class="list-group-item list-group-item-action">
 					<img src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
-				</a>
+				</a> -->
 				<!-- bear1 -->
 				<a href="/bear/chat" class="list-group-item list-group-item-action">
 					<img src="/img/send.svg" width="15" height="15"> 쪽지
@@ -336,6 +379,7 @@ function closemodal(){
 			</nav>
 			<script type="text/javascript">
 			function searchdel(){
+				event.stopPropagation();
 				$('.listdel').remove();
 			}
 					$("#del_ajax").click(function(){
@@ -384,9 +428,13 @@ function closemodal(){
 			<p>
 				<!--글 정렬-->
 			<div class="tab-content" id="myTabContent">
+
 				<!-- 인기  -->
 				<div class="tab-pane fade show active" id="fame" role="tabpanel"
 					aria-labelledby="home-tab">
+					<c:if test="${listSearch.size() == 0 && listUser.size() ==0 }">
+						"${search }" 검색된 내용이 없습니다
+					</c:if>
 					<c:if test="${listSearch.size() == 0 }">
 						<c:forEach var="junghun" items="${listUser }">
 							<div class="card-user" style="padding: 8px; font-weight: bolder;">
@@ -402,7 +450,9 @@ function closemodal(){
 													style="font-weight: bold;">${junghun.unickName}</a>
 												<button type="button"
 													class="btn btn-outline-success btn-sm float-right"
-													style="font-size: 0.8rem; float: right;">팔로우</button>
+													style="font-size: 0.8rem;"
+													onclick="followchk(${junghun.ucode})"
+													name=k${junghun.ucode}>팔로우</button>
 												<h6 class="card-title">@${junghun.uatid }</h6>
 												<p>${junghun.uintro }</p>
 											</div>
@@ -414,56 +464,89 @@ function closemodal(){
 						<p>
 							<c:forEach var="junghun" items="${searchlistall }"
 								varStatus="status">
+								<!-- 경빈 part 시작 -->
 								<div class="card">
-									<div class="card-body">
-										<button type="button" class="btn btn-light float-right">⋯</button>
+									<div class="card-body"
+										onclick="goSingleBoard(${junghun.bcode},${status.index });">
+										<form action="/coffee/deleteBom_singleBoard"
+											class="coffeeDeleteBom1_${status.index }"
+											name="coffeeDeleteBom${status.index }" method="post">
+											<input type="hidden" name="coffeeBoardBcode"
+												value="${junghun.bcode }"> <input type="hidden"
+												name="coffeeBoardUatid" value="${junghun.uatid }">
+											<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
+											<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+											<button type="button" class="btn btn-light float-right"
+												onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },1);">
+												<img src="/img/coffee/trash.svg" width="15" height="15">
+											</button>
+										</form>
+										<!-- 경빈 part 끝 -->
+
 										<img src="<%=context %>/profile_image/${junghun.uimage }"
 											alt="no_image" class="rounded-circle" width="50" width="50">
 										<a class="card-title text-dark">${junghun.unickName}</a> <a
 											class="card-subtitle mb-2 text-muted">@${junghun.uatid}</a> <a
 											class="card-subtitle mb-2 text-muted"
-											style="font-size: 12px;"> ${junghun.bregdate } </a> <a
-											href="#" class="card-text" style="margin-top: 10px;">${junghun.bcontent }
-										</a>
+											style="font-size: 12px;"> ${junghun.bregdate } </a>
+										<p class='card-text mt-2 mb-0' style="height: 100%;"
+											id="quote_content">${junghun.bcontent}</p>
+										<p>
+											<c:if test="${junghun.battach != ''}">
+												<div class="quote_file mt-2">
+													<c:if test="${junghun.battachType eq 'image'}">
+														<img id="quote_img"
+															src="<%=context %>/image/${junghun.battachSrc }"
+															class="img-fluid" />
+													</c:if>
+													<c:if test="${junghun.battachType eq 'video'}">
+														<div id="show_quote_video"
+															class="embed-responsive embed-responsive-16by9">
+															<video controls id="quote_video"
+																src="<%=context %>/video/${tjunghun.battachSrc }">
+															</video>
+														</div>
+													</c:if>
+												</div>
+											</c:if>
+										<p>
+											<!-- 우선 인용문이 있을 때-->
+											<c:if test="${junghun.btype=='quote' }">
+												<div class="col-12 float-left" id="QuoteArea"
+													style="font-size: 0.8em;">
+													<div class='card'>
+														<div class='card-body'>
+															<img id="quote_profile"
+																src="<%=context %>/profile_image/${junghun.q_uimage}"
+																alt='no_image' class='rounded-circle' width='30'>
+															<a class='card-title text-dark' id="quote_nickname">${junghun.q_nickname}</a>
+															<a class='card-subtitle mb-2 text-muted' id="quote_atid">${junghun.q_atid}</a>
+															<a class='card-subtitle mb-2 text-muted'
+																id="quote_regdate">${junghun.q_regdate}</a>
+															<p class='card-text mt-2 mb-0' style="height: 100%;"
+																id="quote_content">${junghun.q_content}</p>
+															<c:if test="${junghun.q_attach != ''}">
+																<div class="quote_file mt-2">
+																	<c:if test="${junghun.q_attachtype eq 'image'}">
+																		<img id="quote_img"
+																			src="<%=context %>/image/${junghun.q_attachsrc }"
+																			class="img-fluid" />
+																	</c:if>
+																	<c:if test="${junghun.q_attachtype eq 'video'}">
+																		<div id="show_quote_video"
+																			class="embed-responsive embed-responsive-16by9">
+																			<video controls id="quote_video"
+																				src="<%=context %>/video/${junghun.q_attachsrc }">
+																			</video>
+																		</div>
+																	</c:if>
+																</div>
+															</c:if>
 
-										<!-- 우선 인용문이 있을 때-->
-										<c:if test="${junghun.btype=='quote' }">
-											<div class="col-12 float-left" id="QuoteArea"
-												style="font-size: 0.8em;">
-												<div class='card'>
-													<div class='card-body'>
-														<img id="quote_profile"
-															src="<%=context %>/profile_image/${junghun.q_uimage}"
-															alt='no_image' class='rounded-circle' width='30'> <a
-															class='card-title text-dark' id="quote_nickname">${junghun.q_nickname}</a>
-														<a class='card-subtitle mb-2 text-muted' id="quote_atid">${junghun.q_atid}</a>
-														<a class='card-subtitle mb-2 text-muted'
-															id="quote_regdate">${junghun.q_regdate}</a>
-														<p class='card-text mt-2 mb-0' style="height: 100%;"
-															id="quote_content">${junghun.q_content}</p>
-														<c:if test="${junghun.q_attach != ''}">
-															<div class="quote_file mt-2">
-																<c:if test="${junghun.q_attachtype eq 'image'}">
-																	<img id="quote_img"
-																		src="<%=context %>/image/${junghun.q_attachsrc }"
-																		class="img-fluid" />
-																</c:if>
-																<c:if test="${junghun.q_attachtype eq 'video'}">
-																	<div id="show_quote_video"
-																		class="embed-responsive embed-responsive-16by9">
-																		<video controls id="quote_video"
-																			src="<%=context %>/video/${junghun.q_attachsrc }">
-																		</video>
-																	</div>
-																</c:if>
-															</div>
-														</c:if>
-
+														</div>
 													</div>
 												</div>
-											</div>
-										</c:if>
-
+											</c:if>
 										<div align="center">
 											<div class="btn-group col-md-12" role="group"
 												aria-label="Button group with nested dropdown">
@@ -522,43 +605,115 @@ function closemodal(){
 								</div>
 							</c:forEach>
 					</c:if>
+					<!-- 인기 -->
 					<c:forEach var="junghun" items="${listSearch }" varStatus="status">
+						<!-- 경빈 part 시작 -->
 						<div class="card">
-							<div class="card-body" id="singleBoard"
+							<div class="card-body"
 								onclick="goSingleBoard(${junghun.bcode},${status.index });">
-								<button type="button"
-									class="btn btn-light dropdown-toggle caret-off float-right">⋯</button>
-								<div class="dropdown-menu">
-									<%-- <c:if test="${tl_element.loginUcode == user.ucode }">
-												<a class="dropdown-item" href="#">봄 삭제</a>
-										</c:if> --%>
-									<a class="dropdown-item" href="#">봄 신고</a> <a
-										class="dropdown-item" href="#">봄 분석</a>
-								</div>
+								<form action="/coffee/deleteBom_singleBoard"
+									class="coffeeDeleteBom2_${status.index }"
+									name="coffeeDeleteBom${status.index }" method="post">
+									<input type="hidden" name="coffeeBoardBcode"
+										value="${junghun.bcode }"> <input type="hidden"
+										name="coffeeBoardUatid" value="${junghun.uatid }">
+									<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
+									<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+									<button type="button" class="btn btn-light float-right"
+										onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },2);">
+										<img src="/img/coffee/trash.svg" width="15" height="15">
+									</button>
+								</form>
+								<!-- 경빈 part 끝 -->
+
 								<img src="<%=context %>/profile_image/${junghun.uimage }"
 									alt="no_image" class="rounded-circle" width="50" width="50">
 								<a class="card-title text-dark">${junghun.unickName}</a> <a
 									class="card-subtitle mb-2 text-muted">@${junghun.uatid}</a> <a
 									class="card-subtitle mb-2 text-muted" style="font-size: 12px;">
-									${junghun.bregdate } </a> <a href="#" class="card-text"
-									style="margin-top: 10px;">${junghun.bcontent } </a>
+									${junghun.bregdate } </a>
+								<p class='card-text mt-2 mb-0' style="height: 100%;"
+									id="quote_content">${junghun.bcontent}</p>
+								<p>
+									<c:if test="${junghun.battach != ''}">
+										<div class="quote_file mt-2">
+											<c:if test="${junghun.battachType eq 'image'}">
+												<img id="quote_img"
+													src="<%=context %>/image/${junghun.battachSrc }"
+													class="img-fluid" />
+											</c:if>
+											<c:if test="${junghun.battachType eq 'video'}">
+												<div id="show_quote_video"
+													class="embed-responsive embed-responsive-16by9">
+													<video controls id="quote_video"
+														src="<%=context %>/video/${junghun.battachSrc }">
+													</video>
+												</div>
+											</c:if>
+										</div>
+									</c:if>
+								<p>
+									<!-- 우선 인용문이 있을 때-->
+									<c:if test="${junghun.btype=='quote' }">
+										<div class="col-12 float-left" id="QuoteArea"
+											style="font-size: 0.8em;">
+											<div class='card'>
+												<div class='card-body'>
+													<img id="quote_profile"
+														src="<%=context %>/profile_image/${junghun.q_uimage}"
+														alt='no_image' class='rounded-circle' width='30'> <a
+														class='card-title text-dark' id="quote_nickname">${junghun.q_nickname}</a>
+													<a class='card-subtitle mb-2 text-muted' id="quote_atid">${junghun.q_atid}</a>
+													<a class='card-subtitle mb-2 text-muted' id="quote_regdate">${junghun.q_regdate}</a>
+													<p class='card-text mt-2 mb-0' style="height: 100%;"
+														id="quote_content">${junghun.q_content}</p>
+													<c:if test="${junghun.q_attach != ''}">
+														<div class="quote_file mt-2">
+															<c:if test="${junghun.q_attachtype eq 'image'}">
+																<img id="quote_img"
+																	src="<%=context %>/image/${junghun.q_attachsrc }"
+																	class="img-fluid" />
+															</c:if>
+															<c:if test="${junghun.q_attachtype eq 'video'}">
+																<div id="show_quote_video"
+																	class="embed-responsive embed-responsive-16by9">
+																	<video controls id="quote_video"
+																		src="<%=context %>/video/${junghun.q_attachsrc }">
+																	</video>
+																</div>
+															</c:if>
+														</div>
+													</c:if>
 
+												</div>
+											</div>
+										</div>
+									</c:if>
 								<div align="center">
 									<div class="btn-group col-md-12" role="group"
 										aria-label="Button group with nested dropdown">
+										<!-- 답글 -->
 										<button type="button"
 											class="replySetting btn btn-secondary mr-3 btn-light"
 											data-toggle="modal" data-target="#writeForm"
-											onclick="reply_click(${junghun.bcode});">
+											onclick="reply_click('${junghun.bcode}','${junghun.uatid }');">
 											<img src="/img/speech-bubble.svg" width="20" height="20">
 											<c:if test="${junghun.breplycount ne 0}">
-                                    ${junghun.breplycount }
-                             			    </c:if>
+												${junghun.breplycount }
+											</c:if>
 										</button>
-										<button type="button" class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
-											<img src="/img/bring.svg" width="20" height="20">
-											${tl_element.bquotecount }
+
+										<!-- 인용 -->
+										<button type="button"
+											onclick="scrap_click('${junghun.bcode}',${status.index },'${junghun.uNickName }','${junghun.uatid }','<%=context %>/profile_image/${junghun.uimage }','${junghun.battachType}','${junghun.battachSrc}','<%=context %>');"
+											class="scrapSetting btn btn-secondary mr-3 btn-light"
+											data-toggle="modal" data-target="#writeForm">
+											<input type="hidden" value="${junghun.bcontent}"
+												id="tagContent${status.index}"> <img
+												src="/img/bring.svg" width="20" height="20">
+											<c:if test="${junghun.bquotecount ne 0}">
+												${junghun.bquotecount }
+											</c:if>
 										</button>
 
 										<button id="likeBtn${status.index }" type="button"
@@ -609,7 +764,8 @@ function closemodal(){
 												style="font-weight: bold;">${junghun.unickName}</a>
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
-												style="font-size: 0.8rem; float: right;">팔로우</button>
+												style="font-size: 0.8rem;"
+												onclick="followchk(${junghun.ucode})" name=k${junghun.ucode}>팔로우</button>
 											<h6 class="card-title">@${junghun.uatid }</h6>
 											<p>${junghun.uintro }</p>
 										</div>
@@ -625,57 +781,91 @@ function closemodal(){
 					<c:if test="${listNew.size() == 0 }">
 						<c:forEach var="junghun" items="${searchlistall }"
 							varStatus="status">
+
+							<!-- 경빈 part 시작 -->
 							<div class="card">
 								<div class="card-body"
 									onclick="goSingleBoard(${junghun.bcode},${status.index });">
-									<button type="button" class="btn btn-light float-right">⋯</button>
+									<form action="/coffee/deleteBom_singleBoard"
+										class="coffeeDeleteBom3_${status.index }"
+										name="coffeeDeleteBom${status.index }" method="post">
+										<input type="hidden" name="coffeeBoardBcode"
+											value="${junghun.bcode }"> <input type="hidden"
+											name="coffeeBoardUatid" value="${junghun.uatid }">
+										<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
+										<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+										<button type="button" class="btn btn-light float-right"
+											onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },3);">
+											<img src="/img/coffee/trash.svg" width="15" height="15">
+										</button>
+									</form>
+									<!-- 경빈 part 끝 -->
+
 									<img src="<%=context %>/profile_image/${junghun.uimage }"
 										alt="no_image" class="rounded-circle" width="50" width="50">
 									<a class="card-title text-dark">${junghun.unickName}</a> <a
 										class="card-subtitle mb-2 text-muted">@${junghun.uatid}</a> <a
 										class="card-subtitle mb-2 text-muted" style="font-size: 12px;">
-										${junghun.bregdate } </a> <a href="#" class="card-text"
-										style="margin-top: 10px;">${junghun.bcontent } </a>
+										${junghun.bregdate } </a>
+									<p class='card-text mt-2 mb-0' style="height: 100%;"
+										id="quote_content">${junghun.bcontent}</p>
+									<p>
+										<c:if test="${junghun.battach != ''}">
+											<div class="quote_file mt-2">
+												<c:if test="${junghun.battachType eq 'image'}">
+													<img id="quote_img"
+														src="<%=context %>/image/${junghun.battachSrc }"
+														class="img-fluid" />
+												</c:if>
+												<c:if test="${junghun.battachType eq 'video'}">
+													<div id="show_quote_video"
+														class="embed-responsive embed-responsive-16by9">
+														<video controls id="quote_video"
+															src="<%=context %>/video/${junghun.battachSrc }">
+														</video>
+													</div>
+												</c:if>
+											</div>
+										</c:if>
+									<p>
 
-									<!-- 우선 인용문이 있을 때-->
-									<c:if test="${junghun.btype=='quote' }">
-										<div class="col-12 float-left" id="QuoteArea"
-											style="font-size: 0.8em;">
-											<div class='card'>
-												<div class='card-body'>
-													<img id="quote_profile"
-														src="<%=context %>/profile_image/${junghun.q_uimage}"
-														alt='no_image' class='rounded-circle' width='30'> <a
-														class='card-title text-dark' id="quote_nickname">${junghun.q_nickname}</a>
-													<a class='card-subtitle mb-2 text-muted' id="quote_atid">${junghun.q_atid}</a>
-													<a class='card-subtitle mb-2 text-muted' id="quote_regdate">${junghun.q_regdate}</a>
-													<p class='card-text mt-2 mb-0' style="height: 100%;"
-														id="quote_content">${junghun.q_content}</p>
-													<c:if test="${junghun.q_attach != ''}">
-														<div class="quote_file mt-2">
-															<c:if test="${junghun.q_attachtype eq 'image'}">
-																<img id="quote_img"
-																	src="<%=context %>/image/${junghun.q_attachsrc }"
-																	class="img-fluid" />
-															</c:if>
-															<c:if test="${junghun.q_attachtype eq 'video'}">
-																<div id="show_quote_video"
-																	class="embed-responsive embed-responsive-16by9">
-																	<video controls id="quote_video"
-																		src="<%=context %>/video/${junghun.q_attachsrc }">
-																	</video>
-																</div>
-															</c:if>
-														</div>
-													</c:if>
+										<!-- 우선 인용문이 있을 때-->
+										<c:if test="${junghun.btype=='quote' }">
+											<div class="col-12 float-left" id="QuoteArea"
+												style="font-size: 0.8em;">
+												<div class='card'>
+													<div class='card-body'>
+														<img id="quote_profile"
+															src="<%=context %>/profile_image/${junghun.q_uimage}"
+															alt='no_image' class='rounded-circle' width='30'> <a
+															class='card-title text-dark' id="quote_nickname">${junghun.q_nickname}</a>
+														<a class='card-subtitle mb-2 text-muted' id="quote_atid">${junghun.q_atid}</a>
+														<a class='card-subtitle mb-2 text-muted'
+															id="quote_regdate">${junghun.q_regdate}</a>
+														<p class='card-text mt-2 mb-0' style="height: 100%;"
+															id="quote_content">${junghun.q_content}</p>
+														<c:if test="${junghun.q_attach != ''}">
+															<div class="quote_file mt-2">
+																<c:if test="${junghun.q_attachtype eq 'image'}">
+																	<img id="quote_img"
+																		src="<%=context %>/image/${junghun.q_attachsrc }"
+																		class="img-fluid" />
+																</c:if>
+																<c:if test="${junghun.q_attachtype eq 'video'}">
+																	<div id="show_quote_video"
+																		class="embed-responsive embed-responsive-16by9">
+																		<video controls id="quote_video"
+																			src="<%=context %>/video/${junghun.q_attachsrc }">
+																		</video>
+																	</div>
+																</c:if>
+															</div>
+														</c:if>
 
+													</div>
 												</div>
 											</div>
-										</div>
-									</c:if>
-
-
-
+										</c:if>
 									<div align="center">
 										<div class="btn-group col-md-12" role="group"
 											aria-label="Button group with nested dropdown">
@@ -733,159 +923,56 @@ function closemodal(){
 							</div>
 						</c:forEach>
 					</c:if>
+
+					<!-- 최신  -->
 					<c:forEach var="junghun" items="${listNew }" varStatus="status">
+
+						<!-- 경빈 part 시작 -->
 						<div class="card">
 							<div class="card-body"
 								onclick="goSingleBoard(${junghun.bcode},${status.index });">
-								<button type="button" class="btn btn-light float-right">⋯</button>
+								<form action="/coffee/deleteBom_singleBoard"
+									class="coffeeDeleteBom4_${status.index }"
+									name="coffeeDeleteBom${status.index }" method="post">
+									<input type="hidden" name="coffeeBoardBcode"
+										value="${junghun.bcode }"> <input type="hidden"
+										name="coffeeBoardUatid" value="${junghun.uatid }">
+									<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
+									<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+									<button type="button" class="btn btn-light float-right"
+										onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },4);">
+										<img src="/img/coffee/trash.svg" width="15" height="15">
+									</button>
+								</form>
+								<!-- 경빈 part 끝 -->
+
 								<img src="<%=context %>/profile_image/${junghun.uimage }"
 									alt="no_image" class="rounded-circle" width="50" width="50">
 								<a class="card-title text-dark">${junghun.unickName}</a> <a
 									class="card-subtitle mb-2 text-muted">@${junghun.uatid}</a> <a
 									class="card-subtitle mb-2 text-muted" style="font-size: 12px;">
-									${junghun.bregdate } </a> <a href="#" class="card-text"
-									style="margin-top: 10px;">${junghun.bcontent } </a>
-
-								<div align="center">
-									<div class="btn-group col-md-12" role="group"
-										aria-label="Button group with nested dropdown">
-										<!-- 답글 -->
-										<button type="button"
-											class="replySetting btn btn-secondary mr-3 btn-light"
-											data-toggle="modal" data-target="#writeForm"
-											onclick="reply_click('${junghun.bcode}','${junghun.uatid }');">
-											<img src="/img/speech-bubble.svg" width="20" height="20">
-											<c:if test="${junghun.breplycount ne 0}">
-												${junghun.breplycount }
-											</c:if>
-										</button>
-
-										<!-- 인용 -->
-										<button type="button"
-											onclick="scrap_click('${junghun.bcode}',${status.index },'${junghun.uNickName }','${junghun.uatid }','<%=context %>/profile_image/${junghun.uimage }','${junghun.battachType}','${junghun.battachSrc}','<%=context %>');"
-											class="scrapSetting btn btn-secondary mr-3 btn-light"
-											data-toggle="modal" data-target="#writeForm">
-											<input type="hidden" value="${junghun.bcontent}"
-												id="tagContent${status.index}"> <img
-												src="/img/bring.svg" width="20" height="20">
-											<c:if test="${junghun.bquotecount ne 0}">
-												${junghun.bquotecount }
-											</c:if>
-										</button>
-										<button type="button" class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="좋아요"
-											style="font-size: 12px;">
-											<img src="/img/heart.svg" width="20" height="20">
-											&ensp;${junghun.blikecount }
-										</button>
-										<button type="button"
-											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
-											data-toggle="dropdown" aria-haspopup="true"
-											aria-expanded="false">
-											<img src="/img/share.svg" width="20" height="20">
-										</button>
-										<div class="dropdown-menu">
-											<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
-												class="dropdown-item" href="#">URL담아가기</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</c:forEach>
-				</div>
-				<!-- 사진 -->
-				<div class="tab-pane fade" id="image" role="tabpanel"
-					aria-labelledby="contact-tab">
-					<c:if test="${searchbattach.size() == 0}">
-						" ${search } " 검색된 사진이 없습니다
-					</c:if>
-					<c:forEach var="junghun" items="${searchbattach }"
-						varStatus="Status">
-						<div class="card">
-							<div class="card-body"
-								onclick="goSingleBoard(${junghun.bcode},${status.index });">
-								<button type="button" class="btn btn-light float-right">⋯</button>
-								<img src="<%=context %>/profile_image/${junghun.uimage }"
-									alt="no_image" class="rounded-circle" width="50" width="50">
-								<a class="card-title text-dark">${junghun.unickName}</a> <a
-									class="card-subtitle mb-2 text-muted">@${junghun.uatid}</a> <a
-									class="card-subtitle mb-2 text-muted" style="font-size: 12px">${junghun.bregdate }</a>
-								<p class="card-text" style="margin-top: 10px;">
-									${junghun.bcontent }
+									${junghun.bregdate } </a>
+								<p class='card-text mt-2 mb-0' style="height: 100%;"
+									id="quote_content">${junghun.bcontent}</p>
 								<p>
-									<c:if test="${junghun.battachType=='image'}">
-										<img class="img-thumnail" width="300"
-											src="<%=context %>/image/${junghun.battachSrc}" />
+									<c:if test="${junghun.battach != ''}">
+										<div class="quote_file mt-2">
+											<c:if test="${junghun.battachType eq 'image'}">
+												<img id="quote_img"
+													src="<%=context %>/image/${junghun.battachSrc }"
+													class="img-fluid" />
+											</c:if>
+											<c:if test="${junghun.battachType eq 'video'}">
+												<div id="show_quote_video"
+													class="embed-responsive embed-responsive-16by9">
+													<video controls id="quote_video"
+														src="<%=context %>/video/${junghun.battachSrc }">
+													</video>
+												</div>
+											</c:if>
+										</div>
 									</c:if>
-								<div align="center">
-									<div class="btn-group col-md-12" role="group"
-										aria-label="Button group with nested dropdown">
-										<!-- 답글 -->
-										<button type="button"
-											class="replySetting btn btn-secondary mr-3 btn-light"
-											data-toggle="modal" data-target="#writeForm"
-											onclick="reply_click('${junghun.bcode}','${junghun.uatid }');">
-											<img src="/img/speech-bubble.svg" width="20" height="20">
-											<c:if test="${junghun.breplycount ne 0}">
-												${junghun.breplycount }
-											</c:if>
-										</button>
-
-										<!-- 인용 -->
-										<button type="button"
-											onclick="scrap_click('${junghun.bcode}',${status.index },'${junghun.uNickName }','${junghun.uatid }','<%=context %>/profile_image/${junghun.uimage }','${junghun.battachType}','${junghun.battachSrc}','<%=context %>');"
-											class="scrapSetting btn btn-secondary mr-3 btn-light"
-											data-toggle="modal" data-target="#writeForm">
-											<input type="hidden" value="${junghun.bcontent}"
-												id="tagContent${status.index}"> <img
-												src="/img/bring.svg" width="20" height="20">
-											<c:if test="${junghun.bquotecount ne 0}">
-												${junghun.bquotecount }
-											</c:if>
-										</button>
-										<button type="button" class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="좋아요"
-											style="font-size: 12px;">
-											<img src="/img/heart.svg" width="20" height="20">
-											&ensp;${junghun.blikecount }
-										</button>
-										<button type="button"
-											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
-											data-toggle="dropdown" aria-haspopup="true"
-											aria-expanded="false">
-											<img src="/img/share.svg" width="20" height="20">
-										</button>
-										<div class="dropdown-menu">
-											<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
-												class="dropdown-item" href="#">URL담아가기</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</c:forEach>
-				</div>
-				<!-- 동영상 -->
-				<div class="tab-pane fade" id="video" role="tabpanel"
-					aria-labelledby="contact-tab">
-					<c:if test="${searchbattachvideo.size()==0 }">
-						" ${search } " 검색된 동영상이 없습니다
-					</c:if>
-					<c:forEach var="junghun" items="${searchbattachvideo }">
-						<div class="card">
-							<div class="card-body"
-								onclick="goSingleBoard(${junghun.bcode},${status.index });">
-								<button type="button" class="btn btn-light float-right">⋯</button>
-								<img src="<%=context %>/profile_image/${junghun.uimage }"
-									alt="no_image" class="rounded-circle" width="50" width="50">
-								<a class="card-title text-dark">${junghun.unickName}</a> <a
-									class="card-subtitle mb-2 text-muted">@${junghun.uatid}</a> <a
-									class="card-subtitle mb-2 text-muted" style="font-size: 12px">${junghun.bregdate }</a>
-								<p class="card-text" style="margin-top: 10px;">
-									${junghun.bcontent }
 								<p>
-
 									<!-- 우선 인용문이 있을 때-->
 									<c:if test="${junghun.btype=='quote' }">
 										<div class="col-12 float-left" id="QuoteArea"
@@ -922,18 +1009,6 @@ function closemodal(){
 											</div>
 										</div>
 									</c:if>
-
-
-									<c:if test="${junghun.battachType=='video'}">
-										<video controls width="300">
-											<source src="<%=context %>/video/${junghun.battachSrc}"
-												type="video/mp4">
-											<source src="<%=context %>/video/${junghun.battachSrc}"
-												type="video/webm">
-										</video>
-									</c:if>
-								</p>
-
 								<div align="center">
 									<div class="btn-group col-md-12" role="group"
 										aria-label="Button group with nested dropdown">
@@ -961,17 +1036,20 @@ function closemodal(){
 											</c:if>
 										</button>
 
-
-										<button type="button" class="btn btn-secondary btn-light mr-3"
-											id="searchLikeBtn${status.index }"
-											onclick="searchLikeBtn(${junghun.bcode},${status.index }); return false;"
+										<button id="likeBtn${status.index }" type="button"
+											class="btn btn-secondary btn-light mr-3"
 											data-toggle="tooltip" data-placement="top" title="좋아요"
-											style="font-size: 12px;">
-											<img src="/img/heart.svg" width="20" height="20">
-											&ensp;${junghun.blikecount }
+											onclick="clickLikeBtn(${junghun.bcode},${status.index }); return false;">
+											<c:if test="${junghun.ltype == 0 || junghun.ltype == null }">
+												<img src="/img/heart.svg" width="20" height="20">
+											</c:if>
+											<c:if test="${junghun.ltype == 1 }">
+												<img src="/img/red_heart.svg" width="20" height="20">
+											</c:if>
+											<c:if test="${junghun.blikecount ne 0}">
+                                 ${junghun.blikecount }
+                              </c:if>
 										</button>
-
-
 										<button type="button"
 											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
 											data-toggle="dropdown" aria-haspopup="true"
@@ -988,50 +1066,517 @@ function closemodal(){
 						</div>
 					</c:forEach>
 				</div>
+				<!-- 사진 -->
+				<div class="tab-pane fade" id="image" role="tabpanel"
+					aria-labelledby="contact-tab">
+					<%-- <c:if
+						test="${searchbattach.size() == 0 && searchbattach2.size() == 0 }">
+						" ${search } " 검색된 사진이 없습니다
+					</c:if>
+					<c:if test="${searchbattach.size() == 0}">
+						<c:forEach var="junghun" items="${searchbattach2 }"
+							varStatus="Status">
+							<!-- 경빈 part 시작 -->
+							<div class="card">
+								<div class="card-body"
+									onclick="goSingleBoard(${junghun.bcode},${status.index });">
+									<form action="/coffee/deleteBom_singleBoard"
+										class="coffeeDeleteBom5_${status.index }"
+										name="coffeeDeleteBom${status.index }" method="post">
+										<input type="hidden" name="coffeeBoardBcode"
+											value="${junghun.bcode }"> <input type="hidden"
+											name="coffeeBoardUatid" value="${junghun.uatid }">
+										<input type="hidden" class="coffeeStatusIndex" value="${status.index }">
+										<input type="hidden" name="coffeeLoginUcode" value="${user.ucode }">
+										<button type="button" class="btn btn-light float-right"
+											onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },5);">
+											<img src="/img/coffee/trash.svg" width="15" height="15">
+										</button>
+									</form>
+									<!-- 경빈 part 끝 -->
+									<img src="<%=context %>/profile_image/${junghun.uimage }"
+										alt="no_image" class="rounded-circle" width="50" width="50">
+									<a class="card-title text-dark">${junghun.unickName}</a> <a
+										class="card-subtitle mb-2 text-muted">@${junghun.uatid}</a> <a
+										class="card-subtitle mb-2 text-muted" style="font-size: 12px">${junghun.bregdate }</a>
+										<p class='card-text mt-2 mb-0' style="height: 100%;"
+														id="quote_content">${junghun.bcontent}</p>
+													<c:if test="${junghun.battach != ''}">
+														<div class="quote_file mt-2">
+															<c:if test="${junghun.battachType eq 'image'}">
+																<img id="quote_img"
+																	src="<%=context %>/image/${junghun.battachSrc }"
+																	class="img-fluid" />
+															</c:if>
+														</div>
+													</c:if>
+									<div align="center">
+										<div class="btn-group col-md-12" role="group"
+											aria-label="Button group with nested dropdown">
+											<!-- 답글 -->
+											<button type="button"
+												class="replySetting btn btn-secondary mr-3 btn-light"
+												data-toggle="modal" data-target="#writeForm"
+												onclick="reply_click('${junghun.bcode}','${junghun.uatid }');">
+												<img src="/img/speech-bubble.svg" width="20" height="20">
+												<c:if test="${junghun.breplycount ne 0}">
+												${junghun.breplycount }
+											</c:if>
+											</button>
+											<!-- 인용 -->
+											<button type="button"
+												onclick="scrap_click('${junghun.bcode}',${status.index },'${junghun.uNickName }','${junghun.uatid }','<%=context %>/profile_image/${junghun.uimage }','${junghun.battachType}','${junghun.battachSrc}','<%=context %>');"
+												class="scrapSetting btn btn-secondary mr-3 btn-light"
+												data-toggle="modal" data-target="#writeForm">
+												<input type="hidden" value="${junghun.bcontent}"
+													id="tagContent${status.index}"> <img
+													src="/img/bring.svg" width="20" height="20">
+												<c:if test="${junghun.bquotecount ne 0}">
+												${junghun.bquotecount }
+											</c:if>
+											</button>
+											<button type="button"
+												class="btn btn-secondary btn-light mr-3"
+												data-toggle="tooltip" data-placement="top" title="좋아요"
+												style="font-size: 12px;">
+												<img src="/img/heart.svg" width="20" height="20">
+												&ensp;${junghun.blikecount }
+											</button>
+											<button type="button"
+												class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+												data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false">
+												<img src="/img/share.svg" width="20" height="20">
+											</button>
+											<div class="dropdown-menu">
+												<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
+													class="dropdown-item" href="#">URL담아가기</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</c:forEach>
+					</c:if> --%>
+
+					<c:forEach var="junghun" items="${listSearch }" varStatus="status">
+						<c:if test="${junghun.battachType == 'image' }">
+							<!-- 경빈 part 시작 -->
+							<div class="card">
+								<div class="card-body"
+									onclick="goSingleBoard(${junghun.bcode},${status.index });">
+									<form action="/coffee/deleteBom_singleBoard"
+										class="coffeeDeleteBom6_${status.index }"
+										name="coffeeDeleteBom${status.index }" method="post">
+										<input type="hidden" name="coffeeBoardBcode"
+											value="${junghun.bcode }"> <input type="hidden"
+											name="coffeeBoardUatid" value="${junghun.uatid }">
+										<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
+										<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+										<button type="button" class="btn btn-light float-right"
+											onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },6);">
+											<img src="/img/coffee/trash.svg" width="15" height="15">
+										</button>
+									</form>
+									<!-- 경빈 part 끝 -->
+
+									<img src="<%=context %>/profile_image/${junghun.uimage }"
+										alt="no_image" class="rounded-circle" width="50" width="50">
+									<a class="card-title text-dark">${junghun.unickName}</a> <a
+										class="card-subtitle mb-2 text-muted">@${junghun.uatid}</a> <a
+										class="card-subtitle mb-2 text-muted" style="font-size: 12px">${junghun.bregdate }</a>
+									<p class='card-text mt-2 mb-0' style="height: 100%;"
+										id="quote_content">${junghun.bcontent}</p>
+									<c:if test="${junghun.battach != ''}">
+										<div class="quote_file mt-2">
+											<c:if test="${junghun.battachType eq 'image'}">
+												<img id="quote_img"
+													src="<%=context %>/image/${junghun.battachSrc }"
+													class="img-fluid" />
+											</c:if>
+										</div>
+									</c:if>
+									<!-- 우선 인용문이 있을 때-->
+									<c:if test="${junghun.btype=='quote' }">
+										<div class="col-12 float-left" id="QuoteArea"
+											style="font-size: 0.8em;">
+											<div class='card'>
+												<div class='card-body'>
+													<img id="quote_profile"
+														src="<%=context %>/profile_image/${junghun.q_uimage}"
+														alt='no_image' class='rounded-circle' width='30'> <a
+														class='card-title text-dark' id="quote_nickname">${junghun.q_nickname}</a>
+													<a class='card-subtitle mb-2 text-muted' id="quote_atid">${junghun.q_atid}</a>
+													<a class='card-subtitle mb-2 text-muted' id="quote_regdate">${junghun.q_regdate}</a>
+													<p class='card-text mt-2 mb-0' style="height: 100%;"
+														id="quote_content">${junghun.q_content}</p>
+													<c:if test="${junghun.q_attach != ''}">
+														<div class="quote_file mt-2">
+															<c:if test="${junghun.q_attachtype eq 'image'}">
+																<img id="quote_img"
+																	src="<%=context %>/image/${junghun.q_attachsrc }"
+																	class="img-fluid" />
+															</c:if>
+															<c:if test="${junghun.q_attachtype eq 'video'}">
+																<div id="show_quote_video"
+																	class="embed-responsive embed-responsive-16by9">
+																	<video controls id="quote_video"
+																		src="<%=context %>/video/${junghun.q_attachsrc }">
+																	</video>
+																</div>
+															</c:if>
+														</div>
+													</c:if>
+
+												</div>
+											</div>
+										</div>
+									</c:if>
+									<div align="center">
+										<div class="btn-group col-md-12" role="group"
+											aria-label="Button group with nested dropdown">
+											<!-- 답글 -->
+											<button type="button"
+												class="replySetting btn btn-secondary mr-3 btn-light"
+												data-toggle="modal" data-target="#writeForm"
+												onclick="reply_click('${junghun.bcode}','${junghun.uatid }');">
+												<img src="/img/speech-bubble.svg" width="20" height="20">
+												<c:if test="${junghun.breplycount ne 0}">
+												${junghun.breplycount }
+											</c:if>
+											</button>
+
+											<!-- 인용 -->
+											<button type="button"
+												onclick="scrap_click('${junghun.bcode}',${status.index },'${junghun.uNickName }','${junghun.uatid }','<%=context %>/profile_image/${junghun.uimage }','${junghun.battachType}','${junghun.battachSrc}','<%=context %>');"
+												class="scrapSetting btn btn-secondary mr-3 btn-light"
+												data-toggle="modal" data-target="#writeForm">
+												<input type="hidden" value="${junghun.bcontent}"
+													id="tagContent${status.index}"> <img
+													src="/img/bring.svg" width="20" height="20">
+												<c:if test="${junghun.bquotecount ne 0}">
+												${junghun.bquotecount }
+											</c:if>
+											</button>
+
+											<button id="likeBtn${status.index }" type="button"
+												class="btn btn-secondary btn-light mr-3"
+												data-toggle="tooltip" data-placement="top" title="좋아요"
+												onclick="clickLikeBtn(${junghun.bcode},${status.index }); return false;">
+												<c:if test="${junghun.ltype == 0 || junghun.ltype == null }">
+													<img src="/img/heart.svg" width="20" height="20">
+												</c:if>
+												<c:if test="${junghun.ltype == 1 }">
+													<img src="/img/red_heart.svg" width="20" height="20">
+												</c:if>
+												<c:if test="${junghun.blikecount ne 0}">
+                                 ${junghun.blikecount }
+                              </c:if>
+											</button>
+											<button type="button"
+												class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+												data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false">
+												<img src="/img/share.svg" width="20" height="20">
+											</button>
+											<div class="dropdown-menu">
+												<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
+													class="dropdown-item" href="#">URL담아가기</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</c:if>
+					</c:forEach>
+				</div>
+				<!-- 동영상 -->
+				<div class="tab-pane fade" id="video" role="tabpanel"
+					aria-labelledby="contact-tab">
+					<%-- <c:if
+						test="${searchbattachvideo.size()==0 && searchbattachvideo2.size()==0 }">
+						" ${search } " 검색된 동영상이 없습니다
+					</c:if>
+					<c:if test="${searchbattachvideo.size()==0 }">
+						<c:forEach var="junghun" items="${searchbattachvideo2 }" varStatus="status">
+							<!-- 경빈 part 시작 -->
+							<div class="card">
+								<div class="card-body"
+									onclick="goSingleBoard(${junghun.bcode},${status.index });">
+									<form action="/coffee/deleteBom_singleBoard"
+										class="coffeeDeleteBom7_${status.index }"
+										name="coffeeDeleteBom${status.index }" method="post">
+										<input type="hidden" name="coffeeBoardBcode"
+											value="${junghun.bcode }"> <input type="hidden"
+											name="coffeeBoardUatid" value="${junghun.uatid }">
+										<input type="hidden" class="coffeeStatusIndex" value="${status.index }">
+										<input type="hidden" name="coffeeLoginUcode" value="${user.ucode }">
+										<button type="button" class="btn btn-light float-right"
+											onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },7);">
+											<img src="/img/coffee/trash.svg" width="15" height="15">
+										</button>
+									</form>
+									<!-- 경빈 part 끝 -->
+									<img src="<%=context %>/profile_image/${junghun.uimage }"
+										alt="no_image" class="rounded-circle" width="50" width="50">
+									<a class="card-title text-dark">${junghun.unickName}</a> <a
+										class="card-subtitle mb-2 text-muted">@${junghun.uatid}</a> <a
+										class="card-subtitle mb-2 text-muted" style="font-size: 12px">${junghun.bregdate }</a>
+									<p class="card-text" style="margin-top: 10px;">
+										${junghun.bcontent }
+									<p>
+										<c:if test="${junghun.battachType=='video'}">
+											<video controls width="300">
+												<source src="<%=context %>/video/${junghun.battachSrc}"
+													type="video/mp4">
+												<source src="<%=context %>/video/${junghun.battachSrc}"
+													type="video/webm">
+											</video>
+										</c:if>
+										<!-- 우선 인용문이 있을 때-->
+										<c:if test="${junghun.btype=='quote' }">
+											<div class="col-12 float-left" id="QuoteArea"
+												style="font-size: 0.8em;">
+												<div class='card'>
+													<div class='card-body'>
+														<img id="quote_profile"
+															src="<%=context %>/profile_image/${junghun.q_uimage}"
+															alt='no_image' class='rounded-circle' width='30'> <a
+															class='card-title text-dark' id="quote_nickname">${junghun.q_nickname}</a>
+														<a class='card-subtitle mb-2 text-muted' id="quote_atid">${junghun.q_atid}</a>
+														<a class='card-subtitle mb-2 text-muted'
+															id="quote_regdate">${junghun.q_regdate}</a>
+														<p class='card-text mt-2 mb-0' style="height: 100%;"
+															id="quote_content">${junghun.q_content}</p>
+														<c:if test="${junghun.q_attach != ''}">
+															<div class="quote_file mt-2">
+																<c:if test="${junghun.q_attachtype eq 'image'}">
+																	<img id="quote_img"
+																		src="<%=context %>/image/${junghun.q_attachsrc }"
+																		class="img-fluid" />
+																</c:if>
+																<c:if test="${junghun.q_attachtype eq 'video'}">
+																	<div id="show_quote_video"
+																		class="embed-responsive embed-responsive-16by9">
+																		<video controls id="quote_video"
+																			src="<%=context %>/video/${junghun.q_attachsrc }">
+																		</video>
+																	</div>
+																</c:if>
+															</div>
+														</c:if>
+													</div>
+												</div>
+											</div>
+										</c:if>
+									</p>
+									<div align="center">
+										<div class="btn-group col-md-12" role="group"
+											aria-label="Button group with nested dropdown">
+											<!-- 답글 -->
+											<button type="button"
+												class="replySetting btn btn-secondary mr-3 btn-light"
+												data-toggle="modal" data-target="#writeForm"
+												onclick="reply_click('${junghun.bcode}','${junghun.uatid }');">
+												<img src="/img/speech-bubble.svg" width="20" height="20">
+												<c:if test="${junghun.breplycount ne 0}">
+												${junghun.breplycount }
+											</c:if>
+											</button>
+											<!-- 인용 -->
+											<button type="button"
+												onclick="scrap_click('${junghun.bcode}',${status.index },'${junghun.uNickName }','${junghun.uatid }','<%=context %>/profile_image/${junghun.uimage }','${junghun.battachType}','${junghun.battachSrc}','<%=context %>');"
+												class="scrapSetting btn btn-secondary mr-3 btn-light"
+												data-toggle="modal" data-target="#writeForm">
+												<input type="hidden" value="${junghun.bcontent}"
+													id="tagContent${status.index}"> <img
+													src="/img/bring.svg" width="20" height="20">
+												<c:if test="${junghun.bquotecount ne 0}">
+												${junghun.bquotecount }
+											</c:if>
+											</button>
+											<button type="button"
+												class="btn btn-secondary btn-light mr-3"
+												id="searchLikeBtn${status.index }"
+												onclick="searchLikeBtn(${junghun.bcode},${status.index }); return false;"
+												data-toggle="tooltip" data-placement="top" title="좋아요"
+												style="font-size: 12px;">
+												<img src="/img/heart.svg" width="20" height="20">
+												&ensp;${junghun.blikecount }
+											</button>
+											<button type="button"
+												class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+												data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false">
+												<img src="/img/share.svg" width="20" height="20">
+											</button>
+											<div class="dropdown-menu">
+												<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
+													class="dropdown-item" href="#">URL담아가기</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</c:forEach>
+					</c:if> --%>
+
+					<c:forEach var="junghun" items="${listSearch }" varStatus="status">
+						<c:if test="${junghun.battachType == 'video' }">
+							<!-- 경빈 part 시작 -->
+							<div class="card">
+								<div class="card-body"
+									onclick="goSingleBoard(${junghun.bcode},${status.index });">
+									<form action="/coffee/deleteBom_singleBoard"
+										class="coffeeDeleteBom8_${status.index }"
+										name="coffeeDeleteBom${status.index }" method="post">
+										<input type="hidden" name="coffeeBoardBcode"
+											value="${junghun.bcode }"> <input type="hidden"
+											name="coffeeBoardUatid" value="${junghun.uatid }">
+										<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
+										<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+										<button type="button" class="btn btn-light float-right"
+											onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },8);">
+											<img src="/img/coffee/trash.svg" width="15" height="15">
+										</button>
+									</form>
+									<!-- 경빈 part 끝 -->
+
+									<img src="<%=context %>/profile_image/${junghun.uimage }"
+										alt="no_image" class="rounded-circle" width="50" width="50">
+									<a class="card-title text-dark">${junghun.unickName}</a> <a
+										class="card-subtitle mb-2 text-muted">@${junghun.uatid}</a> <a
+										class="card-subtitle mb-2 text-muted" style="font-size: 12px">${junghun.bregdate }</a>
+									<p class="card-text" style="margin-top: 10px;">
+										${junghun.bcontent }
+									<p>
+
+										<c:if test="${junghun.battachType=='video'}">
+											<video controls width="300">
+												<source src="<%=context %>/video/${junghun.battachSrc}"
+													type="video/mp4">
+												<source src="<%=context %>/video/${junghun.battachSrc}"
+													type="video/webm">
+											</video>
+										</c:if>
+										<!-- 우선 인용문이 있을 때-->
+										<c:if test="${junghun.btype=='quote' }">
+											<div class="col-12 float-left" id="QuoteArea"
+												style="font-size: 0.8em;">
+												<div class='card'>
+													<div class='card-body'>
+														<img id="quote_profile"
+															src="<%=context %>/profile_image/${junghun.q_uimage}"
+															alt='no_image' class='rounded-circle' width='30'> <a
+															class='card-title text-dark' id="quote_nickname">${junghun.q_nickname}</a>
+														<a class='card-subtitle mb-2 text-muted' id="quote_atid">${junghun.q_atid}</a>
+														<a class='card-subtitle mb-2 text-muted'
+															id="quote_regdate">${junghun.q_regdate}</a>
+														<p class='card-text mt-2 mb-0' style="height: 100%;"
+															id="quote_content">${junghun.q_content}</p>
+														<c:if test="${junghun.q_attach != ''}">
+															<div class="quote_file mt-2">
+																<c:if test="${junghun.q_attachtype eq 'image'}">
+																	<img id="quote_img"
+																		src="<%=context %>/image/${junghun.q_attachsrc }"
+																		class="img-fluid" />
+																</c:if>
+																<c:if test="${junghun.q_attachtype eq 'video'}">
+																	<div id="show_quote_video"
+																		class="embed-responsive embed-responsive-16by9">
+																		<video controls id="quote_video"
+																			src="<%=context %>/video/${junghun.q_attachsrc }">
+																		</video>
+																	</div>
+																</c:if>
+															</div>
+														</c:if>
+
+													</div>
+												</div>
+											</div>
+										</c:if>
+
+									</p>
+
+									<div align="center">
+										<div class="btn-group col-md-12" role="group"
+											aria-label="Button group with nested dropdown">
+											<!-- 답글 -->
+											<button type="button"
+												class="replySetting btn btn-secondary mr-3 btn-light"
+												data-toggle="modal" data-target="#writeForm"
+												onclick="reply_click('${junghun.bcode}','${junghun.uatid }');">
+												<img src="/img/speech-bubble.svg" width="20" height="20">
+												<c:if test="${junghun.breplycount ne 0}">
+												${junghun.breplycount }
+											</c:if>
+											</button>
+
+											<!-- 인용 -->
+											<button type="button"
+												onclick="scrap_click('${junghun.bcode}',${status.index },'${junghun.uNickName }','${junghun.uatid }','<%=context %>/profile_image/${junghun.uimage }','${junghun.battachType}','${junghun.battachSrc}','<%=context %>');"
+												class="scrapSetting btn btn-secondary mr-3 btn-light"
+												data-toggle="modal" data-target="#writeForm">
+												<input type="hidden" value="${junghun.bcontent}"
+													id="tagContent${status.index}"> <img
+													src="/img/bring.svg" width="20" height="20">
+												<c:if test="${junghun.bquotecount ne 0}">
+												${junghun.bquotecount }
+											</c:if>
+											</button>
+
+
+											<button type="button"
+												class="btn btn-secondary btn-light mr-3"
+												id="searchLikeBtn${status.index }"
+												onclick="searchLikeBtn(${junghun.bcode},${status.index }); return false;"
+												data-toggle="tooltip" data-placement="top" title="좋아요"
+												style="font-size: 12px;">
+												<img src="/img/heart.svg" width="20" height="20">
+												&ensp;${junghun.blikecount }
+											</button>
+
+
+											<button type="button"
+												class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+												data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false">
+												<img src="/img/share.svg" width="20" height="20">
+											</button>
+											<div class="dropdown-menu">
+												<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
+													class="dropdown-item" href="#">URL담아가기</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</c:if>
+					</c:forEach>
+				</div>
 			</div>
 		</div>
 	</div>
 	<!-- /#page-content-wrapper -->
-	<script type="text/javascript">
-	function searchLikeBtn(bcode,btnIndex){
-		event.stopPropagation();
-		var index = btnIndex;
-		var bcode = bcode;
-		var msg = '게시글['+bcode+']에 좋아요를 눌렀습니다!';
-		alert(msg);
-		$.ajax({
-			url : "<%=context%>/searchlike",
-			data:{ bcode: bcode }, 
-			dataType:'json',
-			success : function(data){
-				var str='';
-				$('#searchLikeBtn'+index).empty();
-				if(data.ltype==0||data.ltype==null)
-					str += "<img src='/img/heart.svg' width='20' height='20'> " + data.likeCount
-				if(data.ltype==1)
-					str+= "<img src='/img/red_heart.svg' width='20' height='20'> "+ data.likeCount
-				$('#searchLikeBtn'+index).append(str);
-				alert(".ajax searchLikeBtn str->"+str);
-			}
-		});
-	}
-</script>
+
 	<!-- 오른쪽 사이드바 -->
+	<!-- 사이드바 팔로우 가져가야할 구간 시작 -->
 	<div class="bg-light border-left" id="sidebar-wrapper2">
 		<div class="list-group list-group-flush">
-			<!-- 검색창 -->
+			<!-- 사이드바검색 시작-->
 			<div class="list-group-item list-group-item-action bg-light">
 				<div id="drop_the_text">
 					<!-- 엔터치면 searchData() 실행 -->
-					<form class="well form-search" action="searchView" method="get"
-						id="jh_form">
+					<form class="well form-search" action="/hoon/searchView"
+						method="get" id="jh_form">
 						<input class="form-control" id="search" placeholder="봄 검색"
 							name="search"
 							onkeypress="if( event.keyCode == 13 ){searchData();}">
 					</form>
 				</div>
 			</div>
-
+			<!-- 사이드바검색 끝-->
 			<div class="list-group-item list-group-item-action bg-light"
 				style="padding: 5px;">
 				<div class="card bg-light mb-3">
@@ -1046,7 +1591,8 @@ function closemodal(){
 										<img src="<%=context %>/profile_image/${justFollowMe.uimage}"
 											class="rounded-circle" width="20" height="20"> <a
 											class="card-title text-dark">${justFollowMe.unickName}</a> <a
-											class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+											class="card-subtitle mb-2 text-muted"
+											href="/iron/profile?uatid=${justFollowMe.uatid}">@${justFollowMe.uatid}</a>
 										<button type="button"
 											class="btn btn-outline-success btn-sm float-right"
 											style="font-size: 0.8rem;"
@@ -1056,24 +1602,23 @@ function closemodal(){
 								</div>
 							</c:forEach>
 						</c:if>
-						<!-- 팔로우하는 유저가 없을 경우 관심항목이 비슷한 사람을 추천 -->
-						<c:if test="${suggestFlist2_size<1 }">
-							<c:forEach var="justFollowMe" items="${suggestFlist2 }">
-								<div class="card">
-									<div class="card-body"
-										style="font-size: 0.8rem; padding: 10px;">
-										<img
-											src="${resourcePath }/profile_image/${justFollowMe.uimage}"
-											class="rounded-circle" width="20" height="20"> <a
-											class="card-title text-dark">${justFollowMe.unickName}</a> <a
-											class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
-										<button type="button"
-											class="btn btn-outline-success btn-sm float-right"
-											style="font-size: 0.8rem;">팔로우</button>
+						<%--
+							<!-- 팔로우하는 유저가 없을 경우 관심항목이 비슷한 사람을 추천 -->
+							<c:if test="${suggestFlist2_size<1 }">
+								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
+									<div class="card">
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											<img src="${resourcePath }/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
+												height="20">
+												<a class="card-title text-dark">${justFollowMe.unickName}</a>
+												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+											<button type="button"
+												class="btn btn-outline-success btn-sm float-right"
+												style="font-size: 0.8rem;">팔로우</button>
+										</div>
 									</div>
-								</div>
-							</c:forEach>
-						</c:if>
+								</c:forEach>
+							</c:if> --%>
 					</div>
 					<c:if test="${suggestFlist2_size>0 }">
 						<button type="button" class="btn btn-outline-success"
@@ -1082,10 +1627,12 @@ function closemodal(){
 					</c:if>
 				</div>
 			</div>
+			<!-- 사이드바 팔로우 가져가야할 구간 끝 -->
+
 			<div class="list-group-item list-group-item-action bg-light"
 				style="padding: 5px;">
 				<div class="card bg-light mb-3">
-					<div class="card-header">실시간 해시태그</div>
+					<div class="card-header">해시태그 순위</div>
 					<div class="card-body" style="padding: 5px;">
 						<c:forEach var="tag" items="${tag_list}" varStatus="status">
 							<c:if test="${status.count <=3 }">
@@ -1143,8 +1690,8 @@ function closemodal(){
 							<button type="button" id="realCloseWrite" class="close"
 								data-dismiss="modal" style="display: none;"></button>
 							<button type="button" id="closeWrite" class="close"
-								style="float: right;" data-toggle="modal"
-								data-target="#saveModal" aria-label="Close">
+								onclick="closeWriteModal('${search}');" style="float: right;"
+								data-toggle="modal" data-target="#saveModal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
 							<a style="float: right; color: black; text-decoration: none;"
@@ -1155,21 +1702,21 @@ function closemodal(){
 					</div>
 					<div class="modal-body col-12">
 						<!-- 인용부분 -->
-						<div class="col-12 float-left" id="QuoteArea"
+						<div class="col-12 float-left" id="QuoteArea2"
 							style="display: none; font-size: 0.8em;">
 							<div class='card'>
 								<div class='card-body'>
-									<img id="quote_profile" src="" alt='no_image'
+									<img id="quote_profile2" src="" alt='no_image'
 										class='rounded-circle' width='30'> <a
-										class='card-title text-dark' id="quote_nickname"></a> <a
-										class='card-subtitle mb-2 text-muted' id="quote_atid"></a>
+										class='card-title text-dark' id="quote_nickname2"></a> <a
+										class='card-subtitle mb-2 text-muted' id="quote_atid2"></a>
 									<div class='card-text mt-2 mb-0' style="height: 100%;"
-										id="quote_content"></div>
-									<div class="quote_file mt-2" style="display: none;">
-										<img id="quote_img" src="<%=context %>" class="img-fluid" />
-										<div id="show_quote_video"
+										id="quote_content2"></div>
+									<div class="quote_file2 mt-2" style="display: none;">
+										<img id="quote_img2" src="<%=context %>" class="img-fluid" />
+										<div id="show_quote_video2"
 											class="embed-responsive embed-responsive-16by9">
-											<video controls id="quote_video" src="<%=context %>">
+											<video controls id="quote_video2" src="<%=context %>">
 											</video>
 										</div>
 									</div>
@@ -1327,7 +1874,6 @@ function closemodal(){
 							<%
 								SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy");
 								Date d = new Date();
-
 								int year = Integer.parseInt(sdf1.format(d));
 							%>
 							<select name="year" id="year"
@@ -1558,8 +2104,8 @@ function closemodal(){
 						이 내용을 저장하시면 <br> 다음에 이어서 작성하실 수 있습니다.
 					</div>
 					<div class="modal-footer">
-						<button type="button" id="notsaveBtn" class="btn btn-secondary">
-							아뇨 괜찮습니다</button>
+						<button type="button" id="notsaveBtn" class="btn btn-secondary"
+							onclick="saveModalClose('${search}');">아뇨 괜찮습니다</button>
 						<button type="submit" id="saveBtn" class="btn btn-success">저장</button>
 					</div>
 				</div>
@@ -1781,7 +2327,6 @@ function closemodal(){
 			$('#ReplyArea').css("display","block");
 			$('#toreply').text("@"+atid);
 		}
-
 		//클릭시 스크랩 반응안하게
 		$('.scrapSetting').click(function(e){
 			e.stopPropagation();
@@ -1793,22 +2338,22 @@ function closemodal(){
 		function scrap_click(code, index,nickname, atid, profile, type, src, context){
 			var str="";
 			$("input[name=bbcode]").attr("value", code);
-			$("#QuoteArea").css("display","block");
-			$("#quote_nickname").text(nickname); 
+			$("#QuoteArea2").css("display","block");
+			$("#quote_nickname2").text(nickname); 
 			var content = $("input#tagContent"+index).attr('value');
-			$("#quote_content").html(content);
-			$("#quote_atid").text("@"+atid); 
-			$("#quote_profile").attr("src", profile);
+			$("#quote_content2").html(content);
+			$("#quote_atid2").text("@"+atid); 
+			$("#quote_profile2").attr("src", profile);
 			if(type=='image'){
-				$(".quote_file").css("display","block");
-				$("#show_quote_video").css("display","none");
+				$(".quote_file2").css("display","block");
+				$("#show_quote_video2").css("display","none");
 				var img=context+"/image/"+src;
-				$("#quote_img").attr("src", img);
+				$("#quote_img2").attr("src", img);
 			}
 			else if(type=='video'){
-				$(".quote_file").css("display","block");
+				$(".quote_file2").css("display","block");
 				var video=context+"/video/"+src;
-				$("#quote_video").attr("src", video);
+				$("#quote_video2").attr("src", video);
 			}
 			//투표버튼은 비활성화
 			$("#displayVote").attr("disabled","disabled");
@@ -1991,20 +2536,20 @@ function closemodal(){
 					if(data.btype == "quote"){
 						btype=2;
 						$("input[name=bbcode]").attr("value",data.bbcode);
-						$("#QuoteArea").css("display","block");
-						$("#quote_nickname").text(data.qnickname); 
-						$("#quote_content").html(data.qcontent);
-						$("#quote_atid").text("@"+data.qatid); 
-						$("#quote_profile").attr("src", data.qprofileimage);
+						$("#QuoteArea2").css("display","block");
+						$("#quote_nickname2").text(data.qnickname); 
+						$("#quote_content2").html(data.qcontent);
+						$("#quote_atid2").text("@"+data.qatid); 
+						$("#quote_profile2").attr("src", data.qprofileimage);
 						if((data.qattach).substring(0,5) == "image"){
-							$(".quote_file").css("display","block");
-							$("#show_quote_video").css("display","none");
-							$("img#quote_img").attr("src", $("img#quote_img").attr('src')+"/"+data.qattach);
+							$(".quote_file2").css("display","block");
+							$("#show_quote_video2").css("display","none");
+							$("img#quote_img2").attr("src", $("img#quote_img2").attr('src')+"/"+data.qattach);
 						}
 						else if((data.qattach).substring(0,5) == 'video'){
-							$(".quote_file").css("display","block");
-							$("#show_quote_video").css("display","block");
-							$("video#quote_video").attr("src", $("video#quote_video").attr('src')+"/"+data.qattach);
+							$(".quote_file2").css("display","block");
+							$("#show_quote_video2").css("display","block");
+							$("video#quote_video2").attr("src", $("video#quote_video").attr('src')+"/"+data.qattach);
 						}
 						
 						//투표버튼은 비활성화
@@ -2063,9 +2608,9 @@ function closemodal(){
 		}
 		
 		/*글쓰기에서 닫기눌렀을때 글이없으면 저장창 안띄우고 닫기*/
-		jQuery("#closeWrite").click(function(){
+		function closeWriteModal(search){
 			if(bvote==1){
-				location.href="../iron/timeline";
+				location.href="../hoon/searchView?search="+search;
 			}
 			else{
 				var write=$("#writeTextarea").html();
@@ -2073,19 +2618,17 @@ function closemodal(){
 					$("#saveModal .close").click();
 					$("#realCloseWrite").click();
 					//그리고 메인글로 돌아가
-					location.href="/iron/timeline";
+					location.href="../hoon/searchView?search="+search;
 				}
 			}
-		});
+		}
 		
 		/*마지막 저장창에서 저장안해 클릭*/
-		jQuery("#notsaveBtn").click(function(){
-			//$("#writeForm .close").click();
+		function saveModalClose(search){
 			$("#saveModal .close").click();
 			$("#realCloseWrite").click();
-			//그리고 메인글로 돌아가
-			location.href="/iron/timeline";
-		});
+			location.href="../hoon/searchView?search="+search;
+		}
 		
 		/*마지막 저장창에서 저장해 클릭*/
 		jQuery("#saveBtn").click(function(){
@@ -2274,8 +2817,7 @@ function closemodal(){
 								<div class="card">
 									<div class="card-body"
 										style="font-size: 0.8rem; padding: 10px;">
-										<c:forEach var="justFollowMe1" items="${suggestFlist2 }"
-											begin="0" end="2">
+										<c:forEach var="justFollowMe1" items="${suggestFlist2 }">
 											<div class="card">
 												<div class="card-body"
 													style="font-size: 0.8rem; padding: 10px;">
