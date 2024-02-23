@@ -29,7 +29,7 @@ bom_springProject 주혜 - 글쓰기 기능
 - javascipt 안 변수는 jsp로 사용 불가
 - javasctpt 안에서는 jstl 사용 불가
 - javascipt 안에서는 scriptlet도 사용 불가
-미치겄네
+
 
 ```
 > 내일 시도해보겠삼,, 
